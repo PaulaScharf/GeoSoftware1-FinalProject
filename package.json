@@ -11,7 +11,11 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "jquery": "^3.4.1",
+    "mocha": "^6.2.0",
+    "mongodb": "^3.3.0-beta2",
+    "morgan": "~1.9.1",
+    "qunit": "^2.9.2"
   },
   "description": "final project for the class 'Geosoftware I' in the SS 2019",
   "main": "app.js",
