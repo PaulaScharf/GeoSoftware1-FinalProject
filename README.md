@@ -1,5 +1,19 @@
 # GeoSoftware1-Projektaufgabe
-##Aufgabenstellung
+## How to start the project
+- with docker:  
+    ...
+- without docker:
+    1. run ``npm install`` in the terminal
+    2. run ``npm start`` in the terminal
+
+## How to install your own API-keys
+
+## Github Repository
+[Geosoftware1-Projektaufgabe](https://github.com/PaulaScharf/GeoSoftware1-Projektaufgabe.git)
+
+---
+
+## Aufgabenstellung
 
 Mögliche Begegnungen mit Kontext
 
@@ -32,4 +46,4 @@ Anforderungen (Funktional):
 
 - Jede Begegnung erhält einen “Teilen”-Button, der die Begegnung eindeutig identifiziert und aufrufbar macht. Es kann sinnvoll sein, Begegnungen vorzuberechnen und zu speichern, statt diese bei einem Zugriff oder einer Suche zu berechnen.
 
-Eingesetzt werden außerdem Docker, Git, Unit-Tests und Logging. Weitere Anforderungen an die Technik, Qualitätsmerkmale und Hinweise zur Abgabe sind in den Vorlesungsunterlagen (Termin 13.pdf) dokumentiert. 
+Eingesetzt werden außerdem Docker, Git, Unit-Tests und Logging. Weitere Anforderungen an die Technik, Qualitätsmerkmale und Hinweise zur Abgabe sind in den Vorlesungsunterlagen ([Termin 13.pdf](https://www.uni-muenster.de/LearnWeb/learnweb2/pluginfile.php/2000309/mod_resource/content/1/Termin%2013.pdf#page=33)) dokumentiert.  
