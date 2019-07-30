@@ -1,8 +1,42 @@
+/**
+* @desc final project, Geosoftware1, SoSe2019
+* @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
+*/
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #f2f2f2;
+  font-family:'Calibri'
 }
 
-a {
-  color: #00B7FF;
+button, #deleteButton {
+  background-color: #d6a820;
+  border: none;
+  color: black;
+  padding: 10px 30px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+table, th, td {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: center;
+}
+
+caption, td {
+  text-align: left;
+}
+
+th, td {
+  padding: 10px;
+}
+
+/* map-bezeichnungen anpassen!!
+*/
+#map, #routeCreateMap, #routeUpdateMap {
+  height: 600px;
 }
