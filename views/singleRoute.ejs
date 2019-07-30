@@ -64,6 +64,7 @@
             <div class="col-12 col-md-6">
                 <h1>Edit Route</h1>
                     <form action="/item/single" method="POST" >
+                        <input type = "hidden" name = "_id" value="<%= stripEndQuotes(JSON.stringify(result[0]._id)) %>"/>
                         Username:<br />
                         <input type="text" name="creator" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].creator)) %>"/><br>
                         Route:<br />
