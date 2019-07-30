@@ -10,13 +10,83 @@
 </head>
 <body>
     <%- include('partial/navbar', {active: "Home"}); %>
+
     <main role="main">
         <div class="row" style="padding:10px">
             <div class="container-fluid">
                 <h1 style="color:blue; text-align:center">Route Creator</h1>
             </div>
         </div>
+        <div class="row" style="padding:10px;">
+            <div class="col-12 col-md-6">
+                <div id="map" style="width:100%; height:700px;"></div>
+            </div>
+            <div class="col-12 col-md-6">
+                <h1>Add Route</h1>
+
+                <script type="text/javascript" language="javascript">
+                    function checkform()
+                    {
+                        var f = document.forms["createForm"].elements;
+                        var cansubmit = true;
+
+                        for (var i = 0; i < 2; i++) {
+                            if (f[i].value.length == 0) cansubmit = false;
+                        }
+                        document.getElementById('submitbutton').disabled = !cansubmit;
+
+                        if(cansubmit) {
+                            document.getElementById("errorMsg").style.display = "none";
+                        }
+                        else
+                        {
+                            document.getElementById("errorMsg").style.display = "block";
+                        }
+                    }
+                </script>
+
+                <form action="item/create" method="POST" name="createForm">
+                    Route:<br />
+                    <textarea id="route" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
+                    Name:<br />
+                    <input type="text" name="name" onKeyup="checkform()"/><br>
+                    Description:<br />
+                    <input type="text" name="description"/><br>
+                    <br />
+                    <input type = "hidden" name = "date"/>
+                    <input type = "hidden" name = "time"/>
+                    <div id="errorMsg">to add a route you need to atleast define the geoJson through the right hand map and set a name for the route</div>
+                    <input type="submit" value="Create" disabled="disabled" id="submitbutton"/>
+
+                </form>
+            </div>
+        </div>
     </main>
+
+    <script>
+        $(document).ready(function(){
+            // when the submit button is hit current time and date are calulated and send along the other variables of the form
+            $("form").submit(function(){
+                var date = new Date();
+                var dd = date.getDate();
+                var mm = date.getMonth()+1; //January is 0!
+                var yyyy = date.getFullYear();
+                if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm}
+                // current date
+                var calender = yyyy+"-"+mm+"-"+dd;
+
+                var hh = date.getHours();
+                var mm = date.getMinutes();
+                var ss = date.getSeconds();
+                // current time
+                var clock = hh+":"+mm+":"+ss;
+
+                // the hidden inputs of the form are filled with the current date and time
+                $(this).find("input[name=date]").val(calender);
+                $(this).find("input[name=time]").val(clock);
+            });
+        });
+    </script>
 </body>
 </html>
 

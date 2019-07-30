@@ -41,25 +41,3 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 // --------------------------------------------------------------------------------------------------------------------
-
-// get all routes and send them to the secretArea.html
-var createController = function (req, res) {
-  res.render("create.ejs");
-};
-
-app.get("/create", createController);
-// --------------------------------------------------------------------------------------------------------------------
-// closing the database when stopping the process
-process.on("SIGTERM", () => {
-  server.close();
-app.locals.dbConnection.close();
-console.log("SIGTERM");
-process.exit(0);
-});
-
-process.on("SIGINT", () => {
-  server.close();
-app.locals.dbConnection.close();
-console.log("SIGINT");
-process.exit(0);
-});
