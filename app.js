@@ -41,3 +41,10 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 // --------------------------------------------------------------------------------------------------------------------
+
+// get all routes and send them to the secretArea.html
+var createController = function (req, res) {
+  res.render("create");
+};
+
+app.get("/create", createController);
