@@ -17,6 +17,109 @@ var router = express.Router();
 
 // ****************************************************************** CRUD-functionality: ******************************************************************
 
+// --------------------------------------------------------------------------------------------------------------------
+// routehandler for get, post, put, and delete / using querystring via req.query
+
+// get a single route and render the singleRoute.ejs view with that route
+var getitemcontroller = function(req, res) {
+  console.log("get item " + req.query._id);
+  req.db.collection('routeDB').find({_id:new mongodb.ObjectID(req.query._id)}).toArray((error, result) => {
+    if(error){
+      // give a notice, that the reading has failed and show the error-message on the console
+      console.log("Failure while reading from 'routeDB'.", error.message);
+      // in case of an error while reading, do routing to "error.ejs"
+      res.render('error');
+      // if no error occurs ...
+    } else {
+      res.render("singleRoute", {result});
+    }
+});
+};
+
+// add a route from the req.body and redirect to the create.html
+var postitemcontroller = function(req, res) {
+  console.log(req.body);
+  if(req.body.geoJson != '' && req.body.name != '') {
+    req.body.geoJson = JSON.parse(req.body.geoJson);
+    console.log("insert item " + req.body._id);
+    req.db.collection('routeDB').insertOne(req.body, (error, result) => {
+      if (error) {
+        console.dir(error);
+      }
+      res.render("create")
+    });
+  }
+  else {
+    res.render("create");
+  }
+};
+
+// update an item in the database and redirect to the overview.ejs
+var putitemcontroller = function (req, res) {
+  console.log("update item " + req.body._id);
+  req.body.geoJson = JSON.parse(req.body.geoJson);
+  let id = req.body._id;
+  delete req.body._id;
+  console.log(req.body); // => { name:req.body.name, description:req.body.description }
+  req.db.collection('routeDB').updateOne({_id:new mongodb.ObjectID(id)}, {$set: req.body}, (error, result) => {
+    if(error){
+      console.dir(error);
+    }
+    res.redirect("/overview");
+});
+};
+
+// delete an item from the database and redirect to the overview.ejs
+var deleteitemcontroller = function(req, res) {
+  console.log("delete item " + req.query._id);
+  let objectId = new mongodb.ObjectID(req.query._id);
+  console.log(objectId);
+  req.db.collection('routeDB').deleteOne({_id:objectId}, (error, result) => {
+    if(error){
+      console.dir(error);
+    }
+  });
+  res.redirect("/overview");
+};
+router.route("/")
+    .get(getitemcontroller)
+    .post(postitemcontroller);
+
+router.route("/single")
+    .get(deleteitemcontroller)
+    .post(putitemcontroller);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 // *********** CREATE/insert (with html-form) ***********
 
 // HTTP POST request for inserting ONE route into current database 'routeDB'
@@ -168,5 +271,5 @@ router.post("/api/deleteRoute", (req, res) => {
   });
 });
 
-
+*/
 module.exports = router;
