@@ -1,6 +1,6 @@
 # intellij stuff
 .idea/
-.iml
+*.iml
 
 # installed modules
 node_modules/
