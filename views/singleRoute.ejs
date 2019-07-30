@@ -23,13 +23,32 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 </head>
 <body>
-    <% function stripEndQuotes(s){
+    <%
+    function stripEndQuotes(s){
         var t=s.length;
         if (s.charAt(0)=='"') s=s.substring(1,t--);
         if (s.charAt(--t)=='"') s=s.substring(0,t);
         return s;
-    }%>
+    }
+    function checkform()
+    {
+        var f = document.forms["createForm"].elements;
+        var cansubmit = true;
 
+        for (var i = 1; i < 6; i++) {
+            if (f[i].value.length == 0) cansubmit = false;
+        }
+        document.getElementById('submitbutton').disabled = !cansubmit;
+
+        if(cansubmit) {
+            document.getElementById("errorMsg").style.display = "none";
+        }
+        else
+        {
+            document.getElementById("errorMsg").style.display = "block";
+        }
+    }
+    %>
     <%- include('partial/navbar', {active: "Home"}); %>
 
     <main role="main">
@@ -44,27 +63,27 @@
             </div>
             <div class="col-12 col-md-6">
                 <h1>Edit Route</h1>
-                    <form action="item/update" method="POST" >
-                        <input type = "hidden" name = "_id" value="<%= stripEndQuotes(JSON.stringify(result[0]._id)) %>"/>
+                    <form action="/item/single" method="POST" >
+                        Username:<br />
+                        <input type="text" name="creator" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].creator)) %>"/><br>
                         Route:<br />
-                        <textarea id="route" style="width:100%; height:300px" type="text" name="geoJson">
+                        <textarea id="route" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()">
                             <%= stripEndQuotes(JSON.stringify(result[0].geoJson, null, 2)) %>
                         </textarea>
-                        Name:<br />
-                        <input type="text" name="name" value="<%= stripEndQuotes(JSON.stringify(result[0].name)) %>"/><br>
+                        Routename:<br />
+                        <input type="text" name="name" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].name)) %>"/><br>
                         Description:<br />
-                        <input type="text" name="description" value="<%= stripEndQuotes(JSON.stringify(result[0].description)) %>"/><br>
-                        Date:
+                        <input type="text" name="description" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].description)) %>"/><br>
+                        Timestamp:<br />
+                        <input type = "date" name = "date" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].date)) %>"/>
+                        <input type = "time" name = "time" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].time)) %>"/>
                         <br />
-                        <input name = "date" value="<%= stripEndQuotes(JSON.stringify(result[0].date)) %>"/><br>
-                        Time:<br />
-                        <input name = "time" value="<%= stripEndQuotes(JSON.stringify(result[0].time)) %>"/>
-                        <br/>
-                        <input type="submit" value="Update" />
+                        <div id="errorMsg">to add a route you need to fill in all blanks</div>
+                        <input type="submit" value="Update" id="submitbutton"/>
 
                     </form>
 
-                    <form action="item/delete" method="GET" >
+                    <form action="/item/single" method="GET" >
                         <input type = "hidden" name = "_id" value="<%= JSON.stringify(result[0]._id).replace(/"/g, '') %>"/>
                         <input type="submit" value="Delete " />
                     </form>
@@ -80,8 +99,3 @@
         crossorigin=""></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
-<script type="text/javascript" src = "scripts/arrayFunctions.js"></script>
-<script type="text/javascript" src = "scripts/geoJson/polygon-select-teuto.js"></script>
-<script type="text/javascript" src = "scripts/geoJson/teutogeo.js"></script>
-<script type="text/javascript" src = "scripts/routeEditor.js"></script>

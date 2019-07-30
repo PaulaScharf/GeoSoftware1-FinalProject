@@ -6,6 +6,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
 
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
     <title>Final Project</title>
 </head>
 <body>
@@ -30,7 +33,7 @@
                         var f = document.forms["createForm"].elements;
                         var cansubmit = true;
 
-                        for (var i = 0; i < 2; i++) {
+                        for (var i = 1; i < 6; i++) {
                             if (f[i].value.length == 0) cansubmit = false;
                         }
                         document.getElementById('submitbutton').disabled = !cansubmit;
@@ -45,17 +48,21 @@
                     }
                 </script>
 
-                <form action="item/create" method="POST" name="createForm">
+                <form action="/item" method="POST" name="createForm">
+                    Username:<br />
+                    <input type="text" name="creator" onKeyup="checkform()"/><br>
                     Route:<br />
                     <textarea id="route" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
-                    Name:<br />
+                    Routename:<br />
                     <input type="text" name="name" onKeyup="checkform()"/><br>
                     Description:<br />
-                    <input type="text" name="description"/><br>
+                    <input type="text" name="description" onKeyup="checkform()"/><br>
+                    Timestamp:<br />
+                    <input type = "date" name = "date" onKeyup="checkform()"/>
+                    <input type = "time" name = "time" onKeyup="checkform()"/>
+                    <input type = "hidden" name="typ" onKeyup="checkform()" value = "user"/>
                     <br />
-                    <input type = "hidden" name = "date"/>
-                    <input type = "hidden" name = "time"/>
-                    <div id="errorMsg">to add a route you need to atleast define the geoJson through the right hand map and set a name for the route</div>
+                    <div id="errorMsg">to add a route you need to fill in all blanks</div>
                     <input type="submit" value="Create" disabled="disabled" id="submitbutton"/>
 
                 </form>
@@ -63,30 +70,6 @@
         </div>
     </main>
 
-    <script>
-        $(document).ready(function(){
-            // when the submit button is hit current time and date are calulated and send along the other variables of the form
-            $("form").submit(function(){
-                var date = new Date();
-                var dd = date.getDate();
-                var mm = date.getMonth()+1; //January is 0!
-                var yyyy = date.getFullYear();
-                if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm}
-                // current date
-                var calender = yyyy+"-"+mm+"-"+dd;
-
-                var hh = date.getHours();
-                var mm = date.getMinutes();
-                var ss = date.getSeconds();
-                // current time
-                var clock = hh+":"+mm+":"+ss;
-
-                // the hidden inputs of the form are filled with the current date and time
-                $(this).find("input[name=date]").val(calender);
-                $(this).find("input[name=time]").val(clock);
-            });
-        });
-    </script>
 </body>
 </html>
 

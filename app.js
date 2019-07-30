@@ -34,7 +34,6 @@ var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var itemsRouter = require('./routes/items');
 
 
@@ -95,7 +94,7 @@ app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', '
       console.log("Using DB: " + app.locals.db.databaseName);
 
       // tell the user the URL for starting the application / where the routes are shown
-      console.log("URL for starting and viewing the routes: http://localhost:" + port + "/index.html");
+      console.log("URL for starting and viewing the routes: http://localhost:" + port + "/");
 
       // catch possible errors and tell the user about them:
     } catch (error) {
@@ -122,7 +121,6 @@ app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', '
 
 
   app.use('/', indexRouter);
-  app.use('/users', usersRouter);
 
   // CRUD functionality
   app.use('/item', itemsRouter);
