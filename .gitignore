@@ -1,8 +1,12 @@
-# .idea folder
+# intellij stuff
 .idea/
+.iml
 
 # installed modules
 node_modules/
 
 # package-lock
 package-lock.json
+
+# Tokens
+token.js

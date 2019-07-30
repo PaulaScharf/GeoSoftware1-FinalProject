@@ -1,0 +1,24 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<nav class="navbar navbar-expand-md bg-dark navbar-dark navbar-expand-md">
+    <a <%if(active=="Home"){%>class="active"<%}%> class="navbar-brand" href="/">Geosoftware 1</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbardrop">
+                    Maintainance
+                    <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="../create">create new route</a>
+                    <!--a class="dropdown-item" href="overview.ejs">all routes</a-->
+                </div>
+
+            </li>
+        </ul>
+    </div>
+</nav>
