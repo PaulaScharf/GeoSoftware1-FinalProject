@@ -144,9 +144,11 @@ function showRoutesOnIndexHTML(response) {
     for (i = 1; i < response.length; i++) {
 
 
+
 // ROUTEN EINZELN IN TB EINFÜGEN:
 // "" entfernen, wenn richtige Attributbezeichnungen klar sind
-//
+
+
 createAndWriteTableWithSevenCells(i, "response[i].username", "response[i].date", "response[i].time", "response[i].type", "routesTable");
 
 
