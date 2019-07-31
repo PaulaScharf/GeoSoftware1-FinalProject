@@ -88,13 +88,15 @@ $.ajax({
   // use a http GET request
   type: "GET",
   // URL to send the request to
-  url: "/api/readRoutes",
+  url: "/displayAll",
   // data type of the response
   dataType: "json"
 })
 
 // if the request is done successfully, ...
 .done (function (response) {
+
+  console.log(response);
 
   // ... show all read routes on index.html, as the following function does:
   showRoutesOnIndexHTML(response);
