@@ -32,18 +32,24 @@ var overviewController = function(req, res) {
 
 // get all routes in the database and send them back
 var displayAllController = function(req, res) {
-  req.db.collection('routes').find({}).toArray((error, result) => {
+  req.db.collection('routeDB').find({}).toArray((error, result) => {
     if(error){
+      // give a notice, that the reading has failed and show the error-message on the console
+      console.log("Failure in reading from 'routeDB'.", error.message);
       console.dir(error);
     }
-    console.log("display all in map");
-    res.json(result);
+    else {
+      // ... give a notice, that the reading has succeeded and show the result on the console
+      console.log("Successfully read the routes from 'routeDB'.", result);
+      console.log("display all in map");
+      res.json(result);
+    }
   });
 };
 
 router.get("/overview", overviewController);
 
-router.get('/displayAll', displayAllController);
+router.get("/displayAll", displayAllController);
 
 // --------------------------------------------------------------------------------------------------------------------
 
