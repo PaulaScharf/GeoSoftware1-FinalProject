@@ -35,8 +35,6 @@ th, td {
   padding: 10px;
 }
 
-/* map-bezeichnungen anpassen!!
-*/
-#map, #routeCreateMap, #routeUpdateMap {
+#map, #createMap, #updateMap {
   height: 600px;
 }

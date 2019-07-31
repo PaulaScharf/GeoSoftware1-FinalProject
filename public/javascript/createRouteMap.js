@@ -11,8 +11,8 @@
 // please put in your own tokens at 'token.js'
 
 
-// create the initial map in the "map"-HTMLdiv, the proper map extract will be set later
-var map = L.map('map').setView([0, 0], 12);
+// create the initial map in the "createMap"-HTMLdiv, the proper map extract will be set later
+var map = L.map('createMap').setView([0, 0], 12);
 
 // OpenStreetMap tiles as a layer for the map
 var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -30,7 +30,7 @@ var markersGroup = L.layerGroup().addTo(map);
 
 
 
-// *********************************** leaflet.draw (in this task only for POLYGONs) ***********************************
+// *********************************** leaflet.draw (in this task only for POLYLINEs) ***********************************
 
 // feature group for all drawn items, add this group to the existing map
 var drawnItems = L.featureGroup().addTo(map);
@@ -56,16 +56,15 @@ map.addControl(new L.Control.Draw({
     rectangle: false
   },
 
+  // FOLGENDES NOCH ANPASSEN
   // customize the editing options of the toolbar
   edit: {
     featureGroup: drawnItems,
-
 
     /*poly: {
     // forbid the crossing of line segments, because it is only one polygon wanted, not several
     allowIntersection: false
   }*/
-
 
 }
 }));
@@ -76,16 +75,12 @@ map.addControl(new L.Control.Draw({
 map.on(L.Draw.Event.CREATED, function (event) {
 
 
-  // beliebig viele polylines auf einmal einzeichenbar????????
-  /*
   // for having only one polygon in the feature group of drawn polygons, delete the previous polygon
   drawnItems.eachLayer(function (layer){
   drawnItems.removeLayer(layer);
 });
-*/
 
 
-// FOLGENDES AUF MEHRERE POLYLINES ANPASSEN ******************************************************************************************
 
 // add the new drawn polygon (event layer) to the feature group of the drawnItems
 drawnItems.addLayer(event.layer);
@@ -104,8 +99,6 @@ map.on(L.Draw.Event.EDITED, function (event) {
 });
 
 
-
-// LÖSCHEN FUNKTIONIERT NOCH NICHT FÜR MEHR ALS 1 POLYLINE
 
 // specify a listener: if the polyline is deleted, the following function will be executed:
 map.on(L.Draw.Event.DELETED, function (event) {

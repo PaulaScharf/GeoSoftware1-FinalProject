@@ -14,6 +14,14 @@
 // counter for table cell IDs
 var z = 0;
 
+// counter for ID of checkbox
+var cb = -1;
+
+// array for the routes which are shown in the map "map"
+var routesLatLongArray = [];
+
+
+
 
 
 // create the initial map in the "map"-HTMLdiv, the proper map extract will be set later
@@ -26,6 +34,47 @@ var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
 // add the OpenStreetMap tile layer to the map
 oSMLayer.addTo(map);
+
+
+// create a layer group for all routes, add this group to the existing map
+var routesGroup = L.layerGroup().addTo(map);
+
+
+
+
+
+// FOLGENDES NÖTIG????????????????
+// ********************************************************************
+// Kommentare anpassen!!!
+// ********** the following deleting and resetting is to rebuild the initial conditions (needed if the starting button was already clicked before) **********
+
+// delete all children of the tbodys of all tables for not showing the calculated results several times when clicking the button several times
+deleteAllChildrenOfElement("routesTable");
+
+
+
+// delete all children of the ordered list of checkboxes for not showing the checkboxes several times when clicking the button several times
+//deleteAllChildrenOfElement("routesList");
+
+
+
+// reset the counter for table cell IDs
+z = 0;
+
+// reset the counter for ID of checkbox
+cb = -1;
+
+// delete all existing layers of the layergroup routesGroup for not showing each route several times when clicking the button several times
+routesGroup.clearLayers();
+// delete all existing elements (routes) in the array routesLatLongArray for not showing each route several times when clicking the button several times
+routesLatLongArray.length = 0;
+
+// ********************************************************************
+
+
+
+
+// GEOJSON_VALIDIERUNG EINFÜGEN!!!!!!!!!!!!! (z.B. weiter unten, von geoJSONFeatureCollectionString ??)
 
 
 
@@ -63,7 +112,7 @@ $.ajax({
 
 
 
-// UMÄNDERN; UM IN TB ZU SCHREIBEN
+// UMÄNDERN; UM IN TB und MAP ZU SCHREIBEN
 /**
 * Takes the response of the AJAX GET-request for reading all routes out of the database. Accesses the GeoJSON feature
 * of each route and brings these together to a GeoJSON feature collection. Writes this feature collection
@@ -93,19 +142,14 @@ function showRoutesOnIndexHTML(response) {
     for (i = 1; i < response.length; i++) {
 
 
-// IN MAP EINFÜGEN !!!!!!!
-response[i].routeGeoJSON
-
-
-
-
-// "" entfernen, wenn richtige Attributebezeichnungen klar sind
+// ROUTEN EINZELN IN TB EINFÜGEN:
+// "" entfernen, wenn richtige Attributbezeichnungen klar sind
 //
 createAndWriteTableWithSevenCells(i, "response[i].username", "response[i].date", "response[i].time", "response[i].type", "routesTable");
 
 
 
-/*
+// ROUTEN ALS FEATURECOLLECTION IN MAP EINFÜGEN:
 
       // concatenate all features and separate them with a comma
       geoJSONRouteFeaturesString = geoJSONRouteFeaturesString + "," + response[i].routeGeoJSON;
@@ -114,18 +158,122 @@ createAndWriteTableWithSevenCells(i, "response[i].username", "response[i].date",
     // make a feature collection with all features of geoJSONRouteFeaturesString
     let geoJSONFeatureCollectionString = '{"type":"FeatureCollection","features":[' + geoJSONRouteFeaturesString + ']}';
 
-    // write this feature collection into corresponding textarea "routesTextArea"
+    // write this feature collection into map "map"
+
+    // ???????????????????
+
+    /*
     $("#routesTextArea").val(geoJSONFeatureCollectionString);
+*/
+
+
+
+// AUS geoJSONFeatureCollectionString die variable route MACHEN !!!!!
+
+
+// route = ???
+
+
+// IN EIGENE FUNKTION AUSLAGERN
+
+      // *************** adding the part route to the routesGroup and therefore to the map ***************
+
+      // outsource the swapping of the coordinates' order of the currentOriginalRoute (GeoJSONs long-lat order to needed lat-long order for displaying the route in map)
+      var partRouteLatLongOrder = swapGeoJSONLongLatToLatLongOrder(route);
+
+      // make a leaflet-polyline from the currentOriginalRouteLatLongOrder
+      let currentPolyline = L.polyline(partRouteLatLongOrder, {color: '#ec0000'}, {weight: '3'});
+
+      // add the current polyline to the array routesLatLongArray for being able to address the polylines/routes by numbers (kind of IDs)
+      routesLatLongArray.push(currentPolyline);
+
+
+      let l;
+      // loop "over" all poylines/routes in routesLatLongArray
+      for (l = 0; l < routesLatLongArray.length; l++){
+
+        // add the l-th polyline-element of the array routesLatLongArray to the routesGroup that is shown in the map
+        routesLatLongArray[l].addTo(routesGroup);
+      }
+      // *************************************************************************************************
+
+
+
+
+
+
+
+
 
     // to test the syntax, because only String-concatenations are made
     // console.log(JSON.parse(geoJSONFeatureCollectionString));
-    */
+
   }
+
 }
+
+
+
+
+// KOMMENTARE ANPASSEN!!
+/**
+* Calculates the distance of given part route and writes it into HTMLtable.
+* For additional information, for every part route, the current weather and some (max. 5) suggestions for nearby natural recreation areas (if the weather is good)
+* or shops (if the weather is bad) are requested from OpenWeatherMap-API and the HERE-Places-API and written in the corresponding HTMLtables.
+* In addition, the generated part routes are added to the existing map. Besides, in this map the locations of the natural recreation areas or shops are shown as markers.
+* These markers bind popups which show the current weather and the name of the suggested places.
+* For every part route a checkbox is created, that allows the user to select or deselect the part route. Selected routes are shown in the map, deselected are not.
+*
+* @private
+* @author Katharina Poppinga
+* @param {number} numberOriginalRoute - number of corresponding original route
+* @param partRoute - part route for which the distance has to be calculated
+* @return {number} distancePartRoute - calculated distance of given part route
+*/
+function writeRoutes(numberOriginalRoute, partRoute){
+
+  // during the first call of this function, set proper the map extract:
+  if (cb === 0) {
+    // center the map on the first point of the (first, because cb === 0) route
+    map.setView([partRoute[0][1], partRoute[0][0]], 12);
+  }
+
+
+
+  // write calculated distance of part route into HTMLtable and adding two extra cells to the table for the additional information which is written into them later
+  createAndWriteTableWithSevenCells(numberOriginalRoute, "hm", "DistancesRoutesOutsidePolygon");
+
+
+
+
+  // outsource the creation of the checkbox belonging to the given part route
+  checkbox(cb);
+
+
+  // *************** adding the part route to the routesGroup and therefore to the map ***************
+
+  // outsource the swapping of the coordinates' order of the currentOriginalRoute (GeoJSONs long-lat order to needed lat-long order for displaying the route in map)
+  var partRouteLatLongOrder = swapGeoJSONLongLatToLatLongOrder(partRoute);
+
+  // make a leaflet-polyline from the currentOriginalRouteLatLongOrder
+  let currentPolyline = L.polyline(partRouteLatLongOrder, {color: '#ec0000'}, {weight: '3'});
+
+  // add the current polyline to the array routesLatLongArray for being able to address the polylines/routes by numbers (kind of IDs)
+  routesLatLongArray.push(currentPolyline);
+
+
+  let l;
+  // loop "over" all poylines/routes in routesLatLongArray
+  for (l = 0; l < routesLatLongArray.length; l++){
+
+    // add the l-th polyline-element of the array routesLatLongArray to the routesGroup that is shown in the map
+    routesLatLongArray[l].addTo(routesGroup);
+  }
+  // *************************************************************************************************
+
+  // calculated distance of the part route
+  return distancePartRoute;
 }
-
-
-
 
 
 

@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <!-- Required meta tags -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>-->
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-          crossorigin=""/>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
 
-    <!-- Leaflet routing machine -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 
-    <!-- Geocoder -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <link rel="stylesheet" href="../stylesheets/style.css">
 
-    <!-- JQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+
+
+  <title>Final Project</title>
+
 </head>
 <body>
     <%
@@ -59,7 +59,7 @@
         </div>
         <div class="row" style="padding:10px;">
             <div class="col-12 col-md-6">
-                <div id="map" style="width:100%; height:700px;"></div>
+                <div id="updateMap"></div>
             </div>
             <div class="col-12 col-md-6">
                 <h1>Edit Route</h1>
@@ -75,27 +75,30 @@
                         Description:<br />
                         <input type="text" name="description" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].description)) %>"/><br>
                         Timestamp:<br />
-                        <input type = "date" name = "date" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].date)) %>"/>
-                        <input type = "time" name = "time" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].time)) %>"/>
-                        <br />
-                        <div id="errorMsg">to add a route you need to fill in all blanks</div>
+                        <input type="date" name="date" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].date)) %>"/>
+                        <input type="time" name="time" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].time)) %>"/>
+                        <br/><br/>
+                        <div id="errorMsg">To add a route you need to fill in all blanks.</div>
                         <input type="submit" value="Update" id="submitbutton"/>
 
                     </form>
 
                     <form action="/item/single" method="GET" >
                         <input type = "hidden" name = "_id" value="<%= JSON.stringify(result[0]._id).replace(/"/g, '') %>"/>
-                        <input type="submit" value="Delete " />
+                        <input type="submit" value="Delete" />
                     </form>
             </div>
         </div>
     </main>
 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </body>
 </html>
 
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-        crossorigin=""></script>
-<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
