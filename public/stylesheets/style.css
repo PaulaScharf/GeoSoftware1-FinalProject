@@ -41,3 +41,11 @@ th, td {
 #map, #createMap, #updateMap {
   height: 600px;
 }
+
+.navbar-nav > .active > a {
+  color: #7ed5e1;
+}
+
+.nav-item > a:hover {
+  color: #7ed5e1;
+}
