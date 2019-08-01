@@ -64,11 +64,14 @@ app.use(cookieParser());
 
 
 
-/*
+
 // "Erstelle die Routen für die installierten Client-Bibliotheken":
-app.use('/jquery', express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
-app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', 'qunit')));
-*/
+app.use("/leaflet", express.static(__dirname + "/node_modules/leaflet/dist"));
+app.use("/leaflet-draw", express.static(__dirname + "/node_modules/leaflet-draw/dist"));
+app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
+app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
+app.use('/popper', express.static(__dirname + '/node_modules/popper.js/dist'));
+
 
 
 

@@ -1,26 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Required meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
-  <!-- Required meta tags -->
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
-  <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>-->
+    <!-- installed CSS -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="leaflet/leaflet.css"/>
+    <link rel="stylesheet" href="leaflet-draw/leaflet.draw.css"/>
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <!-- locally created css -->
+    <link rel="stylesheet" href="../stylesheets/style.css">
 
-
-  <link rel="stylesheet" href="../stylesheets/style.css">
-
-
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
-
-
-  <title>route: <%= stripEndQuotes(JSON.stringify(result[0].name)) %></title>
-
+    <title>route: <%= stripEndQuotes(JSON.stringify(result[0].name)) %></title>
 </head>
 <body>
     <%
@@ -30,28 +23,32 @@
         if (s.charAt(--t)=='"') s=s.substring(0,t);
         return s;
     }
-    function checkform()
-    {
-        var f = document.forms["createForm"].elements;
-        var cansubmit = true;
-
-        for (var i = 1; i < 6; i++) {
-            if (f[i].value.length == 0) cansubmit = false;
-        }
-        document.getElementById('submitbutton').disabled = !cansubmit;
-
-        if(cansubmit) {
-            document.getElementById("errorMsg").style.display = "none";
-        }
-        else
-        {
-            document.getElementById("errorMsg").style.display = "block";
-        }
-    }
     %>
+    <script type="text/javascript" language="javascript">
+        function checkform()
+        {
+            var f = document.forms["updateForm"].elements;
+            var cansubmit = true;
+
+            for (var i = 1; i < 6; i++) {
+                if (f[i].value.length == 0) cansubmit = false;
+            }
+            document.getElementById('submitbutton').disabled = !cansubmit;
+
+            if(cansubmit) {
+                document.getElementById("errorMsg").style.display = "none";
+            }
+            else
+            {
+                document.getElementById("errorMsg").style.display = "block";
+            }
+        }
+    </script>
+
+
     <%- include('partial/navbar', {active: "Home"}); %>
 
-    <main role="main">
+    <main role="main" onload="checkform()">
         <div class="row" style="padding:10px">
             <div class="container-fluid">
                 <h1 style="color:blue; text-align:center">Route Editor</h1>
@@ -63,7 +60,7 @@
             </div>
             <div class="col-12 col-md-6">
                 <h1>Edit Route</h1>
-                    <form action="/item/single" method="POST" >
+                    <form action="/item/single" method="POST" name="updateForm">
                         <input type = "hidden" name = "_id" value="<%= stripEndQuotes(JSON.stringify(result[0]._id)) %>"/>
                         Username:<br />
                         <input type="text" name="creator" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].creator)) %>"/><br>
@@ -79,9 +76,8 @@
                         <input type="date" name="date" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].date)) %>"/>
                         <input type="time" name="time" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].time)) %>"/>
                         <br/><br/>
-                        <div id="errorMsg">To add a route you need to fill in all blanks.</div>
+                        <div id="errorMsg" style="display: none;">To update a route you need to fill in all blanks.</div>
                         <input type="submit" value="Update" id="submitbutton"/>
-
                     </form>
 
                     <form action="/item/single" method="GET" >
@@ -94,13 +90,11 @@
 
     <%- include('partial/footer', {active: "Home"}); %>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
 </body>
 </html>
 
-
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="jquery/jquery.min.js"></script>
+<script src="popper/umd/popper.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="leaflet/leaflet.js"></script>
+<script src="leaflet-draw/leaflet.draw.js"></script>
