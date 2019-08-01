@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
 
-  <title>???</title>
+  <title>list of all routes</title>
 
 </head>
 <body>
@@ -29,6 +29,7 @@
     <%- include('partial/navbar', {active: "Maintainance"}); %>
 
     <main role="main" class="container-fluid">
+        <div id="content-wrap">
         <div class="row">
             <div class="container-fluid" align="center">
                 <h1>List of all routes</h1>
@@ -55,7 +56,10 @@
                 </ul>
             </div>
         </div>
+        </div>
     </main>
+
+    <%- include('partial/footer', {active: "Home"}); %>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

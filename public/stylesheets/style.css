@@ -5,7 +5,10 @@
 
 body {
   background-color: #f2f2f2;
-  font-family:'Calibri'
+  font-family:'Calibri';
+}
+main {
+  margin-bottom: 100px;
 }
 
 button, #deleteButton {
