@@ -126,64 +126,100 @@ $.ajax({
 */
 function showRoutesOnIndexHTML(response) {
 
+  // UMBENENNEN
+  //
+  var coordinates;
+
   // ************************** for HTML-page "index" **************************
 
   // if there are no routes in the database ...
   if (typeof response[0] === "undefined") {
 
+    /*
     // ... tell the user about it by writing a note into the corresponding textarea "routesTextArea"
     $("#routesTextArea").text("Probably you first have to insert at least one route into the database. For doing this, you can use the menu item 'Route creator'.");
+    */
 
-    // if there are routes in to database ... :
+    // if there are routes in the database ... :
   } else {
+
+
+// FOLGENDES (für i=0) EVTL. IN FOR SCHLEIFE AUFNEHMEN; ausprobieren
+
+    // ROUTEN EINZELN IN TB EINFÜGEN:
+    // NEUE/WEITERE ATTRIBUTE NOCH DAZU
+    //
+    createAndWriteTableWithSevenCells(0, response[0].creator, response[0].name, response[0].date, response[0].time, response[0].type, "routesTable");
+
     // extract the GeoJSON feature of the first route
     var geoJSONRouteFeaturesString = response[0].routeGeoJSON;
 
+
+
+    // EINBLENDEN, WENN NEUE ERSTE ROUTE WG. BEZEICHNUNGSÄNDERUNG
+    //    coordinates = response[0].geoJson.features[0].geometry.coordinates;
+
+
     let i;
-    // loop "over" all routes in the current database "routeDB" except the first
+    // loop "over" all routes in the current database "routeDB" except !!!!!!!!!!!!!!!
     for (i = 1; i < response.length; i++) {
 
 
 
-// ROUTEN EINZELN IN TB EINFÜGEN:
-// "" entfernen, wenn richtige Attributbezeichnungen klar sind
+      // ROUTEN EINZELN IN TB EINFÜGEN:
+      // NEUE/WEITERE ATTRIBUTE NOCH DAZU
+      //
+      createAndWriteTableWithSevenCells(i, response[i].creator, response[i].name, response[i].date, response[i].time, response[i].type, "routesTable");
+
+      coordinates = response[i].geoJson.features[0].geometry.coordinates;
+
+      console.log(response[i].geoJson.features[0].geometry.coordinates);
 
 
-createAndWriteTableWithSevenCells(i, "response[i].username", "response[i].date", "response[i].time", "response[i].type", "routesTable");
-
-
-
-// ROUTEN ALS FEATURECOLLECTION IN MAP EINFÜGEN:
-
+      // LÖSCHEN, WENN FERTIG
+      /*
+      // ROUTEN ALS FEATURECOLLECTION IN MAP EINFÜGEN:
       // concatenate all features and separate them with a comma
       geoJSONRouteFeaturesString = geoJSONRouteFeaturesString + "," + response[i].routeGeoJSON;
-    }
-
-    // make a feature collection with all features of geoJSONRouteFeaturesString
-    let geoJSONFeatureCollectionString = '{"type":"FeatureCollection","features":[' + geoJSONRouteFeaturesString + ']}';
-
-    // write this feature collection into map "map"
-
-    // ???????????????????
-
-    /*
-    $("#routesTextArea").val(geoJSONFeatureCollectionString);
-*/
+      console.log(geoJSONRouteFeaturesString);
+      */
 
 
 
-// AUS geoJSONFeatureCollectionString die variable route MACHEN !!!!!
+      // LÖSCHEN, WENN FERTIG
+      /*
+      // make a feature collection with all features of geoJSONRouteFeaturesString
+      let geoJSONFeatureCollectionString = '{"type":"FeatureCollection","features":[' + geoJSONRouteFeaturesString + ']}';
+      // write this feature collection into map "map"
+      // ???????????????????
+      /*
+      $("#routesTextArea").val(geoJSONFeatureCollectionString);
+      */
+      /*
+      // AUS geoJSONFeatureCollectionString die variable route MACHEN !!!!!
+      var route = geoJSONRouteFeaturesString;
+      var routeParsed = JSON.parse(route);
+      console.log(routeParsed);
+      var routeOh;
+
+      let j;
+      // loop "over" all routes in the current database "routeDB"
+      for (j = 0; j < response.length; j++) {
+
+      routeOh = routeParsed.features[0].geometry.coordinates[j];
+      */
 
 
-// route = ???
 
 
-// IN EIGENE FUNKTION AUSLAGERN
+
+
+      // IN EIGENE FUNKTION AUSLAGERN:
 
       // *************** adding the part route to the routesGroup and therefore to the map ***************
 
       // outsource the swapping of the coordinates' order of the currentOriginalRoute (GeoJSONs long-lat order to needed lat-long order for displaying the route in map)
-      var partRouteLatLongOrder = swapGeoJSONLongLatToLatLongOrder(route);
+      var partRouteLatLongOrder = swapGeoJSONLongLatToLatLongOrder(coordinates);
 
       // make a leaflet-polyline from the currentOriginalRouteLatLongOrder
       let currentPolyline = L.polyline(partRouteLatLongOrder, {color: '#ec0000'}, {weight: '3'});
@@ -202,23 +238,32 @@ createAndWriteTableWithSevenCells(i, "response[i].username", "response[i].date",
       // *************************************************************************************************
 
 
-
-
-
-
-
-
-
-    // to test the syntax, because only String-concatenations are made
-    // console.log(JSON.parse(geoJSONFeatureCollectionString));
-
+    }
   }
+
+
+
+  // LÖSCHEN, WENN FERTIG:
+  // to test the syntax, because only String-concatenations are made
+  // console.log(JSON.parse(geoJSONFeatureCollectionString));
+
 
 }
 
 
 
 
+
+
+
+
+
+
+
+// FOLGENDES AN AKTUELLE AUFGABE ANPASSEN!!!!!!!!!!!!!!!!!!!!!
+
+
+// function heißt "calculateAndWritePartDistance(...)" in Üb7
 // KOMMENTARE ANPASSEN!!
 /**
 * Calculates the distance of given part route and writes it into HTMLtable.
@@ -243,10 +288,10 @@ function writeRoutes(numberOriginalRoute, partRoute){
   }
 
 
-
+  /*
   // write calculated distance of part route into HTMLtable and adding two extra cells to the table for the additional information which is written into them later
   createAndWriteTableWithSevenCells(numberOriginalRoute, "hm", "DistancesRoutesOutsidePolygon");
-
+  */
 
 
 

@@ -11,6 +11,7 @@
 // please put in your own tokens at 'token.js'
 
 
+// KOMMENTARE ANPASSEN!!!!!!
 
 
 /**
@@ -24,7 +25,7 @@
 * @param insertSecond - second value, to write in second new created cell
 * @param {string} tableName - table to which the new created row and new created cells are appended
 */
-function createAndWriteTableWithSevenCells(insertFirst, insertSecond, tableName){
+function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThird, insertFourth, insertFifth, insertSixth, tableName){
 
   // counter for the table cell IDs
   z = z + 1;
@@ -36,15 +37,14 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, tableName)
   var secondValue = document.createElement("td");
   secondValue.innerHTML = insertSecond;
   var thirdValue = document.createElement("td");
-  thirdValue.id = "weatherText"+z;
+  thirdValue.innerHTML = insertThird;
   var fourthValue = document.createElement("td");
-  fourthValue.id = "weatherSymbol"+z;
+  fourthValue.innerHTML = insertFourth;
   var fifthValue = document.createElement("td");
-  fifthValue.id = "placeName"+z;
+  fifthValue.innerHTML = insertFifth;
   var sixthValue = document.createElement("td");
-  sixthValue.id = "placeDistance"+z;
-  var seventhValue = document.createElement("td");
-  seventhValue.id = "correspondingRoutePoint"+z;
+  sixthValue.innerHTML = insertSixth;
+
 
   // append new row and seven new cells to given table
   document.getElementById(tableName).appendChild(row);
@@ -54,8 +54,10 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, tableName)
   row.appendChild(fourthValue);
   row.appendChild(fifthValue);
   row.appendChild(sixthValue);
-  row.appendChild(seventhValue);
 }
+
+
+
 
 
 
@@ -68,6 +70,7 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, tableName)
 * @param insertSecond - second value, to write in second new created cell
 * @param {string} tableName - table to which the new created row and new created cells are appended
 */
+/*
 function createAndWriteTableWithTwoCells(insertFirst, insertSecond, tableName){
 
   // create new table row and two new table cells and write corresponding values into them
@@ -84,7 +87,7 @@ function createAndWriteTableWithTwoCells(insertFirst, insertSecond, tableName){
 }
 
 
-
+*/
 
 
 
