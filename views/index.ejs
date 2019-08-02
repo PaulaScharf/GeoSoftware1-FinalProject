@@ -24,9 +24,12 @@
         <h1 style="color:blue; text-align:center">Final Project</h1>
       </div>
     </div>
+
+    <p>Beschreibung der Seite, was sie tut / wozu sie da ist, nicht vergessen :D</p>
+
     <div class="row" style="padding:10px">
       <div class="col-12 col-lg-6">
-        <div id="map"></div>
+        <div id="allRoutesMap"></div>
       </div>
       <div class="col-12 col-lg-6">
         <table class="table">
@@ -53,39 +56,34 @@
     <br>
 
 
-
-    <div class="col-sm">
-      <p>NOCH UEBERLEGEN, WAS ALLES IN TB ANGEZEIGT WERDEN SOLL</p>
-    </div>
-
     <br>
 
     <div class="row mb-5">
       <div class="col-sm">
         <table class="table">
-          <caption>This table shows routes</caption>
+          <caption>This table shows .....<br>Use checkboxes for displaying the routes in the map or not.</caption>
           <thead class="thead-dark">
             <tr>
-              <th rowspan="2">Number of the route</th>
-                <th rowspan="2">Username</th>
-                <th rowspan="2">Name of route</th>
-                <th colspan="2" rowspan="2">Date and time</th>
-                <th rowspan="2">Type of route</th>
-              </tr>
-            </thead>
-            <tbody id="routesTable">
-            </tbody>
-          </table>
-        </div>
-
+              <th rowspan="2">Consecutive number of the route</th>
+              <th rowspan="2">Username</th>
+              <th rowspan="2">Name of route</th>
+              <th colspan="2" rowspan="2">Date and time</th>
+              <th rowspan="2">Type of route</th>
+            </tr>
+          </thead>
+          <tbody id="routesTable">
+          </tbody>
+        </table>
       </div>
 
-    </main>
+    </div>
+
+  </main>
 
   <%- include('partial/footer'); %>
 
 
-  </body>
+</body>
 </html>
 
 <script src="jquery/jquery.min.js"></script>
