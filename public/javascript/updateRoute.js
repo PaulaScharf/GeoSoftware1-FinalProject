@@ -36,7 +36,7 @@ drawPolyline(updateMap, "updateRoute");
 // SINGLE ROUTE IN UPDATEMAP LADEN!!!
 
 
-
+/*
 // extract the coordinates of the i-th route
 coordinatesRoute = response[i].geoJson.features[0].geometry.coordinates;
 
@@ -57,7 +57,7 @@ polylineRoutesLatLongArray.push(polylineOfRoute);
 
 // add the i-th polyline-element of the array polylineRoutesLatLongArray to the routesGroup and therefore to the map "allRoutesMap"
 polylineRoutesLatLongArray[i].addTo(routesGroup);
-
+*/
 
 
 
