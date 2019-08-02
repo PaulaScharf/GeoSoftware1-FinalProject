@@ -18,6 +18,8 @@
 
 
 
+// ****************************** global variables ******************************
+
 // counter for table cell IDs
 var z = 0;
 
@@ -28,6 +30,7 @@ var polylineRoutesLatLongArray = [];
 var encountersLatLongArray = [];
 
 
+// ****************************** map ******************************
 
 // create the initial map in the "allRoutesMap"-div, the proper map extract will be set later
 var allRoutesMap = L.map('allRoutesMap').setView([0, 0], 2);
@@ -43,18 +46,14 @@ oSMLayer.addTo(allRoutesMap);
 // create a layer group for all routes, add this group to the existing map
 var encountersGroup = L.layerGroup().addTo(allRoutesMap);
 
-
-
 // create a layer group for all routes, add this group to the existing map "allRoutesMap"
 var routesGroup = L.layerGroup().addTo(allRoutesMap);
-
 
 /*
 // create a layer group for all markers, add this group to the existing map "..."
 var markersGroup = L.layerGroup().addTo(map....);
 */
-
-
+// *****************************************************************
 
 
 
@@ -63,7 +62,7 @@ var markersGroup = L.layerGroup().addTo(map....);
 
 
 // FOLGENDES AUCH FÜR BEGEGNUNGEN MACHEN?
-
+// *****************************************************************
 // ********** AJAX request for reading all routes (NUR ROUTES ODER AUCH BEGEGNUNGEN???) out of the database
 // and writing them into ......(ANPASSEN AN BEIDE FUNKTIONSAUFRUFE!!!!!) **********
 $.ajax({
@@ -99,6 +98,7 @@ $.ajax({
   console.log("AJAX request (reading all routes) has failed.", error.message);
 });
 
+// *****************************************************************
 
 
 
