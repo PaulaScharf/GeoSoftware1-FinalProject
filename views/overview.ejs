@@ -13,7 +13,7 @@
     <!-- locally created css -->
     <link rel="stylesheet" href="../stylesheets/style.css">
 
-    <title>list of all routes</title>
+    <title>List of all routes</title>
 </head>
 <body>
     <% function stripEndQuotes(s){
@@ -39,7 +39,7 @@
                             for(var i=0; i<result.length; i++) { %>
                                 <li>
                                     <a href="item?_id=<%= JSON.stringify(result[i]._id).replace(/"/g, '') %>">
-                                        <%= stripEndQuotes(JSON.stringify(result[i].name)) %>
+                                        <%= JSON.stringify(result[i].name).replace(/"/g, '') %>
                                     </a>
                                     </br>
                                     <div>
