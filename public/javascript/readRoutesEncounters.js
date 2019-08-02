@@ -95,11 +95,11 @@ $.ajax({
 
 // if the request is done successfully, ...
 .done (function (response) {
-
-  console.log(response);
-
+  console.log("number of routes in the response: " + response.length);
   // ... show all read routes on index.html, as the following function does:
   showRoutesOnIndexHTML(response);
+  console.log("routes shown successfully");
+  checkForNewRoute(response);
 
   // ... give a notice on the console that the AJAX request for reading all routes has succeeded
   console.log("AJAX request (reading all routes) is done successfully.");
@@ -148,7 +148,7 @@ function showRoutesOnIndexHTML(response) {
 
     // ROUTEN EINZELN IN TB EINFÜGEN:
     // NEUE/WEITERE ATTRIBUTE NOCH DAZU
-    //
+    //TODO: alles in die for-schleife wäre vielleicht besser?
     createAndWriteTableWithSevenCells(0, response[0].creator, response[0].name, response[0].date, response[0].time, response[0].type, "routesTable");
 
     // extract the GeoJSON feature of the first route
