@@ -11,18 +11,23 @@
 // please put in your own tokens at 'token.js'
 
 
-// KOMMENTARE ANPASSEN!!!!!!
+
+
+// KOMMENTARE ANPASSEN, WENN TABELLEN FERTIG SIND!!
 
 
 /**
 * Creates new table row with seven new table cells and appends the row and these cells to given table.
-* In addition, this function writes the first given value into the first cell and second given value into the second cell.
-* The third, fourth, fifth, sixth and seventh cells are getting IDs for writing in the weather and places-information in subsequently called functions.
+* In addition, this function writes the first given value into the first cell and second given value into the second cell and ..............
+* The ......
 *
 * @private
 * @author Katharina Poppinga
 * @param insertFirst - first value, to write in first new created cell
 * @param insertSecond - second value, to write in second new created cell
+* .....
+*
+*
 * @param {string} tableName - table to which the new created row and new created cells are appended
 */
 function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThird, insertFourth, insertFifth, insertSixth, tableName){
@@ -30,9 +35,10 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThir
   // counter for the table cell IDs
   z = z + 1;
 
-  // create new table row and seven new table cells and write corresponding values into them
+  // create new table row and ANZAHL new table cells and write corresponding values into them
   var row = document.createElement("tr");
   var firstValue = document.createElement("td");
+  firstValue.id = "conseNum"+z;
   firstValue.innerHTML = insertFirst;
   var secondValue = document.createElement("td");
   secondValue.innerHTML = insertSecond;
@@ -46,7 +52,7 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThir
   sixthValue.innerHTML = insertSixth;
 
 
-  // append new row and seven new cells to given table
+  // append new row and ANZAHL new cells to given table
   document.getElementById(tableName).appendChild(row);
   row.appendChild(firstValue);
   row.appendChild(secondValue);
@@ -99,6 +105,7 @@ function createAndWriteTableWithTwoCells(insertFirst, insertSecond, tableName){
 * @param {string} elementId - ID of the element whose children will be removed
 */
 function deleteAllChildrenOfElement(elementId){
+
   // pick the element belonging to given Id
   let element = document.getElementById(elementId);
 

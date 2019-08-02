@@ -65,7 +65,7 @@
                         Username:<br />
                         <input type="text" name="creator" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].creator)) %>"/><br>
                         Route:<br />
-                        <textarea id="route" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()">
+                        <textarea id="updateRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()">
                             <%= stripEndQuotes(JSON.stringify(result[0].geoJson, null, 2)) %>
                         </textarea>
                         Routename:<br />
@@ -98,3 +98,6 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="leaflet/leaflet.js"></script>
 <script src="leaflet-draw/leaflet.draw.js"></script>
+
+<script src="javascript/leafletDrawPolyline.js"></script>
+<script src="javascript/updateRoute.js"></script>
