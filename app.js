@@ -35,6 +35,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var itemsRouter = require('./routes/items');
+var encountersRouter = require('./routes/encounters');
 
 
 // view engine setup
@@ -71,6 +72,7 @@ app.use("/leaflet-draw", express.static(__dirname + "/node_modules/leaflet-draw/
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use('/popper', express.static(__dirname + '/node_modules/popper.js/dist'));
+app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
 
 
 
@@ -125,8 +127,11 @@ app.use('/popper', express.static(__dirname + '/node_modules/popper.js/dist'));
 
   app.use('/', indexRouter);
 
-  // CRUD functionality
+  // CRUD functionality for routes
   app.use('/item', itemsRouter);
+
+  // (incomplete) CRUD functionality for encounters
+  app.use('/encounter', encountersRouter);
 
 
 

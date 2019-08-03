@@ -20,6 +20,9 @@ var cb = -1;
 // array for the routes which are shown in the map "map"
 var routesLatLongArray = [];
 
+// array for the encounters which are shown in the map "map"
+var encountersLatLongArray = [];
+
 
 
 
@@ -38,6 +41,9 @@ oSMLayer.addTo(map);
 
 // create a layer group for all routes, add this group to the existing map
 var routesGroup = L.layerGroup().addTo(map);
+
+// create a layer group for all routes, add this group to the existing map
+var encountersGroup = L.layerGroup().addTo(map);
 
 
 
@@ -100,6 +106,7 @@ $.ajax({
   showRoutesOnIndexHTML(response);
   console.log("routes shown successfully");
   checkForNewRoute(response);
+  showEncountersOnIndexHTML(allEncounters, response);
 
   // ... give a notice on the console that the AJAX request for reading all routes has succeeded
   console.log("AJAX request (reading all routes) is done successfully.");
@@ -148,11 +155,10 @@ function showRoutesOnIndexHTML(response) {
 
     // ROUTEN EINZELN IN TB EINFÜGEN:
     // NEUE/WEITERE ATTRIBUTE NOCH DAZU
-    //TODO: alles in die for-schleife wäre vielleicht besser?
-    createAndWriteTableWithSevenCells(0, response[0].creator, response[0].name, response[0].date, response[0].time, response[0].type, "routesTable");
+    //createAndWriteTableWithSevenCells(0, response[0].creator, response[0].name, response[0].date, response[0].time, response[0].type, "routesTable");
 
     // extract the GeoJSON feature of the first route
-    var geoJSONRouteFeaturesString = response[0].routeGeoJSON;
+    //var geoJSONRouteFeaturesString = response[0].routeGeoJSON;
 
 
 
@@ -162,7 +168,7 @@ function showRoutesOnIndexHTML(response) {
 
     let i;
     // loop "over" all routes in the current database "routeDB" except !!!!!!!!!!!!!!!
-    for (i = 1; i < response.length; i++) {
+    for (i = 0; i < response.length; i++) {
 
 
 
@@ -173,7 +179,7 @@ function showRoutesOnIndexHTML(response) {
 
       coordinates = response[i].geoJson.features[0].geometry.coordinates;
 
-      console.log(response[i].geoJson.features[0].geometry.coordinates);
+      //console.log(response[i].geoJson.features[0].geometry.coordinates);
 
 
       // LÖSCHEN, WENN FERTIG
@@ -251,6 +257,78 @@ function showRoutesOnIndexHTML(response) {
 }
 
 
+function showEncountersOnIndexHTML(encounters,response) {
+  // ROUTEN EINZELN IN TB EINFÜGEN:
+
+  let i;
+  // loop "over" all routes in the current database "routeDB" except !!!!!!!!!!!!!!!
+  for (let i = 0; i < encounters.length; i++) {
+
+    for(let m = 0; m < response.length; m++) {
+
+    }
+    createAndWriteTableWithThreeCells(i, encounters[i][1], encounters[i][2], "encountersTable");
+
+
+
+    // LÖSCHEN, WENN FERTIG
+    /*
+    // ROUTEN ALS FEATURECOLLECTION IN MAP EINFÜGEN:
+    // concatenate all features and separate them with a comma
+    geoJSONRouteFeaturesString = geoJSONRouteFeaturesString + "," + response[i].routeGeoJSON;
+    console.log(geoJSONRouteFeaturesString);
+    */
+
+
+
+    // LÖSCHEN, WENN FERTIG
+    /*
+    // make a feature collection with all features of geoJSONRouteFeaturesString
+    let geoJSONFeatureCollectionString = '{"type":"FeatureCollection","features":[' + geoJSONRouteFeaturesString + ']}';
+    // write this feature collection into map "map"
+    // ???????????????????
+    /*
+    $("#routesTextArea").val(geoJSONFeatureCollectionString);
+    */
+    /*
+    // AUS geoJSONFeatureCollectionString die variable route MACHEN !!!!!
+    var route = geoJSONRouteFeaturesString;
+    var routeParsed = JSON.parse(route);
+    console.log(routeParsed);
+    var routeOh;
+
+    let j;
+    // loop "over" all routes in the current database "routeDB"
+    for (j = 0; j < response.length; j++) {
+
+    routeOh = routeParsed.features[0].geometry.coordinates[j];
+    */
+
+
+
+
+
+
+    // IN EIGENE FUNKTION AUSLAGERN:
+
+    // *************** adding the part route to the routesGroup and therefore to the map ***************
+
+    // outsource the swapping of the coordinates' order of the currentOriginalRoute (GeoJSONs long-lat order to needed lat-long order for displaying the route in map)
+
+    // make a leaflet-polyline from the currentOriginalRouteLatLongOrder
+    let currentPoint = L.circle(encounters[i][0], {radius: 200}, {color: '#000bec'});
+
+    // add the current polyline to the array routesLatLongArray for being able to address the polylines/routes by numbers (kind of IDs)
+    encountersLatLongArray.push(currentPoint);
+
+
+    // loop "over" all poylines/routes in routesLatLongArray
+    for (let k = 0; k < encountersLatLongArray.length; k++){
+      // add the l-th polyline-element of the array routesLatLongArray to the encountersGroup that is shown in the map
+      encountersLatLongArray[k].addTo(encountersGroup);
+    }
+  }
+}
 
 
 

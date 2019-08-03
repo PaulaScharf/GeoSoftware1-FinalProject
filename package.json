@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@turf/turf": "^5.1.6",
     "bootstrap": "^4.3.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -18,6 +19,7 @@
     "leaflet-draw": "^1.0.4",
     "mocha": "^6.2.0",
     "mongodb": "^3.3.0-beta2",
+    "mongoose": "^5.6.8",
     "morgan": "~1.9.1",
     "popper": "^1.0.1",
     "popper.js": "^1.15.0",

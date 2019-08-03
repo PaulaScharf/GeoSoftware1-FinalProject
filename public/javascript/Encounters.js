@@ -50,12 +50,16 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId) {
     for(let i = 1; i < firstRoute.length; i++) {
         for(let k = 1; k < secondRoute.length; k++) {
             var result = getIntersection(firstRoute[i-1].lat, firstRoute[i-1].lng, firstRoute[i].lat, firstRoute[i].lng, secondRoute[k-1].lat, secondRoute[k-1].lng, secondRoute[k].lat, secondRoute[k].lng);
-            if(result != false) {
-                let intersectionCoordinates = result;
-                let encounter = [intersectionCoordinates, firstId, secondId];
+            if(result.features.length > 0) {
+                let intersectionCoordinates = result.features[0].geometry.coordinates;
+                let encounter = {
+                    intersection: intersectionCoordinates,
+                    firstRoute: firstId,
+                    secondRoute: secondId
+                };
                 console.log("encounter: ");
                 console.log(encounter);
-                allEncounters.push(encounter);
+                postEncounter(encounter);
             }
         }
     }
@@ -79,57 +83,28 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId) {
  * @see https://stackoverflow.com/questions/13937782/calculating-the-point-of-intersection-of-two-lines
  */
 function getIntersection(x11, y11, x12, y12, x21, y21, x22, y22) {
-    var slope1, slope2, yint1, yint2, intx, inty;
-    // if the starting coordinates of the lines are identical, return them as the intersection
-    if (x11 == x21 && y11 == y21) return [x11, y11];
-    // if the end coordinates of the lines are identical, return them as the intersection
-    if (x12 == x22 && y12 == y22) return [x12, y22];
-
-    slope1 = this.slope(x11, y11, x12, y12);
-    slope2 = this.slope(x21, y21, x22, y22);
-    // If the lines have different start-coord and end-coord but the same slope, there is no intersection
-    if (slope1 === slope2) return false;
-
-    yint1 = this.yInt(x11, y11, x12, y12);
-    yint2 = this.yInt(x21, y21, x22, y22);
-    if (yint1 === yint2) return yint1 === false ? false : [0, yint1];
-
-    if (slope1 === false) return [y21, slope2 * y21 + yint2];
-    if (slope2 === false) return [y11, slope1 * y11 + yint1];
-    intx = (slope1 * x11 + yint1 - yint2)/ slope2;
-
-    return [intx, slope1 * intx + yint1];
+    var line1 = turf.lineString([[x11, y11], [x12, y12]]);
+    var line2 = turf.lineString([[x21, y21], [x22, y22]]);
+    var intersects = turf.lineIntersect(line1, line2);
+    return intersects;
 }
 
-/**
- * this function calculates the slope of line.
- * if the slope is zero it returns false.
- * @param x1    x-coord of start of the line
- * @param y1    y-coord of start of the line
- * @param x2    x-coord of end of the line
- * @param y2    y-coord of end of the line
- * @returns slope | false
- * @author name: Paula Scharf, matr.: 450 334
- * @see https://stackoverflow.com/questions/13937782/calculating-the-point-of-intersection-of-two-lines
- */
-function slope(x1, y1, x2, y2) {
-    if (x1 == x2) return false;
-    return (y1 - y2) / (x1 - x2);
-}
+function postEncounter(encounter) {
+    $.ajax({
+        // use a http POST request
+        type: "POST",
+        // URL to send the request to
+        url: "/encounter/post",
+        data : encounter,
+        // data type of the response
+        dataType: "json"
+    })
 
-/**
- * ?
- * @param x1    x-coord of start of the line
- * @param y1    y-coord of start of the line
- * @param x2    x-coord of end of the line
- * @param y2    y-coord of end of the line
- * @returns ?
- * @author name: Paula Scharf, matr.: 450 334
- * @see https://stackoverflow.com/questions/13937782/calculating-the-point-of-intersection-of-two-lines
- */
-function yInt(x1, y1, x2, y2) {
-    if (x1 === x2) return y1 === 0 ? 0 : false;
-    if (y1 === y2) return y1;
-    return y1 - slope(x1, y1, x2, y2) * x1 ;
+    // if the request is done successfully, ...
+        .done (function (response) {
+            console.log("response: ");
+            console.log(response);
+            // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+            console.log("AJAX request (pushing an encounter) is done successfully.");
+        })
 }
-
