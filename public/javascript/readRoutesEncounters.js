@@ -16,6 +16,7 @@
 
 // CONSECUTIVE NUMBER BEGINNT MIT 0 !! FALLS ÄNDERUNG ZU 1, DANN KOMMENTARE IN CHECKBOX-FUNKTIONEN ANPASSEN
 
+// ALLROUTESMAP UMBENENNEN IN AUCH BEGEGNUNGEN
 
 
 // ****************************** global variables ******************************
@@ -26,7 +27,7 @@ var z = 0;
 // array for the routes which are shown in the map "allRoutesMap"
 var polylineRoutesLatLongArray = [];
 
-// array for the encounters which are shown in the map "map"
+// array for the encounters which are shown in the map "allRoutesMap"
 var encountersLatLongArray = [];
 
 
@@ -43,11 +44,11 @@ var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 // add the OpenStreetMap tile layer to the map "allRoutesMap"
 oSMLayer.addTo(allRoutesMap);
 
-// create a layer group for all routes, add this group to the existing map
-var encountersGroup = L.layerGroup().addTo(allRoutesMap);
-
-// create a layer group for all routes, add this group to the existing map "allRoutesMap"
+// create a layerGroup for all routes, add this group to the existing map "allRoutesMap"
 var routesGroup = L.layerGroup().addTo(allRoutesMap);
+
+// create a layerGroup for all encounters, add this group to the existing map "allRoutesMap"
+var encountersGroup = L.layerGroup().addTo(allRoutesMap);
 
 /*
 // create a layer group for all markers, add this group to the existing map "..."
@@ -83,9 +84,8 @@ $.ajax({
         showAllRoutesOnStartingPage(response);
         // ... ?
         checkForNewRoute(response);
-        //TODO: different name
+        //TODO: different name: showEncountersOnStartingPage
         showEncountersOnIndexHTML(allEncounters, response);
-
 
 
         // ... give a notice on the console that the AJAX request for reading all routes has succeeded
@@ -165,32 +165,52 @@ function showAllRoutesOnStartingPage(response) {
     }
 }
 
-function showEncountersOnIndexHTML(encounters,response) {
-    // ROUTEN EINZELN IN TB EINFÜGEN:
+
+
+// JSDOC ANPASSEN!!!
+/**
+ * Takes the response of the AJAX GET-request for ............
+ *
+ *
+ * @private
+ * @author Paula Scharf
+ * @param encounters
+ * @param response response of AJAX GET-request for reading all .... out of the database
+ */
+function showEncountersOnIndexHTML(encounters, response) {
 
     let i;
-    // loop "over" all routes in the current database "routeDB" except !!!!!!!!!!!!!!!
+    // loop "over" all encounters in the current database "routeDB"
     for (let i = 0; i < encounters.length; i++) {
 
-        for(let m = 0; m < response.length; m++) {
+        for (let m = 0; m < response.length; m++) {
 
         }
+
+        // show the i-th encounter with a consecutive number and its .......... in the table "encountersTable" on starting page
         createAndWriteTableWithThreeCells(i, encounters[i][1], encounters[i][2], "encountersTable");
+
+
+        // ************** show the i-th encounter in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
+
+// VERGLEICHEN MIT ROUTEN IN OBIGER FUNKTION
 
         // make a leaflet-polyline from the currentOriginalRouteLatLongOrder
         let currentPoint = L.circle(encounters[i][0], {radius: 200}, {color: '#000bec'});
 
-        // add the current polyline to the array routesLatLongArray for being able to address the polylines/routes by numbers (kind of IDs)
+        // add the current .......... to the array encountersLatLongArray for being able to address the .......... by numbers (kind of IDs)
         encountersLatLongArray.push(currentPoint);
 
 
-        // loop "over" all poylines/routes in routesLatLongArray
+        // loop "over" all ..... in encountersLatLongArray
         for (let k = 0; k < encountersLatLongArray.length; k++){
-            // add the l-th polyline-element of the array routesLatLongArray to the encountersGroup that is shown in the map
+            // add the k-th .........-element of the array encountersLatLongArray to the encountersGroup and therefore to the map "allRoutesMap"
             encountersLatLongArray[k].addTo(encountersGroup);
         }
     }
 }
+
+
 
 
 /**

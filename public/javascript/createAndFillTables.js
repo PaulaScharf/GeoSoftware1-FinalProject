@@ -13,7 +13,7 @@
 
 
 
-// KOMMENTARE ANPASSEN, WENN TABELLEN FERTIG SIND!!
+// ALLE KOMMENTARE UND JSDOC ANPASSEN, WENN TABELLEN FERTIG SIND!!
 
 
 /**
@@ -62,6 +62,8 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThir
   row.appendChild(sixthValue);
 }
 
+
+
 /**
  * Creates new table row with seven new table cells and appends the row and these cells to given table.
  * In addition, this function writes the first given value into the first cell and second given value into the second cell.
@@ -74,6 +76,7 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThir
  * @param {string} tableName - table to which the new created row and new created cells are appended
  */
 function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, tableName){
+
   // create new table row and three new table cells and write corresponding values into them
   var row = document.createElement("tr");
   var firstValue = document.createElement("td");
@@ -90,9 +93,6 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
   row.appendChild(secondValue);
   row.appendChild(thirdValue);
 }
-
-
-
 
 
 
@@ -126,6 +126,7 @@ function createAndWriteTableWithTwoCells(insertFirst, insertSecond, tableName){
 
 
 
+// FOLGENDE FUNKTION ÜBERHAUPT NÖTIG, WIRD SIE VERWENDET?????
 
 /**
 * Removes all children of a given HTMLelement (DOM node).

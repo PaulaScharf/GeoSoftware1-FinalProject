@@ -68,7 +68,7 @@ function drawPolyline(map, outputTextarea) {
     drawnItems.addLayer(event.layer);
 
     // write the new drawn polyline as a GeoJSON string into the given outputTextarea
-    document.getElementById(outputTextarea).value = JSON.stringify(drawnItems.toGeoJSON());
+    document.getElementById(outputTextarea).value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
   });
 
 
@@ -76,7 +76,7 @@ function drawPolyline(map, outputTextarea) {
   map.on(L.Draw.Event.EDITED, function (event) {
 
     // write the updated/edited polyline as a GeoJSON string into the given outputTextarea
-    document.getElementById(outputTextarea).value = JSON.stringify(drawnItems.toGeoJSON());
+    document.getElementById(outputTextarea).value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
   });
 
 

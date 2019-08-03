@@ -36,7 +36,7 @@
                         <p>No routes available in the database</p>
                     <% } else
                         {
-                            for(var i=0; i<result.length; i++) { %>
+                            for (var i=0; i<result.length; i++) { %>
                                 <li>
                                     <a href="item?_id=<%= JSON.stringify(result[i]._id).replace(/"/g, '') %>">
                                         <%= JSON.stringify(result[i].name).replace(/"/g, '') %>

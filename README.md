@@ -1,4 +1,4 @@
-# GeoSoftware1-Projektaufgabe
+# GeoSoftware1-FinalProject
 ## How to start the project
 - with docker:  
     ...
@@ -13,7 +13,7 @@
 
 ---
 
-## Aufgabenstellung
+## Aufgabenstellung (oder "task" nennen?)
 
 Mögliche Begegnungen mit Kontext
 
