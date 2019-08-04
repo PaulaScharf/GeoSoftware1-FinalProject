@@ -12,7 +12,7 @@
 
 
 //
-var alreadyDefinedRoutes = [];
+var alreadyKnownRoutes = [];
 
 //
 var allEncounters = [];
@@ -31,24 +31,29 @@ function checkForNewRoute(response) {
   for (let i = 0; i < response.length; i++) {
     //
     response[i].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder(response[i].geoJson.features[0].geometry.coordinates);
-    //
-    let routeIdFound = false;
-    //
-    for (let k = 0; k < alreadyDefinedRoutes.length; k++) {
-      console.log("ids: " + response[i]._id + ", " + alreadyDefinedRoutes[k]._id);
-      //
-      if (response[i]._id == alreadyDefinedRoutes[k]._id) {
-        routeIdFound = true;
-      }
-    }
-    //
-    if (!routeIdFound) {
+
+    if(response[i].status == "new") {
+      console.dir(response[i]);
       calculateEncounters(response[i].geoJson.features[0].geometry.coordinates, response[i]._id);
-      alreadyDefinedRoutes.push(response[i]);
+      let route = {
+        _id: response[i]._id,
+        creator: response[i].creator,
+        geoJson: response[i].geoJson,
+        name: response[i].name,
+        description: response[i].description,
+        date: response[i].date,
+        time: response[i].time,
+        madeBy: response[i].madeBy,
+        type: response[i].type,
+        status: response[i].status
+      };
+      updateStatusFromNewToOld(route);
     }
+    alreadyKnownRoutes.push(response[i]);
+
+    console.log("checked " + response[i]._id)
   }
 }
-
 
 
 /**
@@ -59,8 +64,9 @@ function checkForNewRoute(response) {
 */
 function calculateEncounters(oneRoute, oneId) {
   //
-  for (let i = 0; i < alreadyDefinedRoutes.length; i++) {
-    intersectionOfRoutes(oneRoute, alreadyDefinedRoutes[i].geoJson.features[0].geometry.coordinates, oneId, alreadyDefinedRoutes[i]._id);
+  for (let i = 0; i < alreadyKnownRoutes.length; i++) {
+    console.log("Compare: " + oneId + " with " + alreadyKnownRoutes[i]._id)
+    intersectionOfRoutes(oneRoute, alreadyKnownRoutes[i].geoJson.features[0].geometry.coordinates, oneId, alreadyKnownRoutes[i]._id);
   }
 }
 
@@ -88,7 +94,8 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId) {
         let encounter = {
           intersection: intersectionCoordinates,
           firstRoute: firstId,
-          secondRoute: secondId
+          secondRoute: secondId,
+          type: "encounter"
         };
         console.log("encounter: ");
         console.log(encounter);
@@ -148,4 +155,52 @@ function postEncounter(encounter) {
     // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
     console.log("AJAX request (pushing an encounter) is done successfully.");
   });
+}
+
+function getEncounter(routeId) {
+  /*
+  $.ajax({
+    // use a http POST request
+    type: "POST",
+    // URL to send the request to
+    url: "/encounter/post",
+    data: encounter,
+    // data type of the response
+    dataType: "json"
+  })
+
+  // if the request is done successfully, ...
+      .done (function (response) {
+        console.log("response: ");
+        console.log(response);
+        // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+        console.log("AJAX request (pushing an encounter) is done successfully.");
+      });
+  */
+}
+
+function updateStatusFromNewToOld(route) {
+
+  route.status = "old";
+  console.log(route);
+
+
+  $.ajax({
+    // use a http POST request
+    type: "POST",
+    // URL to send the request to
+    url: "/encounter/update",
+    data: route,
+    // data type of the response
+    dataType: "json"
+  })
+
+  // if the request is done successfully, ...
+      .done (function (response) {
+        console.log("response: ");
+        console.log(response);
+        // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+        console.log("AJAX request (pushing an encounter) is done successfully.");
+      });
+
 }

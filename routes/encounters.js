@@ -37,7 +37,34 @@ var postitemcontroller = function(req, res) {
     });
 };
 
+var putitemcontroller = function (req, res) {
+
+    console.log("update item");
+
+    // convert the coordinate-string to Json
+    req.body.geoJson = JSON.parse(req.body.geoJson);
+    //
+    let objectId = new mongodb.ObjectID(req.body._id);
+    // delete the id from the body
+    delete req.body._id;
+
+    console.log("update item" + objectId + "to the following:")
+    console.log(req.body);
+
+    // update the item in the db with the  id of the req.body (which is given in the form)
+    req.db.collection('routeDB').updateOne({_id:objectId}, {$set: req.body}, (error, result) => {
+
+        if(error){
+            console.dir(error);
+        }
+        // go back to the overview-page through the indexRouter
+        res.redirect("/overview");
+    });
+};
+
 router.route("/post")
     .post(postitemcontroller);
+router.route("/update")
+    .post(putitemcontroller);
 
 module.exports = router;

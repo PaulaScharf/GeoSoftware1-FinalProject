@@ -85,7 +85,7 @@ $.ajax({
         // ... ?
         checkForNewRoute(response);
         //TODO: different name: showEncountersOnStartingPage
-        showEncountersOnIndexHTML(allEncounters, response);
+        //showEncountersOnIndexHTML(allEncounters, response);
 
 
         // ... give a notice on the console that the AJAX request for reading all routes has succeeded
