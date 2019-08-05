@@ -54,6 +54,10 @@
                 <h1 style="color:blue; text-align:center">Route Editor</h1>
             </div>
         </div>
+
+        <p>Beschreibung der Seite, was sie tut / wozu sie da ist, nicht vergessen und Erläuterungen, z.B. was die rote Route und blaue Route ist und dass die rote alte Route in Map und Textarea wiederhergestellt werden kann......</p>
+
+
         <div class="row" style="padding:10px;">
             <div class="col-12 col-md-6">
                 <div id="updateMap"></div>
@@ -77,12 +81,12 @@
                         <input type="time" name="time" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].time)) %>"/>
                         <br/><br/>
                         <div id="errorMsg" style="display: none;">To update a route you need to fill in all blanks.</div>
-                        <input type="submit" value="Update" id="submitbutton"/>
+                        <input type="submit" value="Update route" id="submitbutton"/>
                     </form>
 
                     <form action="/item/single" method="GET" >
                         <input type = "hidden" name = "_id" value="<%= JSON.stringify(result[0]._id).replace(/"/g, '') %>"/>
-                        <input type="submit" value="Delete" />
+                        <input type="submit" value="Delete route" />
                     </form>
             </div>
         </div>

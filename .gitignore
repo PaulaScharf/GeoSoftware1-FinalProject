@@ -2,6 +2,8 @@
 .idea/
 *.iml
 
+.htmlhintrc
+
 # installed modules
 node_modules/
 
@@ -10,3 +12,7 @@ package-lock.json
 
 # Tokens
 token.js
+
+# Animal Tracking API
+cookies.txt
+license_terms.txt

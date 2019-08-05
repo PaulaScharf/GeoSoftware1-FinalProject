@@ -59,6 +59,12 @@ function drawPolyline(map, outputTextarea) {
   // specify a listener: if a new polyline is created, the following function will be executed:
   map.on(L.Draw.Event.CREATED, function (event) {
 
+    // if the current used map is the "updateMap" ...
+    if (map._container.id === "updateMap"){
+      // ... remove the old route from the "updateMap" for only displaying the new created route in the "updateMap"
+      map.removeLayer(polylineOfOldRoute);
+    }
+
     // for having only one polyline in the feature group of drawn polylines, delete the previous polyline
     drawnItems.eachLayer(function (layer){
       drawnItems.removeLayer(layer);
@@ -84,14 +90,26 @@ function drawPolyline(map, outputTextarea) {
   map.on(L.Draw.Event.DELETED, function (event) {
 
     // if there are no items (polylines) in the feature group of drawnItems (it means that the polyline is really deleted):
-    if (drawnItems.getLayers().length == 0){
+    if (drawnItems.getLayers().length === 0){
 
-      // write just nothing into the given outputTextarea
-      document.getElementById(outputTextarea).value = "";
+      // if the current used map is the "updateMap" ...
+      if (map._container.id === "updateMap"){
+
+        // ... add the old route to the "updateMap" (recovery, to allow starting a new correction/change of the route in the current update-process)
+        map.addLayer(polylineOfOldRoute);
+
+        // ... write the GeoJSON of the old route into the given outputTextarea
+        document.getElementById(outputTextarea).value = JSON.stringify(oldRouteGeoJSON, null, 2);
+
+        // if the current used map is not the "updateMap" ...
+      } else {
+
+        // ... write just nothing into the given outputTextarea
+        document.getElementById(outputTextarea).value = "";
+      }
     }
 
     // if there is still an item (polyline) in the feature group of drawnItem, do nothing so that the current polyline is still in the given outputTextarea
     // (it is the case if the user has clicked onto "delete layers" and has not selected the polyline to be deleted but nevertheless has then clicked onto "save" that executes this event)
-  }
-);
+  });
 }

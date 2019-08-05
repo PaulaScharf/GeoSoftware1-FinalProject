@@ -12,6 +12,9 @@
 
 
 
+// FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
+
+
 // create the initial map in the "updateMap"-div
 var updateMap = L.map('updateMap').setView([0, 0], 2);
 
@@ -24,45 +27,61 @@ var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 oSMLayer.addTo(updateMap);
 
 
-
 // enable drawing a route into the map "updateMap" (using leaflet.draw) and write the corresponding GeoJSON string into textarea "updateRoute"
 drawPolyline(updateMap, "updateRoute");
 
 
 
 
+// ****************** display the old route (the route that shall be updated) in the map "updateMap" ******************
 
+//
+var oldRouteGeoJSON = JSON.parse(document.getElementById("updateRoute").innerHTML);
 
-// SINGLE ROUTE IN UPDATEMAP LADEN!!!
+// extract the coordinates of the route that shall be updated (old route)
+let coordinatesOldRoute = oldRouteGeoJSON.features[0].geometry.coordinates;
 
-
-/*
-// extract the coordinates of the i-th route
-coordinatesRoute = response[i].geoJson.features[0].geometry.coordinates;
-
-// for the first route of the database ...
-if (i === 0) {
-  // ... center the map on the first point of the first route
-  allRoutesMap.setView([coordinatesRoute[i][1], coordinatesRoute[i][0]], 2);
-}
+// ... center the map on the first point of the old route
+updateMap.setView([coordinatesOldRoute[0][1], coordinatesOldRoute[0][0]], 2);
 
 // outsource the swapping of the order of the coordinates (GeoJSONs long-lat order to needed lat-long order)
-var coordinatesLatLongOrder = swapGeoJSONsLongLatToLatLongOrder(coordinatesRoute);
+let coordinatesOldLatLongOrder = swapGeoJSONsLongLatToLatLongOrder(coordinatesOldRoute);
 
-// make a leaflet-polyline from the coordinatesLatLongOrder
-let polylineOfRoute = L.polyline(coordinatesLatLongOrder, {color: '#ec0000'}, {weight: '3'});
+// make a leaflet-polyline from the coordinatesOldLatLongOrder
+let polylineOfOldRoute = L.polyline(coordinatesOldLatLongOrder, {color: '#ec0000'}, {weight: '3'});
 
-// add the polyline to the array polylineRoutesLatLongArray for being able to address the polylines(routes) by numbers (kind of IDs) (needed for checkboxes)
-polylineRoutesLatLongArray.push(polylineOfRoute);
+// add the polyline-element of the old route to the map "updateMap"
+polylineOfOldRoute.addTo(updateMap);
 
-// add the i-th polyline-element of the array polylineRoutesLatLongArray to the routesGroup and therefore to the map "allRoutesMap"
-polylineRoutesLatLongArray[i].addTo(routesGroup);
-*/
+// *********************************************************************************************************************
 
 
 
+// FUNKTION HIER DOPPELT, STEHT BEREITS IN READROUTESENCOUNTERS.JS, DIESE DATEI SOLL ABER NICHT IN SINGLEROUTE.EJS
+// EINGEBUNDEN WERDEN. DIESES PROBLEM LÖSEN, DATEIEN NEU AUFTEILEN
 
+function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute){
 
+    // point with lat,long-order of its coordinate
+    let latLong;
+
+    // array for (later in this function) containing the route-coordinates with its points as objects in lat,long-coordinate-order
+    var latLongCoordinatesRoute = [];
+
+    let c;
+    // loop "over" all points in given route
+    for (c = 0; c < longLatCoordinatesRoute.length; c++){
+
+        // swap current long,lat coordinate (array) to lat,long coordinate (object)
+        latLong = L.GeoJSON.coordsToLatLng(longLatCoordinatesRoute[c]);
+
+        // write new built lat,long-coordinate-pair (as an object) into the array latLongCoordinatesRoute, for getting the given route with swapped coordinates
+        latLongCoordinatesRoute.push(latLong);
+    }
+
+    // return the given route with swapped coordinates as one array containing objects (not arrays!)
+    return latLongCoordinatesRoute;
+}
 
 
 
