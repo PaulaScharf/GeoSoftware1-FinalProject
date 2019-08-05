@@ -11,6 +11,10 @@
 // please put in your own tokens at 'token.js'
 
 
+
+// FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
+
+
 // create the initial map in the "createMap"-div
 var createMap = L.map('createMap').setView([0, 0], 2);
 
@@ -21,7 +25,6 @@ var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
 // add the OpenStreetMap tile layer to the map "createMap"
 oSMLayer.addTo(createMap);
-
 
 
 // enable drawing a route into the map "createMap" (using leaflet.draw) and write the corresponding GeoJSON string into textarea "createRoute"

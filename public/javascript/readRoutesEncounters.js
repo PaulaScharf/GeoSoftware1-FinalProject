@@ -16,6 +16,7 @@
 
 // CONSECUTIVE NUMBER BEGINNT MIT 0 !! FALLS ÄNDERUNG ZU 1, DANN KOMMENTARE IN CHECKBOX-FUNKTIONEN ANPASSEN
 
+
 // ALLROUTESMAP UMBENENNEN IN AUCH BEGEGNUNGEN
 
 
@@ -29,6 +30,11 @@ var polylineRoutesLatLongArray = [];
 
 // array for the encounters which are shown in the map "allRoutesMap"
 var encountersLatLongArray = [];
+
+
+
+// FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
+
 
 
 // ****************************** map ******************************
@@ -77,8 +83,6 @@ $.ajax({
 
 // if the request is done successfully, ...
     .done (function (response) {
-
-        console.log("ajax-GET-response:", response);
 
         // ... show all read routes on starting page (in table and in map), as the following function does:
         showAllRoutesOnStartingPage(response);

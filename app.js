@@ -113,9 +113,73 @@ app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
   var port = 3000;
 
 
+  // *****************************************************************************
+/*
+  // FÜR ANIMAL TRACKING API??
+  // middleware for ... CORS: origin-response
+  app.use((req, res, next) => {
+    res.set("access-control-allow-origin", "localhost:3000");
+    next();
+  });
 
 
-// AUS AUFGABE 8
+  // FÜR ANIMAL TRACKING API??
+  // middleware for options header... CORS: origin-response
+  app.options("localhost:3000", (res, next) => {
+    res.set({
+      "access-control-allow-methods": "GET, POST",
+      "access-control-allow-headers": "content-type"
+    });
+    res.status(204).end();
+  });
+
+
+  //
+  app.get("/animalTrackingAPI",  (req, res) => {
+
+    // catch error
+    //
+*/
+/*
+    // GET animal tracking api:
+
+      request({
+        method: 'GET',
+        uri: 'https://www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps',
+        //headers: {'Authorization': 'Bearer ' + 'TOKEN HERE'}
+      }, function (error, response, body){
+        if(error){
+          // give a notice, that the ...has failed and show the error-message on the console
+          console.log("Failure while ...", error.message);
+          // in case of an error while ...
+          res.render('error');
+          // if no error occurs ...
+        }
+
+
+        if(!error && response.statusCode == 200){
+              console.log("/animalTrackingAPI request");
+          res.json(body);
+        }
+      });
+    });
+*/
+
+
+// https://www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps
+
+/*
+    //
+    console.log("/animalTrackingAPI request");
+    res.json(req.body);
+  });
+*/
+  // *****************************************************************************
+
+
+
+
+  // AUS AUFGABE 8
   // middleware for making the db connection available via the request object
   app.use((req, res, next) => {
     req.db = app.locals.db;
