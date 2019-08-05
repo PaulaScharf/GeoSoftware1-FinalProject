@@ -85,6 +85,8 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
   secondValue.innerHTML = insertSecond;
   var thirdValue = document.createElement("td");
   thirdValue.innerHTML = insertThird;
+  var fourthValue = document.createElement("td");
+  fourthValue.setAttribute("id", "weather" + insertFirst);
 
 
   // append new row and seven new cells to given table
@@ -92,6 +94,7 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
   row.appendChild(firstValue);
   row.appendChild(secondValue);
   row.appendChild(thirdValue);
+  row.appendChild(fourthValue);
 }
 
 
