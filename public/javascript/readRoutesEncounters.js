@@ -124,6 +124,7 @@ function getAllEncountersAndShow() {
 
             for (let i = 0; i < response.length; i++) {
                 let currentEncounter = response[i];
+                console.log(currentEncounter);
                 let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
                 for (let k = 0; k < allRoutes.length; k++) {
                     if(allRoutes[k][0]._id == currentEncounter.firstRoute) {
@@ -139,6 +140,9 @@ function getAllEncountersAndShow() {
                     allEncounters.push([currentEncounter, true, noOfRoutes])
                 }
             }
+            checkForNewRoute(allRoutes, true);
+
+            //console.log(allEncounters);
 
             showEncountersOnStartingPage();
 

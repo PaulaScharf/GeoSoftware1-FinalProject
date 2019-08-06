@@ -14,7 +14,10 @@
 //
 var alreadyKnownRoutes = [];
 
-
+/**
+ * This function reads all routes from the db and also checks if some of them are new and therefor require a
+ * calculation of encounters
+ */
 function getAllRoutes() {
   $.ajax({
     // use a http GET request
@@ -27,11 +30,15 @@ function getAllRoutes() {
 
   // if the request is done successfully, ...
       .done(function (response) {
+        // make the response comply to the format of the allRoutes-array in readRoutesEncounters
+        let allRoutes = [];
+        for (let i = 0; i < response.length; i++) {
+          allRoutes.push([response[i], true])
+          allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
+        }
 
-        console.log("ajax-GET-response:", response);
-
-        // ... ?
-        checkForNewRoute(response);
+        // check for routes with the status "new" and calculate encounters for said routes
+        checkForNewRoute(allRoutes, false);
 
 
         // ... give a notice on the console that the AJAX request for reading all routes has succeeded
@@ -45,90 +52,74 @@ function getAllRoutes() {
       });
 }
 
-function getAllEncounters() {
-  $.ajax({
-    // use a http GET request
-    type: "GET",
-    // URL to send the request to
-    url: "/encounter/getAll",
-    // data type of the response
-    dataType: "json"
-  })
-
-  // if the request is done successfully, ...
-      .done (function (response) {
-
-        for (let i = 0; i < response.length; i++) {
-          let currentEncounter = response[i];
-          let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
-          for (let k = 0; k < allRoutes.length; k++) {
-            if(allRoutes[k][0]._id == currentEncounter.firstRoute) {
-              noOfRoutes.firstRoute = k;
-            }
-            else if(allRoutes[k][0]._id == currentEncounter.secondRoute) {
-              noOfRoutes.secondRoute = k;
-            }
-          }
-          if(typeof noOfRoutes.firstRoute === "undefined" || typeof noOfRoutes.secondRoute === "undefined") {
-            deleteEncounter(currentEncounter._id);
-          }
-        }
-
-        // ... give a notice on the console that the AJAX request for reading all routes has succeeded
-        console.log("AJAX request (reading all encounters) is done successfully.");
-      })
-
-      // if the request has failed, ...
-      .fail (function (xhr, status, error) {
-        // ... give a notice that the AJAX request for reading all routes has failed and show the error-message on the console
-        console.log("AJAX request (reading all encounters) has failed.", error.message);
-      });
-}
-
-
-
+// TODO: instead of checkForUpdates you could also change the status
 /**
  * this route checks, if the ajax-response contains a new route.
  * If the route is new, then the encounters are calculated for it.
- * @param response  the response of the ajax-request in readRoutesEncounters.js
+ * @param response          the response of the ajax-request in readRoutesEncounters.js
+ * @param checkForUpdates   if true, also delete the old encounters associated with a new route
  * @author name: Paula Scharf, matr.: 450 334
  */
-function checkForNewRoute(response) {
+function checkForNewRoute(response, checkForUpdates) {
 
   console.log("check for new routes");
-  //
-  for (let i = 0; i < response.length; i++) {
-    let route = {
-      _id: response[i]._id,
-      status: response[i].status
-    };
-    //
-    response[i].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder(response[i].geoJson.features[0].geometry.coordinates);
 
-    if(response[i].status == "new") {
-      console.dir(response[i]);
-      calculateEncounters(response[i].geoJson.features[0].geometry.coordinates, response[i]._id);
+  // go through all routes
+  for (let i = 0; i < response.length; i++) {
+    let currentRoute = response[i][0];
+    console.log(currentRoute);
+    let route = {
+      _id: currentRoute._id,
+      // TODO: Why is the status not set to old?
+      status: currentRoute.status
+    };
+
+
+    if(currentRoute.status == "new") {
+      // if this function is also called to check for updates, then delete all old encounters of the new route
+      if(checkForUpdates) {
+        deleteAllEncountersOfRoute(currentRoute._id);
+      }
+
+      calculateEncounters(currentRoute.geoJson.features[0].geometry.coordinates, currentRoute._id, checkForUpdates);
 
       updateStatusFromNewToOld(route);
     }
-    alreadyKnownRoutes.push(response[i]);
+    alreadyKnownRoutes.push(currentRoute);
 
-    console.log("checked " + response[i]._id)
+    console.log("checked " + currentRoute._id)
+  }
+}
+
+/**
+ * This function deletes all encounters which are associated to the route with the given id
+ * @param routeId - the id  of the route
+ */
+function deleteAllEncountersOfRoute(routeId) {
+  console.log("delete encounters of new route " + routeId);
+  for (let i = 0; i < allEncounters.length; i++) {
+    let currentEncounter = allEncounters[i][0];
+    if (currentEncounter.firstRoute == routeId || currentEncounter.secondRoute == routeId) {
+      allEncounters.splice(i, 1);
+      deleteEncounter(currentEncounter._id);
+      i = i-1;
+    }
   }
 }
 
 
 /**
  * This function calculates all encounters of a given route with all other routes.
- * @param oneRoute  a route (only the coordinates)
- * @param oneId     id of oneRoute
+ * @param oneRoute        -  a route (only the coordinates)
+ * @param oneId           -  id of oneRoute
+ * @param checkForUpdates -
  * @author name: Paula Scharf, matr.: 450 334
  */
-function calculateEncounters(oneRoute, oneId) {
+function calculateEncounters(oneRoute, oneId, checkForUpdates) {
   //
   for (let i = 0; i < alreadyKnownRoutes.length; i++) {
     console.log("Compare: " + oneId + " with " + alreadyKnownRoutes[i]._id)
-    intersectionOfRoutes(oneRoute, alreadyKnownRoutes[i].geoJson.features[0].geometry.coordinates, oneId, alreadyKnownRoutes[i]._id);
+    intersectionOfRoutes(oneRoute, alreadyKnownRoutes[i].geoJson.features[0].geometry.coordinates, oneId, alreadyKnownRoutes[i]._id, checkForUpdates);
   }
 }
 
@@ -136,13 +127,14 @@ function calculateEncounters(oneRoute, oneId) {
 
 /**
  * This function calculates the intersections of between all the straight lines that make up two given routes
- * @param firstRoute    a route (only the coordinates)
- * @param secondRoute   a second route (only the coordinates)
- * @param firstId       id of the first route
- * @param secondId      id of the second route
+ * @param firstRoute        a route (only the coordinates)
+ * @param secondRoute       a second route (only the coordinates)
+ * @param firstId           id of the first route
+ * @param secondId          id of the second route
+ * @param checkForUpdates   if true, add the new encounter to the allEncounters-array
  * @author name: Paula Scharf, matr.: 450 334
  */
-function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId) {
+function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkForUpdates) {
   //
   for(let i = 1; i < firstRoute.length; i++) {
     //
@@ -159,11 +151,26 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId) {
           intersectionY: intersectionCoordinates[1],
           firstRoute: firstId,
           secondRoute: secondId
-          //weather: new WeatherRequest(intersectionCoordinates),
-
         };
         console.log("encounter: ");
         console.log(encounter);
+        if(checkForUpdates) {
+            console.log(encounter);
+            let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
+            for (let k = 0; k < allRoutes.length; k++) {
+              if(allRoutes[k][0]._id == encounter.firstRoute) {
+                noOfRoutes.firstRoute = k;
+              }
+              else if(allRoutes[k][0]._id == encounter.secondRoute) {
+                noOfRoutes.secondRoute = k;
+              }
+            }
+            if(typeof noOfRoutes.firstRoute === "undefined" || typeof noOfRoutes.secondRoute === "undefined") {
+              // TODO: ...
+            } else {
+              allEncounters.push([encounter, true, noOfRoutes])
+            }
+        }
         postEncounter(encounter);
       }
     }

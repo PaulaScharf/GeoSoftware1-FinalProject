@@ -79,6 +79,7 @@ var putitemcontroller = function (req, res) {
   // convert the coordinate-string to Json
   req.body.geoJson = JSON.parse(req.body.geoJson);
   //
+  req.body.status = "new";
   let objectId = new mongodb.ObjectID(req.body._id);
   // delete the id from the body
   delete req.body._id;

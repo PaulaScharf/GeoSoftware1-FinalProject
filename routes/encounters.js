@@ -57,6 +57,7 @@ var putitemcontroller = function (req, res) {
         if(error){
             console.dir(error);
         }
+        // ???
         // go back to the overview-page through the indexRouter
         res.redirect("/overview");
     });
@@ -85,7 +86,6 @@ var deleteitemcontroller = function(req, res) {
     //
     let objectId = new mongodb.ObjectID(req.query._id);
 
-    console.log(objectId);
     // delete the item with the given id
     req.db.collection('routeDB').deleteOne({_id:objectId}, (error, result) => {
 

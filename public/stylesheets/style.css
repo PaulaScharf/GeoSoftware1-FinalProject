@@ -26,16 +26,12 @@ table, th, td {
   border-collapse: collapse;
 }
 
-thead {
+#encounterTable {
   position: sticky;
   top: 0;
   text-align: center;
 }
 
-caption {
-  position: sticky;
-  bottom: 0;
-}
 
 caption, td {
   text-align: left;
@@ -56,4 +52,11 @@ th, td {
 
 .nav-item > a:hover {
   color: #7ed5e1;
+}
+
+#encounterTableDiv {
+  overflow:scroll;
+  max-height:600px;
+  width:100%;
+  overflow:auto;
 }
