@@ -35,6 +35,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var itemsRouter = require('./routes/items');
+var encountersRouter = require('./routes/encounters');
 
 
 // view engine setup
@@ -192,6 +193,8 @@ app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
 
   // CRUD functionality for routes
   app.use('/item', itemsRouter);
+
+app.use('/encounter', encountersRouter);
 
 
 

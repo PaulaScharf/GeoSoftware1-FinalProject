@@ -15,7 +15,7 @@
 
     <title>create a new route</title>
 </head>
-<body>
+<body onload = "getAllRoutes()">
   <%- include('partial/navbar', {active: "Maintainance"}); %>
 
   <main role="main">
@@ -37,7 +37,7 @@
           var f = document.forms["createForm"].elements;
           var cansubmit = true;
 
-                        for (var i = 1; i < 6; i++) {
+                        for (var i = 1; i < 5; i++) {
                             if (f[i].value.length == 0) cansubmit = false;
                         }
                         document.getElementById('submitbutton').disabled = !cansubmit;
@@ -59,12 +59,14 @@
                     <textarea id="createRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
                     Routename:<br />
                     <input type="text" name="name" onKeyup="checkform()"/><br>
-                    Type:<br />
-                    <input type="text" name="type" onKeyup="checkform()"/><br>
+                    Description:<br />
+                    <input type="text" name="description" onKeyup="checkform()"/><br>
                     Timestamp:<br />
                     <input type="date" name="date" onKeyup="checkform()"/>
                     <input type="time" name="time" onKeyup="checkform()"/>
                     <input type="hidden" name="madeBy" onKeyup="checkform()" value = "user"/>
+                    <input type="hidden" name="type" onKeyup="checkform()" value = "route"/>
+                    <input type="hidden" name="status" onKeyup="checkform()" value = "new"/>
                     <br/><br/>
                     <div id="errorMsg">To create a route you need to fill in all blanks.</div>
                     <input type="submit" value="Create" disabled="disabled" id="submitbutton"/>
@@ -84,6 +86,10 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="leaflet/leaflet.js"></script>
 <script src="leaflet-draw/leaflet.draw.js"></script>
+<script src="turf/turf.min.js"></script>
 
 <script src="javascript/leafletDrawPolyline.js"></script>
 <script src="javascript/createRouteMap.js"></script>
+<script src="javascript/encounters.js"></script>
+<script src="javascript/tokens.js"></script>
+

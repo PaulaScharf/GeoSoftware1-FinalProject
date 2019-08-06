@@ -18,7 +18,8 @@
 
 
 // ALLROUTESMAP UMBENENNEN IN AUCH BEGEGNUNGEN
-
+    let allEncounters = [];
+    let allRoutes = [];
 
 // ****************************** global variables ******************************
 
@@ -85,12 +86,14 @@ $.ajax({
 // if the request is done successfully, ...
     .done (function (response) {
 
+        for (let i = 0; i < response.length; i++) {
+            allRoutes.push([response[i], true])
+            allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
+        }
         // ... show all read routes on starting page (in table and in map), as the following function does:
-        showAllRoutesOnStartingPage(response);
-        // ... ?
-        calculateEncountersForAllRoutes(response);
+        showAllRoutesOnStartingPage(allRoutes);
 
-        showEncountersOnStartingPage(allEncounters);
+        getAllEncountersAndShow();
 
 
 
@@ -106,8 +109,52 @@ $.ajax({
 
 // *****************************************************************
 
+function getAllEncountersAndShow() {
+    $.ajax({
+        // use a http GET request
+        type: "GET",
+        // URL to send the request to
+        url: "/encounter/getAll",
+        // data type of the response
+        dataType: "json"
+    })
 
+    // if the request is done successfully, ...
+        .done (function (response) {
 
+            for (let i = 0; i < response.length; i++) {
+                let currentEncounter = response[i];
+                let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
+                for (let k = 0; k < allRoutes.length; k++) {
+                    if(allRoutes[k][0]._id == currentEncounter.firstRoute) {
+                        noOfRoutes.firstRoute = k;
+                    }
+                    else if(allRoutes[k][0]._id == currentEncounter.secondRoute) {
+                        noOfRoutes.secondRoute = k;
+                    }
+                }
+                if(typeof noOfRoutes.firstRoute === "undefined" || typeof noOfRoutes.secondRoute === "undefined") {
+                    deleteEncounter(currentEncounter._id);
+                } else {
+                    allEncounters.push([currentEncounter, true, noOfRoutes])
+                }
+            }
+
+            showEncountersOnStartingPage();
+
+            // ... give a notice on the console that the AJAX request for reading all routes has succeeded
+            console.log("AJAX request (reading all encounters) is done successfully.");
+        })
+
+        // if the request has failed, ...
+        .fail (function (xhr, status, error) {
+            // ... give a notice that the AJAX request for reading all routes has failed and show the error-message on the console
+            console.log("AJAX request (reading all encounters) has failed.", error.message);
+        });
+}
+
+// TODO: refactor all for-loops, so that they use "current..."
+// TODO: numbers of routes and encounters should start with 1
 // JSDOC ANPASSEN!!!
 /**
  * Takes the response of the AJAX GET-request for reading all routes out of the database.
@@ -126,7 +173,7 @@ function showAllRoutesOnStartingPage(response) {
 
     // folgendes if LÖSCHEN ?????????
     // if there are no routes in the database ...
-    if (typeof response[0] === "undefined") {
+    if (typeof response[0][0] === "undefined") {
         // if there are routes in the database ... :
     } else {
 
@@ -136,7 +183,7 @@ function showAllRoutesOnStartingPage(response) {
 
             // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
             // show the i-th route with a consecutive number and its creator, name, date, time and type (.................) in the table "routesTable" on starting page
-            createAndWriteTableWithSevenCells(i, response[i].creator, response[i].name, response[i].date, response[i].time, response[i].type, "routesTable");
+            createAndWriteTableWithSevenCells(i, response[i][0].creator, response[i][0].name, response[i][0].date, response[i][0].time, response[i][0].type, "routesTable");
 
 
 
@@ -146,7 +193,7 @@ function showAllRoutesOnStartingPage(response) {
             checkbox(i);
 
             // extract the coordinates of the i-th route
-            coordinatesRoute = swapGeoJSONsLongLatToLatLongOrder(response[i].geoJson.features[0].geometry.coordinates);
+            coordinatesRoute = response[i][0].geoJson.features[0].geometry.coordinates;
             console.log(coordinatesRoute);
             // for the first route of the database ...
             if (i === 0) {
@@ -158,10 +205,10 @@ function showAllRoutesOnStartingPage(response) {
             let polylineOfRoute = L.polyline(coordinatesRoute, {color: '#ec0000'}, {weight: '3'});
 
             // add the polyline to the array polylineRoutesLatLongArray for being able to address the polylines(routes) by numbers (kind of IDs) (needed for checkboxes)
-            polylineRoutesLatLongArray.push([polylineOfRoute, true]);
+            polylineRoutesLatLongArray.push(polylineOfRoute);
 
             // add the i-th polyline-element of the array polylineRoutesLatLongArray to the routesGroup and therefore to the map "allRoutesMap"
-            polylineRoutesLatLongArray[i][0].addTo(routesGroup);
+            polylineRoutesLatLongArray[i].addTo(routesGroup);
         }
     }
 }
@@ -175,20 +222,21 @@ function showAllRoutesOnStartingPage(response) {
  *
  * @private
  * @author Paula Scharf
- * @param encounters
+ * @param allEncounters
  * @param response response of AJAX GET-request for reading all .... out of the database
  */
-function showEncountersOnStartingPage(encounters) {
+function showEncountersOnStartingPage() {
     // fill the table for the encounters with the encounters-array
-    fillEncountersTable(encounters);
+    fillEncountersTable();
     // loop "over" all encounters in the current database "routeDB"
-    for (let i = 0; i < encounters.length; i++) {
+    for (let i = 0; i < allEncounters.length; i++) {
+        let currentEncounter = allEncounters[i][0];
         // ************** show the i-th encounter in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
 
 // VERGLEICHEN MIT ROUTEN IN OBIGER FUNKTION
 
         // make a leaflet-polyline from the currentOriginalRouteLatLongOrder
-        let currentPoint = L.circle(encounters[i][0].intersection, {radius: 200}, {color: '#000bec'});
+        let currentPoint = L.circle([currentEncounter.intersectionX, currentEncounter.intersectionY], {radius: 200}, {color: '#000bec'});
 
         // add the current .......... to the array encountersLatLongArray for being able to address the .......... by numbers (kind of IDs)
         encountersLatLongArray.push(currentPoint);
@@ -201,22 +249,24 @@ function showEncountersOnStartingPage(encounters) {
  *  fill the encounters table
  * @private
  * @author Paula Scharf
- * @param encounters - array of encounters
+ * @param allEncounters - array of encounters
  */
-function fillEncountersTable(encounters) {
+function fillEncountersTable() {
     // clear the table
     deleteAllChildrenOfElement("encountersTable");
     // fill the table
-    for (let i = 0; i < encounters.length; i++) {
+    for (let i = 0; i < allEncounters.length; i++) {
+        let currentEncounter = allEncounters[i];
         // only show encounters, which are also shown on the map
-        if (encounters[i][1] == true) {
-            createAndWriteTableWithThreeCells(i, encounters[i][0].firstRoute, encounters[i][0].secondRoute, "encountersTable");
+        if (currentEncounter[1] == true) {
+            createAndWriteTableWithThreeCells(i, currentEncounter[2].firstRoute, currentEncounter[2].secondRoute, "encountersTable");
             // if the encounter is new then create a new weather request
-            if (typeof encounters[i][0].weatherRequest === 'undefined') {
-                encounters[i][0].weatherRequest = new WeatherRequest(encounters[i][0].intersection, i);
+            console.log(currentEncounter);
+            if (typeof currentEncounter[0].weather === 'undefined') {
+                currentEncounter[0].weather = new WeatherRequest([currentEncounter[0].intersectionX, currentEncounter[0].intersectionX], i);
             // if the encounter is old reuse the response of the already existing corresponding weather request
             } else {
-                encounters[i][0].weatherRequest.x.writeRequestResultsIntoTable();
+                currentEncounter[0].weather.x.writeRequestResultsIntoTable();
             }
         }
     }
@@ -261,9 +311,9 @@ function routeSelectionForMap(cb_id){
     // if the checkbox is picked ...
     if (checkBox.checked === true){
         // ... show the corresponding route in the map "allRoutesMap" (by adding this route to the layerGroup "routesGroup")
-        routesGroup.addLayer(polylineRoutesLatLongArray[cb_id][0]);
+        routesGroup.addLayer(polylineRoutesLatLongArray[cb_id]);
         // set to true to indicate, that the route is currently selected
-        polylineRoutesLatLongArray[cb_id][1] = true;
+        allRoutes[cb_id][1] = true;
         // get all ids of encounters which have to be added
         let idsOfEncountersToBeAdded = encountersToBeAdded(cb_id);
         // add the encounters
@@ -279,9 +329,9 @@ function routeSelectionForMap(cb_id){
     // if the checkbox is deselected ...
     else {
         // ... do not show the corresponding route in the map "allRoutesMap" (by removing this route from the layerGroup "routesGroup")
-        routesGroup.removeLayer(polylineRoutesLatLongArray[cb_id][0]);
+        routesGroup.removeLayer(polylineRoutesLatLongArray[cb_id]);
         // set to false to indicate, that the route is currently not selected
-        polylineRoutesLatLongArray[cb_id][1] = false;
+        allRoutes[cb_id][1] = false;
         // get all ids of encounters which have to be removed
         let idsOfEncountersToBeRemoved = encountersToBeRemoved(cb_id);
         // remove the encounters
@@ -307,10 +357,11 @@ function encountersToBeRemoved(routeId) {
     let result = [];
     for (let i = 0; i < allEncounters.length; i++) {
         // all encounters which belong to the deselected route have to be removed
-        if(allEncounters[i][0].firstRoute == routeId || allEncounters[i][0].secondRoute == routeId) {
+        if(allEncounters[i][2].firstRoute == routeId || allEncounters[i][2].secondRoute == routeId) {
             result.push(i);
         }
     }
+    console.log(result);
     return result;
 }
 
@@ -325,10 +376,10 @@ function encountersToBeAdded(routeId) {
     let result = [];
     for (let i = 0; i < allEncounters.length; i++) {
         // only routes which belong to the selected route and one other selected route have to be added
-        if(allEncounters[i][0].firstRoute == routeId && polylineRoutesLatLongArray[allEncounters[i][0].secondRoute][1] == true) {
+        if(allEncounters[i][2].firstRoute == routeId && allRoutes[allEncounters[i][2].secondRoute][1] == true) {
             result.push(i);
         }
-        else if(allEncounters[i][0].secondRoute == routeId && polylineRoutesLatLongArray[allEncounters[i][0].firstRoute][1] == true) {
+        else if(allEncounters[i][2].secondRoute == routeId && allRoutes[allEncounters[i][2].firstRoute][1] == true) {
             result.push(i);
         }
     }
@@ -365,4 +416,92 @@ function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute){
 
     // return the given route with swapped coordinates as one array containing objects (not arrays!)
     return latLongCoordinatesRoute;
+}
+
+/**
+ * @desc This class creates and holds a request to openweathermap
+ * @author Paula Scharf 450334
+ */
+class WeatherRequest
+{
+    /**
+     * @desc This is the constructor of the class WeatherRequest
+     * @param indiRoute an object of the class individualRoute
+     */
+    constructor(intersection, id)
+    {
+        var lat = intersection[0];
+        var long = intersection[1];
+
+        this.resource = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat
+            + "&lon=" + long + "&appid=" + token.OPENWEATHERMAP_TOKEN;
+
+        this.x = new XMLHttpRequest();
+        this.x.intersection = intersection;
+        this.x.id = id;
+        this.x.respons;
+        this.x.writeRequestResultsIntoTable = this.writeRequestResultsIntoTable;
+        this.x.onload = this.loadcallback;
+        this.x.onerror = this.errorcallback;
+        this.x.onreadystatechange = this.statechangecallback;
+        this.openAndSendRequest();
+
+    }
+
+    openAndSendRequest()
+    {
+        this.x.open("GET", this.resource, true);
+        this.x.send();
+    }
+
+    /**
+     * @desc This function is called, when there is a change in the XMLHttpRequest "x".
+     * When it is called, it writes the weather into the table and creates a infoRequest.
+     */
+    statechangecallback()
+    {
+        if (this.status == "200" && this.readyState == 4)
+        {
+            this.writeRequestResultsIntoTable();
+        }
+    }
+
+    /**
+     * @desc This function writes the weather into the asscoiated cell in the table.
+     */
+    writeRequestResultsIntoTable()
+    {
+        // show the weather as an icon
+        // if you hover over this icon it will show the weather as a text
+        document.getElementById("weather" + this.id).innerHTML =  "<span title='"
+            + JSON.parse(this.responseText).weather[0].description
+            + "'><img src=http://openweathermap.org/img/w/"
+            + JSON.parse(this.responseText).weather[0].icon + ".png /img>";
+    }
+
+    /**
+     * @desc This function is called when theres an error with the request.
+     */
+    errorcallback(e) {
+        //console.dir("x: " + this.x);
+        console.dir("e: " + e);
+        if(this.status = 404)
+        {
+            document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split"
+                + this.indiRoute.positionJ).innerHTML = "error: no connection to the server";
+        }
+        else
+        {
+            document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split"
+                + this.indiRoute.positionJ).innerHTML = "errorcallback: check web-console";
+        }
+    }
+
+    /**
+     * @desc Thsi funcion is called when the request is loaded for the first time
+     */
+    loadcallback() {
+        //console.dir(x);
+        console.log("OpenWeatherMap: status: " + this.status + " , readyState: " + this.readyState);
+    }
 }

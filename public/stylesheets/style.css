@@ -26,8 +26,15 @@ table, th, td {
   border-collapse: collapse;
 }
 
-th {
+thead {
+  position: sticky;
+  top: 0;
   text-align: center;
+}
+
+caption {
+  position: sticky;
+  bottom: 0;
 }
 
 caption, td {
@@ -37,6 +44,7 @@ caption, td {
 th, td {
   padding: 10px;
 }
+
 
 #allRoutesMap, #createMap, #updateMap {
   height: 600px;
