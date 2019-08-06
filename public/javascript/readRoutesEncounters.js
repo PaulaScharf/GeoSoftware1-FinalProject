@@ -109,6 +109,11 @@ $.ajax({
 
 // *****************************************************************
 
+/**
+ * This function retrieves all encounters from the database and displays them on the map and the table.
+ * Also if a route is deleted, added or updated the encounters in the database are also adjusted with this function.
+ * @author name: Paula Scharf, matr.: 450 334
+ */
 function getAllEncountersAndShow() {
     $.ajax({
         // use a http GET request
@@ -126,6 +131,8 @@ function getAllEncountersAndShow() {
                 let currentEncounter = response[i];
                 console.log(currentEncounter);
                 let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
+                // go through all routes, to determine their index in the allRoutes-array and give that information
+                // to the encounter
                 for (let k = 0; k < allRoutes.length; k++) {
                     if(allRoutes[k][0]._id == currentEncounter.firstRoute) {
                         noOfRoutes.firstRoute = k;
@@ -135,18 +142,22 @@ function getAllEncountersAndShow() {
                     }
                 }
                 if(typeof noOfRoutes.firstRoute === "undefined" || typeof noOfRoutes.secondRoute === "undefined") {
+                    // delete the current encounter from the db if any of the corresponding routes are missing
                     deleteEncounter(currentEncounter._id);
                 } else {
+                    // give true as the second argument to indicate that the encounter should be visible on the map
+                    // and in the table
                     allEncounters.push([currentEncounter, true, noOfRoutes])
                 }
             }
+            // check if a route was added or updated and adjust the encounters accordingly
             checkForNewRoute(allRoutes, true);
 
             //console.log(allEncounters);
 
             showEncountersOnStartingPage();
 
-            // ... give a notice on the console that the AJAX request for reading all routes has succeeded
+            // ... give a notice on the console that the AJAX request for reading all encounters has succeeded
             console.log("AJAX request (reading all encounters) is done successfully.");
         })
 
@@ -221,13 +232,9 @@ function showAllRoutesOnStartingPage(response) {
 
 // JSDOC ANPASSEN!!!
 /**
- * Takes the response of the AJAX GET-request for ............
- *
- *
+ * This function displays all encounters in the map and in the table after they have been retrieved from the database.
  * @private
- * @author Paula Scharf
- * @param allEncounters
- * @param response response of AJAX GET-request for reading all .... out of the database
+ * @author name: Paula Scharf, matr.: 450 334
  */
 function showEncountersOnStartingPage() {
     // fill the table for the encounters with the encounters-array
@@ -235,16 +242,12 @@ function showEncountersOnStartingPage() {
     // loop "over" all encounters in the current database "routeDB"
     for (let i = 0; i < allEncounters.length; i++) {
         let currentEncounter = allEncounters[i][0];
-        // ************** show the i-th encounter in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
+        // make a circle out of the current encounter
+        let currentCircle = L.circle([currentEncounter.intersectionX, currentEncounter.intersectionY], {radius: 200}, {color: '#000bec'});
 
-// VERGLEICHEN MIT ROUTEN IN OBIGER FUNKTION
-
-        // make a leaflet-polyline from the currentOriginalRouteLatLongOrder
-        let currentPoint = L.circle([currentEncounter.intersectionX, currentEncounter.intersectionY], {radius: 200}, {color: '#000bec'});
-
-        // add the current .......... to the array encountersLatLongArray for being able to address the .......... by numbers (kind of IDs)
-        encountersLatLongArray.push(currentPoint);
-
+        // add the circle to the array encountersLatLongArray
+        encountersLatLongArray.push(currentCircle);
+        // add the encountersLatLongArray to the encountersGroup
         encountersLatLongArray[i].addTo(encountersGroup);
     }
 }
@@ -252,8 +255,7 @@ function showEncountersOnStartingPage() {
 /**
  *  fill the encounters table
  * @private
- * @author Paula Scharf
- * @param allEncounters - array of encounters
+ * @author Paula Scharf, matr.: 450 334
  */
 function fillEncountersTable() {
     // clear the table

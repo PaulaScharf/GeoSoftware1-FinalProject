@@ -11,12 +11,13 @@
 // please put in your own tokens at 'token.js'
 
 
-//
+// already processed routes
 var alreadyKnownRoutes = [];
 
 /**
  * This function reads all routes from the db and also checks if some of them are new and therefor require a
  * calculation of encounters
+ * @author name: Paula Scharf, matr.: 450 334
  */
 function getAllRoutes() {
   $.ajax({
@@ -80,11 +81,12 @@ function checkForNewRoute(response, checkForUpdates) {
       if(checkForUpdates) {
         deleteAllEncountersOfRoute(currentRoute._id);
       }
-
+      // calculate the encounters with other routes
       calculateEncounters(currentRoute.geoJson.features[0].geometry.coordinates, currentRoute._id, checkForUpdates);
-
+      // after the encounters of a route are calculated, its status is set to old
       updateStatusFromNewToOld(route);
     }
+    // the now processed route is added to the other already processed routes
     alreadyKnownRoutes.push(currentRoute);
 
     console.log("checked " + currentRoute._id)
@@ -94,6 +96,7 @@ function checkForNewRoute(response, checkForUpdates) {
 /**
  * This function deletes all encounters which are associated to the route with the given id
  * @param routeId - the id  of the route
+ * @author name: Paula Scharf, matr.: 450 334
  */
 function deleteAllEncountersOfRoute(routeId) {
   console.log("delete encounters of new route " + routeId);
@@ -135,16 +138,15 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
  * @author name: Paula Scharf, matr.: 450 334
  */
 function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkForUpdates) {
-  //
+  // these nested for-loops go through all adjascent point pairs in each route
   for(let i = 1; i < firstRoute.length; i++) {
-    //
     for(let k = 1; k < secondRoute.length; k++) {
-      //
+      // check for intersections between two lines
       var result = getIntersection(firstRoute[i-1].lat, firstRoute[i-1].lng, firstRoute[i].lat, firstRoute[i].lng, secondRoute[k-1].lat, secondRoute[k-1].lng, secondRoute[k].lat, secondRoute[k].lng);
-      //
+      // if the result contains coordinates, then there in an intersection
       if(result.features.length > 0) {
-        //
         let intersectionCoordinates = result.features[0].geometry.coordinates;
+        // create an encounter object for the calculated intersection
         let encounter = {
           type: "encounter",
           intersectionX: intersectionCoordinates[0],
@@ -154,9 +156,11 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
         };
         console.log("encounter: ");
         console.log(encounter);
+        // add the new encounter to the allEncounters-array, if it was created because a route was updated
         if(checkForUpdates) {
-            console.log(encounter);
             let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
+            // go through all routes, to determine their index in the allRoutes-array and give that information
+            // to the encounter
             for (let k = 0; k < allRoutes.length; k++) {
               if(allRoutes[k][0]._id == encounter.firstRoute) {
                 noOfRoutes.firstRoute = k;
@@ -168,9 +172,12 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
             if(typeof noOfRoutes.firstRoute === "undefined" || typeof noOfRoutes.secondRoute === "undefined") {
               // TODO: ...
             } else {
+                // give true as the second argument to indicate that the encounter should be visible on the map
+                // and in the table
               allEncounters.push([encounter, true, noOfRoutes])
             }
         }
+        // save the new encounter in the database
         postEncounter(encounter);
       }
     }
@@ -202,11 +209,10 @@ function getIntersection(x11, y11, x12, y12, x21, y21, x22, y22) {
 }
 
 
-
 /**
- *
- *
- *
+ * This function calls the encounter/post route with ajax, to save a given encounter in the db
+ * @param encounter - the encounter to be saved
+ * @author name: Paula Scharf, matr.: 450 334
  */
 function postEncounter(encounter) {
   //
@@ -229,6 +235,11 @@ function postEncounter(encounter) {
       });
 }
 
+/**
+ * This function calls the encounter/delete route with ajax, to delete an encounter with a given id from the db
+ * @param encounterId   - the id of the encounter
+ * @author name: Paula Scharf, matr.: 450 334
+ */
 function deleteEncounter(encounterId) {
   $.ajax({
     // use a http POST request
@@ -251,6 +262,11 @@ function deleteEncounter(encounterId) {
       });
 }
 
+/**
+ * This function calls the encounter/update route with ajax, to update a route in the database
+ * @param route - the new route
+ * @author name: Paula Scharf, matr.: 450 334
+ */
 function updateStatusFromNewToOld(route) {
 
   route.status = "old";
