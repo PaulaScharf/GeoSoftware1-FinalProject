@@ -11,6 +11,13 @@
 // please put in your own tokens at 'token.js'
 
 
+// JSNLog
+//var JL = require('jsnlog').JL;
+//fatal(logObject: any): Logger
+//JL("testName1").fatal("Test JSNLog");
+
+
+
 //
 var alreadyKnownRoutes = [];
 
@@ -44,7 +51,7 @@ function calculateEncountersForAllRoutes(response) {
 function calculateEncounters(oneRoute, oneId) {
   // compare the the given route (oneRoute) to all routes in the alreadyKnownRoutes-Array
   for (let i = 0; i < alreadyKnownRoutes.length; i++) {
-    console.log("Compare: " + oneId + " with " + alreadyKnownRoutes[i]._id);
+  //  console.log("Compare: " + oneId + " with " + alreadyKnownRoutes[i]._id);
     intersectionOfRoutes(oneRoute, alreadyKnownRoutes[i].geoJson.features[0].geometry.coordinates, oneId, i);
   }
 }
@@ -88,7 +95,7 @@ class WeatherRequest
 
   /**
    * @desc This function is called, when there is a change in the XMLHttpRequest "x".
-   * When it is called, it writes the weather into the table and creates a infoRequest.
+   * When it is called, it writes the weather into the table and creates an infoRequest.
    */
   statechangecallback()
   {
@@ -112,29 +119,26 @@ class WeatherRequest
   }
 
   /**
-   * @desc This function is called when theres an error with the request.
+   * @desc This function is called when there is an error with the request.
    */
   errorcallback(e) {
     //console.dir("x: " + this.x);
     console.dir("e: " + e);
-    if(this.status = 404)
-    {
-      document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split"
-          + this.indiRoute.positionJ).innerHTML = "error: no connection to the server";
+    if (this.status == 404){
+      document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split" + this.indiRoute.positionJ).innerHTML = "error: no connection to the server";
     }
     else
     {
-      document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split"
-          + this.indiRoute.positionJ).innerHTML = "errorcallback: check web-console";
+      document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split" + this.indiRoute.positionJ).innerHTML = "errorcallback: check web-console";
     }
   }
 
   /**
-   * @desc Thsi funcion is called when the request is loaded for the first time
+   * @desc This funcion is called when the request is loaded for the first time
    */
   loadcallback() {
     //console.dir(x);
-    console.log("OpenWeatherMap: status: " + this.status + " , readyState: " + this.readyState);
+//    console.log("OpenWeatherMap: status: " + this.status + " , readyState: " + this.readyState);
   }
 }
 
@@ -162,8 +166,8 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId) {
           firstRoute: firstId,
           secondRoute: secondId
         };
-        console.log("encounter: ");
-        console.log(encounter);
+  //      console.log("encounter: ");
+  //      console.log(encounter);
         // push the encounter to the allEncounters-Array
         allEncounters.push([encounter, true]);
       }

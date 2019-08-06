@@ -26,8 +26,7 @@ function drawPolyline(map, outputTextarea) {
 
   // feature group for all drawn items, add this group to the existing map
   var drawnItems = L.featureGroup().addTo(map);
-
-
+  
   // add a toolbar for drawing to the existing map
   map.addControl(new L.Control.Draw({
 

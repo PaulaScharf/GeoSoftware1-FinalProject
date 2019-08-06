@@ -62,9 +62,12 @@ var putitemcontroller = function (req, res) {
     });
 };
 
+//
 router.route("/post")
     .post(postitemcontroller);
+// 
 router.route("/update")
     .post(putitemcontroller);
+
 
 module.exports = router;
