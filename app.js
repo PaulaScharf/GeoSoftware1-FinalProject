@@ -10,9 +10,14 @@
 */
 
 
+// USERS ROUTER LÖSCHEN??
+
+
 // load modules:
 // load http-module and save it in const-OBJECT http
 const http = require("http");
+// load http-module and save it in const-OBJECT http
+const https = require("https");
 // load path-module and save it in const-OBJECT path
 const path = require("path");
 
@@ -24,15 +29,21 @@ const express = require('express');
 const app = express();
 // load mongodb-module and save it in const-FUNCTION mongodb
 const mongodb = require('mongodb');
-
-
-
-
-
-// folgendes aus express generator:
+//
 var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
+
+
+// JSNLog
+var JL = require('jsnlog').JL;
+//fatal(logObject: any): Logger
+//JL("testName1").fatal("Test JSNLog");
+
+
+
+// MORGEN LÖSCHEN, DA NICHT GEFORDERT?
 var logger = require('morgan');
+
 var indexRouter = require('./routes/index');
 var itemsRouter = require('./routes/items');
 var encountersRouter = require('./routes/encounters');
@@ -42,7 +53,8 @@ var encountersRouter = require('./routes/encounters');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// Log-Modus "dev"
+// MORGEN LÖSCHEN, DA NICHT GEFORDERT?
+// Log-modus "dev"
 app.use(logger('dev'));
 
 
@@ -57,15 +69,14 @@ app.use(express.json());
 // https://expressjs.com/en/4x/api.html#express.urlencoded
 app.use(express.urlencoded({ extended: false }));
 
-
-
-
+//
 app.use(cookieParser());
 
 
 
 
 
+// KOMMENTAR AUF ENGLISCH ÄNDERN!!!
 // "Erstelle die Routen für die installierten Client-Bibliotheken":
 app.use("/leaflet", express.static(__dirname + "/node_modules/leaflet/dist"));
 app.use("/leaflet-draw", express.static(__dirname + "/node_modules/leaflet-draw/dist"));
@@ -77,7 +88,7 @@ app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
 
 
 
-// DATENBANKVERBINDUNG ANDERS IN AUFGABE 8
+// DATENBANKVERBINDUNG SOLL AUTOMATISCH FÜR MIT UND (!!!) OHNE DOCKER FUNKTIONIEREN
 // connect to MongoDB and use database "routeDB":
 
 // asynchronous scope
@@ -114,7 +125,7 @@ app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
 
 
   // *****************************************************************************
-/*
+
   // FÜR ANIMAL TRACKING API??
   // middleware for ... CORS: origin-response
   app.use((req, res, next) => {
@@ -138,85 +149,96 @@ app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
   app.get("/animalTrackingAPI",  (req, res) => {
 
     // catch error
+
     //
-*/
-/*
-    // GET animal tracking api:
+    var resource = "https:www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps";
 
-      request({
-        method: 'GET',
-        uri: 'https://www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps',
-        //headers: {'Authorization': 'Bearer ' + 'TOKEN HERE'}
-      }, function (error, response, body){
-        if(error){
-          // give a notice, that the ...has failed and show the error-message on the console
-          console.log("Failure while ...", error.message);
-          // in case of an error while ...
-          res.render('error');
-          // if no error occurs ...
-        }
+    var login = "KPoppi";
+    var password = "U6_l1#";
 
-
-        if(!error && response.statusCode == 200){
-              console.log("/animalTrackingAPI request");
-          res.json(body);
-        }
-      });
-    });
-*/
-
-
-// https://www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps
-
-/*
     //
+    const options = {
+      //host: resource,
+      //path: resource,
+      //  auth: 'KPoppi:U6_l1#',
+      //  method: 'GET',
+      headers: {
+        'Authorization':'Basic ' + Buffer.from(login+':'+password).toString('base64')
+        //    "access-control-allow-origin": "localhost:3000",
+        //    "access-control-allow-methods": "GET, POST",
+        //    "access-control-allow-headers": "content-type"
+      }
+    };
+
     console.log("/animalTrackingAPI request");
-    res.json(req.body);
+
+    // GET animal tracking api:
+    https.get(resource, options, (httpResponse) => {
+
+      console.log("/animalTrackingAPI request https.get");
+
+      var body = "";
+
+      httpResponse.on('data', (chunk) => {
+        body += chunk;
+        //process.stdout.write(c);
+      });
+
+      httpResponse.on("end", () => {
+        res.json(JSON.parse(body));
+      });
+
+    }).on('error', (error) => {
+      //httpResponse.on("error", (error) => {
+      console.error(error);
+    });
+
+    //  res.json(req.body);
+
   });
-*/
+
   // *****************************************************************************
 
 
 
 
-  // AUS AUFGABE 8
-  // middleware for making the db connection available via the request object
-  app.use((req, res, next) => {
-    req.db = app.locals.db;
-    next();
-  });
+// taken from template of Assignment 8:
+// middleware for making the db connection available via the request object
+app.use((req, res, next) => {
+  req.db = app.locals.db;
+  next();
+});
 
 
 
+//
+app.use('/', indexRouter);
 
-  app.use('/', indexRouter);
-
-  // CRUD functionality for routes
-  app.use('/item', itemsRouter);
+// CRUD functionality for routes
+app.use('/item', itemsRouter);
 
 app.use('/encounter', encountersRouter);
 
 
 
+// taken from template of Assignment 8:
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
-  // folgendes auch aus express generator:
 
-  // catch 404 and forward to error handler
-  app.use(function(req, res, next) {
-    next(createError(404));
-  });
+// taken from template of Assignment 8:
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // error handler
-  app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-  });
 
-  module.exports = app;
-
-  // ********************************
+module.exports = app;

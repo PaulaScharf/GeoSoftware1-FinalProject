@@ -57,12 +57,13 @@ var putitemcontroller = function (req, res) {
         if(error){
             console.dir(error);
         }
-        // ???
+        // TODO: why back to overview
         // go back to the overview-page through the indexRouter
         res.redirect("/overview");
     });
 };
 
+//
 var getAllitemcontroller = function(req,res) {
     req.db.collection('routeDB').find({type: "encounter"}).toArray((error, result) => {
         if(error){
@@ -99,11 +100,13 @@ var deleteitemcontroller = function(req, res) {
 
 router.route("/post")
     .post(postitemcontroller);
+//
 router.route("/update")
     .post(putitemcontroller);
 router.route("/getAll")
     .get(getAllitemcontroller);
 router.route("/delete")
     .get(deleteitemcontroller);
+
 
 module.exports = router;

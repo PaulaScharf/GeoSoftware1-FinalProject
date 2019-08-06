@@ -59,44 +59,213 @@
 // request-resource for getting the animal tracking data
 var resource = "https://www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps";
 
-/*
+
+
 //
 $.ajax({
-  // use a http GET request
-  type: "GET",
-  // URL to send the request to
-  url: "/animalTrackingAPI",
+// use a http GET request
+type: "GET",
+// URL to send the request to
+url: "/animalTrackingAPI",
 //url: resource,
 
-  //
+//
 //contentType: "application/json",
-  //
+//
 //data: resource,
 
-  // data type of the response
-  dataType: "json", //application/json?
-  //
-  xhrFields: {
-    withCredentials: true
-  }
+// data type of the response
+dataType: "json", //application/json?
+//
+xhrFields: {
+withCredentials: true
+}
 })
 
 // if the request is done successfully, ...
 .done (function (response) {
 
-  console.log("Response: " + JSON.stringify(response));
+console.log("Response: " + JSON.stringify(response));
 })
 
 // if the request has failed, ...
 .fail (function (xhr, status, error) {
-  // ... give a notice that the AJAX request for getting the animal tracking api has failed and show the error-message on the console
-  console.log("AJAX request (GET animal tracking api) has failed.", error, error.message);
+// ... give a notice that the AJAX request for getting the animal tracking api has failed and show the error-message on the console
+console.log("AJAX request (GET animal tracking api) has failed.", error, error.message);
 });
+
+
+
+
+
+
+var ergebnis = makeAnimalRoute();
+console.log("test makeAnimalRoute", ergebnis);
+
+
+
+// ******************************** TODO: ********************************
+
+// AUS REQUEST DIE FUNKTION AUFRUFEN, DIE DIE ANIMALROUTEN IN TB SCHREIBT
+// AUS REQUEST DIE FUNKTION AUFRUFEN, DIE DIE ANIMALROUTEN IN MAP SCHREIBT
+// ODER BEIDES ZUSAMMEN WIE IN showAllRoutesOnStartingPage(...),
+// dazu evtl. showAllRoutesOnStartingPage(response) VERALLGEMEINERN UND EINMAL FÜR USERROUTEN UND EINMAL FÜR
+// ANIMALROUTEN AUFRUFEN (Änderungen nötig, da TB anders aussieht und andere Attribute im Request) !!!!!!
+
+
+
+
+/**
+* Takes the response of the Animal Tracking API request .....................
+* and ......
+*
+*
+* @private WIRKLICH??? WANN PRIVATE, WANN NICHT?????
+* @author Katharina Poppinga
+* @param response response of the ......... request ........
 */
+function hmm(response){
+
+
+// response so verändern, dass Route als GeoJSON darin enthalten ist (dazu makeAnimalRoute innerhalb dieser
+// Funktion aufrufen) und alle übrigen Attribute erhalten bleiben
+
+makeAnimalRoute(/*.....locations*/);
+// TODO: mit deren return-Wert die locations in response ersetzen !!!
+
+
+// ...
+
+// BEARBEITETE RESPONSE AN ROUTEN-FUNKTIONEN ÜBERGEBEN
+// BEARBEITETE RESPONSE AN ENCOUNTERS-FUNKTION ÜBERGEBEN
+
+}
 
 
 
 
 
+// HIER REIN MIT LOCATIONS/COORDINATES, NICHT MIT RESPONSE:
+/**
+* Takes the ..................... and makes a route (as a GeoJSON feature) from/of the
+* individual lat- and long-coordinates.......
+*
+*
+* @private
+* @author Katharina Poppinga
+* @param locations array of ...............
+* @return animalRouteGeoJSONFeature - Animalroute as a GeoJSON Feature.............
+*/
+function makeAnimalRoute(locations){
 
-// make route from animal-coordinates:
+  // timestamps are provided in milliseconds since 1970-01-01 UTC
+  // coordinates are in WGS84
+
+  // new array for the coordinates of the route, written in GeoJSON (only the geometry.coordinates part of the GeoJSON format)
+  var coordinatesGeoJSON = [];
+
+
+  // LETZTENDLICH/STATTDESSEN AUS RESPONSE ÜBERNEHMEN!!!!
+  var locations = [
+    {"timestamp":1212240595000,"location_long":-89.7400582,"location_lat":-1.372675},
+    {"timestamp":1212240618999,"location_long":-89.740053,"location_lat":-1.3726544},
+    {"timestamp":1212246021998,"location_long":-89.7400575,"location_lat":-1.3726589},
+    {"timestamp":1212251449999,"location_long":-89.7400497,"location_lat":-1.3726499},
+    {"timestamp":1212256913000,"location_long":-89.7400693,"location_lat":-1.3726749}
+  ];
+
+  //
+  let lat, long;
+  //
+  for (let i = 0; i < locations.length; i++) {
+
+    //
+    lat = locations[i].location_lat;
+    long = locations[i].location_long;
+
+    // adding the i-th coordinate-pair to the new array coordinatesGeoJSON
+    coordinatesGeoJSON.push([long, lat]);
+  }
+
+
+  // creating the GeoJSON Feature output by setting its attributes:
+  var animalRouteGeoJSONFeature = {
+    type: 'Feature',
+    properties: {           // BISHER: no properties set
+    },
+    geometry: {
+      type: 'LineString',
+      // insert the new array coordinatesGeoJSON
+      coordinates: coordinatesGeoJSON
+    },
+  };
+
+  //
+  return animalRouteGeoJSONFeature;
+}
+
+
+
+
+// **************************************************************************************************************************
+
+
+// JSDOC ANPASSEN!!!
+// KOMMENTARE ANPASSEN!!!
+// FUNKTION SO FAST DOPPELT VORHANDEN
+/**
+* Takes the response of the ........
+*
+*
+* @private
+* @author Katharina Poppinga
+* @param response response of AJAX GET-request for ....
+*/
+function showAllAnimalRoutesOnStartingPage(response) {
+
+  //console.log("Show animalRoutes:", response);
+
+  // coordinates of a route (in GeoJSONs long-lat order)
+  var coordinatesRoute;
+
+  // folgendes if LÖSCHEN ?????????
+  // if there are no routes in the database ...
+  if (typeof response[0] === "undefined") {
+    // if there are routes in the database ... :
+  } else {
+
+    // loop "over" all routes in the current database "routeDB"
+    for (let i = 0; i < response.length; i++) {
+
+
+      // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
+      // show the i-th route with a consecutive number and its ....................... in the table "animalRoutesTable" on starting page
+      createAndWriteTableWithSevenCells(i, "animalRoutesTable");
+
+
+
+      // ************** show the i-th route in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
+
+      // outsource the creation of the checkbox for showing or not showing the i-th route in the map
+      checkbox(i);
+
+      // extract the coordinates of the i-th route
+      coordinatesRoute = swapGeoJSONsLongLatToLatLongOrder(response[i].geoJson.features[0].geometry.coordinates);
+
+      // for the first route of the database ... HIER NICHT, DA SCHON FÜR USER GEMACHT?
+      //if (i === 0) {
+        // ... center the map on the first point of the first route
+        //allRoutesMap.setView([coordinatesRoute[i].lat, coordinatesRoute[i].lng], 3);
+      //}
+
+      // make a leaflet-polyline from the coordinatesLatLongOrder
+      let polylineOfRoute = L.polyline(coordinatesRoute, {color: '#ec0000'}, {weight: '3'});
+
+      // add the polyline to the array polylineRoutesLatLongArray for being able to address the polylines(routes) by numbers (kind of IDs) (needed for checkboxes)
+      polylineRoutesLatLongArray.push([polylineOfRoute, true]);
+
+      // add the i-th polyline-element of the array polylineRoutesLatLongArray to the routesGroup and therefore to the map "allRoutesMap"
+      polylineRoutesLatLongArray[i][0].addTo(routesGroup);
+    }
+  }
+}

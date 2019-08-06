@@ -4,9 +4,9 @@
 "use strict";  // JavaScript code is executed in "strict mode"
 
 /**
- * @desc final project, Geosoftware1, SoSe2019
- * @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
- */
+* @desc final project, Geosoftware1, SoSe2019
+* @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
+*/
 
 // please put in your own tokens at 'token.js'
 
@@ -42,11 +42,11 @@ var encountersLatLongArray = [];
 // ****************************** map ******************************
 
 // create the initial map in the "allRoutesMap"-div, the proper map extract will be set later
-var allRoutesMap = L.map('allRoutesMap').setView([0, 0], 2);
+var allRoutesMap = L.map('allRoutesMap').setView([0, 0], 3);
 
 // OpenStreetMap tiles as a layer for the map "allRoutesMap"
 var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
 // add the OpenStreetMap tile layer to the map "allRoutesMap"
@@ -75,16 +75,16 @@ var markersGroup = L.layerGroup().addTo(map....);
 // ********** AJAX request for reading all routes (NUR ROUTES ODER AUCH BEGEGNUNGEN???) out of the database
 // and writing them into ......(ANPASSEN AN BEIDE FUNKTIONSAUFRUFE!!!!!) **********
 $.ajax({
-    // use a http GET request
-    type: "GET",
-    // URL to send the request to
-    url: "/displayAll",
-    // data type of the response
-    dataType: "json"
+  // use a http GET request
+  type: "GET",
+  // URL to send the request to
+  url: "/displayAll",
+  // data type of the response
+  dataType: "json"
 })
 
 // if the request is done successfully, ...
-    .done (function (response) {
+.done (function (response) {
 
         for (let i = 0; i < response.length; i++) {
             allRoutes.push([response[i], true])
@@ -97,15 +97,15 @@ $.ajax({
 
 
 
-        // ... give a notice on the console that the AJAX request for reading all routes has succeeded
-        console.log("AJAX request (reading all routes) is done successfully.");
-    })
+  // ... give a notice on the console that the AJAX request for reading all routes has succeeded
+  console.log("AJAX request (reading all routes) is done successfully.");
+})
 
-    // if the request has failed, ...
-    .fail (function (xhr, status, error) {
-        // ... give a notice that the AJAX request for reading all routes has failed and show the error-message on the console
-        console.log("AJAX request (reading all routes) has failed.", error.message);
-    });
+// if the request has failed, ...
+.fail (function (xhr, status, error) {
+  // ... give a notice that the AJAX request for reading all routes has failed and show the error-message on the console
+  console.log("AJAX request (reading all routes) has failed.", error.message);
+});
 
 // *****************************************************************
 
@@ -172,19 +172,20 @@ function getAllEncountersAndShow() {
 // TODO: numbers of routes and encounters should start with 1
 // JSDOC ANPASSEN!!!
 /**
- * Takes the response of the AJAX GET-request for reading all routes out of the database.
- * ........ Writes routes into table and shows routes in map (both on starting page) ............
- *
- *
- * @private
- * @author Katharina Poppinga
- * @param response response of AJAX GET-request for reading all routes out of the database
- */
+* Takes the response of the AJAX GET-request for reading all routes out of the database.
+* ........ Writes routes into table and shows routes in map (both on starting page) ............
+*
+*
+* @private
+* @author Katharina Poppinga
+* @param response response of AJAX GET-request for reading all routes out of the database
+*/
 function showAllRoutesOnStartingPage(response) {
-    console.log("show Routes");
 
-    // coordinates of a route (in GeoJSONs long-lat order)
-    var coordinatesRoute;
+  //console.log("Show routes:", response);
+
+  // coordinates of a route (in GeoJSONs long-lat order)
+  var coordinatesRoute;
 
     // folgendes if LÖSCHEN ?????????
     // if there are no routes in the database ...
@@ -192,8 +193,8 @@ function showAllRoutesOnStartingPage(response) {
         // if there are routes in the database ... :
     } else {
 
-        // loop "over" all routes in the current database "routeDB"
-        for (let i = 0; i < response.length; i++) {
+    // loop "over" all routes in the current database "routeDB"
+    for (let i = 0; i < response.length; i++) {
 
 
             // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
@@ -202,10 +203,10 @@ function showAllRoutesOnStartingPage(response) {
 
 
 
-            // ************** show the i-th route in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
+      // ************** show the i-th route in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
 
-            // outsource the creation of the checkbox for showing or not showing the i-th route in the map
-            checkbox(i);
+      // outsource the creation of the checkbox for showing or not showing the i-th route in the map
+      checkbox(i);
 
             // extract the coordinates of the i-th route
             coordinatesRoute = response[i][0].geoJson.features[0].geometry.coordinates;
@@ -216,8 +217,8 @@ function showAllRoutesOnStartingPage(response) {
                 allRoutesMap.setView([coordinatesRoute[i].lat, coordinatesRoute[i].lng], 2);
             }
 
-            // make a leaflet-polyline from the coordinatesLatLongOrder
-            let polylineOfRoute = L.polyline(coordinatesRoute, {color: '#ec0000'}, {weight: '3'});
+      // make a leaflet-polyline from the coordinatesLatLongOrder
+      let polylineOfRoute = L.polyline(coordinatesRoute, {color: '#ec0000'}, {weight: '3'});
 
             // add the polyline to the array polylineRoutesLatLongArray for being able to address the polylines(routes) by numbers (kind of IDs) (needed for checkboxes)
             polylineRoutesLatLongArray.push(polylineOfRoute);
@@ -252,6 +253,8 @@ function showEncountersOnStartingPage() {
     }
 }
 
+
+
 /**
  *  fill the encounters table
  * @private
@@ -280,39 +283,41 @@ function fillEncountersTable() {
 
 
 /**
- * Creates a checkbox - inside the fixed corresponding table cell - that corresponds to the individual route, which has the same consecutive
- * number as the id of the checkbox.
- * A selected/checked checkbox adds its corresponding route to the "routesGroup", therefore this route is shown in the map "allRoutesMap".
- * A deselected checkbox removes its corresponding route from the "routesGroup", therefore this route is not shown in the map "allRoutesMap".
- *
- * @private
- * @author Katharina Poppinga
- * @param {number} cb_id - ID for the checkbox to be created
- */
+* Creates a checkbox - inside the fixed corresponding table cell - that corresponds to the individual route, which has the same consecutive
+* number as the id of the checkbox.
+* A selected/checked checkbox adds its corresponding route to the "routesGroup", therefore this route is shown in the map "allRoutesMap".
+* A deselected checkbox removes its corresponding route from the "routesGroup", therefore this route is not shown in the map "allRoutesMap".
+*
+* @private
+* @author Katharina Poppinga
+* @param {number} cb_id - ID for the checkbox to be created
+*/
 function checkbox(cb_id){
-    // label the table cell, in which the checkbox will be written, as "tableCellCheckbox"
-    let tableCellCheckbox = document.getElementById("conseNum"+z);
+  // label the table cell, in which the checkbox will be written, as "tableCellCheckbox"
+  let tableCellCheckbox = document.getElementById("conseNum"+z);
 
-    // add a checkbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
-    tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " " + "<input type='checkbox' id='" +cb_id+ "' checked=true onclick='routeSelectionForMap("+cb_id+")'>";
+  // add a checkbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
+  tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " " + "<input type='checkbox' id='" +cb_id+ "' checked=true onclick='routeSelectionForMap("+cb_id+")'>";
 }
 
 
 
 /**
- * Checks whether a checkbox with given ID is checked (picked) or not (deselected) for customizing the shown routes in the map "allRoutesMap".
- * If the checkbox is checked (picked), the corresponding route (route with the same consecutive number or the same "element-number" in the
- * polylineRoutesLatLongArray (global variable) as the ID of the checkbox) is added to the routesGroup (global variable) and therefore shown in the map "allRoutesMap".
- *
- * @private
- * @author Katharina Poppinga, Paula Scharf
- * @param {number} cb_id - ID of the checkbox
- * @param {array} idsOfEncounters - IDs of the corresponding encounters
- */
+* Checks whether a checkbox with given ID is checked (picked) or not (deselected) for customizing the shown routes in the map "allRoutesMap".
+* If the checkbox is checked (picked), the corresponding route (route with the same consecutive number or the same "element-number" in the
+* polylineRoutesLatLongArray (global variable) as the ID of the checkbox) is added to the routesGroup (global variable) and therefore shown in the map "allRoutesMap".
+*
+* @private
+* @author Katharina Poppinga, Paula Scharf
+* @param {number} cb_id - ID of the checkbox
+* @param {array} idsOfEncounters - IDs of the corresponding encounters
+*/
 function routeSelectionForMap(cb_id){
-    console.log(routesGroup);
-    // label the checkbox
-    let checkBox = document.getElementById(cb_id);
+
+  console.log(routesGroup);
+
+  // label the checkbox
+  let checkBox = document.getElementById(cb_id);
 
     // if the checkbox is picked ...
     if (checkBox.checked === true){
@@ -351,35 +356,44 @@ function routeSelectionForMap(cb_id){
     }
 }
 
+
+
 /**
- * This function returns all ids of encounters which have to be removed, because a route was deselected
- * @private
- * @author Paula Scharf
- * @param routeId           id of affected route
- * @returns {Array} result  ids of affected encounters
- */
+* This function returns all ids of encounters which have to be removed, because a route was deselected
+* @private
+* @author Paula Scharf
+* @param routeId           id of affected route
+* @returns {Array} result  ids of affected encounters
+*/
 function encountersToBeRemoved(routeId) {
     console.log("calculate encounters to be removed")
+
     let result = [];
+
     for (let i = 0; i < allEncounters.length; i++) {
         // all encounters which belong to the deselected route have to be removed
         if(allEncounters[i][2].firstRoute == routeId || allEncounters[i][2].secondRoute == routeId) {
             result.push(i);
         }
     }
+
     console.log(result);
     return result;
 }
 
+
+
 /**
- * This function returns all ids of encounters which have to be added, because a route was reselected
- * @private
- * @author Paula Scharf
- * @param routeId           id of affected route
- * @returns {Array} result  ids of affected encounters
- */
+* This function returns all ids of encounters which have to be added, because a route was reselected
+* @private
+* @author Paula Scharf
+* @param routeId           id of affected route
+* @returns {Array} result  ids of affected encounters
+*/
 function encountersToBeAdded(routeId) {
+
     let result = [];
+    //
     for (let i = 0; i < allEncounters.length; i++) {
         // only routes which belong to the selected route and one other selected route have to be added
         if(allEncounters[i][2].firstRoute == routeId && allRoutes[allEncounters[i][2].secondRoute][1] == true) {
@@ -392,36 +406,38 @@ function encountersToBeAdded(routeId) {
     return result;
 }
 
+
+
 /**
- * Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part).This means this function takes one array (with all coordinates)
- * containing arrays (individual long-lat-pairs) of a route.
- * Swaps these coordinate-pairs. Returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
- *
- * @author Katharina Poppinga
- * @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
- * @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
- */
+* Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part).This means this function takes one array (with all coordinates)
+* containing arrays (individual long-lat-pairs) of a route.
+* Swaps these coordinate-pairs. Returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
+*
+* @author Katharina Poppinga
+* @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
+* @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
+*/
 function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute){
 
-    // point with lat,long-order of its coordinate
-    let latLong;
+  // point with lat,long-order of its coordinate
+  let latLong;
 
-    // array for (later in this function) containing the route-coordinates with its points as objects in lat,long-coordinate-order
-    var latLongCoordinatesRoute = [];
+  // array for (later in this function) containing the route-coordinates with its points as objects in lat,long-coordinate-order
+  var latLongCoordinatesRoute = [];
 
-    let c;
-    // loop "over" all points in given route
-    for (c = 0; c < longLatCoordinatesRoute.length; c++){
+  let c;
+  // loop "over" all points in given route
+  for (c = 0; c < longLatCoordinatesRoute.length; c++){
 
-        // swap current long,lat coordinate (array) to lat,long coordinate (object)
-        latLong = L.GeoJSON.coordsToLatLng(longLatCoordinatesRoute[c]);
+    // swap current long,lat coordinate (array) to lat,long coordinate (object)
+    latLong = L.GeoJSON.coordsToLatLng(longLatCoordinatesRoute[c]);
 
-        // write new built lat,long-coordinate-pair (as an object) into the array latLongCoordinatesRoute, for getting the given route with swapped coordinates
-        latLongCoordinatesRoute.push(latLong);
-    }
+    // write new built lat,long-coordinate-pair (as an object) into the array latLongCoordinatesRoute, for getting the given route with swapped coordinates
+    latLongCoordinatesRoute.push(latLong);
+  }
 
-    // return the given route with swapped coordinates as one array containing objects (not arrays!)
-    return latLongCoordinatesRoute;
+  // return the given route with swapped coordinates as one array containing objects (not arrays!)
+  return latLongCoordinatesRoute;
 }
 
 /**
@@ -504,7 +520,7 @@ class WeatherRequest
     }
 
     /**
-     * @desc Thsi funcion is called when the request is loaded for the first time
+     * @desc This funcion is called when the request is loaded for the first time
      */
     loadcallback() {
         //console.dir(x);

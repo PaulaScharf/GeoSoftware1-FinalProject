@@ -12,6 +12,14 @@
 
 
 // already processed routes
+// JSNLog
+//var JL = require('jsnlog').JL;
+//fatal(logObject: any): Logger
+//JL("testName1").fatal("Test JSNLog");
+
+
+
+//
 var alreadyKnownRoutes = [];
 
 /**
@@ -204,6 +212,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 function getIntersection(x11, y11, x12, y12, x21, y21, x22, y22) {
   var line1 = turf.lineString([[x11, y11], [x12, y12]]);
   var line2 = turf.lineString([[x21, y21], [x22, y22]]);
+  //calculate the intersection with turf
   var intersects = turf.lineIntersect(line1, line2);
   return intersects;
 }

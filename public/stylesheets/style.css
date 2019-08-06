@@ -7,18 +7,23 @@ body {
   background-color: #f2f2f2;
   font-family:'Calibri';
 }
-main {
-  margin-bottom: 100px;
-}
 
-button, #deleteButton {
+button {
   background-color: #d6a820;
   border: none;
   color: black;
+  cursor: pointer;
+  font-size: 16px;
   padding: 10px 30px;
   text-align: center;
-  font-size: 16px;
-  cursor: pointer;
+}
+
+caption, td {
+  text-align: left;
+}
+
+main {
+  margin-bottom: 100px;
 }
 
 table, th, td {
@@ -40,7 +45,6 @@ caption, td {
 th, td {
   padding: 10px;
 }
-
 
 #allRoutesMap, #createMap, #updateMap {
   height: 600px;

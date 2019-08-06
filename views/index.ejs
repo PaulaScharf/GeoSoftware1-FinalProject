@@ -28,40 +28,17 @@
     <p>Beschreibung der Seite, was sie tut / wozu sie da ist, nicht vergessen :D</p>
 
     <div class="row" style="padding:10px">
-      <div class="col-12 col-lg-6">
+      <div class="col-sm-12">
         <div id="allRoutesMap"></div>
       </div>
-      <div class="col-12 col-lg-6">
-        <div id = "encounterTableDiv">
-        <table class="table" id = "encounterTable">
-          <thead class="thead-dark">
-            <tr>
-              <th rowspan="2">Consecutive number of the encounter</th>
-              <th rowspan="2">Number of first route</th>
-              <th rowspan="2">Number of second route</th>
-              <th colspan="2" align="center">Context-information</th>
-              <th rowspan="2">Confirm encounter</th>
-              <th rowspan="2">Save Encounter</th>
-            </tr>
-            <tr>
-              <th>Weather</th>
-              <th>Terrain</th>
-            </tr>
-          </thead>
-          <tbody id="encountersTable">
-          </tbody>
-        </table>
-        </div>
-        <div>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</div>
-      </div>
     </div>
-
     <br>
 
-    <div class="row mb-5">
+    <div class="row">
+
       <div class="col-sm">
-        <table class="table">
-          <caption>This table shows .....<br>Use checkboxes for displaying the routes in the map or not.</caption>
+          <div id = "encounterTableDiv">
+        <table class="table" id = "encounterTable">
           <thead class="thead-dark">
             <tr>
               <th rowspan="2">Consecutive number of the route</th>
@@ -74,9 +51,53 @@
           <tbody id="routesTable">
           </tbody>
         </table>
+          </div>
+          <div>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</div>
+      </div>
+
+
+      <div class="col-sm">
+        <table class="table">
+          <caption>This table shows .....<br>Use checkboxes for displaying the routes in the map or not.</caption>
+          <thead class="thead-dark">
+            <tr>
+              <th rowspan="2">Consecutive number of the route</th>
+              <th rowspan="2">Animalname/species</th>
+              <th rowspan="2">?</th>
+              <th colspan="2" rowspan="2">?</th>
+              <th rowspan="2">?</th>
+            </tr>
+          </thead>
+          <tbody id="animalRoutesTable">
+          </tbody>
+        </table>
       </div>
 
     </div>
+
+<div class="row">
+    <div class="col-sm">
+      <table class="table">
+        <caption>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</caption>
+        <thead class="thead-dark">
+          <tr>
+            <th rowspan="2">Consecutive number of the encounter</th>
+            <th rowspan="2">Number of first route</th>
+            <th rowspan="2">Number of second route</th>
+            <th colspan="2" align="center">Context-information</th>
+            <th rowspan="2">Confirm encounter</th>
+            <th rowspan="2">Save Encounter</th>
+          </tr>
+          <tr>
+            <th>Weather</th>
+            <th>Terrain</th>
+          </tr>
+        </thead>
+        <tbody id="encountersTable">
+        </tbody>
+      </table>
+    </div>
+</div>
 
   </main>
 

@@ -33,7 +33,7 @@ router.get("/create", createController);
 
 // get all routes in the database and render them to the overview.ejs
 var overviewController = function(req, res) {
-  req.db.collection('routeDB').find({type: "route"}).toArray((error, result) => {
+  req.db.collection('routeDB').find({}).toArray((error, result) => {
     if(error){
       console.dir(error);
     }
@@ -46,7 +46,7 @@ var overviewController = function(req, res) {
 
 // get all routes in the database and send them back
 var displayAllController = function(req, res) {
-  req.db.collection('routeDB').find({type: "route"}).toArray((error, result) => {
+  req.db.collection('routeDB').find({}).toArray((error, result) => {
     if(error){
       // give a notice, that the reading has failed and show the error-message on the console
       console.log("Failure in reading from 'routeDB'.", error.message);
