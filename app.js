@@ -68,7 +68,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 
-// load/provide all files given in the folder public (public is in the directory in which the actual file (?????????????????) is in)
+// load/provide all files given in the folder public
 app.use(express.static(path.join(__dirname, 'public')));
 
 // use built-in middleware which parses incoming requests with JSON payloads so that explicit parse expressions for every JSON are not necessary
@@ -83,15 +83,13 @@ app.use(cookieParser());
 
 
 
-// TODO: PATH.JOIN VERWENDEN, ANSTATT DIRNAME UND /
-// KOMMENTAR AUF ENGLISCH ÄNDERN!!!
-// "Erstelle die Routen für die installierten Client-Bibliotheken":
-app.use("/leaflet", express.static(__dirname + "/node_modules/leaflet/dist"));
-app.use("/leaflet-draw", express.static(__dirname + "/node_modules/leaflet-draw/dist"));
-app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
-app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
-app.use('/popper', express.static(__dirname + '/node_modules/popper.js/dist'));
-app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
+// routes for npm-installed client-libraries
+app.use("/leaflet", express.static(path.join(__dirname, 'node_modules', 'leaflet', 'dist')));
+app.use("/leaflet-draw", express.static(path.join(__dirname, 'node_modules', 'leaflet-draw', 'dist')));
+app.use("/jquery", express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
+app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
+app.use("/popper", express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist')));
+app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 'turf')));
 
 
 
