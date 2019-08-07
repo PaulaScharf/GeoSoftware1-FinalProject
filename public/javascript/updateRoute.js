@@ -14,7 +14,6 @@
 
 // FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
 
-
 // create the initial map in the "updateMap"-div
 var updateMap = L.map('updateMap').setView([0, 0], 2);
 

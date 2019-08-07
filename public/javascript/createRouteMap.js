@@ -14,7 +14,6 @@
 
 // FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
 
-
 // create the initial map in the "createMap"-div
 var createMap = L.map('createMap').setView([0, 0], 2);
 
@@ -29,6 +28,7 @@ oSMLayer.addTo(createMap);
 
 // enable drawing a route into the map "createMap" (using leaflet.draw) and write the corresponding GeoJSON string into textarea "createRoute"
 drawPolyline(createMap, "createRoute");
+
 
 
 

@@ -37,6 +37,8 @@ var postitemcontroller = function(req, res) {
     });
 };
 
+
+//
 var putitemcontroller = function (req, res) {
 
     console.log("update item");
@@ -63,6 +65,7 @@ var putitemcontroller = function (req, res) {
     });
 };
 
+
 //
 var getAllitemcontroller = function(req,res) {
     req.db.collection('routeDB').find({type: "encounter"}).toArray((error, result) => {
@@ -78,7 +81,8 @@ var getAllitemcontroller = function(req,res) {
             res.json(result);
         }
     });
-}
+};
+
 
 // delete an item from the database and redirect to the overview.ejs
 var deleteitemcontroller = function(req, res) {
@@ -98,13 +102,18 @@ var deleteitemcontroller = function(req, res) {
     res.send();
 };
 
+// **********************************
+
+//
 router.route("/post")
     .post(postitemcontroller);
 //
 router.route("/update")
     .post(putitemcontroller);
+//
 router.route("/getAll")
     .get(getAllitemcontroller);
+//
 router.route("/delete")
     .get(deleteitemcontroller);
 

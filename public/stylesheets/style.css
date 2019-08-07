@@ -47,7 +47,7 @@ th, td {
   padding: 10px;
 }
 
-#allRoutesMap, #createMap, #updateMap {
+#allRoutesMap, #createAnimalRouteMap, #createMap, #updateMap {
   height: 600px;
 }
 

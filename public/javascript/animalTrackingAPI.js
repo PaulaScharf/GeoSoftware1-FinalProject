@@ -11,6 +11,10 @@
 // please put in your own tokens at 'token.js'
 
 
+// TODO: HIER AUCH JSNLOG EINBAUEN
+
+
+
 // API used to gain animal tracking data: Movebank's REST API
 
 
@@ -45,8 +49,7 @@
 // < Set-Cookie: JSESSIONID=F61ECAEFC08A13313375C6168C1EC294; Path=/movebank
 
 
-// API-key: S1BvcHBpOlU2X2wxIw==    ???????
-
+// API-key: S1BvcHBpOlU2X2wxIw==    ???????   MUSS FÜR JEDE STUDY_ID NEU ERSTELLT WERDEN
 
 
 // "Because studies are treated independently, animal and tag identifiers can be assumed to be unique within a
@@ -54,53 +57,82 @@
 
 
 
+
+// FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
+
+// create the initial map in the "createAnimalRouteMap"-div
+var createAnimalRouteMap = L.map('createAnimalRouteMap').setView([0, 0], 2);
+
+// OpenStreetMap tiles as a layer for the map "createAnimalRouteMap"
+var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+
+// add the OpenStreetMap tile layer to the map "createAnimalRouteMap"
+oSMLayer.addTo(createAnimalRouteMap);
+
+
+
+
+
 // JSDoc: * @throws request failed: [object ProgressEvent]
 
-// request-resource for getting the animal tracking data
+// TEST-request-resource for getting the animal tracking data
 var resource = "https://www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps";
 
 
 
 //
 $.ajax({
-// use a http GET request
-type: "GET",
-// URL to send the request to
-url: "/animalTrackingAPI",
-//url: resource,
+  // use a http GET request
+  type: "GET",
+  // URL to send the request to
+  url: "/animalTrackingAPI",
+  //url: resource,
 
-//
-//contentType: "application/json",
-//
-//data: resource,
+  //
+  //contentType: "application/json",
+  //
+  //data: resource,
 
-// data type of the response
-dataType: "json", //application/json?
-//
-xhrFields: {
-withCredentials: true
-}
+  // data type of the response
+  dataType: "json", //application/json?
+  //
+  xhrFields: {
+    withCredentials: true
+  },
+
+  // NÖTIG ODER UNSINNIG????
+  // timeout set to 5 seconds
+  timeout: 5000
 })
 
 // if the request is done successfully, ...
 .done (function (response) {
 
-console.log("Response: " + JSON.stringify(response));
+  console.log("Response: " + JSON.stringify(response));
 })
 
 // if the request has failed, ...
 .fail (function (xhr, status, error) {
-// ... give a notice that the AJAX request for getting the animal tracking api has failed and show the error-message on the console
-console.log("AJAX request (GET animal tracking api) has failed.", error, error.message);
+  // ... give a notice that the AJAX request for getting the animal tracking api has failed and show the error-message on the console
+  console.log("AJAX request (GET animal tracking api) has failed.", error, error.message);
+
+
+  // WIE NUR FÜR TIMEOUT MACHEN ???
+  // WAS BEI ANDEREN ERRORS?
+  // ???????????????
+//  JL("ajaxAnimalTrackingAPITimeout").fatal("ajax: '/animalTrackingAPI' timeout");
+
 });
 
 
 
 
-
-
 var ergebnis = makeAnimalRoute();
+
 console.log("test makeAnimalRoute", ergebnis);
+
 
 
 
@@ -120,24 +152,24 @@ console.log("test makeAnimalRoute", ergebnis);
 * and ......
 *
 *
-* @private WIRKLICH??? WANN PRIVATE, WANN NICHT?????
+* @private
 * @author Katharina Poppinga
 * @param response response of the ......... request ........
 */
 function hmm(response){
 
 
-// response so verändern, dass Route als GeoJSON darin enthalten ist (dazu makeAnimalRoute innerhalb dieser
-// Funktion aufrufen) und alle übrigen Attribute erhalten bleiben
+  // response so verändern, dass Route als GeoJSON darin enthalten ist (dazu makeAnimalRoute innerhalb dieser
+  // Funktion aufrufen) und alle übrigen Attribute erhalten bleiben
 
-makeAnimalRoute(/*.....locations*/);
-// TODO: mit deren return-Wert die locations in response ersetzen !!!
+  makeAnimalRoute(/*.....locations*/);
+  // TODO: mit deren return-Wert die locations in response ersetzen !!!
 
 
-// ...
+  // ...
 
-// BEARBEITETE RESPONSE AN ROUTEN-FUNKTIONEN ÜBERGEBEN
-// BEARBEITETE RESPONSE AN ENCOUNTERS-FUNKTION ÜBERGEBEN
+  // BEARBEITETE RESPONSE AN ROUTEN-FUNKTIONEN ÜBERGEBEN
+  // BEARBEITETE RESPONSE AN ENCOUNTERS-FUNKTION ÜBERGEBEN
 
 }
 
@@ -165,7 +197,7 @@ function makeAnimalRoute(locations){
   var coordinatesGeoJSON = [];
 
 
-  // LETZTENDLICH/STATTDESSEN AUS RESPONSE ÜBERNEHMEN!!!!
+  // HIER NUR TEST, LETZTENDLICH/STATTDESSEN AUS RESPONSE ÜBERNEHMEN!!!!
   var locations = [
     {"timestamp":1212240595000,"location_long":-89.7400582,"location_lat":-1.372675},
     {"timestamp":1212240618999,"location_long":-89.740053,"location_lat":-1.3726544},
@@ -212,7 +244,7 @@ function makeAnimalRoute(locations){
 
 // JSDOC ANPASSEN!!!
 // KOMMENTARE ANPASSEN!!!
-// FUNKTION SO FAST DOPPELT VORHANDEN
+// TODO: FUNKTION SO FAST DOPPELT VORHANDEN; ÄNDERN
 /**
 * Takes the response of the ........
 *
@@ -254,8 +286,8 @@ function showAllAnimalRoutesOnStartingPage(response) {
 
       // for the first route of the database ... HIER NICHT, DA SCHON FÜR USER GEMACHT?
       //if (i === 0) {
-        // ... center the map on the first point of the first route
-        //allRoutesMap.setView([coordinatesRoute[i].lat, coordinatesRoute[i].lng], 3);
+      // ... center the map on the first point of the first route
+      //allRoutesMap.setView([coordinatesRoute[i].lat, coordinatesRoute[i].lng], 3);
       //}
 
       // make a leaflet-polyline from the coordinatesLatLongOrder

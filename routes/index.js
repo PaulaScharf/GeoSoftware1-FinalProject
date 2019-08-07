@@ -11,9 +11,9 @@
 
 
 
-
 var express = require('express');
 var router = express.Router();
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -21,12 +21,25 @@ router.get('/', function(req, res, next) {
 });
 
 
-// get all routes and send them to the secretArea.html
+
+// get all routes and send them to the secretArea.html  ?????????
 var createController = function (req, res, next) {
   res.render("create");
 };
 
 router.get("/create", createController);
+
+
+
+// get ........... ???????
+var createAnimalRouteController = function (req, res, next) {
+  res.render("createAnimalRoute");
+};
+
+router.get("/createAnimalRoute", createAnimalRouteController);
+
+
+
 
 // --------------------------------------------------------------------------------------------------------------------
 //route handler for getting all created (gps-)routes and sending/rendering them
