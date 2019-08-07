@@ -31,14 +31,6 @@ table, th, td {
   border-collapse: collapse;
 }
 
-#encounterTable {
-  overflow: auto;
-  position: sticky;
-  top: 0;
-  text-align: center;
-}
-
-
 caption, td {
   text-align: left;
 }
@@ -60,7 +52,14 @@ th, td {
 }
 
 #encounterTableDiv {
-  overflow: scroll;
-  max-height: 600px;
-  width: 100%;
+  overflow:scroll;
+  height:600px;
+  width:100%;
+  overflow:auto;
+}
+
+#encounterTableHead {
+  position: sticky;
+  top: 0;
+  text-align: center;
 }

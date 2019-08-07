@@ -15,32 +15,54 @@
 
 
 // TODO: CONSECUTIVE NUMBER BEGINNT MIT 0 !! FALLS ÄNDERUNG ZU 1, DANN KOMMENTARE IN CHECKBOX-FUNKTIONEN ANPASSEN
+// TODO: Jojo, was only a suggestion.
 
 
 // ALLROUTESMAP UMBENENNEN IN AUCH BEGEGNUNGEN
 
 
 // FÜR TESTZWECKE, SPÄTER HIER LÖSCHEN
-JL("testName1").fatal("Teeeest JSNLog");
+// JL("testName1").fatal("Teeeest JSNLog");
 
 
 
 // ****************************** global variables ******************************
 
 // TODO: WARUM LET UND VAR GEMISCHT??
+// TODO: I wanted to talk about that too. Personally I prefer let (https://stackoverflow.com/questions/762011/whats-the-difference-between-using-let-and-var).
 
-//
-let allEncounters = [];
+/**
+ * global variable, which contains
+ * [all routes from the db,
+ * boolean indicating if route is currently displayed]
+ * @type {Array} allRoutes
+ */
 let allRoutes = [];
+/**
+ * global variable, which contains
+ * [all encounters from the db,
+ * boolean indicating if encounter is currently displayed,
+ * object containing the indexes of the corresponding routes in the allRoutes-array]
+ * @type {Array} allEncounters
+ */
+let allEncounters = [];
 
-// counter for table cell IDs
+/**
+ * counter for table cell IDs
+ * @type {number} z
+ */
 var z = 0;
 
 // TODO: refactor names
-// array for the routes which are shown in the map "allRoutesMap"
+/**
+ * array for the routes which are shown in the map "allRoutesMap"
+ * @type {Array} polylineRoutesLatLongArray
+ */
 var polylineRoutesLatLongArray = [];
-
-// array for the encounters which are shown in the map "allRoutesMap"
+/**
+ * array for the encounters which are shown in the map "allRoutesMap"
+ * @type {Array} encountersLatLongArray
+ */
 var encountersLatLongArray = [];
 
 
@@ -50,10 +72,16 @@ var encountersLatLongArray = [];
 
 // ****************************** map ******************************
 
-// create the initial map in the "allRoutesMap"-div, the proper map extract will be set later
+/**
+ * create the initial map in the "allRoutesMap"-div, the proper map extract will be set later
+ * @param {map} allRoutesMap
+ */
 var allRoutesMap = L.map('allRoutesMap').setView([0, 0], 3);
 
-// OpenStreetMap tiles as a layer for the map "allRoutesMap"
+/**
+ * OpenStreetMap tiles as a layer for the map "allRoutesMap"
+ * @param {tileLayer} oSMLayer
+ */
 var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
@@ -61,10 +89,17 @@ var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 // add the OpenStreetMap tile layer to the map "allRoutesMap"
 oSMLayer.addTo(allRoutesMap);
 
-// create a layerGroup for all routes, add this group to the existing map "allRoutesMap"
+/**
+ * create a layerGroup for all routes, add this group to the existing map "allRoutesMap"
+ * @param {layerGroup} routesGroup
+ */
 var routesGroup = L.layerGroup().addTo(allRoutesMap);
 
-// create a layerGroup for all encounters, add this group to the existing map "allRoutesMap"
+
+/**
+ * create a layerGroup for all encounters, add this group to the existing map "allRoutesMap"
+ * @param {layerGroup} encountersGroup
+ */
 var encountersGroup = L.layerGroup().addTo(allRoutesMap);
 
 /*
@@ -99,12 +134,7 @@ $.ajax({
 // if the request is done successfully, ...
 .done (function (response) {
 
-
-  // TODO: FOLGENDES IN SEPARATE FUNKTION AUSLAGERN, ANSTATT DIREKT IM AJAX?
-  for (let i = 0; i < response.length; i++) {
-    allRoutes.push([response[i], true])
-    allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
-  }
+  writeAllRoutesInTheGlobalArray(response);
 
   // ... show all read routes on starting page (in table and in map), as the following function does:
   showAllRoutesOnStartingPage(allRoutes);
@@ -210,6 +240,13 @@ function getAllEncountersAndShow() {
   });
 }
 
+function writeAllRoutesInTheGlobalArray(response) {
+  for (let i = 0; i < response.length; i++) {
+    allRoutes.push([response[i], true]);
+    allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
+  }
+}
+
 
 // TODO: refactor all for-loops, so that they use "current..."
 // TODO: numbers of routes and encounters should start with 1
@@ -221,9 +258,8 @@ function getAllEncountersAndShow() {
 *
 * @private
 * @author Katharina Poppinga
-* @param response response of AJAX GET-request for reading all routes out of the database
 */
-function showAllRoutesOnStartingPage(response) {
+function showAllRoutesOnStartingPage() {
 
   //console.log("Show routes:", response);
 
@@ -232,17 +268,17 @@ function showAllRoutesOnStartingPage(response) {
 
   // folgendes if LÖSCHEN ?????????
   // if there are no routes in the database ...
-  if (typeof response[0][0] === "undefined") {
+  if (typeof allRoutes[0][0] === "undefined") {
     // if there are routes in the database ... :
   } else {
 
     // loop "over" all routes in the current database "routeDB"
-    for (let i = 0; i < response.length; i++) {
+    for (let i = 0; i < allRoutes.length; i++) {
 
 
       // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
       // show the i-th route with a consecutive number and its creator, name, date, time and type (.................) in the table "routesTable" on starting page
-      createAndWriteTableWithSevenCells(i, response[i][0].creator, response[i][0].name, response[i][0].date, response[i][0].time, response[i][0].type, "routesTable");
+      createAndWriteTableWithSevenCells(i, allRoutes[i][0].creator, allRoutes[i][0].name, allRoutes[i][0].date, allRoutes[i][0].time, allRoutes[i][0].type, "routesTable");
 
 
 
@@ -252,7 +288,7 @@ function showAllRoutesOnStartingPage(response) {
       checkbox(i);
 
       // extract the coordinates of the i-th route
-      coordinatesRoute = response[i][0].geoJson.features[0].geometry.coordinates;
+      coordinatesRoute = allRoutes[i][0].geoJson.features[0].geometry.coordinates;
       console.log(coordinatesRoute);
       // for the first route of the database ...
       if (i === 0) {
