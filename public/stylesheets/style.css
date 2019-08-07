@@ -32,6 +32,7 @@ table, th, td {
 }
 
 #encounterTable {
+  overflow: auto;
   position: sticky;
   top: 0;
   text-align: center;
@@ -59,8 +60,7 @@ th, td {
 }
 
 #encounterTableDiv {
-  overflow:scroll;
-  max-height:600px;
-  width:100%;
-  overflow:auto;
+  overflow: scroll;
+  max-height: 600px;
+  width: 100%;
 }
