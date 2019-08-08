@@ -59,9 +59,9 @@ var putitemcontroller = function (req, res) {
         if(error){
             console.dir(error);
         }
-        // TODO: why back to overview
-        // go back to the overview-page through the indexRouter
-        res.redirect("/overview");
+
+        //
+        res.send(result);
     });
 };
 

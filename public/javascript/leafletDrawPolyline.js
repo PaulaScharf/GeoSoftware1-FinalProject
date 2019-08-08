@@ -73,7 +73,11 @@ function drawPolyline(map, outputTextarea) {
     drawnItems.addLayer(event.layer);
 
     // write the new drawn polyline as a GeoJSON string into the given outputTextarea
-    document.getElementById(outputTextarea).value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
+    let output = document.getElementById(outputTextarea);
+    output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
+    let ev = document.createEvent('Event');
+    ev.initEvent('keyup', true, false);
+    output.dispatchEvent(ev);
   });
 
 
@@ -81,7 +85,11 @@ function drawPolyline(map, outputTextarea) {
   map.on(L.Draw.Event.EDITED, function (event) {
 
     // write the updated/edited polyline as a GeoJSON string into the given outputTextarea
-    document.getElementById(outputTextarea).value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
+    let output = document.getElementById(outputTextarea);
+    output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
+    let ev = document.createEvent('Event');
+    ev.initEvent('keyup', true, false);
+    output.dispatchEvent(ev);
   });
 
 
@@ -98,13 +106,21 @@ function drawPolyline(map, outputTextarea) {
         map.addLayer(polylineOfOldRoute);
 
         // ... write the GeoJSON of the old route into the given outputTextarea
-        document.getElementById(outputTextarea).value = JSON.stringify(oldRouteGeoJSON, null, 2);
+        let output = document.getElementById(outputTextarea);
+        output.value = JSON.stringify(polylineOfOldRoute.toGeoJSON(), null, 2);
+        let ev = document.createEvent('Event');
+        ev.initEvent('keyup', true, false);
+        output.dispatchEvent(ev);;
 
         // if the current used map is not the "updateMap" ...
       } else {
 
         // ... write just nothing into the given outputTextarea
-        document.getElementById(outputTextarea).value = "";
+        let output = document.getElementById(outputTextarea);
+        output.value = "";
+        let ev = document.createEvent('Event');
+        ev.initEvent('keyup', true, false);
+        output.dispatchEvent(ev);
       }
     }
 

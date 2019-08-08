@@ -77,7 +77,7 @@
                         Type:<br />
                         <input type="text" name="type" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].type)) %>"/><br>
                         Timestamp:<br />
-                        <input type="date" name="date" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].date)) %>"/>
+                        <input type="date" name="date" onchange="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].date)) %>"/>
                         <input type="time" name="time" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].time)) %>"/>
                         <br/><br/>
                         <div id="errorMsg" style="display: none;">To update a route you need to fill in all blanks.</div>

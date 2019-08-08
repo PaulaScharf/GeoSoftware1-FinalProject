@@ -11,7 +11,10 @@
 // please put in your own tokens at 'token.js'
 
 
-// already processed routes
+/**
+ * already known/processed routes
+ * @type {Array} alreadyKnownRoutes
+ */
 var alreadyKnownRoutes = [];
 
 
@@ -86,8 +89,7 @@ function checkForNewRoute(response, checkForUpdates) {
     console.log(currentRoute);
     let route = {
       _id: currentRoute._id,
-      // TODO: Why is the status not set to old?
-      status: currentRoute.status
+      status: "old"
     };
 
     //
@@ -211,7 +213,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 
 
 /**
-* This function calculates the coordinates of an intersection between two straight lines.
+* This function calculates the coordinates of an intersection between two straight lines with the turf-library.
 * If there is no intersection it returns false.
 * @param x11   x-coord of start of the first line
 * @param y11   y-coord of start of the first line
@@ -226,7 +228,6 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 * @see https://stackoverflow.com/questions/13937782/calculating-the-point-of-intersection-of-two-lines
 */
 function getIntersection(x11, y11, x12, y12, x21, y21, x22, y22) {
-  //
   var line1 = turf.lineString([[x11, y11], [x12, y12]]);
   var line2 = turf.lineString([[x21, y21], [x22, y22]]);
   //calculate the intersection with turf
@@ -263,13 +264,13 @@ function postEncounter(encounter) {
     console.log("response: ");
     console.log(response);
     // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
-    console.log("AJAX request (pushing an encounter) is done successfully.");
+    console.log("AJAX request (posting an encounter) is done successfully.");
   })
 
   // if the request has failed, ...
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for posting an encounter has failed and show the error-message on the console
-    console.log("AJAX request (pushing an encounter) has failed.", error.message);
+    console.log("AJAX request (posting an encounter) has failed.", error.message);
 
 
     // TODO:
@@ -337,10 +338,6 @@ function deleteEncounter(encounterId) {
 * @author name: Paula Scharf, matr.: 450 334
 */
 function updateStatusFromNewToOld(route) {
-
-  route.status = "old";
-  console.log(route);
-
   $.ajax({
     // use a http POST request
     type: "POST",
@@ -361,7 +358,7 @@ function updateStatusFromNewToOld(route) {
     console.log("response: ");
     console.log(response);
     // ... give a notice on the console that the AJAX request for ....... has succeeded
-    console.log("AJAX request (updating a route GENAUER SPEZIFIZIEREN/TRENNEN?) is done successfully.");
+    console.log("AJAX request (updating the status of a route) is done successfully.");
   })
 
   // if the request has failed, ...

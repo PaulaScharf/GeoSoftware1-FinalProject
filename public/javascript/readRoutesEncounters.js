@@ -15,7 +15,6 @@
 
 
 // TODO: CONSECUTIVE NUMBER BEGINNT MIT 0 !! FALLS ÄNDERUNG ZU 1, DANN KOMMENTARE IN CHECKBOX-FUNKTIONEN ANPASSEN
-// TODO: Jojo, was only a suggestion.
 
 
 // ALLROUTESMAP UMBENENNEN IN AUCH BEGEGNUNGEN
@@ -53,7 +52,6 @@ let allEncounters = [];
  */
 var z = 0;
 
-// TODO: refactor names
 /**
  * array for the routes which are shown in the map "allRoutesMap"
  * @type {Array} polylineRoutesLatLongArray
@@ -274,12 +272,13 @@ function showAllRoutesOnStartingPage() {
 
     // loop "over" all routes in the current database "routeDB"
     for (let i = 0; i < allRoutes.length; i++) {
+      let currentRoute = allRoutes[i];
+
 
 
       // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
       // show the i-th route with a consecutive number and its creator, name, date, time and type (.................) in the table "routesTable" on starting page
-      createAndWriteTableWithSevenCells(i, allRoutes[i][0].creator, allRoutes[i][0].name, allRoutes[i][0].date, allRoutes[i][0].time, allRoutes[i][0].type, "routesTable");
-
+      createAndWriteTableWithSevenCells(i, currentRoute[0].creator, currentRoute[0].name, currentRoute[0].date, currentRoute[0].time, currentRoute[0].type, "routesTable");
 
 
       // ************** show the i-th route in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
@@ -288,7 +287,7 @@ function showAllRoutesOnStartingPage() {
       checkbox(i);
 
       // extract the coordinates of the i-th route
-      coordinatesRoute = allRoutes[i][0].geoJson.features[0].geometry.coordinates;
+      coordinatesRoute = currentRoute[0].geoJson.features[0].geometry.coordinates;
       console.log(coordinatesRoute);
       // for the first route of the database ...
       if (i === 0) {
@@ -302,8 +301,11 @@ function showAllRoutesOnStartingPage() {
       // add the polyline to the array polylineRoutesLatLongArray for being able to address the polylines(routes) by numbers (kind of IDs) (needed for checkboxes)
       polylineRoutesLatLongArray.push(polylineOfRoute);
 
-      // add the i-th polyline-element of the array polylineRoutesLatLongArray to the routesGroup and therefore to the map "allRoutesMap"
-      polylineRoutesLatLongArray[i].addTo(routesGroup);
+      if(currentRoute[1]) {
+
+        // add the i-th polyline-element of the array polylineRoutesLatLongArray to the routesGroup and therefore to the map "allRoutesMap"
+        polylineRoutesLatLongArray[i].addTo(routesGroup);
+      }
     }
   }
 }
@@ -319,16 +321,23 @@ function showAllRoutesOnStartingPage() {
 function showEncountersOnStartingPage() {
   // fill the table for the encounters with the encounters-array
   fillEncountersTable();
+  encountersGroup.eachLayer(function (layer)
+  {
+    encountersGroup.removeLayer(layer);
+  });
+  encountersLatLongArray = [];
   // loop "over" all encounters in the current database "routeDB"
   for (let i = 0; i < allEncounters.length; i++) {
-    let currentEncounter = allEncounters[i][0];
+    let currentEncounter = allEncounters[i];
     // make a circle out of the current encounter
-    let currentCircle = L.circle([currentEncounter.intersectionX, currentEncounter.intersectionY], {radius: 200}, {color: '#000bec'});
+    let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY], {radius: 200}, {color: '#000bec'});
 
     // add the circle to the array encountersLatLongArray
     encountersLatLongArray.push(currentCircle);
-    // add the encountersLatLongArray to the encountersGroup
-    encountersLatLongArray[i].addTo(encountersGroup);
+    if(currentEncounter[1]) {
+      // add the encountersLatLongArray to the encountersGroup
+      encountersLatLongArray[i].addTo(encountersGroup);
+    }
   }
 }
 
@@ -349,7 +358,6 @@ function fillEncountersTable() {
     if (currentEncounter[1] == true) {
       createAndWriteTableWithThreeCells(i, currentEncounter[2].firstRoute, currentEncounter[2].secondRoute, "encountersTable");
       // if the encounter is new then create a new weather request
-      console.log(currentEncounter);
       if (typeof currentEncounter[0].weather === 'undefined') {
         currentEncounter[0].weather = new WeatherRequest([currentEncounter[0].intersectionX, currentEncounter[0].intersectionX], i);
         // if the encounter is old reuse the response of the already existing corresponding weather request
@@ -519,6 +527,63 @@ function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute){
   return latLongCoordinatesRoute;
 }
 
+function searchEncounters(obj) {
+  if($(obj).is(":checked")){
+    let name = document.getElementById("searchRouteName").value;
+    let routeIds = searchForRouteIds(name);
+    console.log(routeIds);
+    for (let i = 0; i < routeIds.length; i ++) {
+
+      routesGroup.removeLayer(polylineRoutesLatLongArray[routeIds[i]]);
+      polylineRoutesLatLongArray[routeIds[i]].setStyle({
+        color: '#ecd43f'
+      });
+      console.log(polylineRoutesLatLongArray[i]);
+      routesGroup.addLayer(polylineRoutesLatLongArray[routeIds[i]]);
+    }
+    for (let i = 0; i < allEncounters.length; i++) {
+      let currentEncounter = allEncounters[i];
+      if (routeIds.includes(currentEncounter[2].firstRoute) || routeIds.includes(currentEncounter[2].secondRoute)) {
+        allEncounters[i][1] = true;
+      } else {
+        console.log(false);
+        allEncounters[i][1] = false;
+      }
+    }
+    showEncountersOnStartingPage();
+  }else{
+    encountersGroup.eachLayer(function (layer)
+    {
+      encountersGroup.removeLayer(layer);
+    });
+    for (let i = 0; i < polylineRoutesLatLongArray.length; i++) {
+      polylineRoutesLatLongArray[i].setStyle({
+        color: 'red'
+      });
+    }
+    for (let i = 0; i < allEncounters.length; i++) {
+      let currentEncounter = allEncounters[i];
+      if (allRoutes[currentEncounter[2].firstRoute][1] && allRoutes[currentEncounter[2].secondRoute][1]) {
+        allEncounters[i][1] = true;
+      } else {
+        allEncounters[i][1] = false;
+      }
+    }
+    showEncountersOnStartingPage();
+  }
+
+}
+
+function searchForRouteIds(input) {
+  let result = [];
+  for (let i = 0; i < allRoutes.length; i++) {
+    let currentRoute = allRoutes[i];
+    if(currentRoute[1] && currentRoute[0].name == input) {
+      result.push(i);
+    }
+  }
+  return result;
+}
 
 
 /**
@@ -550,8 +615,6 @@ class WeatherRequest
     this.x = new XMLHttpRequest();
     this.x.intersection = intersection;
     this.x.id = id;
-    // ?
-    this.x.respons;
     this.x.writeRequestResultsIntoTable = this.writeRequestResultsIntoTable;
     this.x.onload = this.loadcallback;
     this.x.onerror = this.errorcallback;
@@ -593,13 +656,13 @@ class WeatherRequest
   }
 
   /**
-  * @desc This function is called when theres an error with the request.
+  * @desc This function is called when there is an error with the request.
   */
   errorcallback(e) {
     //console.dir("x: " + this.x);
     console.dir("e: " + e);
     //
-    if (this.status = 404)
+    if (this.status == 404)
     {
       document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split"
       + this.indiRoute.positionJ).innerHTML = "error: no connection to the server";
