@@ -22,7 +22,7 @@ var router = express.Router();
 // routehandler for get, post, put, and delete / using querystring via req.query
 
 // *********** READ/find ***********
-// get a single route and render the update.ejs view with that route
+// get a single route and render the updateDelete.ejs view with that route
 var getItemController = function(req, res) {
 
   console.log("get item " + req.query._id);
@@ -79,10 +79,9 @@ var putItemController = function (req, res) {
   // convert the coordinate-string to Json
   req.body.geoJson = JSON.parse(req.body.geoJson);
   //
-  req.body.status = "updated";
+  req.body.status = "new";
   let objectId = new mongodb.ObjectID(req.body._id);
   // delete the id from the body
-  // TODO: check if necessary
   delete req.body._id;
 
   console.log("update item" + objectId + "to the following:")
