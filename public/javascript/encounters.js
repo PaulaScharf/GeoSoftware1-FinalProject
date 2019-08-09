@@ -322,14 +322,14 @@ function updateStatusFromNewToOld(route) {
 
   // if the request is done successfully, ...
   .done (function (response) {
-    // ... give a notice on the console that the AJAX request for ....... has succeeded
+    // ... give a notice on the console that the AJAX request for updating the status of a route has succeeded
     console.log("AJAX request (updating the status of a route) is done successfully.");
   })
 
   // if the request has failed, ...
   .fail(function (xhr, status, error) {
-    // ... give a notice that the AJAX request for updating the route has failed and show the error-message on the console
-    console.log("AJAX request (updating a route) has failed.", error.message);
+    // ... give a notice that the AJAX request for updating the status of a route has failed and show the error-message on the console
+    console.log("AJAX request (updating the status of a route) has failed.", error.message);
   });
 }
 
