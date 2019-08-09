@@ -179,10 +179,10 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
           // go through all routes, to determine their index in the allRoutes-array and give that information
           // to the encounter
           for (let k = 0; k < allRoutes.length; k++) {
-            if(allRoutes[k][0]._id == encounter.firstRoute) {
+            if(allRoutes[k][0]._id === encounter.firstRoute) {
               noOfRoutes.firstRoute = k;
             }
-            else if (allRoutes[k][0]._id == encounter.secondRoute) {
+            else if (allRoutes[k][0]._id === encounter.secondRoute) {
               noOfRoutes.secondRoute = k;
             }
           }
