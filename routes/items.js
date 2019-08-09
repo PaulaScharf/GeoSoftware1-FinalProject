@@ -23,7 +23,7 @@ var router = express.Router();
 
 // *********** READ/find ***********
 // get a single route and render the updateDelete.ejs view with that route
-var getitemcontroller = function(req, res) {
+var getItemController = function(req, res) {
 
   console.log("get item " + req.query._id);
   //
@@ -44,7 +44,7 @@ var getitemcontroller = function(req, res) {
 
 // *********** CREATE/insert (with html-form) ***********
 // add a route from the req.body and redirect to the create.html
-var postitemcontroller = function(req, res) {
+var postItemController = function(req, res) {
 
   console.log("insert item " + req.body._id);
 
@@ -72,7 +72,7 @@ var postitemcontroller = function(req, res) {
 
 // *********** UPDATE (with html-form) ***********
 // update an item in the database and redirect to the overview.ejs
-var putitemcontroller = function (req, res) {
+var putItemController = function (req, res) {
 
   console.log("update item " + req.body._id);
 
@@ -101,7 +101,7 @@ var putitemcontroller = function (req, res) {
 
 // *********** DELETE ***********
 // delete an item from the database and redirect to the overview.ejs
-var deleteitemcontroller = function(req, res) {
+var deleteItemController = function(req, res) {
 
   console.log("delete item " + req.query._id);
   //
@@ -120,17 +120,17 @@ var deleteitemcontroller = function(req, res) {
 };
 
 
-
+// TODO: aufteilen
 // routes for get and create
 router.route("/")
-    .get(getitemcontroller)
-    .post(postitemcontroller);
+    .get(getItemController)
+    .post(postItemController);
 
 // routes for delete and update (we could'nt use the update and delete methods,
 // because they are not available for html-forms)
 router.route("/single")
-    .get(deleteitemcontroller)
-    .post(putitemcontroller);
+    .get(deleteItemController)
+    .post(putItemController);
 
 
 module.exports = router;

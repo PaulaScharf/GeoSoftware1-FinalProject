@@ -61,6 +61,8 @@
                     <input type="text" name="creator" onKeyup="checkform()"/><br>
                     Name of route:<br />
                     <input type="text" name="name" onKeyup="checkform()"/><br>
+                    Route in correct GeoJSON syntax:<br />
+                    <textarea id="createRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
                     Type:<br />
                     <input type="radio" name="type" value="planned" checked>planned<br>
                     <input type="radio" name="type" value="completed">completed<br>
@@ -97,5 +99,5 @@
 <script src="javascript/leafletDrawPolyline.js"></script>
 <script src="javascript/createRouteMap.js"></script>
 <script src="javascript/validationGeoJSONInput.js"></script>
-<!--<script src="javascript/encounters.js"></script>-->
+<script src="javascript/encounters.js"></script>
 <script src="javascript/tokens.js"></script>
