@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
+  <!-- Required meta tags -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
-    <!-- installed CSS -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="leaflet/leaflet.css"/>
+  <!-- installed CSS -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="leaflet/leaflet.css"/>
 
-    <!-- locally created css -->
-    <link rel="stylesheet" href="../stylesheets/style.css">
+  <!-- locally created css -->
+  <link rel="stylesheet" href="../stylesheets/style.css">
 
-    <title>Create a new animal route</title>
+  <title>Create a new animal route</title>
 </head>
 
 <body>
@@ -34,55 +34,74 @@
       <div class="col-12 col-md-6">
         <h1>Add animalroute</h1>
 
+
+
+
+<!--
+
+        <form action="/animalTrackingAPI" method="GET" name="createForm">
+          ID of Study:<br />
+          <input type="number" name="studyId"><br />
+          ID of individual:<br />
+          <input type="number" name="individualId"><br />
+          <input type="submit" value="Create" id="submitbutton"/>
+        </form>
+
+-->
+
+        <!--
+
+
+
         <script type="text/javascript" language="javascript">
         function checkform()
         {
 
-          // AB HIER ANPASSEN/ÄNDERN
+        // AB HIER ANPASSEN/ÄNDERN
 
-          var f = document.forms["createAnimalRouteForm"].elements;
-          var cansubmit = true;
+        var f = document.forms["createAnimalRouteForm"].elements;
+        var cansubmit = true;
 
-                        for (var i = 1; i < 5; i++) {
-                            if (f[i].value.length == 0) cansubmit = false;
-                        }
-                        document.getElementById('submitbutton').disabled = !cansubmit;
+        for (var i = 1; i < 5; i++) {
+        if (f[i].value.length == 0) cansubmit = false;
+      }
+      document.getElementById('submitbutton').disabled = !cansubmit;
 
-          if(cansubmit) {
-            document.getElementById("errorMsg").style.display = "none";
-          }
-          else
-          {
-            document.getElementById("errorMsg").style.display = "block";
-          }
-        }
-        </script>
+      if(cansubmit) {
+      document.getElementById("errorMsg").style.display = "none";
+    }
+    else
+    {
+    document.getElementById("errorMsg").style.display = "block";
+  }
+}
+</script>
 
-                <form action="/item" method="POST" name="createAnimalRouteForm">
-                    Animal.../name?:<br />
-                    <input type="text" name="creator" onKeyup="checkform()"/><br>
-                    Route:<br />
-                    <textarea id="createRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
-                    Routename/???:<br />
-                    <input type="text" name="name" onKeyup="checkform()"/><br>
-                    Description:<br />
-                    <input type="text" name="description" onKeyup="checkform()"/><br>
-                    Timestamp: NICHT, SONDERN AUS REQUEST NEHMEN?<br />
-                    <input type="date" name="date" onKeyup="checkform()"/>
-                    <input type="time" name="time" onKeyup="checkform()"/>
-                    <input type="hidden" name="madeBy" onKeyup="checkform()" value = "user"/>
-                    <input type="hidden" name="type" onKeyup="checkform()" value = "route"/>
-                    <input type="hidden" name="status" onKeyup="checkform()" value = "new"/>
-                    <br/><br/>
-                    <div id="errorMsg">To get/and/create (??) an animalroute you need to fill in all blanks.</div>
-                    <input type="submit" value="Create" disabled="disabled" id="submitbutton"/>
+<form action="/item" method="POST" name="createAnimalRouteForm">
+Animal.../name?:<br />
+<input type="text" name="creator" onKeyup="checkform()"/><br>
+Route:<br />
+<textarea id="createRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
+Routename/???:<br />
+<input type="text" name="name" onKeyup="checkform()"/><br>
+Description:<br />
+<input type="text" name="description" onKeyup="checkform()"/><br>
+Timestamp: NICHT, SONDERN AUS REQUEST NEHMEN?<br />
+<input type="date" name="date" onKeyup="checkform()"/>
+<input type="time" name="time" onKeyup="checkform()"/>
+<input type="hidden" name="madeBy" onKeyup="checkform()" value = "user"/>
+<input type="hidden" name="type" onKeyup="checkform()" value = "route"/>
+<input type="hidden" name="status" onKeyup="checkform()" value = "new"/>
+<br/><br/>
+<div id="errorMsg">To get/and/create (??) an animalroute you need to fill in all blanks.</div>
+<input type="submit" value="Create" disabled="disabled" id="submitbutton"/>
 
-                </form>
-            </div>
-        </div>
-    </main>
+</form> -->
+</div>
+</div>
+</main>
 
-  <%- include('partial/footer', {active: "Home"}); %>
+<%- include('partial/footer', {active: "Home"}); %>
 
 </body>
 </html>
@@ -91,8 +110,6 @@
 <script src="popper/umd/popper.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="leaflet/leaflet.js"></script>
-<script src="leaflet-draw/leaflet.draw.js"></script>
-<script src="turf/turf.min.js"></script>
 
 <script src="javascript/animalTrackingAPI.js"></script>
 <script src="javascript/tokens.js"></script>

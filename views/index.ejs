@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <p>Beschreibung der Seite, was sie tut / wozu sie da ist, nicht vergessen :D</p>
+    <p>Beschreibung der Seite, was sie tut / wozu sie da ist, nicht vergessen :D, Use checkboxes for displaying the routes in the map or not.</p>
 
     <div class="row" style="padding:10px">
       <div class="col-sm-12">
@@ -38,57 +38,63 @@
     <div class="row">
 
       <div class="col-sm">
-        <table class="table">
-          <thead class="thead-dark">
-            <tr>
-              <th rowspan="2">Consecutive number of the route</th>
-              <th rowspan="2">Username</th>
-              <th rowspan="2">Name of route</th>
-              <th colspan="2" rowspan="2">Date and time</th>
-              <th rowspan="2">Type of route</th>
-            </tr>
-          </thead>
-          <tbody id="routesTable">
-          </tbody>
-        </table>
-        <div>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</div>
+        <div id="userRoutesTableDiv">
+          <table class="table">
+            <thead class="thead-dark" id="userRoutesTableHead">
+              <tr>
+                <th>Consecutive number of the route</th>
+                <th>Username</th>
+                <th>Name of route</th>
+                <th colspan="2">Date and time</th>
+                <th>Type of route</th>
+              </tr>
+            </thead>
+            <tbody id="routesTable">
+            </tbody>
+          </table>
+        </div>
+        <div>This table shows .....</div>
       </div>
 
 
       <div class="col-sm">
-        <table class="table">
-          <caption>This table shows .....<br>Use checkboxes for displaying the routes in the map or not.</caption>
-          <thead class="thead-dark">
-            <tr>
-              <th rowspan="2">Consecutive number of the route</th>
-              <th rowspan="2">Animalname/species</th>
-              <th rowspan="2">?</th>
-              <th colspan="2" rowspan="2">?</th>
-              <th rowspan="2">?</th>
-            </tr>
-          </thead>
-          <tbody id="animalRoutesTable">
-          </tbody>
-        </table>
+        <div id="animalRoutesTableDiv">
+          <table class="table">
+            <thead class="thead-dark" id="animalRoutesTableHead">
+              <tr>
+                <th>Consecutive number of the route</th>
+                <th>Animalname/species</th>
+                <th>?</th>
+                <th colspan="2">?</th>
+                <th>?</th>
+              </tr>
+            </thead>
+            <tbody id="animalRoutesTable">
+            </tbody>
+          </table>
+        </div>
+        <div>This table shows .....</div>
       </div>
 
     </div>
+
+    <br><br>
 
     <div class="row">
       <div class="col-sm">
         <div id="encounterTableDiv">
           <table class="table">
-            <caption>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</caption>
             <thead class="thead-dark" id="encounterTableHead">
               <tr>
                 <th rowspan="2">Consecutive number of the encounter</th>
                 <th rowspan="2">Number of first route</th>
                 <th rowspan="2">Number of second route</th>
-                <th colspan="2" align="center">Context-information</th>
+                <th colspan="3" align="center">Context-information</th>
                 <th rowspan="2">Confirm encounter</th>
                 <th rowspan="2">Save Encounter</th>
               </tr>
               <tr>
+                <th>Country</th>
                 <th>Weather</th>
                 <th>Terrain</th>
               </tr>

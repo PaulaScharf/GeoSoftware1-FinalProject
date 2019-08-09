@@ -55,6 +55,14 @@ app.post("/jsnlog.logger", function (req, res) {
 });
 
 
+
+
+
+
+
+
+
+
 // *******************************************************************************
 
 // TODO: PATH.JOIN VERWENDEN, ANSTATT DIRNAME UND /
@@ -131,6 +139,11 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
 
   // *********************** regarding animal tracking API ***********************
 
+  app.get("/createAnimalRoute", (req,res) => {
+    res.render("createAnimalRoute");
+  });
+
+
   // FÜR ANIMAL TRACKING API??
   // middleware for ... CORS: origin-response
   app.use((req, res, next) => {
@@ -157,7 +170,7 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
     // ...
 
     //
-    var resource = "https:www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps";
+    var resource = "https://www.movebank.org/movebank/service/public/json?study_id=2911040&individual_local_identifiers[]=4262-84830876&max_events_per_individual=100&sensor_type=gps";
 
     var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
     var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
@@ -204,7 +217,7 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
     });
 
     //  res.json(req.body);
-
+//res.render("createAnimalRoute");
   });
 
   // *****************************************************************************

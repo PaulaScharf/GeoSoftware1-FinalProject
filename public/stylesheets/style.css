@@ -43,22 +43,21 @@ th, td {
   height: 600px;
 }
 
-.navbar-nav > .active > a {
-  color: #7ed5e1;
-}
-
-.nav-item > a:hover {
-  color: #7ed5e1;
-}
-
-#encounterTableDiv {
+#animalRoutesTableDiv, #userRoutesTableDiv {
   overflow:scroll;
-  height:600px;
+  max-height:400px;
   width:100%;
   overflow:auto;
 }
 
-#encounterTableHead {
+#encounterTableDiv {
+  overflow:scroll;
+  max-height:600px;
+  width:100%;
+  overflow:auto;
+}
+
+#animalRoutesTableHead, #encounterTableHead, #userRoutesTableHead {
   position: sticky;
   top: 0;
   text-align: center;

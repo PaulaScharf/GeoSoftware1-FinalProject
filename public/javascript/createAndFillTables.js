@@ -36,19 +36,19 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThir
   z = z + 1;
 
   // create new table row and ANZAHL new table cells and write corresponding values into them
-  var row = document.createElement("tr");
-  var firstValue = document.createElement("td");
+  let row = document.createElement("tr");
+  let firstValue = document.createElement("td");
   firstValue.id = "conseNum"+z;
   firstValue.innerHTML = insertFirst;
-  var secondValue = document.createElement("td");
+  let secondValue = document.createElement("td");
   secondValue.innerHTML = insertSecond;
-  var thirdValue = document.createElement("td");
+  let thirdValue = document.createElement("td");
   thirdValue.innerHTML = insertThird;
-  var fourthValue = document.createElement("td");
+  let fourthValue = document.createElement("td");
   fourthValue.innerHTML = insertFourth;
-  var fifthValue = document.createElement("td");
+  let fifthValue = document.createElement("td");
   fifthValue.innerHTML = insertFifth;
-  var sixthValue = document.createElement("td");
+  let sixthValue = document.createElement("td");
   sixthValue.innerHTML = insertSixth;
 
 
@@ -78,23 +78,29 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThir
 function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, tableName){
 
   // create new table row and three new table cells and write corresponding values into them
-  var row = document.createElement("tr");
-  var firstValue = document.createElement("td");
+  let row = document.createElement("tr");
+  let firstValue = document.createElement("td");
   firstValue.innerHTML = insertFirst;
-  var secondValue = document.createElement("td");
+  let secondValue = document.createElement("td");
   secondValue.innerHTML = insertSecond;
-  var thirdValue = document.createElement("td");
+  let thirdValue = document.createElement("td");
   thirdValue.innerHTML = insertThird;
-  var fourthValue = document.createElement("td");
-  fourthValue.setAttribute("id", "weather" + insertFirst);
+  let fourthValue = document.createElement("td");
+  fourthValue.setAttribute("id", "country" + insertFirst);
+  let fifthValue = document.createElement("td");
+  fifthValue.setAttribute("id", "weather" + insertFirst);
+  let sixthValue = document.createElement("td");
+  sixthValue.setAttribute("id", "terrain" + insertFirst);
 
 
-  // append new row and seven new cells to given table
+  // append new row and ANZAHL new cells to given table
   document.getElementById(tableName).appendChild(row);
   row.appendChild(firstValue);
   row.appendChild(secondValue);
   row.appendChild(thirdValue);
   row.appendChild(fourthValue);
+  row.appendChild(fifthValue);
+  row.appendChild(sixthValue);
 }
 
 

@@ -59,9 +59,9 @@ var putitemcontroller = function (req, res) {
         if(error){
             console.dir(error);
         }
-        // TODO: why back to overview
-        // go back to the overview-page through the indexRouter
-        res.redirect("/overview");
+
+        //
+        res.send(result);
     });
 };
 
@@ -98,7 +98,9 @@ var deleteitemcontroller = function(req, res) {
             console.dir(error);
         }
     });
-    // go back to the overview-page through the indexRouter
+    //
+    // TODO: FEHLER BEHEBEN, TRITT AUF BEI/NACH(?) DEM LÖSCHEN VON BEGEGNUNGEN, NACHDEM ROUTEN GELÖSCHT WURDEN
+    // AJAX request (deleting an encounter) has failed. JSON.parse: unexpected end of data at line 1 column 1 of the JSON data
     res.send();
 };
 
