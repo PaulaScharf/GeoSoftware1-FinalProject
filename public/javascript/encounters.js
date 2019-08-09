@@ -174,7 +174,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
         let intersectionCoordinates = result.features[0].geometry.coordinates;
         // create an encounter object for the calculated intersection
         let encounter = {
-          type: "encounter",
+          what: "encounter",
           intersectionX: intersectionCoordinates[0],
           intersectionY: intersectionCoordinates[1],
           firstRoute: firstId,
@@ -251,8 +251,6 @@ function postEncounter(encounter) {
     url: "/encounter/post",
     //
     data: encounter,
-    // data type of the response
-    dataType: "json",
 
     // NÖTIG????
     // timeout set to 5 seconds
@@ -260,9 +258,7 @@ function postEncounter(encounter) {
   })
 
   // if the request is done successfully, ...
-  .done (function (response) {
-    console.log("response: ");
-    console.log(response);
+  .done (function () {
     // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
     console.log("AJAX request (posting an encounter) is done successfully.");
   })
@@ -299,8 +295,6 @@ function deleteEncounter(encounterId) {
     data: {
       _id: encounterId
     },
-    // data type of the response
-    dataType: "json",
 
     // NÖTIG????
     // timeout set to 5 seconds
@@ -308,9 +302,7 @@ function deleteEncounter(encounterId) {
   })
 
   // if the request is done successfully, ...
-  .done (function (response) {
-    console.log("response: ");
-    console.log(response);
+  .done (function () {
     // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
     console.log("AJAX request (deleting an encounter) is done successfully.");
   })
@@ -345,8 +337,6 @@ function updateStatusFromNewToOld(route) {
     url: "/encounter/update",
     //
     data: route,
-    // data type of the response
-    dataType: "json",
 
     // NÖTIG????
     // timeout set to 5 seconds
@@ -355,8 +345,6 @@ function updateStatusFromNewToOld(route) {
 
   // if the request is done successfully, ...
   .done (function (response) {
-    console.log("response: ");
-    console.log(response);
     // ... give a notice on the console that the AJAX request for ....... has succeeded
     console.log("AJAX request (updating the status of a route) is done successfully.");
   })

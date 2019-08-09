@@ -63,13 +63,14 @@
                     <textarea id="createRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
                     Routename:<br />
                     <input type="text" name="name" onKeyup="checkform()"/><br>
-                    Description:<br />
-                    <input type="text" name="description" onKeyup="checkform()"/><br>
+                    Type:<br />
+                    <input type="radio" name="type" value="planned" checked>planned<br>
+                    <input type="radio" name="type" value="completed">completed<br>
                     Timestamp:<br />
                     <input type="date" name="date" onchange="checkform()"/>
                     <input type="time" name="time" onKeyup="checkform()"/>
                     <input type="hidden" name="madeBy" onKeyup="checkform()" value = "user"/>
-                    <input type="hidden" name="type" onKeyup="checkform()" value = "route"/>
+                    <input type="hidden" name="what" onKeyup="checkform()" value = "route"/>
                     <input type="hidden" name="status" onKeyup="checkform()" value = "new"/>
                     <br/><br/>
                     <div id="errorMsg">To create a route you need to fill in all blanks.</div>

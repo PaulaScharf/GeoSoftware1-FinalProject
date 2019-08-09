@@ -33,7 +33,7 @@ var postitemcontroller = function(req, res) {
             console.dir(error);
         }
         // after the item (route) is successfully created go back to the create-page
-        res.send(result)
+        res.send()
     });
 };
 
@@ -61,7 +61,7 @@ var putitemcontroller = function (req, res) {
         }
 
         //
-        res.send(result);
+        res.send();
     });
 };
 
@@ -102,6 +102,29 @@ var deleteitemcontroller = function(req, res) {
     res.send();
 };
 
+// get a single encounter and the corresponding routes and render the singleroute.ejs view with that route
+var singleencounterpagecontroller = function(req, res) {
+
+    console.log("get items " + req.query.e_id + ", " + req.query.r1_id + ", " + req.query.r2_id);
+    //
+    req.db.collection('routeDB').find({_id: {"$in" : [new mongodb.ObjectID(req.query.e_id),
+                new mongodb.ObjectID(req.query.r1_id),
+                new mongodb.ObjectID(req.query.r2_id)]}}).toArray((error, result) => {
+
+        if(error){
+            // give a notice, that the reading has failed and show the error-message on the console
+            console.log("Failure while reading from 'routeDB'.", error.message);
+            // in case of an error while reading, do routing to "error.ejs"
+            res.render('error');
+            // if no error occurs ...
+        } else {
+            console.log(result);
+            //
+            res.render("singleEncounte", {result});
+        }
+    });
+};
+
 // **********************************
 
 //
@@ -116,6 +139,9 @@ router.route("/getAll")
 //
 router.route("/delete")
     .get(deleteitemcontroller);
+//
+router.route("/getSingleEncounter")
+    .get(singleencounterpagecontroller);
 
 
 module.exports = router;

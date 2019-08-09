@@ -22,7 +22,7 @@ var router = express.Router();
 // routehandler for get, post, put, and delete / using querystring via req.query
 
 // *********** READ/find ***********
-// get a single route and render the singleRoute.ejs view with that route
+// get a single route and render the updateDelete.ejs view with that route
 var getitemcontroller = function(req, res) {
 
   console.log("get item " + req.query._id);
@@ -37,7 +37,7 @@ var getitemcontroller = function(req, res) {
       // if no error occurs ...
     } else {
       //
-      res.render("singleRoute", {result});
+      res.render("updateDelete", {result});
     }
 });
 };

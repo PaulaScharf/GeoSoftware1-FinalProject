@@ -46,6 +46,7 @@ let allRoutes = [];
  */
 let allEncounters = [];
 
+// TODO: I think its not a good idea to make the counter a global variable
 /**
  * counter for table cell IDs
  * @type {number} z
@@ -206,9 +207,10 @@ function getAllEncountersAndShow() {
         deleteEncounter(currentEncounter._id);
         //
       } else {
-        // give true as the second argument to indicate that the encounter should be visible on the map
-        // and in the table
-        allEncounters.push([currentEncounter, true, noOfRoutes])
+        // give true as the second argument to indicate that all corresponding routes for this encounter are selected
+        // give true as the fourth argument to indicate that ther is either no search active or this encounter is
+        // currently being searched for
+        allEncounters.push([currentEncounter, true, noOfRoutes, "no search"])
       }
     }
     // ************************************************************************************************************
@@ -266,7 +268,7 @@ function showAllRoutesOnStartingPage() {
 
   // folgendes if LÖSCHEN ?????????
   // if there are no routes in the database ...
-  if (typeof allRoutes[0][0] === "undefined") {
+  if (typeof allRoutes[0] === "undefined") {
     // if there are routes in the database ... :
   } else {
 
@@ -331,10 +333,10 @@ function showEncountersOnStartingPage() {
     let currentEncounter = allEncounters[i];
     // make a circle out of the current encounter
     let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY], {radius: 200}, {color: '#000bec'});
-
+    currentCircle.bindPopup("encounter between route number " + currentEncounter[2].firstRoute + "and route number " + currentEncounter[2].secondRoute);
     // add the circle to the array encountersLatLongArray
     encountersLatLongArray.push(currentCircle);
-    if(currentEncounter[1]) {
+    if(currentEncounter[1] && (currentEncounter[3] == "no search" || currentEncounter[3] == "searched for")) {
       // add the encountersLatLongArray to the encountersGroup
       encountersLatLongArray[i].addTo(encountersGroup);
     }
@@ -355,8 +357,8 @@ function fillEncountersTable() {
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
     // only show encounters, which are also shown on the map
-    if (currentEncounter[1] == true) {
-      createAndWriteTableWithThreeCells(i, currentEncounter[2].firstRoute, currentEncounter[2].secondRoute, "encountersTable");
+    if (currentEncounter[1] && (currentEncounter[3] === "no search" || currentEncounter[3] === "searched for")) {
+      createAndWriteTableWithThreeCells(i, currentEncounter[2].firstRoute, currentEncounter[2].secondRoute, i, "encountersTable");
       // if the encounter is new then create a new weather request
       if (typeof currentEncounter[0].weather === 'undefined') {
         currentEncounter[0].weather = new WeatherRequest([currentEncounter[0].intersectionX, currentEncounter[0].intersectionX], i);
@@ -364,6 +366,7 @@ function fillEncountersTable() {
       } else {
         currentEncounter[0].weather.x.writeRequestResultsIntoTable();
       }
+      shareButton(i);
     }
   }
 }
@@ -379,12 +382,64 @@ function fillEncountersTable() {
 * @author Katharina Poppinga
 * @param {number} cb_id - ID for the checkbox to be created
 */
-function checkbox(cb_id){
+function checkbox(cb_id) {
   // label the table cell, in which the checkbox will be written, as "tableCellCheckbox"
   let tableCellCheckbox = document.getElementById("conseNum"+z);
 
   // add a checkbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
-  tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " " + "<input type='checkbox' id='" +cb_id+ "' checked=true onclick='routeSelectionForMap("+cb_id+")'>";
+  tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='checkbox" +cb_id+ "' checked=true onclick='routeSelectionForMap("+cb_id+")'>";
+}
+
+function shareButton(bt_id) {
+// label the table cell, in which the checkbox will be written, as "tableCellCheckbox"
+  let tableCellButton = document.getElementById("conseNumEnc"+bt_id);
+
+  let ids = {
+    e_id : allEncounters[bt_id][0]._id,
+    r1_id: allRoutes[allEncounters[bt_id][2].firstRoute][0]._id,
+    r2_id: allRoutes[allEncounters[bt_id][2].secondRoute][0]._id,
+  };
+  console.log(ids.e_id);
+
+  // add a button (which calls the function routeSelectionForMap(bt_id) if clicked) to the content of the "tableCellCheckbox"
+  tableCellButton.innerHTML = "<form action='/encounter/getSingleEncounter?e_id=" + ids.e_id+ "' method='GET' name='shareForm'>" +
+      "<input type='submit' value='share' id='sharebutton" + bt_id + "'/></form>";
+}
+
+function getSingleEncounterPage(encounterIndex) {
+
+  $.ajax({
+    // use a http POST request
+    type: "GET",
+    // URL to send the request to
+    url: "/encounter/getSingleEncounter",
+    //
+    data: ids,
+
+    // NÖTIG????
+    // timeout set to 5 seconds
+    timeout: 5000
+  })
+
+  // if the request is done successfully, ...
+      .done (function (response) {
+        // ... give a notice on the console that the AJAX request for ....... has succeeded
+        console.log("AJAX request (redirecting to the single-encounter-page) is done successfully.");
+      })
+
+      // if the request has failed, ...
+      .fail(function (xhr, status, error) {
+        // ... give a notice that the AJAX request for .......... has failed and show the error-message on the console
+        console.log("AJAX request (updating a route GENAUER SPEZIFIZIEREN/TRENNEN?) has failed.", error.message);
+
+
+        // TODO:
+        // WIE NUR FÜR TIMEOUT MACHEN ??? BRINGT HIER SONST NICHTS
+        // WAS BEI ANDEREN ERRORS?
+        // NOTFALLS LÖSCHEN, BEI ALLEN AJAX
+        JL("ajaxEncounterUpdateTimeout").fatal("ajax: '/encounter/update' timeout");
+
+      });
 }
 
 
@@ -404,7 +459,7 @@ function routeSelectionForMap(cb_id){
   console.log(routesGroup);
 
   // label the checkbox
-  let checkBox = document.getElementById(cb_id);
+  let checkBox = document.getElementById("checkbox" + cb_id);
 
   // if the checkbox is picked ...
   if (checkBox.checked === true){
@@ -458,8 +513,9 @@ function encountersToBeRemoved(routeId) {
   let result = [];
 
   for (let i = 0; i < allEncounters.length; i++) {
+    let currentEncounter = allEncounters[i];
     // all encounters which belong to the deselected route have to be removed
-    if(allEncounters[i][2].firstRoute == routeId || allEncounters[i][2].secondRoute == routeId) {
+    if(currentEncounter[3] != "searched for" && (currentEncounter[2].firstRoute == routeId || currentEncounter[2].secondRoute == routeId)) {
       result.push(i);
     }
   }
@@ -483,10 +539,10 @@ function encountersToBeAdded(routeId) {
   //
   for (let i = 0; i < allEncounters.length; i++) {
     // only routes which belong to the selected route and one other selected route have to be added
-    if(allEncounters[i][2].firstRoute == routeId && allRoutes[allEncounters[i][2].secondRoute][1] == true) {
+    if(allEncounters[i][2].firstRoute === routeId && allRoutes[allEncounters[i][2].secondRoute][1]) {
       result.push(i);
     }
-    else if(allEncounters[i][2].secondRoute == routeId && allRoutes[allEncounters[i][2].firstRoute][1] == true) {
+    else if(allEncounters[i][2].secondRoute === routeId && allRoutes[allEncounters[i][2].firstRoute][1]) {
       result.push(i);
     }
   }
@@ -527,30 +583,43 @@ function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute){
   return latLongCoordinatesRoute;
 }
 
+/**
+ *
+ * @param obj - the checkbox-object for the search
+ */
 function searchEncounters(obj) {
+  // if the checkbox is checked then do the search
   if($(obj).is(":checked")){
     let name = document.getElementById("searchRouteName").value;
     let routeIds = searchForRouteIds(name);
     console.log(routeIds);
-    for (let i = 0; i < routeIds.length; i ++) {
-
-      routesGroup.removeLayer(polylineRoutesLatLongArray[routeIds[i]]);
-      polylineRoutesLatLongArray[routeIds[i]].setStyle({
-        color: '#ecd43f'
-      });
-      console.log(polylineRoutesLatLongArray[i]);
-      routesGroup.addLayer(polylineRoutesLatLongArray[routeIds[i]]);
+    for (let i = 0; i < allRoutes.length; i ++) {
+      routesGroup.removeLayer(polylineRoutesLatLongArray[i]);
+      if (routeIds.includes(i)) {
+        polylineRoutesLatLongArray[i].setStyle({
+          color: '#ecd43f'
+        });
+        routesGroup.addLayer(polylineRoutesLatLongArray[i]);
+        document.getElementById("checkbox" + i).checked = true;
+        allRoutes[i][1] = true;
+      } else {
+        document.getElementById("checkbox" + i).checked = false;
+        allRoutes[i][1] = false;
+      }
     }
     for (let i = 0; i < allEncounters.length; i++) {
       let currentEncounter = allEncounters[i];
       if (routeIds.includes(currentEncounter[2].firstRoute) || routeIds.includes(currentEncounter[2].secondRoute)) {
         allEncounters[i][1] = true;
+        allEncounters[i][3] = "searched for";
       } else {
         console.log(false);
         allEncounters[i][1] = false;
+        allEncounters[i][3] = "not searched for";
       }
     }
     showEncountersOnStartingPage();
+    // if the checkbox is unchecked then undo the search
   }else{
     encountersGroup.eachLayer(function (layer)
     {
@@ -563,6 +632,7 @@ function searchEncounters(obj) {
     }
     for (let i = 0; i < allEncounters.length; i++) {
       let currentEncounter = allEncounters[i];
+      allEncounters[i][3] = "no search";
       if (allRoutes[currentEncounter[2].firstRoute][1] && allRoutes[currentEncounter[2].secondRoute][1]) {
         allEncounters[i][1] = true;
       } else {

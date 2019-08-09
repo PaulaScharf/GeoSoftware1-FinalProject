@@ -75,7 +75,7 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThir
  * @param insertSecond - second value, to write in second new created cell
  * @param {string} tableName - table to which the new created row and new created cells are appended
  */
-function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, tableName){
+function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, id, tableName){
 
   // create new table row and three new table cells and write corresponding values into them
   var row = document.createElement("tr");
@@ -87,6 +87,9 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
   thirdValue.innerHTML = insertThird;
   var fourthValue = document.createElement("td");
   fourthValue.setAttribute("id", "weather" + insertFirst);
+  var fifthValue = document.createElement("td");
+  var sixthValue = document.createElement("td");
+  sixthValue.id = "conseNumEnc"+id;
 
 
   // append new row and seven new cells to given table
@@ -95,6 +98,8 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
   row.appendChild(secondValue);
   row.appendChild(thirdValue);
   row.appendChild(fourthValue);
+  row.appendChild(fifthValue);
+  row.appendChild(sixthValue);
 }
 
 
