@@ -17,9 +17,10 @@ exports.token = {
     OPENWEATHERMAP_TOKEN: "5e48111daa1da0d2673f81e5ec6fe1bc",
 
     // terrain data
-    // ...
+    usernameTerrainAPI: "geosoftw_k_p",
+    // PW???
 
-    // animal tracking data:
+    // animal tracking data
     loginnameAnimalTrackingAPI: "KPoppi",
     passwordAnimalTrackingAPI: "U6_l1#"
 };

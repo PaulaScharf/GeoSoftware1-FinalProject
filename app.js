@@ -55,6 +55,14 @@ app.post("/jsnlog.logger", function (req, res) {
 });
 
 
+
+
+
+
+
+
+
+
 // *******************************************************************************
 
 // TODO: PATH.JOIN VERWENDEN, ANSTATT DIRNAME UND /
@@ -131,9 +139,11 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
 
   // *********************** regarding animal tracking API ***********************
 
-  app.get("/animalPage", (req,res) => {
+  app.get("/createAnimalRoute", (req,res) => {
     res.render("createAnimalRoute");
   });
+
+
   // FÜR ANIMAL TRACKING API??
   // middleware for ... CORS: origin-response
   app.use((req, res, next) => {
@@ -207,7 +217,7 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
     });
 
     //  res.json(req.body);
-
+//res.render("createAnimalRoute");
   });
 
   // *****************************************************************************
