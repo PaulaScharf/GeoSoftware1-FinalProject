@@ -22,7 +22,7 @@ var router = express.Router();
 
 // *********** CREATE/insert (with html-form) ***********
 // add a route from the req.body and redirect to the create.html
-var postItemController = function(req, res) {
+var postitemcontroller = function(req, res) {
     console.log("insert encounter");
     console.log(req.body);
     // your only able to add an item if it contains atleast the route-coordinates and a name
@@ -33,13 +33,13 @@ var postItemController = function(req, res) {
             console.dir(error);
         }
         // after the item (route) is successfully created go back to the create-page
-        res.send()
+        res.send(result)
     });
 };
 
 
 //
-var putItemController = function (req, res) {
+var putitemcontroller = function (req, res) {
 
     console.log("update item");
 
@@ -61,14 +61,14 @@ var putItemController = function (req, res) {
         }
 
         //
-        res.send();
+        res.send(result);
     });
 };
 
 
 //
-var getAllItemController = function(req,res) {
-    req.db.collection('routeDB').find({what: "encounter"}).toArray((error, result) => {
+var getAllitemcontroller = function(req,res) {
+    req.db.collection('routeDB').find({type: "encounter"}).toArray((error, result) => {
         if(error){
             // give a notice, that the reading has failed and show the error-message on the console
             console.log("Failure in reading from 'routeDB'.", error.message);
@@ -85,7 +85,7 @@ var getAllItemController = function(req,res) {
 
 
 // delete an item from the database and redirect to the overview.ejs
-var deleteItemController = function(req, res) {
+var deleteitemcontroller = function(req, res) {
 
     console.log("delete item " + req.query._id);
     //
@@ -104,46 +104,20 @@ var deleteItemController = function(req, res) {
     res.send();
 };
 
-// get a single encounter and the corresponding routes and render the singleroute.ejs view with that route
-var singleEncounterPageController = function(req, res) {
-
-    console.log("get items " + req.query.e_id + ", " + req.query.r1_id + ", " + req.query.r2_id);
-    //
-    req.db.collection('routeDB').find({_id: {"$in" : [new mongodb.ObjectID(req.query.e_id),
-                new mongodb.ObjectID(req.query.r1_id),
-                new mongodb.ObjectID(req.query.r2_id)]}}).toArray((error, result) => {
-
-        if(error){
-            // give a notice, that the reading has failed and show the error-message on the console
-            console.log("Failure while reading from 'routeDB'.", error.message);
-            // in case of an error while reading, do routing to "error.ejs"
-            res.render('error');
-            // if no error occurs ...
-        } else {
-            console.log(result);
-            //
-            res.render("singleEncounter", { result });
-        }
-    });
-};
-
 // **********************************
 
 //
 router.route("/post")
-    .post(postItemController);
+    .post(postitemcontroller);
 //
 router.route("/update")
-    .post(putItemController);
+    .post(putitemcontroller);
 //
 router.route("/getAll")
-    .get(getAllItemController);
+    .get(getAllitemcontroller);
 //
 router.route("/delete")
-    .get(deleteItemController);
-//
-router.route("/getSingleEncounter")
-    .get(singleEncounterPageController);
+    .get(deleteitemcontroller);
 
 
 module.exports = router;
