@@ -58,13 +58,6 @@ function getAllRoutes() {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for reading all routes has failed and show the error-message on the console
     console.log("AJAX request (reading all routes) has failed.", error.message);
-
-
-    // TODO:
-    // WIE NUR FÜR TIMEOUT MACHEN ??? BRINGT HIER SONST NICHTS
-    // WAS BEI ANDEREN ERRORS?
-    // NOTFALLS LÖSCHEN, BEI ALLEN AJAX?
-    JL("ajaxDisplayAllTimeout2").fatal("ajax: '/displayAll' timeout");
   });
 }
 
@@ -188,10 +181,10 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
           // go through all routes, to determine their index in the allRoutes-array and give that information
           // to the encounter
           for (let k = 0; k < allRoutes.length; k++) {
-            if(allRoutes[k][0]._id == encounter.firstRoute) {
+            if(allRoutes[k][0]._id === encounter.firstRoute) {
               noOfRoutes.firstRoute = k;
             }
-            else if (allRoutes[k][0]._id == encounter.secondRoute) {
+            else if (allRoutes[k][0]._id === encounter.secondRoute) {
               noOfRoutes.secondRoute = k;
             }
           }
@@ -200,7 +193,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
           } else {
             // give true as the second argument to indicate that the encounter should be visible on the map
             // and in the table
-            allEncounters.push([encounter, true, noOfRoutes])
+            allEncounters.push([encounter, true, noOfRoutes, "no search"])
           }
         }
         // save the new encounter in the database
@@ -238,7 +231,7 @@ function getIntersection(x11, y11, x12, y12, x21, y21, x22, y22) {
 
 
 /**
-* This function calls the encounter/post route with ajax, to save a given encounter in the db.
+* This function calls the /encounter/post route with ajax, to save a given encounter in the database.
 * @param encounter - the encounter to be saved
 * @author name: Paula Scharf, matr.: 450 334
 */
@@ -267,14 +260,6 @@ function postEncounter(encounter) {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for posting an encounter has failed and show the error-message on the console
     console.log("AJAX request (posting an encounter) has failed.", error.message);
-
-
-    // TODO:
-    // WIE NUR FÜR TIMEOUT MACHEN ??? BRINGT HIER SONST NICHTS
-    // WAS BEI ANDEREN ERRORS?
-    // NOTFALLS LÖSCHEN, BEI ALLEN AJAX
-    JL("ajaxEncounterPostTimeout").fatal("ajax: '/encounter/post' timeout");
-
   });
 }
 
@@ -311,14 +296,6 @@ function deleteEncounter(encounterId) {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for deleting an encounter has failed and show the error-message on the console
     console.log("AJAX request (deleting an encounter) has failed.", error.message);
-
-
-    // TODO:
-    // WIE NUR FÜR TIMEOUT MACHEN ??? BRINGT HIER SONST NICHTS
-    // WAS BEI ANDEREN ERRORS?
-    // NOTFALLS LÖSCHEN, BEI ALLEN AJAX
-    JL("ajaxEncounterDeleteTimeout").fatal("ajax: '/encounter/delete' timeout");
-
   });
 }
 
@@ -345,22 +322,14 @@ function updateStatusFromNewToOld(route) {
 
   // if the request is done successfully, ...
   .done (function (response) {
-    // ... give a notice on the console that the AJAX request for ....... has succeeded
+    // ... give a notice on the console that the AJAX request for updating the status of a route has succeeded
     console.log("AJAX request (updating the status of a route) is done successfully.");
   })
 
   // if the request has failed, ...
   .fail(function (xhr, status, error) {
-    // ... give a notice that the AJAX request for .......... has failed and show the error-message on the console
-    console.log("AJAX request (updating a route GENAUER SPEZIFIZIEREN/TRENNEN?) has failed.", error.message);
-
-
-    // TODO:
-    // WIE NUR FÜR TIMEOUT MACHEN ??? BRINGT HIER SONST NICHTS
-    // WAS BEI ANDEREN ERRORS?
-    // NOTFALLS LÖSCHEN, BEI ALLEN AJAX
-    JL("ajaxEncounterUpdateTimeout").fatal("ajax: '/encounter/update' timeout");
-
+    // ... give a notice that the AJAX request for updating the status of a route has failed and show the error-message on the console
+    console.log("AJAX request (updating the status of a route) has failed.", error.message);
   });
 }
 

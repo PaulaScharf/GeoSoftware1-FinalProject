@@ -15,10 +15,10 @@
 // FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
 
 // create the initial map in the "updateMap"-div
-var updateMap = L.map('updateMap').setView([0, 0], 2);
+let updateMap = L.map('updateMap').setView([0, 0], 2);
 
 // OpenStreetMap tiles as a layer for the map "updateMap"
-var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+let oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
@@ -35,7 +35,7 @@ drawPolyline(updateMap, "updateRoute");
 // ****************** display the old route (the route that shall be updated) in the map "updateMap" ******************
 
 //
-var oldRouteGeoJSON = JSON.parse(document.getElementById("updateRoute").innerHTML);
+let oldRouteGeoJSON = JSON.parse(document.getElementById("updateRoute").innerHTML);
 
 // extract the coordinates of the route that shall be updated (old route)
 let coordinatesOldRoute = oldRouteGeoJSON.features[0].geometry.coordinates;

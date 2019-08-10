@@ -15,10 +15,10 @@
 // FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
 
 // create the initial map in the "createMap"-div
-var createMap = L.map('createMap').setView([0, 0], 2);
+let createMap = L.map('createMap').setView([0, 0], 2);
 
 // OpenStreetMap tiles as a layer for the map "createMap"
-var oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+let oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 

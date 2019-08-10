@@ -22,7 +22,7 @@ var router = express.Router();
 
 // *********** CREATE/insert (with html-form) ***********
 // add a route from the req.body and redirect to the create.html
-var postitemcontroller = function(req, res) {
+var postItemController = function(req, res) {
     console.log("insert encounter");
     console.log(req.body);
     // your only able to add an item if it contains atleast the route-coordinates and a name
@@ -39,7 +39,7 @@ var postitemcontroller = function(req, res) {
 
 
 //
-var putitemcontroller = function (req, res) {
+var putItemController = function (req, res) {
 
     console.log("update item");
 
@@ -67,8 +67,8 @@ var putitemcontroller = function (req, res) {
 
 
 //
-var getAllitemcontroller = function(req,res) {
-    req.db.collection('routeDB').find({type: "encounter"}).toArray((error, result) => {
+var getAllItemController = function(req,res) {
+    req.db.collection('routeDB').find({what: "encounter"}).toArray((error, result) => {
         if(error){
             // give a notice, that the reading has failed and show the error-message on the console
             console.log("Failure in reading from 'routeDB'.", error.message);
@@ -85,7 +85,7 @@ var getAllitemcontroller = function(req,res) {
 
 
 // delete an item from the database and redirect to the overview.ejs
-var deleteitemcontroller = function(req, res) {
+var deleteItemController = function(req, res) {
 
     console.log("delete item " + req.query._id);
     //
@@ -98,12 +98,14 @@ var deleteitemcontroller = function(req, res) {
             console.dir(error);
         }
     });
-    // go back to the overview-page through the indexRouter
+    //
+    // TODO: FEHLER BEHEBEN, TRITT AUF BEI/NACH(?) DEM LÖSCHEN VON BEGEGNUNGEN, NACHDEM ROUTEN GELÖSCHT WURDEN
+    // AJAX request (deleting an encounter) has failed. JSON.parse: unexpected end of data at line 1 column 1 of the JSON data
     res.send();
 };
 
 // get a single encounter and the corresponding routes and render the singleroute.ejs view with that route
-var singleencounterpagecontroller = function(req, res) {
+var singleEncounterPageController = function(req, res) {
 
     console.log("get items " + req.query.e_id + ", " + req.query.r1_id + ", " + req.query.r2_id);
     //
@@ -120,7 +122,7 @@ var singleencounterpagecontroller = function(req, res) {
         } else {
             console.log(result);
             //
-            res.render("singleEncounte", {result});
+            res.render("singleEncounte", { result });
         }
     });
 };
@@ -129,19 +131,19 @@ var singleencounterpagecontroller = function(req, res) {
 
 //
 router.route("/post")
-    .post(postitemcontroller);
+    .post(postItemController);
 //
 router.route("/update")
-    .post(putitemcontroller);
+    .post(putItemController);
 //
 router.route("/getAll")
-    .get(getAllitemcontroller);
+    .get(getAllItemController);
 //
 router.route("/delete")
-    .get(deleteitemcontroller);
+    .get(deleteItemController);
 //
 router.route("/getSingleEncounter")
-    .get(singleencounterpagecontroller);
+    .get(singleEncounterPageController);
 
 
 module.exports = router;
