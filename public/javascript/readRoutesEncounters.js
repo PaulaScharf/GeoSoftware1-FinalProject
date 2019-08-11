@@ -377,27 +377,6 @@ function getAllEncountersAndShow() {
 function showEncountersOnStartingPage() {
   // fill the table for the encounters with the encounters-array
   fillEncountersTable();
-  encountersGroup.eachLayer(function (layer)
-  {
-    encountersGroup.removeLayer(layer);
-  });
-  encountersLatLongArray = [];
-  // loop "over" all encounters in the current database "routeDB"
-  for (let i = 0; i < allEncounters.length; i++) {
-    let currentEncounter = allEncounters[i];
-    // make a circle out of the current encounter
-    let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY], {radius: 200}, {color: '#000bec'});
-    currentCircle.bindPopup("encounter between route number " + currentEncounter[2].firstRoute + "and route number " + currentEncounter[2].secondRoute);
-    // add the circle to the array encountersLatLongArray
-    encountersLatLongArray.push(currentCircle);
-    if(currentEncounter[1] && (currentEncounter[3] == "no search" || currentEncounter[3] == "searched for")) {
-      // add the encountersLatLongArray to the encountersGroup
-      encountersLatLongArray[i].addTo(encountersGroup);
-    }
-  }
-  // fill the table for the encounters with the encounters-array
-  fillEncountersTable();
-  // fill the map with all selected encounters
   fillEncountersMap();
 }
 
