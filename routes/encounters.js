@@ -122,7 +122,7 @@ var singleEncounterPageController = function(req, res) {
         } else {
             console.log(result);
             //
-            res.render("singleEncounte", { result });
+            res.render("singleEncounter", { result });
         }
     });
 };
