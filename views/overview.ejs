@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
+
+    <!-- installed CSS -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="leaflet/leaflet.css"/>
+    <link rel="stylesheet" href="leaflet-draw/leaflet.draw.css"/>
+
+    <!-- locally created css -->
+    <link rel="stylesheet" href="../stylesheets/style.css">
+
+    <title>List of all routes</title>
+</head>
+
+<body>
+    <% function stripEndQuotes(s){
+        var t=s.length;
+        if (s.charAt(0)=='"') s=s.substring(1,t--);
+        if (s.charAt(--t)=='"') s=s.substring(0,t);
+        return s;
+    }%>
+
+    <%- include('partial/navbar', {active: "Maintainance"}); %>
+
+    <main role="main" class="container-fluid">
+        <div id="content-wrap">
+        <div class="row">
+            <div class="container-fluid" align="center">
+
+              <p>durch update- und delete-Buttons auf Startseite ersetzen</p>
+
+              <h1>List of all routes</h1>
+
+                <ul>
+                    <% if(result.length==0) { %>
+                        <p>No routes available in the database.</p>
+                    <% } else
+                        {
+                            for (var i=0; i<result.length; i++) { %>
+                                <li>
+                                    <a href="item?_id=<%= JSON.stringify(result[i]._id).replace(/"/g, '') %>">
+                                        <%= JSON.stringify(result[i].name).replace(/"/g, '') %>
+                                    </a>
+                                    </br>
+                                    <div>
+                                        <%= stripEndQuotes(JSON.stringify(result[i].creator)) %>
+                                    </div>
+                                    <p>
+                                        <%= stripEndQuotes(JSON.stringify(result[i].type)) %>
+                                    </p>
+                                </li>
+                        <%}}%>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <%- include('partial/footer', {active: "Home"}); %>
+
+</body>
+</html>
+
+<script src="jquery/jquery.min.js"></script>
+<script src="popper/umd/popper.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="leaflet/leaflet.js"></script>
+<script src="leaflet-draw/leaflet.draw.js"></script>
