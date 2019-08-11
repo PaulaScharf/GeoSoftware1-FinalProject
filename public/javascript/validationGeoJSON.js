@@ -103,39 +103,33 @@ function validateGeoJSON(routeJSON) {
 
               // correct GeoJSON syntax of the input route
               console.log("Route syntax checked: GeoJSON syntax is correct.");
-              // do submit form
               return true;
 
               // if the input route is not written in a correct GeoJSON syntax:
             } else {
               // tell the user that the input is incorrect
               alert("The route input is not in the requested correct GeoJSON syntax (FeatureCollection with a LineString feature)!\nThe coordinates have to be numbers.");
-              // do not submit form
               return false;
             }
           } else {
             // tell the user that the input is incorrect
             alert("The textarea for the route input only accepts the requested GeoJSON FeatureCollection in a correct GeoJSON syntax.");
-            // do not submit form
             return false;
           }
         }
       } else {
         // tell the user that the input is incorrect
         alert("The textarea for the route input only accepts the requested GeoJSON FeatureCollection in a correct GeoJSON syntax.");
-        // do not submit form
         return false;
       }
     } else {
       // tell the user that the input is incorrect
       alert("The textarea for the route input only accepts the requested GeoJSON FeatureCollection in a correct GeoJSON syntax.");
-      // do not submit form
       return false;
     }
   } else {
     // tell the user that the input is incorrect
     alert("The textarea for the route input only accepts the requested GeoJSON FeatureCollection in a correct GeoJSON syntax.");
-    // do not submit form
     return false;
   }
 }
