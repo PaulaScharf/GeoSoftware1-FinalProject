@@ -8,6 +8,7 @@ body {
   font-family:'Calibri';
 }
 
+/*
 button {
   background-color: #d6a820;
   border: none;
@@ -17,9 +18,15 @@ button {
   padding: 10px 30px;
   text-align: center;
 }
+*/
 
 caption, td {
   text-align: left;
+}
+
+h1 {
+  color: blue;
+  text-align: center;
 }
 
 main {
@@ -64,8 +71,7 @@ th, td {
 }
 
 
-
-/* The switch - the box around the slider */
+/* the switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
@@ -73,14 +79,14 @@ th, td {
   height: 34px;
 }
 
-/* Hide default HTML routeCheckbox */
+/* hide default HTML checkbox */
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-/* The slider */
+/* the slider */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -119,7 +125,7 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-/* Rounded sliders */
+/* rounded sliders */
 .slider.round {
   border-radius: 34px;
 }
