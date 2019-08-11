@@ -1,138 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
+  <!-- Required meta tags -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
-    <!-- installed CSS -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="leaflet/leaflet.css"/>
-    <link rel="stylesheet" href="leaflet-draw/leaflet.draw.css"/>
+  <!-- installed CSS -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="leaflet/leaflet.css"/>
+  <link rel="stylesheet" href="leaflet-draw/leaflet.draw.css"/>
 
-    <!-- locally created css -->
-    <link rel="stylesheet" href="../stylesheets/style.css">
+  <!-- locally created css -->
+  <link rel="stylesheet" href="../stylesheets/style.css">
 
 
-    <title>Final Project</title>
+  <title>Final Project</title>
 </head>
 
 <body>
-<%- include('partial/navbar', {active: "Home"}); %>
-<main role="main">
+
+  <%- include('partial/navbar', {active: "Home"}); %>
+
+  <main role="main">
     <div class="row" style="padding:10px">
-        <div class="container-fluid">
-            <h1 style="color:blue; text-align:center">Final Project</h1>
-        </div>
+      <div class="container-fluid">
+        <h1>Final Project</h1>
+      </div>
     </div>
 
     <p>Beschreibung der Seite, was sie tut / wozu sie da ist, nicht vergessen :D</p>
 
     <div class="row" style="padding:10px">
-        <div class="col-sm-12">
-            <div id="allRoutesMap"></div>
-        </div>
+      <div class="col-sm-12">
+        <div id="allRoutesMap"></div>
+      </div>
     </div>
     <br>
 
     <div class="row">
 
-        <div class="col-sm">
-            <table class="table">
-                <thead class="thead-dark">
-                <tr>
-                    <th rowspan="2">Consecutive number of the route</th>
-                    <th rowspan="2">Username</th>
-                    <th rowspan="2">Name of route</th>
-                    <th colspan="2" rowspan="2">Date and time</th>
-                    <th rowspan="2">Type of route</th>
-                </tr>
-                </thead>
-                <tbody id="routesTable">
-                </tbody>
-            </table>
-            <div>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</div>
-        </div>
+      <div class="col-sm">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th rowspan="2">Consecutive number of the route</th>
+              <th rowspan="2">Username</th>
+              <th rowspan="2">Name of route</th>
+              <th colspan="2" rowspan="2">Date and time</th>
+              <th rowspan="2">Type of route</th>
+            </tr>
+          </thead>
+          <tbody id="routesTable">
+          </tbody>
+        </table>
+        <div>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</div>
+      </div>
 
 
-        <div class="col-sm">
-            <table class="table">
-                <caption>This table shows .....<br>Use checkboxes for displaying the routes in the map or not.</caption>
-                <thead class="thead-dark">
-                <tr>
-                    <th rowspan="2">Consecutive number of the route</th>
-                    <th rowspan="2">Animalname/species</th>
-                    <th rowspan="2">?</th>
-                    <th colspan="2" rowspan="2">?</th>
-                    <th rowspan="2">?</th>
-                </tr>
-                </thead>
-                <tbody id="animalRoutesTable">
-                </tbody>
-            </table>
-        </div>
+      <div class="col-sm">
+        <table class="table">
+          <caption>This table shows .....<br>Use checkboxes for displaying the routes in the map or not.</caption>
+          <thead class="thead-dark">
+            <tr>
+              <th rowspan="2">Consecutive number of the route</th>
+              <th rowspan="2">Animalname/species</th>
+              <th rowspan="2">?</th>
+              <th colspan="2" rowspan="2">?</th>
+              <th rowspan="2">?</th>
+            </tr>
+          </thead>
+          <tbody id="animalRoutesTable">
+          </tbody>
+        </table>
+      </div>
 
     </div>
     <input type="text" id="searchRouteName" placeholder="Search for names of specific routes.." title="Type in a name">
     <label class="switch">
-        <input type="checkbox" onchange="searchEncounters(this)">
-        <span class="slider round"></span>
+      <input type="checkbox" onchange="searchEncounters(this)">
+      <span class="slider round"></span>
     </label>
 
 
     <div class="row">
-        <div class="col-sm">
-            <div id="encounterTableDiv">
-                <table class="table">
-                    <caption>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</caption>
-                    <thead class="thead-dark" id="encounterTableHead">
-                    <tr>
-                        <th rowspan="2">Consecutive number of the encounter</th>
-                        <th colspan="2" align="center">Context-information</th>
-                    </tr>
-                    <tr>
-                        <th>Weather</th>
-                        <th>Terrain</th>
-                    </tr>
-                    </thead>
-                    <tbody id="encountersTable">
-                    <% if(result.length==0) { %>
-                        <p>No routes available in the database</p>
-                    <% } else
-                    {
-                    for (var i=0; i<result.length; i++) {
-                        if(result[i].what == "encounter") {%>
-                    <tr>
+      <div class="col-sm">
+        <div id="encounterTableDiv">
+          <table class="table">
+            <caption>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</caption>
+            <thead class="thead-dark" id="encounterTableHead">
+              <tr>
+                <th rowspan="2">Consecutive number of the encounter</th>
+                <th colspan="2" align="center">Context-information</th>
+              </tr>
+              <tr>
+                <th>Weather</th>
+                <th>Terrain</th>
+              </tr>
+            </thead>
+            <tbody id="encountersTable">
+              <% if(result.length==0) { %>
+                <p>No routes available in the database</p>
+                <% } else
+                {
+                  for (var i=0; i<result.length; i++) {
+                    if(result[i].what == "encounter") {%>
+                      <tr>
                         <td><%= result[i]._id %></td>
-                    </tr>
-                    <%}}}%>
+                      </tr>
+                      <%}}}%>
                     </tbody>
-                </table>
+                  </table>
+                </div>
+                <div>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</div>
+              </div>
             </div>
-            <div>This table shows encounters...<br>Frage: "Consecutive number of the encounter" oder Nummer den entsprechenden Routen zugehörig?</div>
-        </div>
-    </div>
 
-</main>
+          </main>
 
-<%- include('partial/footer'); %>
+          <%- include('partial/footer'); %>
 
-</body>
-</html>
+        </body>
+        </html>
 
-<script src="jquery/jquery.min.js"></script>
-<script src="popper/umd/popper.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="leaflet/leaflet.js"></script>
-<script src="leaflet-draw/leaflet.draw.js"></script>
-<script src="turf/turf.min.js"></script>
+        <script src="jquery/jquery.min.js"></script>
+        <script src="popper/umd/popper.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="leaflet/leaflet.js"></script>
+        <script src="leaflet-draw/leaflet.draw.js"></script>
+        <script src="turf/turf.min.js"></script>
 
 
-<!-- löschen und zu npm umwandeln !! -->
-<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jsnlog/2.29.0/jsnlog.min.js"></script>
+        <!-- löschen und zu npm umwandeln !! -->
+        <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jsnlog/2.29.0/jsnlog.min.js"></script>
 
 
-<script src="javascript/createAndFillTables.js"></script>
-<script src="javascript/encounters.js"></script>
-<script src="javascript/readRoutesEncounters.js"></script>
-<script src="javascript/tokens.js"></script>
+        <script src="javascript/createAndFillTables.js"></script>
+        <script src="javascript/encounters.js"></script>
+        <script src="javascript/readRoutesEncounters.js"></script>
+        <script src="javascript/tokens.js"></script>

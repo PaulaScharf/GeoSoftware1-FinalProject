@@ -242,6 +242,7 @@ function postEncounter(encounter) {
     type: "POST",
     // URL to send the request to
     url: "/encounter/post",
+    // TODO: warum kein contentType definiert?
     //
     data: encounter,
 
@@ -252,7 +253,7 @@ function postEncounter(encounter) {
 
   // if the request is done successfully, ...
   .done (function () {
-    // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+    // ... give a notice on the console that the AJAX request for posting an encounter has succeeded
     console.log("AJAX request (posting an encounter) is done successfully.");
   })
 
@@ -288,7 +289,7 @@ function deleteEncounter(encounterId) {
 
   // if the request is done successfully, ...
   .done (function () {
-    // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+    // ... give a notice on the console that the AJAX request for deleting an encounter has succeeded
     console.log("AJAX request (deleting an encounter) is done successfully.");
   })
 
@@ -340,7 +341,7 @@ function updateStatusFromNewToOld(route) {
 * containing arrays (individual long-lat-pairs) of a route.
 * Swaps these coordinate-pairs. Returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
 *
-* @author Katharina Poppinga
+* @author Katharina Poppinga 450146
 * @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
 * @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
 */

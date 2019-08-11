@@ -22,21 +22,19 @@
 
 
 /**
-* Takes the ID of the textarea which contains the route input and checks whether this route input is in a correct GeoJSON syntax.
+* Takes the ID of the textarea which contains the route input and checks whether this route input is in a correct JSON and a correct GeoJSON syntax.
 * If its syntax is correct, the corresponding action form will be submitted. If its syntax is incorrect, the
 * corresponding action form will not be submitted and the user is given a notice.
 *
 * @private
-* @author Katharina Poppinga
+* @author Katharina Poppinga 450146
 * @param idInputTextarea ID of the textarea which contains the route input
 * @return {boolean} true, if the route input is in a correct GeoJSON syntax, false if not
 */
-function validateGeoJSON(idInputTextarea) {
+function validateJSONAndGeoJSON(idInputTextarea) {
 
   // take the content of textarea with the id idInputTextarea
   let routeInput = document.getElementById(idInputTextarea ).value;
-
-  console.log(routeInput);
 
   // check whether createRouteInput is valid JSON that can be parsed, if not throw an exception and do not submit form
   try {
@@ -51,39 +49,57 @@ function validateGeoJSON(idInputTextarea) {
   // if there is no exception thrown, parse the already saved content routeInput into object routeJSONInput
   let routeJSONInput = JSON.parse(routeInput);
 
+//
+validateGeoJSON(routeJSONInput);
+}
+
+
+
+/**
+* Takes .... which contains the route input ...... and checks whether this route input is in a correct GeoJSON syntax.
+* If its syntax is correct, true will be returned. If its syntax is incorrect, the user is given a notice and
+* false will be returned.
+*
+* @author Katharina Poppinga 450146
+* @param
+* @return {boolean} true, if the route input is in a correct GeoJSON syntax, false if not
+*/
+function validateGeoJSON(routeJSON) {
+
+
   // check whether the syntax of the input route is conform to GeoJSON syntax:
   // attribute "properties" is not checked because it is not that relevant for this assignment
 
   // check whether all necessary attributes exist
-  if ((routeJSONInput.type !== "undefined") && (routeJSONInput.features !== "undefined") &&
+  if ((routeJSON.type !== "undefined") && (routeJSON.features !== "undefined") &&
 
 
-   (Array.isArray(routeJSONInput.features)) &&
+   (Array.isArray(routeJSON.features)) &&
 
 
-  (routeJSONInput.features[0].type !== "undefined") && (routeJSONInput.features[0].geometry !== "undefined") &&
+  (routeJSON.features[0].type !== "undefined") && (routeJSON.features[0].geometry !== "undefined") &&
 
 
-  (routeJSONInput.features[0].geometry.type !== "undefined") && (routeJSONInput.features[0].geometry.coordinates!== "undefined") &&
+  (routeJSON.features[0].geometry.type !== "undefined") && (routeJSON.features[0].geometry.coordinates!== "undefined") &&
 
 
-  (Array.isArray(routeJSONInput.features[0].geometry.coordinates))) {
+  (Array.isArray(routeJSON.features[0].geometry.coordinates))) {
 
     //
-    if ((routeJSONInput.type === "FeatureCollection") && (routeJSONInput.features.length === 1)) {
+    if ((routeJSON.type === "FeatureCollection") && (routeJSON.features.length === 1)) {
 
       // check the following in the only item in the array 'routeJSONInput.features':
-      if ((routeJSONInput.features[0].type === "Feature") && (routeJSONInput.features[0].geometry.type === "LineString") &&
-      (routeJSONInput.features[0].geometry.coordinates.length >= 2 )) {
+      if ((routeJSON.features[0].type === "Feature") && (routeJSON.features[0].geometry.type === "LineString") &&
+      (routeJSON.features[0].geometry.coordinates.length >= 2 )) {
 
         // loop "over" all elements in the array 'routeJSONInput.features[i].geometry.coordinates[0]', (over all coordinate-pairs at its best)
-        for (let j = 0; j < routeJSONInput.features[0].geometry.coordinates.length; j++) {
+        for (let j = 0; j < routeJSON.features[0].geometry.coordinates.length; j++) {
 
           // check whether the j-th element in the array 'routeJSONInput.features[i].geometry.coordinates[0]' is an array with length 2
-          if ((Array.isArray(routeJSONInput.features[0].geometry.coordinates[j])) && (routeJSONInput.features[0].geometry.coordinates[j].length === 2)) {
+          if ((Array.isArray(routeJSON.features[0].geometry.coordinates[j])) && (routeJSON.features[0].geometry.coordinates[j].length === 2)) {
 
             // check whether both elements in routeJSONInput.features[i].geometry.coordinates[0][j] are numbers
-            if ((typeof routeJSONInput.features[0].geometry.coordinates[j][0] === "number") && (typeof routeJSONInput.features[0].geometry.coordinates[j][1] === "number")) {
+            if ((typeof routeJSON.features[0].geometry.coordinates[j][0] === "number") && (typeof routeJSON.features[0].geometry.coordinates[j][1] === "number")) {
 
               // correct GeoJSON syntax of the input route
               console.log("Route syntax checked: GeoJSON syntax is correct.");
