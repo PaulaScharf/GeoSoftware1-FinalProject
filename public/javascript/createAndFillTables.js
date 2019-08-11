@@ -32,14 +32,11 @@
  */
 function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThird, insertFourth, insertFifth, insertSixth, tableName){
 
-    // counter for the table cell IDs
-    z = z + 1;
-
     // create new table row and ANZAHL new table cells and write corresponding values into them
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
-    firstValue.id = "conseNum"+z;
-    firstValue.innerHTML = insertFirst;
+    firstValue.id = "conseNum"+insertFirst;
+    firstValue.innerHTML = insertFirst + 1;
     let secondValue = document.createElement("td");
     secondValue.innerHTML = insertSecond;
     let thirdValue = document.createElement("td");
@@ -80,7 +77,7 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     // create new table row and three new table cells and write corresponding values into them
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
-    firstValue.innerHTML = insertFirst;
+    firstValue.innerHTML = insertFirst + 1;
     let secondValue = document.createElement("td");
     secondValue.innerHTML = insertSecond;
     let thirdValue = document.createElement("td");
