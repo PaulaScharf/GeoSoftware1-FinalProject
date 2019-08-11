@@ -17,12 +17,14 @@
   <title>Final Project</title>
 </head>
 
-<body>
+<body onload="getAndShowData()">
+
   <%- include('partial/navbar', {active: "Home"}); %>
+
   <main role="main">
     <div class="row" style="padding:10px">
       <div class="container-fluid">
-        <h1 style="color:blue; text-align:center">Final Project</h1>
+        <h1>Final Project</h1>
       </div>
     </div>
 
@@ -63,9 +65,9 @@
             <thead class="thead-dark" id="animalRoutesTableHead">
               <tr>
                 <th>Consecutive number of the route</th>
-                <th>Animalname/species</th>
-                <th>?</th>
-                <th colspan="2">?</th>
+                <th>StudyID</th>
+                <th>Individual Taxon Canonical Name</th>
+                <th colspan="2">Date and time</th>
                 <th>?</th>
               </tr>
             </thead>
@@ -77,6 +79,12 @@
       </div>
 
     </div>
+    <input type="text" id="searchRouteName" placeholder="Search for names of specific routes.." size="30" title="Type in a route name">
+    <label class="switch">
+      <input type="checkbox" onchange="searchEncounters(this)">
+      <span class="slider round"></span>
+    </label>
+
 
     <br><br>
 

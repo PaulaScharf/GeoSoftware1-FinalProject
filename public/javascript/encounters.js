@@ -11,8 +11,11 @@
 // please put in your own tokens at 'token.js'
 
 
-// already processed routes
-let alreadyKnownRoutes = [];
+/**
+ * already known/processed routes
+ * @type {Array} alreadyKnownRoutes
+ */
+var alreadyKnownRoutes = [];
 
 
 /**
@@ -79,7 +82,6 @@ function checkForNewRoute(response, checkForUpdates) {
     console.log(currentRoute);
     let route = {
       _id: currentRoute._id,
-      // TODO: Why is the status not set to old?
       status: "old"
     };
 
@@ -165,7 +167,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
         let intersectionCoordinates = result.features[0].geometry.coordinates;
         // create an encounter object for the calculated intersection
         let encounter = {
-          type: "encounter",
+          what: "encounter",
           intersectionX: intersectionCoordinates[0],
           intersectionY: intersectionCoordinates[1],
           firstRoute: firstId,
@@ -204,7 +206,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 
 
 /**
-* This function calculates the coordinates of an intersection between two straight lines.
+* This function calculates the coordinates of an intersection between two straight lines with the turf-library.
 * If there is no intersection it returns false.
 * @param x11   x-coord of start of the first line
 * @param y11   y-coord of start of the first line
@@ -219,7 +221,6 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 * @see https://stackoverflow.com/questions/13937782/calculating-the-point-of-intersection-of-two-lines
 */
 function getIntersection(x11, y11, x12, y12, x21, y21, x22, y22) {
-  //
   var line1 = turf.lineString([[x11, y11], [x12, y12]]);
   var line2 = turf.lineString([[x21, y21], [x22, y22]]);
   //calculate the intersection with turf
@@ -241,10 +242,9 @@ function postEncounter(encounter) {
     type: "POST",
     // URL to send the request to
     url: "/encounter/post",
+    // TODO: warum kein contentType definiert?
     //
     data: encounter,
-    // data type of the response
-    dataType: "json",
 
     // NÖTIG????
     // timeout set to 5 seconds
@@ -252,9 +252,7 @@ function postEncounter(encounter) {
   })
 
   // if the request is done successfully, ...
-  .done (function (response) {
-    console.log("response: ");
-    console.log(response);
+  .done (function () {
     // ... give a notice on the console that the AJAX request for posting an encounter has succeeded
     console.log("AJAX request (posting an encounter) is done successfully.");
   })
@@ -290,10 +288,8 @@ function deleteEncounter(encounterId) {
   })
 
   // if the request is done successfully, ...
-  .done (function (response) {
-    console.log("response: ");
-    console.log(response);
-    // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+  .done (function () {
+    // ... give a notice on the console that the AJAX request for deleting an encounter has succeeded
     console.log("AJAX request (deleting an encounter) is done successfully.");
   })
 
@@ -312,7 +308,6 @@ function deleteEncounter(encounterId) {
 * @author name: Paula Scharf, matr.: 450 334
 */
 function updateStatusFromNewToOld(route) {
-
   $.ajax({
     // use a http POST request
     type: "POST",
@@ -320,8 +315,6 @@ function updateStatusFromNewToOld(route) {
     url: "/encounter/update",
     //
     data: route,
-    // data type of the response
-    dataType: "json",
 
     // NÖTIG????
     // timeout set to 5 seconds
@@ -330,16 +323,14 @@ function updateStatusFromNewToOld(route) {
 
   // if the request is done successfully, ...
   .done (function (response) {
-    console.log("response: ");
-    console.log(response);
-    // ... give a notice on the console that the AJAX request for ....... has succeeded
-    console.log("AJAX request (updating a route) is done successfully.");
+    // ... give a notice on the console that the AJAX request for updating the status of a route has succeeded
+    console.log("AJAX request (updating the status of a route) is done successfully.");
   })
 
   // if the request has failed, ...
   .fail(function (xhr, status, error) {
-    // ... give a notice that the AJAX request for updating the route has failed and show the error-message on the console
-    console.log("AJAX request (updating a route) has failed.", error.message);
+    // ... give a notice that the AJAX request for updating the status of a route has failed and show the error-message on the console
+    console.log("AJAX request (updating the status of a route) has failed.", error.message);
   });
 }
 
@@ -350,7 +341,7 @@ function updateStatusFromNewToOld(route) {
 * containing arrays (individual long-lat-pairs) of a route.
 * Swaps these coordinate-pairs. Returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
 *
-* @author Katharina Poppinga
+* @author Katharina Poppinga 450146
 * @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
 * @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
 */
