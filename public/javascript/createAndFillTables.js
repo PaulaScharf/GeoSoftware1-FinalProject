@@ -13,7 +13,7 @@
 
 
 
-// TODO: ALLE KOMMENTARE UND JSDOC ANPASSEN, WENN TABELLEN FERTIG SIND!!
+// ALLE KOMMENTARE UND JSDOC ANPASSEN, WENN TABELLEN FERTIG SIND!!
 
 
 /**
@@ -22,8 +22,7 @@
  * The ......
  *
  * @private
- * @author Katharina Poppinga 450146
- * @param tableCellID
+ * @author Katharina Poppinga
  * @param insertFirst - first value, to write in first new created cell
  * @param insertSecond - second value, to write in second new created cell
  * .....
@@ -31,13 +30,13 @@
  *
  * @param {string} tableName - table to which the new created row and new created cells are appended
  */
-function createAndWriteTableWithSevenCells(tableCellID, insertFirst, insertSecond, insertThird, insertFourth, insertFifth, insertSixth, tableName){
+function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThird, insertFourth, insertFifth, insertSixth, tableName){
 
-  // create new table row and ANZAHL new table cells and write corresponding values into them
+    // create new table row and ANZAHL new table cells and write corresponding values into them
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
-    firstValue.id = "conseNum"+tableCellID;
-    firstValue.innerHTML = insertFirst;
+    firstValue.id = "conseNum"+insertFirst;
+    firstValue.innerHTML = insertFirst + 1;
     let secondValue = document.createElement("td");
     secondValue.innerHTML = insertSecond;
     let thirdValue = document.createElement("td");
@@ -68,17 +67,17 @@ function createAndWriteTableWithSevenCells(tableCellID, insertFirst, insertSecon
  * The third, fourth, fifth, sixth and seventh cells are getting IDs for writing in the weather and places-information in subsequently called functions.
  *
  * @private
- * @author Katharina Poppinga 450146, Paula Scharf 450334
+ * @author Katharina Poppinga, Paula Scharf
  * @param insertFirst - first value, to write in first new created cell
  * @param insertSecond - second value, to write in second new created cell
  * @param {string} tableName - table to which the new created row and new created cells are appended
  */
-function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, id, tableName){
+function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, tableName){
 
     // create new table row and three new table cells and write corresponding values into them
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
-    firstValue.innerHTML = insertFirst;
+    firstValue.innerHTML = insertFirst + 1;
     let secondValue = document.createElement("td");
     secondValue.innerHTML = insertSecond;
     let thirdValue = document.createElement("td");
@@ -89,8 +88,10 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     fifthValue.setAttribute("id", "weather" + insertFirst);
     let sixthValue = document.createElement("td");
     sixthValue.setAttribute("id", "terrain" + insertFirst);
-    var seventhValue = document.createElement("td");
-    seventhValue.id = "conseNumEnc"+id;
+    let seventhValue = document.createElement("td");
+    seventhValue.setAttribute("id", "confirm"+insertFirst);
+    let eigthValue = document.createElement("td");
+    eigthValue.setAttribute("id", "share"+insertFirst);
 
     // append new row and ANZAHL new cells to given table
     document.getElementById(tableName).appendChild(row);
@@ -101,6 +102,7 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     row.appendChild(fifthValue);
     row.appendChild(sixthValue);
     row.appendChild(seventhValue);
+    row.appendChild(eigthValue);
 }
 
 
@@ -109,7 +111,7 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
 /**
  * Creating new table row with two new table cells, writing the two given values into these cells and append the row and these cells to given table.
  *
- * @author Katharina Poppinga 450146
+ * @author Katharina Poppinga
  * @param insertFirst - first value, to write in first new created cell
  * @param insertSecond - second value, to write in second new created cell
  * @param {string} tableName - table to which the new created row and new created cells are appended
@@ -140,7 +142,7 @@ function createAndWriteTableWithTwoCells(insertFirst, insertSecond, tableName){
 /**
  * Removes all children of a given HTMLelement (DOM node).
  *
- * @author Katharina Poppinga 450146
+ * @author Katharina Poppinga
  * @param {string} elementId - ID of the element whose children will be removed
  */
 function deleteAllChildrenOfElement(elementId){
