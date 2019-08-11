@@ -10,9 +10,6 @@
 */
 
 
-// USERS ROUTER LÖSCHEN??
-
-
 // load modules:
 // load http-module and save it in const-OBJECT http
 const http = require("http");
@@ -23,27 +20,52 @@ const path = require("path");
 
 
 // load third-modules: (after installed using cmd: npm install ...)
-// load express-module and save it in const-FUNCTION express
 const express = require('express');
+var bodyParser = require('body-parser');
 // call express and save it in the function app
 const app = express();
-// load mongodb-module and save it in const-FUNCTION mongodb
+
+// ÜBERHAUPT NÖTIG?????? (für jsnlog installiert, um require client-seitig nutzen zu können)
+const browserify = require('browserify');
+
 const mongodb = require('mongodb');
-//
+// WERDEN BEIDEN FOLGENDEN ÜBERHAUPT GENUTZT????
 var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
 
 
 // JSNLog
 var JL = require('jsnlog').JL;
-//fatal(logObject: any): Logger
-//JL("testName1").fatal("Test JSNLog");
+var jsnlog_nodejs = require('jsnlog-nodejs').jsnlog_nodejs;
+
+
+// ******************** folgendes an andere Stelle dieser Datei??? ********************
+
+// KOMMENTARE ÄNDERN, DA VON DOC WEBSITE
+// ensure that the JSON objects received from the client get parsed correctly.
+app.use(bodyParser.json())
+
+// jsnlog.js on the client-side by default sends log messages to /jsnlog.logger, using POST.
+app.post("/jsnlog.logger", function (req, res) {
+  //app.post('*.logger', function (req, res) {
+  jsnlog_nodejs(JL, req.body);
+
+  // Send empty response. This is ok, because client side jsnlog does not use response from server.
+  res.send('');
+});
 
 
 
-// MORGEN LÖSCHEN, DA NICHT GEFORDERT?
-var logger = require('morgan');
 
+
+
+
+
+
+
+// *******************************************************************************
+
+// TODO: PATH.JOIN VERWENDEN, ANSTATT DIRNAME UND /
 var indexRouter = require('./routes/index');
 var itemsRouter = require('./routes/items');
 var encountersRouter = require('./routes/encounters');
@@ -53,13 +75,8 @@ var encountersRouter = require('./routes/encounters');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// MORGEN LÖSCHEN, DA NICHT GEFORDERT?
-// Log-modus "dev"
-app.use(logger('dev'));
 
-
-
-// load/provide all files given in the folder public (public is in the directory in which the actual file is in)
+// load/provide all files given in the folder public
 app.use(express.static(path.join(__dirname, 'public')));
 
 // use built-in middleware which parses incoming requests with JSON payloads so that explicit parse expressions for every JSON are not necessary
@@ -69,28 +86,23 @@ app.use(express.json());
 // https://expressjs.com/en/4x/api.html#express.urlencoded
 app.use(express.urlencoded({ extended: false }));
 
-//
+// WOZU ?????
 app.use(cookieParser());
 
 
 
-
-
-// KOMMENTAR AUF ENGLISCH ÄNDERN!!!
-// "Erstelle die Routen für die installierten Client-Bibliotheken":
-app.use("/leaflet", express.static(__dirname + "/node_modules/leaflet/dist"));
-app.use("/leaflet-draw", express.static(__dirname + "/node_modules/leaflet-draw/dist"));
-app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
-app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
-app.use('/popper', express.static(__dirname + '/node_modules/popper.js/dist'));
-app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
+// routes for npm-installed client-libraries
+app.use("/leaflet", express.static(path.join(__dirname, 'node_modules', 'leaflet', 'dist')));
+app.use("/leaflet-draw", express.static(path.join(__dirname, 'node_modules', 'leaflet-draw', 'dist')));
+app.use("/jquery", express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
+app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
+app.use("/popper", express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist')));
+app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 'turf')));
 
 
 
-
-// DATENBANKVERBINDUNG SOLL AUTOMATISCH FÜR MIT UND (!!!) OHNE DOCKER FUNKTIONIEREN
+// TODO: DATENBANKVERBINDUNG SOLL AUTOMATISCH FÜR MIT UND (!!!) OHNE DOCKER FUNKTIONIEREN
 // connect to MongoDB and use database "routeDB":
-
 // asynchronous scope
 (async () => {
   // try to connect to mongodb on localhost:27017, if not possible throw an exception/error:
@@ -124,7 +136,13 @@ app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
   var port = 3000;
 
 
-  // *****************************************************************************
+
+  // *********************** regarding animal tracking API ***********************
+
+  app.get("/createAnimalRoute", (req, res) => {
+    res.render("createAnimalRoute");
+  });
+
 
   // FÜR ANIMAL TRACKING API??
   // middleware for ... CORS: origin-response
@@ -148,52 +166,61 @@ app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
   //
   app.get("/animalTrackingAPI",  (req, res) => {
 
-    // catch error
+    // catch error, WO???
+
+
+    // TODO: max_events_per_individual festlegen
 
     //
-    var resource = "https:www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps";
+    var resource = "https://www.movebank.org/movebank/service/public/json?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=200&sensor_type=gps";
 
-    var login = "KPoppi";
-    var password = "U6_l1#";
+    //
+    var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
+    var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
 
     //
     const options = {
-      //host: resource,
-      //path: resource,
-      //  auth: 'KPoppi:U6_l1#',
+
       //  method: 'GET',
       headers: {
-        'Authorization':'Basic ' + Buffer.from(login+':'+password).toString('base64')
+        'Authorization':'Basic ' + Buffer.from(loginname+':'+password).toString('base64')
         //    "access-control-allow-origin": "localhost:3000",
         //    "access-control-allow-methods": "GET, POST",
         //    "access-control-allow-headers": "content-type"
       }
     };
 
-    console.log("/animalTrackingAPI request");
 
     // GET animal tracking api:
     https.get(resource, options, (httpResponse) => {
-
-      console.log("/animalTrackingAPI request https.get");
 
       var body = "";
 
       httpResponse.on('data', (chunk) => {
         body += chunk;
-        //process.stdout.write(c);
       });
 
       httpResponse.on("end", () => {
-        res.json(JSON.parse(body));
+        //  res.json(JSON.parse(body));
+
+        //
+        body = JSON.parse(body);
+
+        //
+        res.send(body);
+
       });
 
+
+
     }).on('error', (error) => {
+      // give a notice, that the API request has failed and show the error-message on the console
+      console.log("Failure while getting animal tracking data from movebank API.", error.message);
+
       //httpResponse.on("error", (error) => {
-      console.error(error);
+      //console.error(error);
     });
 
-    //  res.json(req.body);
 
   });
 
@@ -201,44 +228,44 @@ app.use('/turf', express.static(__dirname + '/node_modules/@Turf/turf/'));
 
 
 
-
-// taken from template of Assignment 8:
-// middleware for making the db connection available via the request object
-app.use((req, res, next) => {
-  req.db = app.locals.db;
-  next();
-});
-
-
-
-//
-app.use('/', indexRouter);
-
-// CRUD functionality for routes
-app.use('/item', itemsRouter);
-
-app.use('/encounter', encountersRouter);
+  // taken from template of Assignment 8:
+  // middleware for making the db connection available via the request object
+  app.use((req, res, next) => {
+    req.db = app.locals.db;
+    next();
+  });
 
 
 
-// taken from template of Assignment 8:
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+  //
+  app.use('/', indexRouter);
+
+  // CRUD functionality for routes
+  app.use('/item', itemsRouter);
+
+  //
+  app.use('/encounter', encountersRouter);
 
 
-// taken from template of Assignment 8:
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+  // taken from template of Assignment 8:
+  // catch 404 and forward to error handler
+  app.use(function(req, res, next) {
+    next(createError(404));
+  });
 
 
-module.exports = app;
+  // taken from template of Assignment 8:
+  // error handler
+  app.use(function(err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+  });
+
+
+  module.exports = app;

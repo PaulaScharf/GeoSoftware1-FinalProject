@@ -22,8 +22,8 @@ var router = express.Router();
 // routehandler for get, post, put, and delete / using querystring via req.query
 
 // *********** READ/find ***********
-// get a single route and render the singleRoute.ejs view with that route
-var getitemcontroller = function(req, res) {
+// get a single route and render the update.ejs view with that route
+var getItemController = function(req, res) {
 
   console.log("get item " + req.query._id);
   //
@@ -37,19 +37,20 @@ var getitemcontroller = function(req, res) {
       // if no error occurs ...
     } else {
       //
-      res.render("singleRoute", {result});
+      res.render("update", {result});
     }
-});
+  });
 };
 
+
 // *********** CREATE/insert (with html-form) ***********
-// add a route from the req.body and redirect to the create.html
-var postitemcontroller = function(req, res) {
+// add a route from the req.body and redirect to the create.ejs
+var postItemController = function(req, res) {
 
   console.log("insert item " + req.body._id);
 
   // your only able to add an item, if it contains at least the route-coordinates and a name
-  if(req.body.geoJson != '' && req.body.name != '') {
+  if (req.body.geoJson != '' && req.body.name != '') {
 
     // convert the coordinate-string to Json
     req.body.geoJson = JSON.parse(req.body.geoJson);
@@ -71,8 +72,8 @@ var postitemcontroller = function(req, res) {
 
 
 // *********** UPDATE (with html-form) ***********
-// update an item in the database and redirect to the overview.ejs
-var putitemcontroller = function (req, res) {
+// update an item in the database and redirect to the startpage
+var putItemController = function (req, res) {
 
   console.log("update item " + req.body._id);
 
@@ -93,15 +94,15 @@ var putitemcontroller = function (req, res) {
     if(error){
       console.dir(error);
     }
-    // go back to the overview-page through the indexRouter
-    res.redirect("/overview");
-});
+    // go back to the startpage through the indexRouter
+    res.redirect("/");
+  });
 };
 
 
 // *********** DELETE ***********
-// delete an item from the database and redirect to the overview.ejs
-var deleteitemcontroller = function(req, res) {
+// delete an item from the database and redirect to the startpage
+var deleteItemController = function(req, res) {
 
   console.log("delete item " + req.query._id);
   //
@@ -115,22 +116,52 @@ var deleteitemcontroller = function(req, res) {
       console.dir(error);
     }
   });
-  // go back to the overview-page through the indexRouter
-  res.redirect("/overview");
+  // go back to the startpage through the indexRouter
+  res.redirect("/");
 };
 
 
 
+// *********** CREATE/insert animalroute (with html-form) ***********
+// add an animalroute from the req.body and redirect to createAnimalRoute.ejs
+var postAnimalController = function(req, res) {
+
+  console.log("insert animalroute");
+
+  // convert the ... string to JSON
+  req.body.geoJson = JSON.parse(req.body.geoJson);
+
+  //
+  req.body.status = "new";
+
+  // insert one item (one animalroute) into current database
+  req.db.collection('routeDB').insertOne(req.body, (error, result) => {
+
+    if (error) {
+      console.dir(error);
+    }
+    // after the item (animalroute) is successfully created, go back to the createAnimalRoute-page
+    res.render("createAnimalRoute");
+  });
+};
+
+
+
+
+// TODO: aufteilen
 // routes for get and create
 router.route("/")
-    .get(getitemcontroller)
-    .post(postitemcontroller);
+.get(getItemController)
+.post(postItemController);
 
 // routes for delete and update (we could'nt use the update and delete methods,
 // because they are not available for html-forms)
 router.route("/single")
-    .get(deleteitemcontroller)
-    .post(putitemcontroller);
+.get(deleteItemController)
+.post(putItemController);
+
+// routes for animal.....
+router.route("/createAnimal").post(postAnimalController);
 
 
 module.exports = router;
