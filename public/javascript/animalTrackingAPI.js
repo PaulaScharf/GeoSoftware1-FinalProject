@@ -58,17 +58,6 @@
 
 
 
-
-
-/**
-* Global variable which ....
-* @type {????????} allRoutes
-*/
-let animalRoute;
-
-
-
-
 // FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
 
 // create the initial map in the "createAnimalRouteMap"-div
@@ -85,104 +74,65 @@ oSMLayer.addTo(createAnimalRouteMap);
 
 
 
+
 // JSDoc: * @throws request failed: [object ProgressEvent]
 
+// TEST-request-resource for getting the animal tracking data
+let resource = "https://www.movebank.org/movebank/service/json-auth?&study_id=2911040&individual_local_identifiers[]=4262-84830876&sensor_type=gps";
 
 
-/**
-*
-*
-*
-*/
-function getTrackingData() {
 
 
-  let studyID = document.getElementById('studyID').value;
 
-  let individualID = document.getElementById('individualID').value;
+
+
+
+
+
+//
+$.ajax({
+  // use a http GET request
+  type: "GET",
+  // URL to send the request to
+  url: "/animalTrackingAPI",
+  //url: resource,
 
   //
-  let iDs = {
-    studyID: studyID,
-    individualID: individualID
-  };
+  //contentType: "application/json",
+  //
+  //data: resource,
+
+  // data type of the response
+  dataType: "json", //application/json?
+  //
+  xhrFields: {
+    withCredentials: true
+  },
+
+  // NÖTIG ODER UNSINNIG????
+  // timeout set to 5 seconds
+  timeout: 5000
+})
+
+// if the request is done successfully, ...
+.done (function (response) {
+
+  // ... give a notice on the console that the AJAX request for getting the animal tracking API data has succeeded
+  console.log("AJAX request (getting animal tracking data from API) is done successfully.");
 
 
-  // ********** AJAX request for getting animal tracking data from movebank API **********
-  $.ajax({
-    // use a http GET request
-    //type: "GET",
-    type: "GET",
-    // URL to send the request to
-    url: "/animalTrackingAPI",
-    // data type of the response
-    dataType: "json",
-
-    // data to send to the server
-    data: iDs,
-    //
-    xhrFields: {
-      withCredentials: true
-    },
-
-    // NÖTIG ODER UNSINNIG????
-    // timeout set to 5 seconds
-    timeout: 5000
-  })
-
-  // if the request is done successfully, ...
-  .done (function (response) {
-
-    // ... give a notice on the console that the AJAX request for getting the animal tracking API data has succeeded
-    console.log("AJAX request (getting animal tracking data from API) is done successfully.");
-
-    //
-    formatAndShowAnimalRoute(response);
-  })
-
-  // if the request has failed, ...
-  .fail (function (xhr, status, error) {
-    // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error-message on the console
-    console.log("AJAX request (getting animal tracking data from API) has failed.", error.message);
-  });
-
-}
+  //
+  showAllAnimalRoutesOnStartingPage(response);
 
 
 
-// TODO: HIER LÖSCHEN; NUR EINBINDEN??
-/**
-* Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part).This means this function takes one array (with all coordinates)
-* containing arrays (individual long-lat-pairs) of a route.
-* Swaps these coordinate-pairs. Returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
-*
-* @author Katharina Poppinga 450146
-* @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
-* @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
-*/
-function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute) {
+})
 
-  // point with lat,long-order of its coordinate
-  let latLong;
-
-  // array for (later in this function) containing the route-coordinates with its points as objects in lat,long-coordinate-order
-  var latLongCoordinatesRoute = [];
-
-  let c;
-  // loop "over" all points in given route
-  for (c = 0; c < longLatCoordinatesRoute.length; c++){
-
-    // swap current long,lat coordinate (array) to lat,long coordinate (object)
-    latLong = L.GeoJSON.coordsToLatLng(longLatCoordinatesRoute[c]);
-
-    // write new built lat,long-coordinate-pair (as an object) into the array latLongCoordinatesRoute, for getting the given route with swapped coordinates
-    latLongCoordinatesRoute.push(latLong);
-  }
-
-  // return the given route with swapped coordinates as one array containing objects (not arrays!)
-  return latLongCoordinatesRoute;
-}
-
+// if the request has failed, ...
+.fail (function (xhr, status, error) {
+  // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error-message on the console
+  console.log("AJAX request (getting animal tracking data from API) has failed.", error, error.message);
+});
 
 
 
@@ -193,53 +143,44 @@ function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute) {
 *
 *
 * @private
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga
 * @param response response of the ......... request ........
 */
-function formatAndShowAnimalRoute(response) {
+function showAllAnimalRoutesOnStartingPage(response){
 
   //
   let locations = response.individuals[0].locations;
 
-  //
-  let animalRouteGeoJSON = makeAnimalRouteGeoJSON(locations);
+  console.log(locations);
+
+
+  let animalRouteGeoJSON = makeAnimalRoute(locations);
+
+  console.log(animalRouteGeoJSON);
+  
+  // TODO: mit deren return-Wert die locations in response ersetzen !!!
+
+  // response so verändern, dass Route als GeoJSON darin enthalten ist (dazu makeAnimalRoute innerhalb dieser
+  // Funktion aufrufen) und alle übrigen Attribute erhalten bleiben
+  //let animalRoute = response.individuals[0]....;
 
 
 
-  // timestamps are provided in milliseconds since 1970-01-01 UTC
 
-  let firstTimestamp = response.individuals[0].locations[0].timestamp;
-
-  // TODO: timestamp von Epoch in unser Format (date: "2019-08-13", time: "23:23") konvertieren
-
-  var myDate = new Date(firstTimestamp * 1000);
-  //console.log(myDate);
-  //let test = myDate.toGMTString() + "<br>" + myDate.toLocaleString()
-  //console.log(test);
+  // WO DIE TIMESTAMPS SPEICHERN?
 
 
 
-  // create ....
-  animalRoute = {
-    study_id: response.individuals[0].study_id,
-    individualTaxonCanonicalName: response.individuals[0].individual_taxon_canonical_name,
-    // TODO: stringify wegbekommen
-    geoJson: JSON.stringify(animalRouteGeoJSON),
-    // date of the first entry in the locations-array
-    date: ".",
-    // time of the first entry in the locations-array
-    time: ".",
-    madeBy: "animal",
-    what: "route",
-    status: "new"
-  };
+  // BEARBEITETE RESPONSE (animalRoute) AN ROUTEN-FUNKTIONEN ÜBERGEBEN
+  // DIE FUNKTION AUFRUFEN, DIE DIE ANIMALROUTEN IN TB SCHREIBT
+  // UND DIE FUNKTION AUFRUFEN, DIE DIE ANIMALROUTEN IN MAP SCHREIBT
 
-  console.log("animalroute: ", animalRoute);
+  // dazu evtl. showAllRoutesOnStartingPage(response) VERALLGEMEINERN UND EINMAL FÜR USERROUTEN UND EINMAL FÜR
+  // ANIMALROUTEN AUFRUFEN (Änderungen nötig, da TB anders aussieht und andere Attribute im Request) !!!!!!
 
 
-  //
-  showAnimalRoute(animalRoute);
 
+  // BEARBEITETE RESPONSE (animalRoute) AN ENCOUNTERS-FUNKTION ÜBERGEBEN
 
 }
 
@@ -251,168 +192,128 @@ function formatAndShowAnimalRoute(response) {
 *
 *
 * @private
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga
 * @param locations array of ...............
 * @return animalRouteGeoJSON - the locations of the animalroute as a GeoJSON FeatureCollection
 */
-function makeAnimalRouteGeoJSON(locations) {
+function makeAnimalRoute(locations){
 
+  // timestamps are provided in milliseconds since 1970-01-01 UTC
   // coordinates are in WGS84
 
   // new array for the coordinates of the route, written in GeoJSON (only the geometry.coordinates part of the GeoJSON format)
   let coordinatesGeoJSON = [];
 
+  /*
+  // HIER NUR TEST, LETZTENDLICH/STATTDESSEN AUS RESPONSE ÜBERNEHMEN!!!!
+  locations = [
+  {"timestamp":1212240595000,"location_long":-89.7400582,"location_lat":-1.372675},
+  {"timestamp":1212240618999,"location_long":-89.740053,"location_lat":-1.3726544},
+  {"timestamp":1212246021998,"location_long":-89.7400575,"location_lat":-1.3726589},
+  {"timestamp":1212251449999,"location_long":-89.7400497,"location_lat":-1.3726499},
+  {"timestamp":1212256913000,"location_long":-89.7400693,"location_lat":-1.3726749}
+];
+*/
+
+
+//
+let lat, long;
+//
+for (let i = 0; i < locations.length; i++) {
 
   //
-  let lat, long;
-  //
-  for (let i = 0; i < locations.length; i++) {
+  lat = locations[i].location_lat;
+  long = locations[i].location_long;
 
-    //
-    lat = locations[i].location_lat;
-    long = locations[i].location_long;
-
-    // adding the i-th coordinate-pair to the new array coordinatesGeoJSON
-    coordinatesGeoJSON.push([long, lat]);
-  }
+  // adding the i-th coordinate-pair to the new array coordinatesGeoJSON
+  coordinatesGeoJSON.push([long, lat]);
+}
 
 
-  // creating the GeoJSON FeatureCollection output by setting its attributes:
-  let animalRouteGeoJSON = {
+// creating the GeoJSON FeatureCollection output by setting its attributes:
+let animalRouteGeoJSON = {
 
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "LineString",
-          // insert the new array coordinatesGeoJSON
-          coordinates: coordinatesGeoJSON
-        }
+  type: "FeatureCollection",
+  features: [
+    {
+      type: 'Feature',
+      properties: {           // BISHER: no properties set
+      },
+      geometry: {
+        type: 'LineString',
+        // insert the new array coordinatesGeoJSON
+        coordinates: coordinatesGeoJSON
       }
-    ]
-  };
+    }
+  ]
+};
 
-  //
-  return animalRouteGeoJSON;
+//
+return animalRouteGeoJSON;
 }
 
 
 
+
+// **************************************************************************************************************************
+
+
+// JSDOC ANPASSEN!!!
+// KOMMENTARE ANPASSEN!!!
+// TODO: FUNKTION SO FAST DOPPELT VORHANDEN; ÄNDERN
 /**
-*
+* Takes the response of the ........
 *
 *
 * @private
-* @author Katharina Poppinga 450146
-* @param animalroute
+* @author Katharina Poppinga
+* @param response response of AJAX GET-request for ....
 */
-function showAnimalRoute(animalRoute) {
+function showAllAnimalRoutesOnStartingPage(response) {
 
-  //
-  document.getElementById('animalName').innerHTML = animalRoute.individualTaxonCanonicalName;
-  document.getElementById('animalDateTime').innerHTML = animalRoute.date + ", " + animalRoute.time;
+  //console.log("Show animalRoutes:", response);
+
+  // coordinates of a route (in GeoJSONs long-lat order)
+  var coordinatesRoute;
+
+  // folgendes if LÖSCHEN ?????????
+  // if there are no routes in the database ...
+  if (typeof response[0] === "undefined") {
+    // if there are routes in the database ... :
+  } else {
+
+    // loop "over" all routes in the current database "routeDB"
+    for (let i = 0; i < response.length; i++) {
 
 
-  // **************** show animalroute in map "createAnimalRouteMap" ****************
-
-  let animalRouteGeoJSON = JSON.parse(animalRoute.geoJson);
-
-  // extract the coordinates of the animalroute
-  // TODO: vorher stringify löschen, dann hier parse löschen
-  //let coordinatesGeoJSON = animalRoute.geoJson.features[0].geometry.coordinates;
-  let coordinatesGeoJSON = animalRouteGeoJSON.features[0].geometry.coordinates;
-
-  //
-  let coordinatesLatLong = swapGeoJSONsLongLatToLatLongOrder(coordinatesGeoJSON);
-
-  // ... center the map on the first point of the animalroute
-  createAnimalRouteMap.setView([coordinatesLatLong[0].lat, coordinatesLatLong[0].lng], 4);
-
-  // make a leaflet-polyline from the coordinates and show this polyline in orange in the map
-  let polylineOfRoute = L.polyline(coordinatesLatLong, {color: '#ec7e00'}, {weight: '3'});
-  polylineOfRoute.addTo(createAnimalRouteMap);
-}
+      // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
+      // show the i-th route with a consecutive number and its ....................... in the table "animalRoutesTable" on starting page
+      createAndWriteTableWithSevenCells(i, "animalRoutesTable");
 
 
 
-/**
-*
-*
-*
-* @author Katharina Poppinga 450146
-*/
-function postAnimalRoute() {
+      // ************** show the i-th route in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
 
-  // if there is no animalroute gotten/chosen from movebank API ...
-  if (typeof animalRoute === "undefined") {
-    // ... tell the user that he/she first has to choose an animalroute by getting tracking data of a study from movebank API
-    alert("First, you have to choose an animalroute by getting tracking data of a study from movebank API.")
-  }
-  // if there is an animalroute gotten/chosen from movebank API ...
-  else {
+      // outsource the creation of the routeCheckbox for showing or not showing the i-th route in the map
+      checkbox(i);
 
-    // da global variable, nochmal prüfen:
+      // extract the coordinates of the i-th route
+      coordinatesRoute = swapGeoJSONsLongLatToLatLongOrder(response[i].geoJson.features[0].geometry.coordinates);
 
-    // check whether animalRoute is valid JSON that can be parsed, if not throw an exception and tell the user .....???
-    try {
-      JSON.stringify(animalRoute);
-    }
-    catch (exception){
-      //
-      alert("The animalroute has no valid JSON syntax.\n" + exception);
-      // .........
-      return;
-    }
+      // for the first route of the database ... HIER NICHT, DA SCHON FÜR USER GEMACHT?
+      //if (i === 0) {
+      // ... center the map on the first point of the first route
+      //allRoutesMap.setView([coordinatesRoute[i].lat, coordinatesRoute[i].lng], 3);
+      //}
 
-    // if there is no exception thrown, .......... parse the ....... into object ........
-    // json prüfen, beides????????
-    let animalRouteJSON = JSON.parse(animalRoute.geoJson);
+      // make a leaflet-polyline from the coordinatesLatLongOrder
+      let polylineOfRoute = L.polyline(coordinatesRoute, {color: '#ec0000'}, {weight: '3'});
 
+      // add the polyline to the array polylineRoutesLatLongArray for being able to address the polylines(routes) by numbers (kind of IDs) (needed for checkboxes)
+      polylineRoutesLatLongArray.push([polylineOfRoute, true]);
 
-    //geojson prüfen
-    //
-    if (validateGeoJSON(animalRouteJSON)) {
-
-      // ... save this route in the database "routeDB":
-
-      // ********** AJAX request for posting the animalroute into the database "routeDB" **********
-      $.ajax({
-        // use a http POST request
-        type: "POST",
-        // URL to send the request to
-        url: "/item/createAnimal",
-        // data to send to the server
-        data: animalRoute,
-
-        // NÖTIG ODER UNSINNIG????
-        //xhrFields: {
-        //withCredentials: true
-        //  },
-
-        // NÖTIG ODER UNSINNIG????
-        // timeout set to 5 seconds
-        timeout: 5000
-      })
-
-      // if the request is done successfully, ...
-      .done (function (response) {
-        // ... give a notice on the console that the AJAX request for posting the animalroute has succeeded
-        console.log("AJAX request (posting animalroute) is done successfully.");
-
-      })
-
-      // if the request has failed, ...
-      .fail (function (xhr, status, error) {
-        // ... give a notice that the AJAX request for posting the animalroute has failed and show the error-message on the console
-        console.log("AJAX request (posting animalroute) has failed.", error.message);
-      });
-
-      //
-    } else {
-
-      alert("The GeoJSON-part of the animalroute has no valid syntax.\n" + exception);
+      // add the i-th polyline-element of the array polylineRoutesLatLongArray to the routesGroup and therefore to the map "allRoutesMap"
+      polylineRoutesLatLongArray[i][0].addTo(routesGroup);
     }
   }
 }
