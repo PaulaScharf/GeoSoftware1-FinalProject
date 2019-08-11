@@ -37,7 +37,7 @@ function createAndWriteTableWithSevenCells(tableCellID, insertFirst, insertSecon
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
     firstValue.id = "conseNum"+tableCellID;
-    firstValue.innerHTML = insertFirst;
+    firstValue.innerHTML = insertFirst + 1;
     let secondValue = document.createElement("td");
     secondValue.innerHTML = insertSecond;
     let thirdValue = document.createElement("td");
@@ -78,7 +78,7 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     // create new table row and three new table cells and write corresponding values into them
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
-    firstValue.innerHTML = insertFirst;
+    firstValue.innerHTML = insertFirst + 1;
     let secondValue = document.createElement("td");
     secondValue.innerHTML = insertSecond;
     let thirdValue = document.createElement("td");
@@ -89,8 +89,10 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     fifthValue.setAttribute("id", "weather" + insertFirst);
     let sixthValue = document.createElement("td");
     sixthValue.setAttribute("id", "terrain" + insertFirst);
-    var seventhValue = document.createElement("td");
-    seventhValue.id = "conseNumEnc"+id;
+    let seventhValue = document.createElement("td");
+    seventhValue.setAttribute("id", "confirm"+insertFirst);
+    let eigthValue = document.createElement("td");
+    eigthValue.setAttribute("id", "share"+insertFirst);
 
     // append new row and ANZAHL new cells to given table
     document.getElementById(tableName).appendChild(row);
@@ -101,6 +103,7 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     row.appendChild(fifthValue);
     row.appendChild(sixthValue);
     row.appendChild(seventhValue);
+    row.appendChild(eigthValue);
 }
 
 

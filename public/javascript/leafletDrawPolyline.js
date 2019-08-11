@@ -127,7 +127,7 @@ function drawPolyline(map, outputTextarea) {
         let ev = document.createEvent('Event');
         //
         ev.initEvent('keyup', true, false);
-        // 
+        //
         output.dispatchEvent(ev);
       }
     }
