@@ -13,7 +13,7 @@
 
 /**
  * already known/processed routes
- * @type {Array} alreadyKnownRoutes
+ * @type {Array}
  */
 var alreadyKnownRoutes = [];
 
@@ -43,9 +43,10 @@ function getAllRoutes() {
       .done(function (response) {
         // make the response comply to the format of the allRoutes-array in readRoutesEncounters
         let allRoutes = [];
+        //
         for (let i = 0; i < response.length; i++) {
           allRoutes.push([response[i], true])
-          allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
+          allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder_Arrays(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
         }
 
         // check for routes with the status "new" and calculate encounters for said routes
@@ -302,6 +303,7 @@ function deleteEncounter(encounterId) {
  * @author name: Paula Scharf, matr.: 450 334
  */
 function updateStatusFromNewToOld(route) {
+
   $.ajax({
     // use a http POST request
     type: "POST",
@@ -326,38 +328,4 @@ function updateStatusFromNewToOld(route) {
         // ... give a notice that the AJAX request for updating the status of a route has failed and show the error-message on the console
         console.log("AJAX request (updating the status of a route) has failed.", error.message);
       });
-}
-
-
-
-/**
- * Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part). This means this function takes one array (with all coordinates)
- * containing arrays (individual long-lat-pairs) of a route.
- * Swaps these coordinate-pairs. Returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
- *
- * @author Katharina Poppinga
- * @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
- * @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
- */
-function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute){
-
-  // point with lat,long-order of its coordinate
-  let latLong;
-
-  // array for (later in this function) containing the route-coordinates with its points as objects in lat,long-coordinate-order
-  var latLongCoordinatesRoute = [];
-
-  let c;
-  // loop "over" all points in given route
-  for (c = 0; c < longLatCoordinatesRoute.length; c++){
-
-    // swap current long,lat coordinate (array) to lat,long coordinate (object)
-    latLong = L.GeoJSON.coordsToLatLng(longLatCoordinatesRoute[c]);
-
-    // write new built lat,long-coordinate-pair (as an object) into the array latLongCoordinatesRoute, for getting the given route with swapped coordinates
-    latLongCoordinatesRoute.push([latLong.lat, latLong.lng]);
-  }
-
-  // return the given route with swapped coordinates as one array containing objects (not arrays!)
-  return latLongCoordinatesRoute;
 }

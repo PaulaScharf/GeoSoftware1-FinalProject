@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
   <!-- installed CSS -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="leaflet/leaflet.css"/>
   <link rel="stylesheet" href="leaflet-draw/leaflet.draw.css"/>
-  <link rel="stylesheet" href="bootstrap/css/bootstrap-v4.2.1.min.css">
 
   <!-- locally created css -->
   <link rel="stylesheet" href="../stylesheets/style.css">
@@ -17,7 +17,7 @@
   <title>Final Project</title>
 </head>
 
-<body onload="getAndShowData()">
+<body onload = "getAndShowData()">
 
   <%- include('partial/navbar', {active: "Home"}); %>
 
@@ -31,7 +31,7 @@
     <p>Beschreibung der Seite, was sie tut / wozu sie da ist, nicht vergessen :D, Use checkboxes for displaying the routes in the map or not.</p>
 
     <div class="row" style="padding:10px">
-      <div class="col-md-12">
+      <div class="col-sm-12">
         <div id="allRoutesMap"></div>
       </div>
     </div>
@@ -43,7 +43,7 @@
 
   <div class="row" style="padding:10px; margin-bottom:50px; margin-top:50px;">
 
-    <div class="col-md-7">
+    <div class="col-sm-7">
       <h3 style="text-align:center">User routes</h3>
       <div id="userRoutesTableDiv">
         <table class="table">
@@ -63,11 +63,11 @@
       <div>This table shows .....</div>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-sm-5">
       <h3 style="margin-left: auto; margin-right: auto;">Search User Routes</h3>
       Name of route:    <input type="text" id="searchRouteName" placeholder="Search names of routes" title="Type in a name">
       <br />
-      Username:    <input type="text" id="searchRouteUser" placeholder="Search users of routes" title="Type in a user">
+      Username:    <input type="text" id="searchRouteUser" placeholder="Search users of routes" title="Type in a username">
       <div>
         <label class="switch">
           <input type="checkbox" onchange="searchEncounters('user', this)">
@@ -80,7 +80,7 @@
 
   <div class="row" style="padding:10px">
 
-      <div class="col-md-7">
+      <div class="col-sm-7">
           <h3 style="text-align:center">Animal routes</h3>
           <div id="animalRoutesTableDiv">
           <table class="table">
@@ -100,7 +100,7 @@
         <div>This table shows .....</div>
       </div>
 
-    <div class="col-md-5">
+    <div class="col-sm-5">
       <h3 style="margin-left: auto; margin-right: auto;">Search Animal Routes</h3>
       StudyID:    <input type="text" id="searchStudyID" placeholder="Search studyID" title="Type in a studyID">
       <br />
@@ -116,7 +116,7 @@
   </div>
 
   <div class="row" style="padding:10px">
-    <div class="col-md">
+    <div class="col-sm">
       <h3 style="text-align:center">Encounters</h3>
       <div id="encounterTableDiv">
         <table class="table">
@@ -153,17 +153,18 @@
 
 <script src="jquery/jquery.min.js"></script>
 <script src="popper/umd/popper.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="leaflet/leaflet.js"></script>
 <script src="leaflet-draw/leaflet.draw.js"></script>
 <script src="turf/turf.min.js"></script>
-<script src="bootstrap/js/bootstrap-v4.2.1.bundle.min.js"></script>
 
 
-<!-- löschen und zu npm umwandeln !! -->
-<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jsnlog/2.29.0/jsnlog.min.js"></script>
+<!-- löschen und zu npm umwandeln !!
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jsnlog/2.29.0/jsnlog.min.js"></script> -->
 
 
 <script src="javascript/createAndFillTables.js"></script>
+<script src="javascript/coordinateSwapping.js"></script>
 <script src="javascript/encounters.js"></script>
 <script src="javascript/readRoutesEncounters.js"></script>
 <script src="javascript/tokens.js"></script>

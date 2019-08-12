@@ -1,15 +1,33 @@
+// jshint esversion: 6
+// jshint maxerr: 1000
+
+"use strict";  // JavaScript code is executed in "strict mode"
+
+/**
+* @desc final project, Geosoftware1, SoSe2019
+* @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
+*/
+
+// please put in your own tokens at 'token.js'
+
+
+
+
+// TODO: FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
+
+
 // ****************************** map ******************************
 
 /**
  * create the initial map in the "allRoutesMap"-div, the proper map extract will be set later
- * @type {map} allRoutesMap
+ * @type {map}
  */
 
 let encountersMap = L.map('allRoutesMap').setView([0, 0], 3);
 
 /**
  * OpenStreetMap tiles as a layer for the map "allRoutesMap"
- * @type {tileLayer} oSMLayer
+ * @type {tileLayer}
  */
 let oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -20,22 +38,17 @@ oSMLayer.addTo(encountersMap);
 
 /**
  * create a layerGroup for all routes, add this group to the existing map "allRoutesMap"
- * @type {layerGroup} routesGroup
+ * @type {layerGroup}
  */
 let routesGroup = L.layerGroup().addTo(encountersMap);
 
 
 /**
  * create a layerGroup for all encounters, add this group to the existing map "allRoutesMap"
- * @type {layerGroup} encountersGroup
+ * @type {layerGroup}
  */
 let encountersGroup = L.layerGroup().addTo(encountersMap);
 
-/*
-// create a layer group for all markers, add this group to the existing map "..."
-let markersGroup = L.layerGroup().addTo(map....);
-*/
-// *****************************************************************
 
 /**
  * This function takes the shared encounter and its corresponding coordinates and shows them in map and tables
@@ -83,18 +96,19 @@ function showRoute(currentRoute, counter) {
     // ************** show the i-th route in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
 
     // extract the coordinates of the i-th route
-    let coordinatesRoute = swapGeoJSONsLongLatToLatLongOrder(currentRoute.geoJson.features[0].geometry.coordinates);
+    let coordinatesRoute = swapGeoJSONsLongLatToLatLongOrder_Objects(currentRoute.geoJson.features[0].geometry.coordinates);
     console.log(coordinatesRoute);
 
-    // make a leaflet-polyline from the coordinatesLatLongOrder
+    // make a leaflet-polyline from the coordinatesRoute
     let polylineOfRoute = L.polyline(coordinatesRoute, {color: '#ec0000'}, {weight: '3'});
 
     // add the polyline to the array polylineRoutesLatLongArray for being able to address the polylines(routes) by numbers (kind of IDs) (needed for checkboxes)
     //polylineRoutesLatLongArray.push(polylineOfRoute);
 
     polylineOfRoute.addTo(routesGroup);
-
 }
+
+
 
 /**
  * This function shows an encounter in the map and the table
@@ -144,41 +158,9 @@ function fillEncountersMap(currentEncounter) {
     //encountersLatLongArray.push(currentCircle);
     currentCircle.addTo(encountersGroup);
     encountersMap.setView([currentEncounter.intersectionX, currentEncounter.intersectionY], 9);
-
-
 }
 
-/**
- * Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part).This means this function takes one array (with all coordinates)
- * containing arrays (individual long-lat-pairs) of a route.
- * Swaps these coordinate-pairs. Returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
- *
- * @author Katharina Poppinga
- * @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
- * @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
- */
-function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute){
 
-    // point with lat,long-order of its coordinate
-    let latLong;
-
-    // array for (later in this function) containing the route-coordinates with its points as objects in lat,long-coordinate-order
-    let latLongCoordinatesRoute = [];
-
-    let c;
-    // loop "over" all points in given route
-    for (c = 0; c < longLatCoordinatesRoute.length; c++){
-
-        // swap current long,lat coordinate (array) to lat,long coordinate (object)
-        latLong = L.GeoJSON.coordsToLatLng(longLatCoordinatesRoute[c]);
-
-        // write new built lat,long-coordinate-pair (as an object) into the array latLongCoordinatesRoute, for getting the given route with swapped coordinates
-        latLongCoordinatesRoute.push(latLong);
-    }
-
-    // return the given route with swapped coordinates as one array containing objects (not arrays!)
-    return latLongCoordinatesRoute;
-}
 
 /**
  * @desc This class creates and holds a request to openweathermap.
@@ -256,7 +238,7 @@ class WeatherRequest
         //
         if (this.status === 404)
         {
-            document.getElementById("weather" + (this.id)).innerHTML = "error: no connection to the server";
+            document.getElementById("weather" + (this.id)).innerHTML = "Error: No connection to the server.";
 
 
             // KOMMENTAR ANPASSEN
@@ -267,7 +249,7 @@ class WeatherRequest
         //
         else
         {
-            document.getElementById("weather" + (this.id)).innerHTML = "errorcallback: check web-console";
+            document.getElementById("weather" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
 
 
             // KOMMENTAR ANPASSEN
@@ -316,8 +298,8 @@ function terrainRequest(encounter, id) {
         //
         if (this.status === 404)
         {
-            document.getElementById("country" + (this.id)).innerHTML = "error: no connection to the server";
-            document.getElementById("terrain" + (this.id)).innerHTML = "error: no connection to the server";
+            document.getElementById("country" + (this.id)).innerHTML = "Error: No connection to the server.";
+            document.getElementById("terrain" + (this.id)).innerHTML = "Error: No connection to the server.";
 
 
             // KOMMENTAR ANPASSEN
@@ -328,8 +310,8 @@ function terrainRequest(encounter, id) {
         //
         else
         {
-            document.getElementById("country" + (this.id + 1)).innerHTML = "errorcallback: check web-console";
-            document.getElementById("terrain" + (this.id + 1)).innerHTML = "errorcallback: check web-console";
+            document.getElementById("country" + (this.id + 1)).innerHTML = "Errorcallback: Check web-console.";
+            document.getElementById("terrain" + (this.id + 1)).innerHTML = "Errorcallback: Check web-console.";
 
 
             // KOMMENTAR ANPASSEN
@@ -369,8 +351,8 @@ function writeRequestResultsIntoTable(response, id) {
             document.getElementById("country" + (id)).innerHTML = JSON.parse(response).geonames[0].countryName;
             document.getElementById("terrain" + (id)).innerHTML = JSON.parse(response).geonames[0].fclName;
         } else {
-            document.getElementById("country" + (id)).innerHTML = "country could not be identified";
-            document.getElementById("terrain" + (id)).innerHTML = "terrain could not be identified";
+            document.getElementById("country" + (id)).innerHTML = "Country could not be identified.";
+            document.getElementById("terrain" + (id)).innerHTML = "Terrain could not be identified.";
         }
     }
 }

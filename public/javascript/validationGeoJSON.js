@@ -49,8 +49,13 @@ function validateJSONAndGeoJSON(idInputTextarea) {
   // if there is no exception thrown, parse the already saved content routeInput into object routeJSONInput
   let routeJSONInput = JSON.parse(routeInput);
 
-//
-validateGeoJSON(routeJSONInput);
+  //
+  if (validateGeoJSON(routeJSONInput)){
+    return true;
+    // 
+  } else {
+    return false;
+  }
 }
 
 
@@ -74,7 +79,7 @@ function validateGeoJSON(routeJSON) {
   if ((routeJSON.type !== "undefined") && (routeJSON.features !== "undefined") &&
 
 
-   (Array.isArray(routeJSON.features)) &&
+  (Array.isArray(routeJSON.features)) &&
 
 
   (routeJSON.features[0].type !== "undefined") && (routeJSON.features[0].geometry !== "undefined") &&
