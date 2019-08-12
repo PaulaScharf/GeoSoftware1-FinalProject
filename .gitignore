@@ -16,3 +16,6 @@ token.js
 # Animal Tracking API
 cookies.txt
 license_terms.txt
+
+# JSDoc
+out/
