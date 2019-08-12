@@ -37,7 +37,7 @@ function createAndWriteTableWithSevenCells(tableCellID, insertFirst, insertSecon
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
     firstValue.id = "conseNum"+tableCellID;
-    firstValue.innerHTML = insertFirst;
+    firstValue.innerHTML = insertFirst + 1;
     let secondValue = document.createElement("td");
     secondValue.innerHTML = insertSecond;
     let thirdValue = document.createElement("td");
@@ -71,14 +71,14 @@ function createAndWriteTableWithSevenCells(tableCellID, insertFirst, insertSecon
  * @author Katharina Poppinga 450146, Paula Scharf 450334
  * @param insertFirst - first value, to write in first new created cell
  * @param insertSecond - second value, to write in second new created cell
+ * @param insertThird - third value, to write in second new created cell
  * @param {string} tableName - table to which the new created row and new created cells are appended
  */
-function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, id, tableName){
-
+function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, tableName){
     // create new table row and three new table cells and write corresponding values into them
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
-    firstValue.innerHTML = insertFirst;
+    firstValue.innerHTML = insertFirst + 1;
     let secondValue = document.createElement("td");
     secondValue.innerHTML = insertSecond;
     let thirdValue = document.createElement("td");
@@ -89,8 +89,10 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     fifthValue.setAttribute("id", "weather" + insertFirst);
     let sixthValue = document.createElement("td");
     sixthValue.setAttribute("id", "terrain" + insertFirst);
-    var seventhValue = document.createElement("td");
-    seventhValue.id = "conseNumEnc"+id;
+    let seventhValue = document.createElement("td");
+    seventhValue.setAttribute("id", "confirm"+insertFirst);
+    let eigthValue = document.createElement("td");
+    eigthValue.setAttribute("id", "share"+insertFirst);
 
     // append new row and ANZAHL new cells to given table
     document.getElementById(tableName).appendChild(row);
@@ -101,41 +103,9 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     row.appendChild(fifthValue);
     row.appendChild(sixthValue);
     row.appendChild(seventhValue);
+    row.appendChild(eigthValue);
 }
 
-
-
-
-/**
- * Creating new table row with two new table cells, writing the two given values into these cells and append the row and these cells to given table.
- *
- * @author Katharina Poppinga 450146
- * @param insertFirst - first value, to write in first new created cell
- * @param insertSecond - second value, to write in second new created cell
- * @param {string} tableName - table to which the new created row and new created cells are appended
- */
-/*
-function createAndWriteTableWithTwoCells(insertFirst, insertSecond, tableName){
-
-  // create new table row and two new table cells and write corresponding values into them
-  var row = document.createElement("tr");
-  var firstValue = document.createElement("td");
-  firstValue.innerHTML = insertFirst;
-  var secondValue = document.createElement("td");
-  secondValue.innerHTML = insertSecond;
-
-  // append new row and two new cells to given table
-  document.getElementById(tableName).appendChild(row);
-  row.appendChild(firstValue);
-  row.appendChild(secondValue);
-}
-
-
-*/
-
-
-
-// FOLGENDE FUNKTION ÜBERHAUPT NÖTIG, WIRD SIE VERWENDET?????
 
 /**
  * Removes all children of a given HTMLelement (DOM node).

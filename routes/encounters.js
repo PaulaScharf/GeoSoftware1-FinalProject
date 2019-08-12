@@ -26,7 +26,7 @@ var router = express.Router();
 // *********** CREATE/insert (with html-form) ***********
 // add an encounter from the req.body and ...
 var postItemController = function(req, res) {
-    console.log("insert encounter" + req.body);
+    console.log("insert encounter");
     // TODO: your only able to add an encounter if it contains atleast ...
 
     // insert one item (one encounter) into current database
@@ -35,7 +35,7 @@ var postItemController = function(req, res) {
             console.dir(error);
         }
         // after the encounter is successfully created, ...??
-        res.send();
+        res.send(result.insertedId);
     });
 };
 
@@ -105,13 +105,10 @@ var deleteItemController = function(req, res) {
     res.send();
 };
 
-
-// get a single encounter and the corresponding routes and render the singleroute.ejs view with that route ???
+// get a single encounter and the corresponding routes and render the singleroute.ejs view with that route
 var singleEncounterPageController = function(req, res) {
-console.log(req.body);
 
-
-    console.log("get items " + req.body.e_id + ", " + req.query.r1_id + ", " + req.query.r2_id);
+    console.log("get items " + req.query.e_id + ", " + req.query.r1_id + ", " + req.query.r2_id);
     //
     req.db.collection('routeDB').find({_id: {"$in" : [new mongodb.ObjectID(req.query.e_id),
                 new mongodb.ObjectID(req.query.r1_id),
@@ -126,7 +123,7 @@ console.log(req.body);
         } else {
             console.log(result);
             //
-            res.render("singleEncounter", {result});
+            res.render("singleEncounter.js", { result });
         }
     });
 };
