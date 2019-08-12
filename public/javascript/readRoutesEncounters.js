@@ -467,7 +467,7 @@ function fillEncountersMap() {
     let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY],
         {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
     let agent = ((allRoutes[currentEncounter[2].firstRoute][0].madeBy === "animal") ?
-        allRoutes[currentEncounter[2].firstRoute][0].individual_taxon_canonical_name : allRoutes[currentEncounter[2].firstRoute][0].creator)
+        allRoutes[currentEncounter[2].firstRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].firstRoute][0].creator)
     currentCircle.bindPopup("encounter number " + (i + 1) + " between " + agent + " and " + allRoutes[currentEncounter[2].secondRoute][0].creator);
     // add the circle to the array encountersLatLongArray
     encountersLatLongArray.push(currentCircle);
@@ -862,7 +862,7 @@ function searchForRouteIds(input) {
     if(currentRoute[1] &&
         ((input.name === "") ? true: (currentRoute[0].name === input.name)) &&
         ((input.user === "") ? true: (currentRoute[0].creator === input.user)) &&
-        ((input.animalName === "") ? true: (currentRoute[0].individual_taxon_canonical_name === input.animalName)) &&
+        ((input.animalName === "") ? true: (currentRoute[0].individualTaxonCanonicalName === input.animalName)) &&
         ((input.studyID === "") ? true: (currentRoute[0].study_id === input.studyID))) {
       result.push(i);
     }
