@@ -127,7 +127,7 @@ function deleteAllEncountersOfRoute(routeId) {
     //
     let currentEncounter = allEncounters[i][0];
     //
-    if (currentEncounter[0].firstRoute === routeId || currentEncounter.secondRoute === routeId) {
+    if (currentEncounter.firstRoute === routeId || currentEncounter.secondRoute === routeId) {
       //
       allEncounters.splice(i, 1);
       deleteEncounter(currentEncounter._id);

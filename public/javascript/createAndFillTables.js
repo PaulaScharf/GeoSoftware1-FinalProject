@@ -71,9 +71,11 @@ function createAndWriteTableWithSevenCells(tableCellID, insertFirst, insertSecon
  * @author Katharina Poppinga 450146, Paula Scharf 450334
  * @param insertFirst - first value, to write in first new created cell
  * @param insertSecond - second value, to write in second new created cell
+ * @param insertThird - third value, to write in second new created cell
  * @param {string} tableName - table to which the new created row and new created cells are appended
  */
-function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, id, tableName){
+function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, tableName){
+    console.log("three cells");
 
     // create new table row and three new table cells and write corresponding values into them
     let row = document.createElement("tr");
@@ -94,6 +96,7 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     let eigthValue = document.createElement("td");
     eigthValue.setAttribute("id", "share"+insertFirst);
 
+    console.log(tableName);
     // append new row and ANZAHL new cells to given table
     document.getElementById(tableName).appendChild(row);
     row.appendChild(firstValue);
@@ -106,39 +109,6 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     row.appendChild(eigthValue);
 }
 
-
-
-
-/**
- * Creating new table row with two new table cells, writing the two given values into these cells and append the row and these cells to given table.
- *
- * @author Katharina Poppinga 450146
- * @param insertFirst - first value, to write in first new created cell
- * @param insertSecond - second value, to write in second new created cell
- * @param {string} tableName - table to which the new created row and new created cells are appended
- */
-/*
-function createAndWriteTableWithTwoCells(insertFirst, insertSecond, tableName){
-
-  // create new table row and two new table cells and write corresponding values into them
-  var row = document.createElement("tr");
-  var firstValue = document.createElement("td");
-  firstValue.innerHTML = insertFirst;
-  var secondValue = document.createElement("td");
-  secondValue.innerHTML = insertSecond;
-
-  // append new row and two new cells to given table
-  document.getElementById(tableName).appendChild(row);
-  row.appendChild(firstValue);
-  row.appendChild(secondValue);
-}
-
-
-*/
-
-
-
-// FOLGENDE FUNKTION ÜBERHAUPT NÖTIG, WIRD SIE VERWENDET?????
 
 /**
  * Removes all children of a given HTMLelement (DOM node).

@@ -24,9 +24,9 @@
 
 
 // FÜR TESTZWECKE, SPÄTER HIER LÖSCHEN
-JL("testName1").fatal("Teeeest JSNLog");
+//JL("testName1").fatal("Teeeest JSNLog");
 
-
+/*
 // TODO: muss in allen JS-dateien stehen, die JSNLoggen
 var appender = JL.createAjaxAppender("Appender");
 appender.setOptions({
@@ -36,7 +36,7 @@ appender.setOptions({
 JL().setOptions({
   "appenders": [appender]
 });
-
+*/
 
 // TODO: var zu let verändern
 
@@ -75,7 +75,7 @@ let allEncounters = [];
 
 // TODO: entscheiden, ob onload oder nicht, weil dann folgende auch als globale variablen nötig:
 
-let allRoutesMap;
+let allRoutesMap = null;
 
 let routesGroup;
 
@@ -226,7 +226,7 @@ function showAllRoutesOnStartingPage() {
     let currentRoute = allRoutes[i];
 
     //
-    if (currentRoute[0].madeBy == "user") {
+    if (currentRoute[0].madeBy === "user") {
 
       // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
       // show the i-th route with a consecutive number and its creator, name, date, time and type (.................) in the table "routesTable" on starting page
@@ -234,7 +234,7 @@ function showAllRoutesOnStartingPage() {
     }
 
     //
-    else if (currentRoute[0].madeBy == "animal") {
+    else if (currentRoute[0].madeBy === "animal") {
 
       // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
       // show the i-th animalroute with a consecutive number and its .......... date, time and ................... in the table "animalRoutesTable" on starting page
@@ -265,7 +265,7 @@ function showAllRoutesOnStartingPage() {
     // for the first route of the database ...
     if (i === 0) {
       // ... center the map on the first point of the first route
-      allRoutesMap.setView([coordinatesRoute[i].lat, coordinatesRoute[i].lng], 2);
+      allRoutesMap.setView([coordinatesRoute[i][0], coordinatesRoute[i][1]], 2);
     }
 
     //
@@ -925,7 +925,7 @@ class WeatherRequest
 
       // KOMMENTAR ANPASSEN
       // log the .... exception to the server and .....
-      JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+      //JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
     }
 
     //
@@ -937,7 +937,7 @@ class WeatherRequest
       // KOMMENTAR ANPASSEN
       // log the .... exception to the server and .....
       // GENAUER SPEZIFIZIEREN?????
-      JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
+      //JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
     }
   }
   /**
