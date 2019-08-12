@@ -223,7 +223,7 @@ function formatAndShowAnimalRoute(response) {
   // create ....
   animalRoute = {
     study_id: response.individuals[0].study_id,
-    individualTaxonCanonicalName: response.individuals[0].individual_taxon_canonical_name,
+    creator: response.individuals[0].individual_taxon_canonical_name,
     // TODO: stringify wegbekommen
     geoJson: JSON.stringify(animalRouteGeoJSON),
     // date of the first entry in the locations-array

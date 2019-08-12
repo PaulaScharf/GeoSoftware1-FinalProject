@@ -95,15 +95,17 @@ function checkForNewRoute(response, checkForUpdates) {
       updateStatusFromNewToOld(route);
     }
     else if(currentRoute[0].status === "updated") {
-      let temp = alreadyKnownRoutes;
-      alreadyKnownRoutes = response.splice(i,1);
+      console.log("updated");
+      let akrPreviously = alreadyKnownRoutes;
+      alreadyKnownRoutes = response;
+
       console.log(response);
       deleteAllEncountersOfRoute(currentRoute[0]._id);
       // calculate the encounters with other routes
       calculateEncounters(currentRoute[0].geoJson.features[0].geometry.coordinates, currentRoute[0]._id, checkForUpdates);
       // after the encounters of a route are calculated, its status is set to old
       updateStatusFromNewToOld(route);
-      alreadyKnownRoutes = temp;
+      alreadyKnownRoutes = akrPreviously;
     }
     // the now processed route is added to the other already processed routes
     alreadyKnownRoutes.push(currentRoute);
@@ -149,8 +151,10 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
   console.log(alreadyKnownRoutes.length);
   //
   for (let i = 0; i < alreadyKnownRoutes.length; i++) {
-    console.log("Compare: " + oneId + " with " + alreadyKnownRoutes[i][0]._id);
-    intersectionOfRoutes(oneRoute, alreadyKnownRoutes[i][0].geoJson.features[0].geometry.coordinates, oneId, alreadyKnownRoutes[i][0]._id, checkForUpdates);
+    if (oneId !== alreadyKnownRoutes[i][0]._id) {
+      console.log("Compare: " + oneId + " with " + alreadyKnownRoutes[i][0]._id);
+      intersectionOfRoutes(oneRoute, alreadyKnownRoutes[i][0].geoJson.features[0].geometry.coordinates, oneId, alreadyKnownRoutes[i][0]._id, checkForUpdates);
+    }
   }
 }
 
@@ -168,7 +172,7 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
 function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkForUpdates) {
 
   console.log("first route", firstRoute);
-  console.log("first route", secondRoute);
+  console.log("second route", secondRoute);
   var line1 = turf.lineString(firstRoute);
   var line2 = turf.lineString(secondRoute);
   // these nested for-loops go through all adjascent point pairs in each route

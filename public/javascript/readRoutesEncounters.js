@@ -214,9 +214,6 @@ function writeAllRoutesInTheGlobalArray(response) {
 */
 function showAllRoutesOnStartingPage() {
 
-  // counter for the consecutive number of the routes
-  let consecNo = 0;
-
   // coordinates of a route (in GeoJSONs long-lat order)
   var coordinatesRoute;
 
@@ -230,7 +227,7 @@ function showAllRoutesOnStartingPage() {
 
       // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
       // show the i-th route with a consecutive number and its creator, name, date, time and type (.................) in the table "routesTable" on starting page
-      createAndWriteTableWithSevenCells(consecNo, i + 1, currentRoute[0].creator, currentRoute[0].name, currentRoute[0].date, currentRoute[0].time, currentRoute[0].type, "routesTable");
+      createAndWriteTableWithSevenCells(i, currentRoute[0].creator, currentRoute[0].name, currentRoute[0].date, currentRoute[0].time, currentRoute[0].type, "routesTable");
     }
 
     //
@@ -238,11 +235,9 @@ function showAllRoutesOnStartingPage() {
 
       // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
       // show the i-th animalroute with a consecutive number and its .......... date, time and ................... in the table "animalRoutesTable" on starting page
-      createAndWriteTableWithSevenCells(consecNo, i + 1, currentRoute[0].study_id, currentRoute[0].individualTaxonCanonicalName, currentRoute[0].date, currentRoute[0].time, "und hier?", "animalRoutesTable");
+      createAndWriteTableWithSevenCells(i, currentRoute[0].study_id, currentRoute[0].creator, currentRoute[0].date, currentRoute[0].time, "und hier?", "animalRoutesTable");
     }
 
-    // (tableCellID)
-    consecNo = consecNo + 1;
 
     // outsource the creation of the checkbox for showing or not showing the i-th route in the map
     routeCheckbox(i);
@@ -352,7 +347,7 @@ function getAllEncountersAndShow() {
     // check if a route was added or updated and adjust the encounters accordingly
     checkForNewRoute(allRoutes, true);
 
-    console.log(allEncounters);
+    //console.log(allEncounters);
 
     showEncountersOnStartingPage();
 
@@ -411,7 +406,6 @@ function fillEncountersTable() {
       } else {
         writeRequestResultsIntoTable(currentEncounter[0].terrain, i);
       }
-
       let isFirstPlanned = (allRoutes[currentEncounter[2].firstRoute][0].type === "planned");
       let isSecondPlanned = (allRoutes[currentEncounter[2].secondRoute][0].type === "planned");
 
@@ -481,8 +475,6 @@ function routeCheckbox(cb_id){
  */
 function deleteButton(i, routeID){
 
-    console.log("routeID:", routeID);
-
     // label the table cell, in which the delete-button will be written, as "tableCellButtons"
     let tableCellDeleteButton = document.getElementById("conseNum"+i);
 
@@ -502,8 +494,6 @@ function deleteButton(i, routeID){
  * @param
  */
 function updateButton(i, routeID){
-
-    console.log("routeID:", routeID);
 
     // label the table cell, in which the update-button will be written, as "tableCellButtons"
     let tableCellUpdateButton = document.getElementById("conseNum"+i);
@@ -525,7 +515,6 @@ function shareButton(bt_id) {
     r1_id: allRoutes[allEncounters[bt_id][2].firstRoute][0]._id,
     r2_id: allRoutes[allEncounters[bt_id][2].secondRoute][0]._id,
   };
-  console.log(ids.e_id);
 
   // add a button (which calls the function routeSelectionForMap(bt_id) if clicked) to the content of the "tableCellCheckbox"
   tableCellButton.innerHTML = "<form action='/encounter/getSingleEncounter' method='GET' name='shareForm'>" +

@@ -63,12 +63,12 @@
           <input type="text" name="name" onKeyup="checkform()"/><br>
           Route in correct GeoJSON syntax:<br />
           <textarea id="createRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
+          Timestamp:<br />
+          <input type="date" name="date" onchange="checkform()"/>
+          <input type="time" name="time" onKeyup="checkform()"/><br />
           Type:<br />
           <input type="radio" name="type" value="planned" checked> planned<br>
           <input type="radio" name="type" value="completed"> completed<br>
-          Timestamp:<br />
-          <input type="date" name="date" onchange="checkform()"/>
-          <input type="time" name="time" onKeyup="checkform()"/>
           <input type="hidden" name="madeBy" onKeyup="checkform()" value = "user"/>
           <input type="hidden" name="what" onKeyup="checkform()" value = "route"/>
           <input type="hidden" name="status" onKeyup="checkform()" value = "new"/>

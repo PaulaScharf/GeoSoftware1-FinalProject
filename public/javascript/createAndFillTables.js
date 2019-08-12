@@ -31,12 +31,12 @@
  *
  * @param {string} tableName - table to which the new created row and new created cells are appended
  */
-function createAndWriteTableWithSevenCells(tableCellID, insertFirst, insertSecond, insertThird, insertFourth, insertFifth, insertSixth, tableName){
+function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThird, insertFourth, insertFifth, insertSixth, tableName){
 
   // create new table row and ANZAHL new table cells and write corresponding values into them
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
-    firstValue.id = "conseNum"+tableCellID;
+    firstValue.id = "conseNum"+insertFirst;
     firstValue.innerHTML = insertFirst + 1;
     let secondValue = document.createElement("td");
     secondValue.innerHTML = insertSecond;
