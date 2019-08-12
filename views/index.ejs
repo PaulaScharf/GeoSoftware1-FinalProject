@@ -17,7 +17,7 @@
   <title>Final Project</title>
 </head>
 
-<body onload="getAndShowData()">
+<body onload = "getAndShowData()">
 
   <%- include('partial/navbar', {active: "Home"}); %>
 
@@ -47,7 +47,7 @@
     </div>
     <div class="col-sm">
       <p>Name of route:    </p><input type="text" id="searchRouteName" placeholder="Search names of routes" title="Type in a name">
-      <p>Username:    </p><input type="text" id="searchRouteUser" placeholder="Search users of routes" title="Type in a user">
+      <p>Username:    </p><input type="text" id="searchRouteUser" placeholder="Search users of routes" title="Type in a username">
       <div>
         <label class="switch">
           <input type="checkbox" onchange="searchEncounters(this)">
@@ -145,11 +145,12 @@
 <script src="turf/turf.min.js"></script>
 
 
-<!-- löschen und zu npm umwandeln !! -->
-<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jsnlog/2.29.0/jsnlog.min.js"></script>
+<!-- löschen und zu npm umwandeln !!
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jsnlog/2.29.0/jsnlog.min.js"></script> -->
 
 
 <script src="javascript/createAndFillTables.js"></script>
+<script src="javascript/coordinateSwapping.js"></script>
 <script src="javascript/encounters.js"></script>
 <script src="javascript/readRoutesEncounters.js"></script>
 <script src="javascript/tokens.js"></script>

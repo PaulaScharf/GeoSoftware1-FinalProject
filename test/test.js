@@ -90,7 +90,7 @@ describe("HTTP-CRUD Test" , function() {
           //console.dir(data);
 
           // WIRD NUR GEPRÜFT, OB DIE ID VORHANDEN IST, MEHR NICHT??
-          assert.ok(undefined!==data._id);
+          assert.ok(undefined !== data._id);
 
           done();
         });

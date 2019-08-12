@@ -15,7 +15,7 @@
   <title>Create a new animal route</title>
 </head>
 
-<body>
+<body onload = "showAnimalMapData()">
   <%- include('partial/navbar', {active: "Maintenance"}); %>
 
   <main role="main">
@@ -34,64 +34,29 @@
       <div class="col-12 col-md-6">
         <h2>Get and add Animalroute</h2>
 
-        <!--        <script type="text/javascript" language="javascript">
-        function checkform()
-        {
-        var f = document.forms["createForm"].elements;
-        var cansubmit = true;
+        ID of study:<br />
+        <input type="number" value="2911040" name="studyId" id="studyID"><br />
+        ID of individual:<br />
+        <input type="text" value="4262-84830876" name="individualId" id="individualID"><br />
+        <br>
+        <button onclick="getTrackingData()">Get tracking data</button>
 
-        for (var i = 1; i < 3; i++) {
-        if (f[i].value.length === 0) cansubmit = false;
-      }
-      document.getElementById('submitbutton').disabled = !cansubmit;
+        <br><br><br>
+        <div>
+          <h4>Currently chosen Animalroute</h4>
+          <p><b>Individual Taxon Canonical Name:</b></p>
+          <p id="animalName"></p>
+          <p><b>Date and time of first coordinate:</b></p>
+          <p id="animalDateTime"></p>
+        </div>
+        <br>
+        <button onclick="postAnimalRoute()">Add chosen animalroute to database</button>
 
-      if(cansubmit) {
-      document.getElementById("errorMsg").style.display = "none";
-    }
-    else
-    {
-    document.getElementById("errorMsg").style.display = "block";
-  }
-}
-</script>
+      </div>
+    </div>
+  </main>
 
-
-<form action="/animalTrackingAPI" method="GET" name="createForm">
-ID of study:<br />
-<input type="number" name="studyId" onKeyup="checkform()"><br />
-ID of individual:<br />
-<input type="number" name="individualId" onKeyup="checkform()"><br />
-<div id="errorMsg">To get an animalroute you need to fill in both blanks.</div>
-<input type="submit" value="Get tracking data" disabled="disabled" id="submitbutton"/>
-</form>
-
--->
-
-
-ID of study:<br />
-<input type="number" value="2911040" name="studyId" id="studyID"><br />
-ID of individual:<br />
-<input type="text" value="4262-84830876" name="individualId" id="individualID"><br />
-<br>
-<button onclick="getTrackingData()">Get tracking data</button>
-
-<br><br><br>
-<div>
-  <h4>Currently chosen Animalroute</h4>
-  <p><b>Individual Taxon Canonical Name:</b></p>
-  <p id="animalName"></p>
-  <p><b>Date and time of first coordinate:</b></p>
-  <p id="animalDateTime"></p>
-</div>
-<br>
-<button onclick="postAnimalRoute()">Add chosen animalroute to database</button>
-
-
-</div>
-</div>
-</main>
-
-<%- include('partial/footer', {active: "Home"}); %>
+  <%- include('partial/footer', {active: "Home"}); %>
 
 </body>
 </html>
@@ -102,5 +67,6 @@ ID of individual:<br />
 <script src="leaflet/leaflet.js"></script>
 
 <script src="javascript/validationGeoJSON.js"></script>
+<script src="javascript/coordinateSwapping.js"></script>
 <script src="javascript/animalTrackingAPI.js"></script>
 <script src="javascript/tokens.js"></script>

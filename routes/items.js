@@ -141,7 +141,8 @@ var postAnimalController = function(req, res) {
       console.dir(error);
     }
     // after the item (animalroute) is successfully created, go back to the createAnimalRoute-page
-    res.render("createAnimalRoute");
+    //res.render("createAnimalRoute");
+    res.send(result);
   });
 };
 

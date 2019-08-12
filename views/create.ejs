@@ -16,7 +16,7 @@
   <title>Create a new route</title>
 </head>
 
-<body onload = "getAllRoutes()">
+<body onload = "showMapData('createMap')">
   <%- include('partial/navbar', {active: "Maintenance"}); %>
 
   <main role="main">
@@ -93,11 +93,12 @@
 <script src="leaflet-draw/leaflet.draw.js"></script>
 <script src="turf/turf.min.js"></script>
 
-<!-- löschen und zu npm umwandeln !! -->
-<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jsnlog/2.29.0/jsnlog.min.js"></script>
+<!-- löschen und zu npm umwandeln !!
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jsnlog/2.29.0/jsnlog.min.js"></script> -->
 
 <script src="javascript/leafletDrawPolyline.js"></script>
-<script src="javascript/createRouteMap.js"></script>
 <script src="javascript/validationGeoJSON.js"></script>
+<script src="javascript/coordinateSwapping.js"></script>
 <script src="javascript/encounters.js"></script>
+<script src="javascript/createUpdateMaps.js"></script>
 <script src="javascript/tokens.js"></script>

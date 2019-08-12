@@ -1,7 +1,14 @@
 // jshint esversion: 6
 // jshint maxerr: 1000
 
+
+// TODO: importieren und ausprobieren
+//import {JL} from 'jsnlog';
+
+
 "use strict";  // JavaScript code is executed in "strict mode"
+
+
 
 /**
 * @desc final project, Geosoftware1, SoSe2019
@@ -14,33 +21,32 @@
 // TODO: DIESE DATEI AM ENDE IN INDEX.JS ÜBERFÜHREN
 
 
-// TODO: checkbox animalrouten funktioniert nicht, da anderes array??
-
 
 // TODO: KOMMENTARE (u.a. IN CHECKBOX-FUNKTIONEN) an consecutive nr mit 1 beginnend ANPASSEN
 
 
 // TODO: ALLROUTESMAP UMBENENNEN IN AUCH BEGEGNUNGEN
 
-
-// FÜR TESTZWECKE, SPÄTER HIER LÖSCHEN
-//JL("testName1").fatal("Teeeest JSNLog");
-
 /*
+// FÜR TESTZWECKE, SPÄTER HIER LÖSCHEN
+JL("testName1").fatal("Teeeest JSNLog");
+
+
 // TODO: muss in allen JS-dateien stehen, die JSNLoggen
 var appender = JL.createAjaxAppender("Appender");
 appender.setOptions({
-  "maxBatchSize": 100
+"maxBatchSize": 100
 });
 
 JL().setOptions({
-  "appenders": [appender]
+"appenders": [appender]
 });
+
 */
+
 
 // TODO: var zu let verändern
 
-// TODO: code und kommentare darauf anpassen, dass ein array für userrouten und ein array für animalrouten
 
 
 // ****************************** global variables ******************************
@@ -55,8 +61,6 @@ JL().setOptions({
 */
 let allRoutes = [];
 
-console.log("allRoutes", allRoutes);
-
 
 // TODO: im hierdrunterstehenden JSDoc die .......... ausfüllen mit Beschreibung des 4. elements des arrys ("no search" etc.)
 /**
@@ -67,40 +71,54 @@ console.log("allRoutes", allRoutes);
 * a boolean indicator, representing whether the encounter is currently displayed or not, at its second position,
 * an object containing the indices of the corresponding routes in the allRoutes-array at its third position and
 * a .............. at its fourth position.
-* @type {Array} allEncounters
+* @type {Array}
 */
 let allEncounters = [];
 
 
+/**
+*
+*
+* @type {map????}
+*/
+let allRoutesMap;
 
-// TODO: entscheiden, ob onload oder nicht, weil dann folgende auch als globale variablen nötig:
 
-let allRoutesMap = null;
-
+/**
+*
+*
+* @type {layerGroup}
+*/
 let routesGroup;
 
+
+/**
+*
+*
+* @type {layerGroup}
+*/
 let encountersGroup;
 
 
 
 
 // TODO: refactor names
+
 /**
 * array for the routes which are shown in the map "allRoutesMap"
-* @type {Array} polylineRoutesLatLongArray
+* @type {Array}
 */
 let polylineRoutesLatLongArray = [];
 
 
 /**
 * array for the encounters which are shown in the map "allRoutesMap"
-* @type {Array} encountersLatLongArray
+* @type {Array}
 */
 let encountersLatLongArray = [];
 
 
 
-// FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
 
 // TODO: JSDoc
 
@@ -114,7 +132,7 @@ let encountersLatLongArray = [];
 function getAndShowData() {
 
 
-// ****************************** map ******************************
+  // ****************************** map ******************************
 
   // create the initial map in the "allRoutesMap"-div, the proper map extract will be set later
   allRoutesMap = L.map('allRoutesMap').setView([0, 0], 3);
@@ -168,9 +186,9 @@ function getAndShowData() {
     // ... show all read routes on starting page (in table and in map), as the following function does:
     showAllRoutesOnStartingPage();
 
-      //
-      getAllEncountersAndShow();
-    })
+    //
+    getAllEncountersAndShow();
+  })
 
   // if the request has failed, ...
   .fail (function (xhr, status, error) {
@@ -195,7 +213,7 @@ function writeAllRoutesInTheGlobalArray(response) {
     allRoutes.push([response[i], true]);
     // TODO: ATTRIBUT UMBENENNEN, DA ES KEIN GEOJSON IST
     //
-    allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
+    allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder_Arrays(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
 
   }
 }
@@ -235,7 +253,7 @@ function showAllRoutesOnStartingPage() {
 
       // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
       // show the i-th animalroute with a consecutive number and its .......... date, time and ................... in the table "animalRoutesTable" on starting page
-      createAndWriteTableWithSevenCells(i, currentRoute[0].study_id, currentRoute[0].creator, currentRoute[0].date, currentRoute[0].time, "und hier?", "animalRoutesTable");
+      createAndWriteTableWithSevenCells(i, currentRoute[0].study_id, currentRoute[0].individualTaxonCanonicalName, currentRoute[0].date, currentRoute[0].time, "und hier?", "animalRoutesTable");
     }
 
 
@@ -432,630 +450,575 @@ function fillEncountersMap() {
 
     // make a circle out of the current encounter
     let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY],
-        {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
-    currentCircle.bindPopup("encounter number " + (i + 1) + " between " + allRoutes[currentEncounter[2].firstRoute][0].creator + " and " + allRoutes[currentEncounter[2].secondRoute][0].creator);
-    // add the circle to the array encountersLatLongArray
-    encountersLatLongArray.push(currentCircle);
-    if(currentEncounter[1] && (currentEncounter[3] === "no search" || currentEncounter[3] === "searched for")) {
-      // add the encountersLatLongArray to the encountersGroup
-      encountersLatLongArray[i].addTo(encountersGroup);
+      {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
+      currentCircle.bindPopup("encounter number " + (i + 1) + " between " + allRoutes[currentEncounter[2].firstRoute][0].creator + " and " + allRoutes[currentEncounter[2].secondRoute][0].creator);
+      // add the circle to the array encountersLatLongArray
+      encountersLatLongArray.push(currentCircle);
+      if(currentEncounter[1] && (currentEncounter[3] === "no search" || currentEncounter[3] === "searched for")) {
+        // add the encountersLatLongArray to the encountersGroup
+        encountersLatLongArray[i].addTo(encountersGroup);
+      }
     }
   }
-}
 
-/**
- * Creates a routeCheckbox - inside the fixed corresponding table cell - that corresponds to the individual route, which has the same consecutive
- * number as the id of the routeCheckbox.
- * A selected/checked routeCheckbox adds its corresponding route to the "routesGroup", therefore this route is shown in the map "allRoutesMap".
- * A deselected routeCheckbox removes its corresponding route from the "routesGroup", therefore this route is not shown in the map "allRoutesMap".
- *
- * @private
- * @author Katharina Poppinga
- * @param {number} cb_id - ID for the routeCheckbox to be created
- */
-function routeCheckbox(cb_id){
-  // label the table cell, in which the routeCheckbox will be written, as "tableCellCheckbox"
-  let tableCellCheckbox = document.getElementById("conseNum"+cb_id);
+  /**
+  * Creates a routeCheckbox - inside the fixed corresponding table cell - that corresponds to the individual route, which has the same consecutive
+  * number as the id of the routeCheckbox.
+  * A selected/checked routeCheckbox adds its corresponding route to the "routesGroup", therefore this route is shown in the map "allRoutesMap".
+  * A deselected routeCheckbox removes its corresponding route from the "routesGroup", therefore this route is not shown in the map "allRoutesMap".
+  *
+  * @private
+  * @author Katharina Poppinga
+  * @param {number} cb_id - ID for the routeCheckbox to be created
+  */
+  function routeCheckbox(cb_id){
+    // label the table cell, in which the routeCheckbox will be written, as "tableCellCheckbox"
+    let tableCellCheckbox = document.getElementById("conseNum"+cb_id);
 
-  // add a routeCheckbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
-  tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" +cb_id+ "' checked onclick='routeSelectionForMap("+cb_id+")'>";
-}
+    // add a routeCheckbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
+    tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" +cb_id+ "' checked onclick='routeSelectionForMap("+cb_id+")'>";
+  }
 
-// TODO: BUTTON GENANNT, SIND ABER BISHER KEINE BUTTONS, SONDERN NUR LINKS
+  // TODO: BUTTON GENANNT, SIND ABER BISHER KEINE BUTTONS, SONDERN NUR LINKS
 
 
-/**
- * Creates .....
- *
- *
- *
- * @private
- * @author Katharina Poppinga 450146
- * @param
- */
-function deleteButton(i, routeID){
+  /**
+  * Creates .....
+  *
+  *
+  *
+  * @private
+  * @author Katharina Poppinga 450146
+  * @param
+  */
+  function deleteButton(i, routeID){
 
     // label the table cell, in which the delete-button will be written, as "tableCellButtons"
     let tableCellDeleteButton = document.getElementById("conseNum"+i);
 
     //
     tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + " <a href='item/single?_id="+routeID+"'>delete</a>";
-}
+  }
 
 
 
-/**
- * Creates .....
- *
- *
- *
- * @private
- * @author Katharina Poppinga 450146
- * @param
- */
-function updateButton(i, routeID){
+  /**
+  * Creates .....
+  *
+  *
+  *
+  * @private
+  * @author Katharina Poppinga 450146
+  * @param
+  */
+  function updateButton(i, routeID){
 
     // label the table cell, in which the update-button will be written, as "tableCellButtons"
     let tableCellUpdateButton = document.getElementById("conseNum"+i);
 
     //
     tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <a href='item?_id="+routeID+"'>update</a>";
-}
-
-/**
- *
- * @param bt_id
- */
-function shareButton(bt_id) {
-  // label the table cell, in which the routeCheckbox will be written, as "tableCellCheckbox"
-  let tableCellButton = document.getElementById("share"+bt_id);
-
-  let ids = {
-    e_id : allEncounters[bt_id][0]._id,
-    r1_id: allRoutes[allEncounters[bt_id][2].firstRoute][0]._id,
-    r2_id: allRoutes[allEncounters[bt_id][2].secondRoute][0]._id,
-  };
-
-  // add a button (which calls the function routeSelectionForMap(bt_id) if clicked) to the content of the "tableCellCheckbox"
-  tableCellButton.innerHTML = "<form action='/encounter/getSingleEncounter' method='GET' name='shareForm'>" +
-      "<input type='hidden' name='e_id' value='" + ids.e_id +"'/>" +
-      "<input type='hidden' name='r1_id' value='" + ids.r1_id +"'/>" +
-      "<input type='hidden' name='r2_id' value='" + ids.r2_id +"'/>" +
-      "<input type='submit' value='share' id='sharebutton" + bt_id + "'/>" +
-      "</form>";
-}
-
-/**
- *
- * @param cb_id
- */
-function encounterCheckbox(cb_id, disabled) {
-  let currentEncounter = allEncounters[cb_id][0];
-  // label the table cell, in which the routeCheckbox will be written, as "tableCellCheckbox"
-  let tableCellCheckbox = document.getElementById("confirm"+cb_id);
-
-  let checked;
-  if (currentEncounter.tookPlace === "yes") {
-    checked = true;
-  } else {
-    checked = false;
   }
 
-  // add a routeCheckbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
-  tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='encounterCheckbox" +cb_id+ "' onclick='encounterConfirm("+cb_id+")'>";
-  document.getElementById("encounterCheckbox" + cb_id).checked = checked;
+  /**
+  *
+  * @param bt_id
+  */
+  function shareButton(bt_id) {
+    // label the table cell, in which the routeCheckbox will be written, as "tableCellCheckbox"
+    let tableCellButton = document.getElementById("share"+bt_id);
 
-  document.getElementById("encounterCheckbox" + cb_id).disabled = disabled;
+    let ids = {
+      e_id : allEncounters[bt_id][0]._id,
+      r1_id: allRoutes[allEncounters[bt_id][2].firstRoute][0]._id,
+      r2_id: allRoutes[allEncounters[bt_id][2].secondRoute][0]._id,
+    };
 
-}
-
-function encounterConfirm(cb_id) {
-  let checkbox = document.getElementById("encounterCheckbox" + cb_id);
-  let currentEncounter = allEncounters[cb_id][0];
-  let tookPlace = "";
-
-  if (checkbox.checked === true) {
-    tookPlace = "yes";
-  } else {
-    tookPlace = "maybe";
+    // add a button (which calls the function routeSelectionForMap(bt_id) if clicked) to the content of the "tableCellCheckbox"
+    tableCellButton.innerHTML = "<form action='/encounter/getSingleEncounter' method='GET' name='shareForm'>" +
+    "<input type='hidden' name='e_id' value='" + ids.e_id +"'/>" +
+    "<input type='hidden' name='r1_id' value='" + ids.r1_id +"'/>" +
+    "<input type='hidden' name='r2_id' value='" + ids.r2_id +"'/>" +
+    "<input type='submit' value='share' id='sharebutton" + bt_id + "'/>" +
+    "</form>";
   }
-  let encounter = {
-    _id: currentEncounter._id,
-    tookPlace: tookPlace
-  };
 
-  allEncounters[cb_id][0].tookPlace = tookPlace;
+  /**
+  *
+  * @param cb_id
+  */
+  function encounterCheckbox(cb_id, disabled) {
+    let currentEncounter = allEncounters[cb_id][0];
+    // label the table cell, in which the routeCheckbox will be written, as "tableCellCheckbox"
+    let tableCellCheckbox = document.getElementById("confirm"+cb_id);
 
-  updateEncounter(encounter);
-  fillEncountersMap();
-}
+    let checked;
+    if (currentEncounter.tookPlace === "yes") {
+      checked = true;
+    } else {
+      checked = false;
+    }
 
-function updateEncounter(encounter) {
-  $.ajax({
-    // use a http POST request
-    type: "POST",
-    // URL to send the request to
-    url: "/encounter/update",
-    //
-    data: encounter,
+    // add a routeCheckbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
+    tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='encounterCheckbox" +cb_id+ "' onclick='encounterConfirm("+cb_id+")'>";
+    document.getElementById("encounterCheckbox" + cb_id).checked = checked;
 
-    // NÖTIG????
-    // timeout set to 5 seconds
-    timeout: 5000
-  })
+    document.getElementById("encounterCheckbox" + cb_id).disabled = disabled;
 
-  // if the request is done successfully, ...
-      .done (function () {
-        // ... give a notice on the console that the AJAX request for ....... has succeeded
-        console.log("AJAX request (updating an encounter) is done successfully.");
-      })
+  }
 
-      // if the request has failed, ...
-      .fail(function (xhr, status, error) {
-        // ... give a notice that the AJAX request for .......... has failed and show the error-message on the console
-        console.log("AJAX request (updating an encounter) has failed.", error.message);
+  function encounterConfirm(cb_id) {
+    let checkbox = document.getElementById("encounterCheckbox" + cb_id);
+    let currentEncounter = allEncounters[cb_id][0];
+    let tookPlace = "";
+
+    if (checkbox.checked === true) {
+      tookPlace = "yes";
+    } else {
+      tookPlace = "maybe";
+    }
+    let encounter = {
+      _id: currentEncounter._id,
+      tookPlace: tookPlace
+    };
+
+    allEncounters[cb_id][0].tookPlace = tookPlace;
+
+    updateEncounter(encounter);
+    fillEncountersMap();
+  }
+
+  function updateEncounter(encounter) {
+    $.ajax({
+      // use a http POST request
+      type: "POST",
+      // URL to send the request to
+      url: "/encounter/update",
+      //
+      data: encounter,
+
+      // NÖTIG????
+      // timeout set to 5 seconds
+      timeout: 5000
+    })
+
+    // if the request is done successfully, ...
+    .done (function () {
+      // ... give a notice on the console that the AJAX request for ....... has succeeded
+      console.log("AJAX request (updating an encounter) is done successfully.");
+    })
+
+    // if the request has failed, ...
+    .fail(function (xhr, status, error) {
+      // ... give a notice that the AJAX request for .......... has failed and show the error-message on the console
+      console.log("AJAX request (updating an encounter) has failed.", error.message);
 
 
-        // TODO:
-        // WIE NUR FÜR TIMEOUT MACHEN ??? BRINGT HIER SONST NICHTS
-        // WAS BEI ANDEREN ERRORS?
-        // NOTFALLS LÖSCHEN, BEI ALLEN AJAX
-        //JL("ajaxEncounterUpdateTimeout").fatal("ajax: '/encounter/update' timeout");
+      // TODO:
+      // WIE NUR FÜR TIMEOUT MACHEN ??? BRINGT HIER SONST NICHTS
+      // WAS BEI ANDEREN ERRORS?
+      // NOTFALLS LÖSCHEN, BEI ALLEN AJAX
+      //JL("ajaxEncounterUpdateTimeout").fatal("ajax: '/encounter/update' timeout");
 
-      });
-}
+    });
+  }
 
 
-/**
-* Checks whether a routeCheckbox with given ID is checked (picked) or not (deselected) for customizing the shown routes in the map "allRoutesMap".
-* If the routeCheckbox is checked (picked), the corresponding route (route with the same consecutive number or the same "element-number" in the
-* polylineRoutesLatLongArray (global variable) as the ID of the routeCheckbox) is added to the routesGroup (global variable) and therefore shown in the map "allRoutesMap".
-*
-* @private
-* @author Katharina Poppinga 450146, Paula Scharf 450334
-* @param {number} cb_id - ID of the routeCheckbox
-* @param {array} idsOfEncounters - IDs of the corresponding encounters
-*/
-function routeSelectionForMap(cb_id){
+  /**
+  * Checks whether a routeCheckbox with given ID is checked (picked) or not (deselected) for customizing the shown routes in the map "allRoutesMap".
+  * If the routeCheckbox is checked (picked), the corresponding route (route with the same consecutive number or the same "element-number" in the
+  * polylineRoutesLatLongArray (global variable) as the ID of the routeCheckbox) is added to the routesGroup (global variable) and therefore shown in the map "allRoutesMap".
+  *
+  * @private
+  * @author Katharina Poppinga 450146, Paula Scharf 450334
+  * @param {number} cb_id - ID of the routeCheckbox
+  * @param {array} idsOfEncounters - IDs of the corresponding encounters
+  */
+  function routeSelectionForMap(cb_id){
 
-  console.log(routesGroup);
+    console.log(routesGroup);
 
-  // label the routeCheckbox
-  let checkBox = document.getElementById("routeCheckbox" + cb_id);
+    // label the routeCheckbox
+    let checkBox = document.getElementById("routeCheckbox" + cb_id);
 
-  // if the routeCheckbox is picked ...
-  if (checkBox.checked === true){
-    // ... show the corresponding route in the map "allRoutesMap" (by adding this route to the layerGroup "routesGroup")
-    routesGroup.addLayer(polylineRoutesLatLongArray[cb_id]);
-    // set to true to indicate, that the route is currently selected
-    allRoutes[cb_id][1] = true;
-    // get all ids of encounters which have to be added
-    let idsOfEncountersToBeAdded = encountersToBeAdded(cb_id);
-    // add the encounters
-    for (let i = 0; i < idsOfEncountersToBeAdded.length; i++) {
-      encountersGroup.addLayer(encountersLatLongArray[idsOfEncountersToBeAdded[i]]);
+    // if the routeCheckbox is picked ...
+    if (checkBox.checked === true){
+      // ... show the corresponding route in the map "allRoutesMap" (by adding this route to the layerGroup "routesGroup")
+      routesGroup.addLayer(polylineRoutesLatLongArray[cb_id]);
       // set to true to indicate, that the route is currently selected
-      allEncounters[idsOfEncountersToBeAdded[i]][1] = true;
+      allRoutes[cb_id][1] = true;
+      // get all ids of encounters which have to be added
+      let idsOfEncountersToBeAdded = encountersToBeAdded(cb_id);
+      // add the encounters
+      for (let i = 0; i < idsOfEncountersToBeAdded.length; i++) {
+        encountersGroup.addLayer(encountersLatLongArray[idsOfEncountersToBeAdded[i]]);
+        // set to true to indicate, that the route is currently selected
+        allEncounters[idsOfEncountersToBeAdded[i]][1] = true;
+      }
+      // refill the encounters-table, so that it only shows selected encounters
+      fillEncountersTable(allEncounters);
     }
-    // refill the encounters-table, so that it only shows selected encounters
-    fillEncountersTable(allEncounters);
-  }
 
-  // if the routeCheckbox is deselected ...
-  else {
-    // ... do not show the corresponding route in the map "allRoutesMap" (by removing this route from the layerGroup "routesGroup")
-    routesGroup.removeLayer(polylineRoutesLatLongArray[cb_id]);
-    // set to false to indicate, that the route is currently not selected
-    allRoutes[cb_id][1] = false;
-    // get all ids of encounters which have to be removed
-    let idsOfEncountersToBeRemoved = encountersToBeRemoved(cb_id);
-    // remove the encounters
-    for (let i = 0; i < idsOfEncountersToBeRemoved.length; i++) {
-      encountersGroup.removeLayer(encountersLatLongArray[idsOfEncountersToBeRemoved[i]]);
-      // set to false to indicate, that the encounter is currently not selected
-      allEncounters[idsOfEncountersToBeRemoved[i]][1] = false;
-    }
-    // refill the encounters-table, so that it only shows selected encounters
-    fillEncountersTable(allEncounters);
-  }
-}
-
-
-
-/**
- * This function returns all ids of encounters which have to be removed, because a route was deselected
- * @private
- * @author Paula Scharf
- * @param routeId           id of affected route
- * @returns {Array} result  ids of affected encounters
- */
-function encountersToBeRemoved(routeId) {
-
-  console.log("calculate encounters to be removed");
-
-  let result = [];
-
-  for (let i = 0; i < allEncounters.length; i++) {
-    let currentEncounter = allEncounters[i];
-    // all encounters which belong to the deselected route have to be removed
-    if(currentEncounter[3] !== "searched for" && (currentEncounter[2].firstRoute === routeId || currentEncounter[2].secondRoute === routeId)) {
-      result.push(i);
+    // if the routeCheckbox is deselected ...
+    else {
+      // ... do not show the corresponding route in the map "allRoutesMap" (by removing this route from the layerGroup "routesGroup")
+      routesGroup.removeLayer(polylineRoutesLatLongArray[cb_id]);
+      // set to false to indicate, that the route is currently not selected
+      allRoutes[cb_id][1] = false;
+      // get all ids of encounters which have to be removed
+      let idsOfEncountersToBeRemoved = encountersToBeRemoved(cb_id);
+      // remove the encounters
+      for (let i = 0; i < idsOfEncountersToBeRemoved.length; i++) {
+        encountersGroup.removeLayer(encountersLatLongArray[idsOfEncountersToBeRemoved[i]]);
+        // set to false to indicate, that the encounter is currently not selected
+        allEncounters[idsOfEncountersToBeRemoved[i]][1] = false;
+      }
+      // refill the encounters-table, so that it only shows selected encounters
+      fillEncountersTable(allEncounters);
     }
   }
 
-  console.log(result);
-  return result;
-}
 
 
+  /**
+  * This function returns all ids of encounters which have to be removed, because a route was deselected
+  * @private
+  * @author Paula Scharf
+  * @param routeId           id of affected route
+  * @returns {Array} result  ids of affected encounters
+  */
+  function encountersToBeRemoved(routeId) {
 
-/**
- * This function returns all ids of encounters which have to be added, because a route was reselected.
- * @private
- * @author Paula Scharf
- * @param routeId           id of affected route
- * @returns {Array} result  ids of affected encounters
- */
-function encountersToBeAdded(routeId) {
+    console.log("calculate encounters to be removed");
 
-  let result = [];
-  //
-  for (let i = 0; i < allEncounters.length; i++) {
-    // only routes which belong to the selected route and one other selected route have to be added
-    if (allEncounters[i][2].firstRoute === routeId && allRoutes[allEncounters[i][2].secondRoute][1]) {
-      result.push(i);
+    let result = [];
+
+    for (let i = 0; i < allEncounters.length; i++) {
+      let currentEncounter = allEncounters[i];
+      // all encounters which belong to the deselected route have to be removed
+      if(currentEncounter[3] !== "searched for" && (currentEncounter[2].firstRoute === routeId || currentEncounter[2].secondRoute === routeId)) {
+        result.push(i);
+      }
     }
-    else if (allEncounters[i][2].secondRoute === routeId && allRoutes[allEncounters[i][2].firstRoute][1]) {
-      result.push(i);
-    }
-  }
-  return result;
-}
 
-
-
-/**
-* Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part).This means this function takes one array (with all coordinates)
-* containing arrays (individual long-lat-pairs) of a route.
-* Swaps these coordinate-pairs. Returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
-*
-* @author Katharina Poppinga 450146
-* @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
-* @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
-*/
-function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute){
-
-  // point with lat,long-order of its coordinate
-  let latLong;
-
-  // array for (later in this function) containing the route-coordinates with its points as objects in lat,long-coordinate-order
-  let latLongCoordinatesRoute = [];
-
-  let c;
-  // loop "over" all points in given route
-  for (c = 0; c < longLatCoordinatesRoute.length; c++){
-
-    // swap current long,lat coordinate (array) to lat,long coordinate (object)
-    latLong = L.GeoJSON.coordsToLatLng(longLatCoordinatesRoute[c]);
-
-    // write new built lat,long-coordinate-pair (as an object) into the array latLongCoordinatesRoute, for getting the given route with swapped coordinates
-    latLongCoordinatesRoute.push([latLong.lat, latLong.lng]);
+    console.log(result);
+    return result;
   }
 
-  // return the given route with swapped coordinates as one array containing objects (not arrays!)
-  return latLongCoordinatesRoute;
-}
 
-/**
- * Show all routes that apply for the searched parameters and all their encounters
- * @author Paula Scharf, matr.: 450 334
- * @param obj - the routeCheckbox-object for the search
- */
-function searchEncounters(obj) {
-  // if the routeCheckbox is checked then do the search
-  if($(obj).is(":checked")){
-    let searchInput = {
-      name: document.getElementById("searchRouteName").value,
-      user: document.getElementById("searchRouteUser").value
+
+  /**
+  * This function returns all ids of encounters which have to be added, because a route was reselected.
+  * @private
+  * @author Paula Scharf
+  * @param routeId           id of affected route
+  * @returns {Array} result  ids of affected encounters
+  */
+  function encountersToBeAdded(routeId) {
+
+    let result = [];
+    //
+    for (let i = 0; i < allEncounters.length; i++) {
+      // only routes which belong to the selected route and one other selected route have to be added
+      if (allEncounters[i][2].firstRoute === routeId && allRoutes[allEncounters[i][2].secondRoute][1]) {
+        result.push(i);
+      }
+      else if (allEncounters[i][2].secondRoute === routeId && allRoutes[allEncounters[i][2].firstRoute][1]) {
+        result.push(i);
+      }
     }
-    // get the id of all routes to which the search applies for
-    let routeIds = searchForRouteIds(searchInput);
-    console.log("routeIds: " + routeIds);
-    for (let i = 0; i < allRoutes.length; i ++) {
-      routesGroup.removeLayer(polylineRoutesLatLongArray[i]);
-      if (routeIds.includes(i)) {
+    return result;
+  }
+
+
+
+  /**
+  * Show all routes that apply for the searched parameters and all their encounters
+  * @author Paula Scharf, matr.: 450 334
+  * @param obj - the routeCheckbox-object for the search
+  */
+  function searchEncounters(obj) {
+    // if the routeCheckbox is checked then do the search
+    if($(obj).is(":checked")){
+      let searchInput = {
+        name: document.getElementById("searchRouteName").value,
+        user: document.getElementById("searchRouteUser").value
+      };
+      // get the id of all routes to which the search applies for
+      let routeIds = searchForRouteIds(searchInput);
+      console.log("routeIds: " + routeIds);
+      for (let i = 0; i < allRoutes.length; i ++) {
+        routesGroup.removeLayer(polylineRoutesLatLongArray[i]);
+        if (routeIds.includes(i)) {
+          polylineRoutesLatLongArray[i].setStyle({
+            color: '#ec1a9c'
+          });
+          routesGroup.addLayer(polylineRoutesLatLongArray[i]);
+          document.getElementById("routeCheckbox" + i).checked = true;
+          allRoutes[i][1] = true;
+        } else {
+          document.getElementById("routeCheckbox" + i).checked = false;
+          allRoutes[i][1] = false;
+        }
+      }
+      for (let i = 0; i < allEncounters.length; i++) {
+        let currentEncounter = allEncounters[i];
+        if (routeIds.includes(currentEncounter[2].firstRoute) || routeIds.includes(currentEncounter[2].secondRoute)) {
+          allEncounters[i][1] = true;
+          allEncounters[i][3] = "searched for";
+        } else {
+          allEncounters[i][1] = false;
+          allEncounters[i][3] = "not searched for";
+        }
+      }
+      showEncountersOnStartingPage();
+      // if the routeCheckbox is unchecked then undo the search
+    }else{
+      // recolor all routes in red
+      for (let i = 0; i < polylineRoutesLatLongArray.length; i++) {
         polylineRoutesLatLongArray[i].setStyle({
-          color: '#ec1a9c'
+          color: 'red'
         });
-        routesGroup.addLayer(polylineRoutesLatLongArray[i]);
-        document.getElementById("routeCheckbox" + i).checked = true;
-        allRoutes[i][1] = true;
-      } else {
-        document.getElementById("routeCheckbox" + i).checked = false;
-        allRoutes[i][1] = false;
       }
-    }
-    for (let i = 0; i < allEncounters.length; i++) {
-      let currentEncounter = allEncounters[i];
-      if (routeIds.includes(currentEncounter[2].firstRoute) || routeIds.includes(currentEncounter[2].secondRoute)) {
-        allEncounters[i][1] = true;
-        allEncounters[i][3] = "searched for";
-      } else {
-        allEncounters[i][1] = false;
-        allEncounters[i][3] = "not searched for";
-      }
-    }
-    showEncountersOnStartingPage();
-    // if the routeCheckbox is unchecked then undo the search
-  }else{
-    // recolor all routes in red
-    for (let i = 0; i < polylineRoutesLatLongArray.length; i++) {
-      polylineRoutesLatLongArray[i].setStyle({
-        color: 'red'
-      });
-    }
-    //TODO: reselect all routes
+      //TODO: reselect all routes
 
-    // reset the attributes of the encounter, that indicate if it is selected or searched for
-    for (let i = 0; i < allEncounters.length; i++) {
-      let currentEncounter = allEncounters[i];
-      allEncounters[i][3] = "no search";
-      // if both routes of an encounter are selected then indicate that the encounter is selected
-      if (allRoutes[currentEncounter[2].firstRoute][1] && allRoutes[currentEncounter[2].secondRoute][1]) {
-        allEncounters[i][1] = true;
-      } else {
-        allEncounters[i][1] = false;
+      // reset the attributes of the encounter, that indicate if it is selected or searched for
+      for (let i = 0; i < allEncounters.length; i++) {
+        let currentEncounter = allEncounters[i];
+        allEncounters[i][3] = "no search";
+        // if both routes of an encounter are selected then indicate that the encounter is selected
+        if (allRoutes[currentEncounter[2].firstRoute][1] && allRoutes[currentEncounter[2].secondRoute][1]) {
+          allEncounters[i][1] = true;
+        } else {
+          allEncounters[i][1] = false;
+        }
       }
+      // show indicated encounters on the starting page
+      showEncountersOnStartingPage();
     }
-    // show indicated encounters on the starting page
-    showEncountersOnStartingPage();
+
   }
 
-}
-
-/**
- * get the position of the searched for routes in the allRoutes-array
- * @author Paula Scharf, matr.: 450 334
- * @param {obj} input - the search parameters
- * @returns {Array} result - an array of indices
- */
-function searchForRouteIds(input) {
-  let result = [];
-  for (let i = 0; i < allRoutes.length; i++) {
-    let currentRoute = allRoutes[i];
-    if(currentRoute[1] &&
+  /**
+  * get the position of the searched for routes in the allRoutes-array
+  * @author Paula Scharf, matr.: 450 334
+  * @param {obj} input - the search parameters
+  * @returns {Array} result - an array of indices
+  */
+  function searchForRouteIds(input) {
+    let result = [];
+    for (let i = 0; i < allRoutes.length; i++) {
+      let currentRoute = allRoutes[i];
+      if(currentRoute[1] &&
         ((input.name !== "" && currentRoute[0].name === input.name) || (input.name === "")) &&
         ((input.user !== "" && currentRoute[0].creator === input.user) || (input.user === ""))) {
-      result.push(i);
+          result.push(i);
+        }
+      }
+      return result;
     }
-  }
-  return result;
-}
 
-// TODO: put requests into seperate javascript file
+    // TODO: put requests into seperate javascript file
 
-/**
- * @desc This class creates and holds a request to openweathermap.
- * @author Paula Scharf 450334
- */
-class WeatherRequest
-{
-  /**
-  * @desc This is the constructor of the class WeatherRequest.
-  * @param intersection
-  * @param id     ?????????????????????????
-  */
-  constructor(intersection, id)
-  {
-    var lat = intersection[0];
-    var long = intersection[1];
-
-    //
-    this.resource = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + token.OPENWEATHERMAP_TOKEN;
-
-
-    // TESTZWECKE, SPÄTER LÖSCHEN
-    //console.log("WETTER API NICHT ERREICHBAR TEST");
-    //JL("testName1").fatal("WETTER API NICHT ERREICHBAR TEST");
-
-
-    //
-    this.x = new XMLHttpRequest();
-    this.x.intersection = intersection;
-    this.x.id = id;
-    this.x.writeRequestResultsIntoTable = this.writeRequestResultsIntoTable;
-    this.x.onload = this.loadcallback;
-    this.x.onerror = this.errorcallback;
-    this.x.onreadystatechange = this.statechangecallback;
-    this.openAndSendRequest();
-
-  }
-
-  //
-  openAndSendRequest()
-  {
-    this.x.open("GET", this.resource, true);
-    this.x.send();
-  }
-
-  /**
-  * @desc This function is called, when there is a change in the XMLHttpRequest "x".
-  * If it is called and the status is 200 and readyState is 4, it writes the weather into the table and creates an infoRequest.
-  */
-  statechangecallback()
-  {
-    if (this.status === 200 && this.readyState === 4)
+    /**
+    * @desc This class creates and holds a request to openweathermap.
+    * @author Paula Scharf 450334
+    */
+    class WeatherRequest
     {
-      this.writeRequestResultsIntoTable();
-    }
-  }
+      /**
+      * @desc This is the constructor of the class WeatherRequest.
+      * @param intersection
+      * @param id     ?????????????????????????
+      */
+      constructor(intersection, id)
+      {
+        var lat = intersection[0];
+        var long = intersection[1];
 
-  /**
-   * @desc This function writes the weather into the associated cell in the table.
-   */
-  writeRequestResultsIntoTable() {
-    // show the weather as an icon
-    // if you hover over this icon it will show the weather as a text
-    if (this.responseText !== "") {
-      document.getElementById("weather" + (this.id)).innerHTML = "<span title='" + JSON.parse(this.responseText).weather[0].description + "'><img src=http://openweathermap.org/img/w/" + JSON.parse(this.responseText).weather[0].icon + ".png /img>";
-    }
-  }
-
-  /**
-  * @desc This function is called when there is an error with the request.
-  */
-  errorcallback(e) {
-    //console.dir("x: " + this.x);
-    console.dir("e: " + e);
-    //
-    if (this.status === 404)
-    {
-      document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split" + this.indiRoute.positionJ).innerHTML = "error: no connection to the server";
+        //
+        this.resource = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + token.OPENWEATHERMAP_TOKEN;
 
 
-      // KOMMENTAR ANPASSEN
-      // log the .... exception to the server and .....
-      //JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
-    }
-
-    //
-    else
-    {
-      document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split" + this.indiRoute.positionJ).innerHTML = "errorcallback: check web-console";
+        // TESTZWECKE, SPÄTER LÖSCHEN
+        //console.log("WETTER API NICHT ERREICHBAR TEST");
+        //JL("testName1").fatal("WETTER API NICHT ERREICHBAR TEST");
 
 
-      // KOMMENTAR ANPASSEN
-      // log the .... exception to the server and .....
-      // GENAUER SPEZIFIZIEREN?????
-      //JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
-    }
-  }
-  /**
-   * @desc This function is called when there is an error with the request.
-   */
-  errorcallback(e) {
-    //console.dir("x: " + this.x);
-    console.dir("e: " + e);
-    //
-    if (this.status === 404)
-    {
-      document.getElementById("weather" + (this.id)).innerHTML = "error: no connection to the server";
+        //
+        this.x = new XMLHttpRequest();
+        this.x.intersection = intersection;
+        this.x.id = id;
+        this.x.writeRequestResultsIntoTable = this.writeRequestResultsIntoTable;
+        this.x.onload = this.loadcallback;
+        this.x.onerror = this.errorcallback;
+        this.x.onreadystatechange = this.statechangecallback;
+        this.openAndSendRequest();
+
+      }
+
+      //
+      openAndSendRequest()
+      {
+        this.x.open("GET", this.resource, true);
+        this.x.send();
+      }
+
+      /**
+      * @desc This function is called, when there is a change in the XMLHttpRequest "x".
+      * If it is called and the status is 200 and readyState is 4, it writes the weather into the table and creates an infoRequest.
+      */
+      statechangecallback()
+      {
+        if (this.status === 200 && this.readyState === 4)
+        {
+          this.writeRequestResultsIntoTable();
+        }
+      }
+
+      /**
+      * @desc This function writes the weather into the associated cell in the table.
+      */
+      writeRequestResultsIntoTable() {
+        // show the weather as an icon
+        // if you hover over this icon it will show the weather as a text
+        if (this.responseText !== "") {
+          document.getElementById("weather" + (this.id)).innerHTML = "<span title='" + JSON.parse(this.responseText).weather[0].description + "'><img src=http://openweathermap.org/img/w/" + JSON.parse(this.responseText).weather[0].icon + ".png /img>";
+        }
+      }
+
+      /**
+      * @desc This function is called when there is an error with the request.
+      */
+      errorcallback(e) {
+        //console.dir("x: " + this.x);
+        console.dir("e: " + e);
+        //
+        if (this.status === 404)
+        {
+          document.getElementById("weather" + (this.id)).innerHTML = "Error: No connection to the server.";
 
 
-      // KOMMENTAR ANPASSEN
-      // log the .... exception to the server and .....
-      //JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
-    }
+          // KOMMENTAR ANPASSEN
+          // log the .... exception to the server and .....
+          JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+        }
 
-    //
-    else
-    {
-      document.getElementById("weather" + (this.id)).innerHTML = "errorcallback: check web-console";
-
-
-      // KOMMENTAR ANPASSEN
-      // log the .... exception to the server and .....
-      // GENAUER SPEZIFIZIEREN?????
-      //JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
-    }
-  }
-
-  /**
-  * @desc This function is called when the request is loaded for the first time.
-  */
-  loadcallback() {
-    //console.dir(x);
-    console.log("OpenWeatherMap: status: " + this.status + " , readyState: " + this.readyState);
-  }
-}
+        //
+        else
+        {
+          document.getElementById("weather" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
 
 
-/**
- *
- * @param encounter
- * @param id
- */
-function getNewTerrainRequest(encounter, id) {
-  console.log("get new terrain request",  encounter._id);
-  let lat = encounter.intersectionX;
-  let long = encounter.intersectionY;
+          // KOMMENTAR ANPASSEN
+          // log the .... exception to the server and .....
+          // GENAUER SPEZIFIZIEREN?????
+          JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
+        }
+      }
 
-  //
-  let resource = "http://api.geonames.org/findNearbyJSON?lat=" + lat + "&lng=" + long + "&username=" + token.usernameTerrainAPI;
-
-  //
-  let xx = new XMLHttpRequest();
-  xx.writeRequestResultsIntoTable = writeRequestResultsIntoTable;
-  xx.updateEncounter = updateEncounter;
-  xx.id = id;
-  xx.encounter = encounter;
-  xx.onload = function () {
-    //console.dir(xx);
-    console.log("Geonames: status: " + this.status + " , readyState: " + this.readyState);
-  };
-  xx.onerror = function (e) {
-    //console.dir("xx: " + this.xx);
-    console.dir("e: " + e);
-    //
-    if (this.status === 404)
-    {
-      document.getElementById("country" + (this.id)).innerHTML = "error: no connection to the server";
-      document.getElementById("terrain" + (this.id)).innerHTML = "error: no connection to the server";
-
-
-      // KOMMENTAR ANPASSEN
-      // log the .... exception to the server and .....
-      //JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
-    }
-
-    //
-    else
-    {
-      document.getElementById("country" + (this.id + 1)).innerHTML = "errorcallback: check web-console";
-      document.getElementById("terrain" + (this.id + 1)).innerHTML = "errorcallback: check web-console";
-
-
-      // KOMMENTAR ANPASSEN
-      // log the .... exception to the server and .....
-      // GENAUER SPEZIFIZIEREN?????
-      //JL("terrainRequestError").fatalException("Error: Status-Code " + this.status, e);
-    }
-  };
-  xx.onreadystatechange = function () {
-    if (this.status === 200 && this.readyState === 4)
-    {
-      this.writeRequestResultsIntoTable(this.responseText, this.id);
-      // if the id of the correspondingencounter in the database is known, then save the terrain-info as an attribute
-      // of the encounter in the database
-      if(typeof encounter._id !== "undefined") {
-        let encounter = {
-          _id: this.encounter._id,
-          terrain: this.responseText
-        };
-        this.updateEncounter(encounter);
+      /**
+      * @desc This function is called when the request is loaded for the first time.
+      */
+      loadcallback() {
+        //console.dir(x);
+        console.log("OpenWeatherMap: status: " + this.status + " , readyState: " + this.readyState);
       }
     }
-  };
-  xx.open("GET", resource, true);
-  xx.send();
 
-}
 
-/**
- *
- * @param response
- * @param id
- */
-function writeRequestResultsIntoTable(response, id) {
-  // show the terrain .....
-  // .....
-  if (response !== "") {
-    if (typeof JSON.parse(response).geonames !== "undefined" && typeof JSON.parse(response).geonames[0] !== "undefined") {
-      document.getElementById("country" + (id)).innerHTML = JSON.parse(response).geonames[0].countryName;
-      document.getElementById("terrain" + (id)).innerHTML = JSON.parse(response).geonames[0].fclName;
-    } else {
-      document.getElementById("country" + (id)).innerHTML = "country could not be identified";
-      document.getElementById("terrain" + (id)).innerHTML = "terrain could not be identified";
+    /**
+    *
+    *
+    *
+    * @param encounter
+    * @param id
+    */
+    function getNewTerrainRequest(encounter, id) {
+      console.log("get new terrain request",  encounter._id);
+      let lat = encounter.intersectionX;
+      let long = encounter.intersectionY;
+
+      //
+      let resource = "http://api.geonames.org/findNearbyJSON?lat=" + lat + "&lng=" + long + "&username=" + token.usernameTerrainAPI;
+
+      //
+      let xx = new XMLHttpRequest();
+      xx.writeRequestResultsIntoTable = writeRequestResultsIntoTable;
+      xx.updateEncounter = updateEncounter;
+      xx.id = id;
+      xx.encounter = encounter;
+      xx.onload = function () {
+        //console.dir(xx);
+        console.log("Geonames: status: " + this.status + " , readyState: " + this.readyState);
+      };
+      xx.onerror = function (e) {
+        //console.dir("xx: " + this.xx);
+        console.dir("e: " + e);
+        //
+        if (this.status === 404)
+        {
+          document.getElementById("country" + (this.id)).innerHTML = "Error: No connection to the server.";
+          document.getElementById("terrain" + (this.id)).innerHTML = "Error: No connection to the server.";
+
+
+          // KOMMENTAR ANPASSEN
+          // log the .... exception to the server and .....
+          JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+        }
+
+        //
+        else
+        {
+          document.getElementById("country" + (this.id + 1)).innerHTML = "Errorcallback: Check web-console.";
+          document.getElementById("terrain" + (this.id + 1)).innerHTML = "Errorcallback: Check web-console.";
+
+
+          // KOMMENTAR ANPASSEN
+          // log the .... exception to the server and .....
+          // GENAUER SPEZIFIZIEREN?????
+          JL("terrainRequestError").fatalException("Error: Status-Code " + this.status, e);
+        }
+      };
+      xx.onreadystatechange = function () {
+        if (this.status === 200 && this.readyState === 4)
+        {
+          this.writeRequestResultsIntoTable(this.responseText, this.id);
+          // if the id of the correspondingencounter in the database is known, then save the terrain-info as an attribute
+          // of the encounter in the database
+          if(typeof encounter._id !== "undefined") {
+            let encounter = {
+              _id: this.encounter._id,
+              terrain: this.responseText
+            };
+            this.updateEncounter(encounter);
+          }
+        }
+      };
+      xx.open("GET", resource, true);
+      xx.send();
+
     }
-  }
-}
+
+    /**
+    *
+    * @param response
+    * @param id
+    */
+    function writeRequestResultsIntoTable(response, id) {
+      // show the terrain .....
+      // .....
+      if (response !== "") {
+        if (typeof JSON.parse(response).geonames !== "undefined" && typeof JSON.parse(response).geonames[0] !== "undefined") {
+          document.getElementById("country" + (id)).innerHTML = JSON.parse(response).geonames[0].countryName;
+          document.getElementById("terrain" + (id)).innerHTML = JSON.parse(response).geonames[0].fclName;
+          // we could not check the status code because status 200 is returned although too many requests are made
+        } else if (typeof JSON.parse(response).status !== "undefined" && JSON.parse(response).status.message === "the hourly limit of 1000 credits for geosoftw_k_p has been exceeded. Please throttle your requests or use the commercial service.") {
+          document.getElementById("country" + (id)).innerHTML = "too many requests";
+          document.getElementById("terrain" + (id)).innerHTML = "too many requests";
+        } else {
+          document.getElementById("country" + (id)).innerHTML = "Country could not be identified";
+          document.getElementById("terrain" + (id)).innerHTML = "Terrain could not be identified";
+        }
+      }
+    }
