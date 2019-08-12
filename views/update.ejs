@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
     <!-- installed CSS -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-v4.2.1.min.css">
     <link rel="stylesheet" href="leaflet/leaflet.css"/>
     <link rel="stylesheet" href="leaflet-draw/leaflet.draw.css"/>
 
@@ -65,19 +65,20 @@
             <div class="col-12 col-md-6">
                 <h1>Edit Route</h1>
                     <form action="/item/single" method="POST" name="updateForm" onsubmit="return validateJSONAndGeoJSON('updateRoute')">
-                        <input type = "hidden" name = "_id" value="<%= stripEndQuotes(JSON.stringify(result[0]._id)) %>"/>
+                        <input type = "hidden" name = "_id" value="<%= result[0]._id %>"/>
                         Username:<br />
-                        <input type="text" name="creator" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].creator)) %>"/><br>
+                        <input type="text" name="creator" onKeyup="checkform()" value="<%= result[0].creator %>"/><br>
                         Name of route:<br />
-                        <input type="text" name="name" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].name)) %>"/><br>
+                        <input type="text" name="name" onKeyup="checkform()" value="<%= result[0].name %>"/><br>
                         Route in correct GeoJSON syntax:<br />
                         <textarea id="updateRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()">
                             <%= stripEndQuotes(JSON.stringify(result[0].geoJson, null, 2)) %> </textarea>
-                        Type ÄNDERN!:<br />
-                        <input type="text" name="type" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].type)) %>"/><br>
                         Timestamp:<br />
-                        <input type="date" name="date" onchange="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].date)) %>"/>
-                        <input type="time" name="time" onKeyup="checkform()" value="<%= stripEndQuotes(JSON.stringify(result[0].time)) %>"/>
+                        <input type="date" name="date" onchange="checkform()" value="<%= result[0].date %>"/>
+                        <input type="time" name="time" onKeyup="checkform()" value="<%= result[0].time %>"/><br />
+                        Type:<br />
+                        <input type="radio" name="type" value="planned" <%if(result[0].type === "planned") {%>checked<%}%>> planned<br>
+                        <input type="radio" name="type" value="completed" <%if(result[0].type === "completed") {%>checked<%}%>> completed<br>
                         <br/><br/>
                         <input type="submit" value="Update route" id="submitbutton"/>
                         <div id="errorMsg" style="display: none;">To update a route you need to fill in all blanks.</div>
@@ -93,7 +94,7 @@
 
 <script src="jquery/jquery.min.js"></script>
 <script src="popper/umd/popper.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="bootstrap/js/bootstrap-v4.2.1.bundle.min.js"></script>
 <script src="leaflet/leaflet.js"></script>
 <script src="leaflet-draw/leaflet.draw.js"></script>
 

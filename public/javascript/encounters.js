@@ -17,7 +17,6 @@
  */
 var alreadyKnownRoutes = [];
 
-let allOtherRoutes=[];
 
 
 /**
@@ -87,6 +86,9 @@ function checkForNewRoute(response, checkForUpdates) {
       status: "old"
     };
 
+    // the now processed route is added to the other already processed routes
+    alreadyKnownRoutes.push(currentRoute);
+
     //
     if (currentRoute[0].status === "new") {
       // calculate the encounters with other routes
@@ -95,11 +97,9 @@ function checkForNewRoute(response, checkForUpdates) {
       updateStatusFromNewToOld(route);
     }
     else if(currentRoute[0].status === "updated") {
-      console.log("updated");
       let akrPreviously = alreadyKnownRoutes;
       alreadyKnownRoutes = response;
 
-      console.log(response);
       deleteAllEncountersOfRoute(currentRoute[0]._id);
       // calculate the encounters with other routes
       calculateEncounters(currentRoute[0].geoJson.features[0].geometry.coordinates, currentRoute[0]._id, checkForUpdates);
@@ -107,8 +107,7 @@ function checkForNewRoute(response, checkForUpdates) {
       updateStatusFromNewToOld(route);
       alreadyKnownRoutes = akrPreviously;
     }
-    // the now processed route is added to the other already processed routes
-    alreadyKnownRoutes.push(currentRoute);
+
 
     console.log("checked " + currentRoute[0]._id);
   }
@@ -211,10 +210,14 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
           noOfRoutes.secondRoute = k;
         }
       }
+      let parameters = {
+        routesSelected: true,
+        search: "no search"
+      };
       console.log("push an encounter");
       // give true as the second argument to indicate that the encounter should be visible on the map
       // and in the table
-      allEncounters.push([encounter, true, noOfRoutes, "no search"])
+      allEncounters.push([encounter, parameters, noOfRoutes])
     }
 
   }

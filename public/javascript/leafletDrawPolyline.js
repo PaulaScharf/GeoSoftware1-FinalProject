@@ -114,7 +114,7 @@ function drawPolyline(map, outputTextarea) {
         //
         ev.initEvent('keyup', true, false);
         //
-        output.dispatchEvent(ev);;
+        output.dispatchEvent(ev);
 
         // if the current used map is not the "updateMap" ...
       } else {

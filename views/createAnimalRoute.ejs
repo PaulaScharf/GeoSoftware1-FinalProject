@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
   <!-- installed CSS -->
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap-v4.2.1.min.css">
   <link rel="stylesheet" href="leaflet/leaflet.css"/>
 
   <!-- locally created css -->
@@ -15,14 +15,14 @@
   <title>Create a new animal route</title>
 </head>
 
-<body onload = "getAllRoutes()">
-<%- include('partial/navbar', {active: "Maintainance"}); %>
+<body>
+  <%- include('partial/navbar', {active: "Maintenance"}); %>
 
-<main role="main">
+  <main role="main">
     <div class="row" style="padding:10px">
-        <div class="container-fluid">
-            <h1 style="color:blue; text-align:center">Route Creator</h1>
-        </div>
+      <div class="container-fluid">
+        <h1>Route Creator</h1>
+      </div>
     </div>
 
     <p>Beschreibung der Seite, was sie tut / wozu sie da ist, nicht vergessen :D</p>
@@ -32,38 +32,16 @@
         <div id="createAnimalRouteMap"></div>
       </div>
       <div class="col-12 col-md-6">
-        <h1>Add animalroute</h1>
+        <h2>Get and add Animalroute</h2>
 
-
-
-
-<!--
-
-        <form action="/animalTrackingAPI" method="GET" name="createForm">
-          ID of Study:<br />
-          <input type="number" name="studyId"><br />
-          ID of individual:<br />
-          <input type="number" name="individualId"><br />
-          <input type="submit" value="Create" id="submitbutton"/>
-        </form>
-
--->
-
-        <!--
-
-
-
-        <script type="text/javascript" language="javascript">
+        <!--        <script type="text/javascript" language="javascript">
         function checkform()
         {
-
-        // AB HIER ANPASSEN/ÄNDERN
-
-        var f = document.forms["createAnimalRouteForm"].elements;
+        var f = document.forms["createForm"].elements;
         var cansubmit = true;
 
-        for (var i = 1; i < 5; i++) {
-        if (f[i].value.length == 0) cansubmit = false;
+        for (var i = 1; i < 3; i++) {
+        if (f[i].value.length === 0) cansubmit = false;
       }
       document.getElementById('submitbutton').disabled = !cansubmit;
 
@@ -77,26 +55,38 @@
 }
 </script>
 
-<form action="/item" method="POST" name="createAnimalRouteForm">
-Animal.../name?:<br />
-<input type="text" name="creator" onKeyup="checkform()"/><br>
-Route:<br />
-<textarea id="createRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
-Routename/???:<br />
-<input type="text" name="name" onKeyup="checkform()"/><br>
-Description:<br />
-<input type="text" name="description" onKeyup="checkform()"/><br>
-Timestamp: NICHT, SONDERN AUS REQUEST NEHMEN?<br />
-<input type="date" name="date" onKeyup="checkform()"/>
-<input type="time" name="time" onKeyup="checkform()"/>
-<input type="hidden" name="madeBy" onKeyup="checkform()" value = "user"/>
-<input type="hidden" name="type" onKeyup="checkform()" value = "route"/>
-<input type="hidden" name="status" onKeyup="checkform()" value = "new"/>
-<br/><br/>
-<div id="errorMsg">To get/and/create (??) an animalroute you need to fill in all blanks.</div>
-<input type="submit" value="Create" disabled="disabled" id="submitbutton"/>
 
-</form> -->
+<form action="/animalTrackingAPI" method="GET" name="createForm">
+ID of study:<br />
+<input type="number" name="studyId" onKeyup="checkform()"><br />
+ID of individual:<br />
+<input type="number" name="individualId" onKeyup="checkform()"><br />
+<div id="errorMsg">To get an animalroute you need to fill in both blanks.</div>
+<input type="submit" value="Get tracking data" disabled="disabled" id="submitbutton"/>
+</form>
+
+-->
+
+
+ID of study:<br />
+<input type="number" value="2911040" name="studyId" id="studyID"><br />
+ID of individual:<br />
+<input type="text" value="4262-84830876" name="individualId" id="individualID"><br />
+<br>
+<button onclick="getTrackingData()">Get tracking data</button>
+
+<br><br><br>
+<div>
+  <h4>Currently chosen Animalroute</h4>
+  <p><b>Individual Taxon Canonical Name:</b></p>
+  <p id="animalName"></p>
+  <p><b>Date and time of first coordinate:</b></p>
+  <p id="animalDateTime"></p>
+</div>
+<br>
+<button onclick="postAnimalRoute()">Add chosen animalroute to database</button>
+
+
 </div>
 </div>
 </main>
@@ -108,9 +98,9 @@ Timestamp: NICHT, SONDERN AUS REQUEST NEHMEN?<br />
 
 <script src="jquery/jquery.min.js"></script>
 <script src="popper/umd/popper.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="bootstrap/js/bootstrap-v4.2.1.bundle.min.js"></script>
 <script src="leaflet/leaflet.js"></script>
 
-<script src="javascript/leafletDrawPolyline.js"></script>
-<script src="javascript/createRouteMap.js"></script>
+<script src="javascript/validationGeoJSON.js"></script>
+<script src="javascript/animalTrackingAPI.js"></script>
 <script src="javascript/tokens.js"></script>

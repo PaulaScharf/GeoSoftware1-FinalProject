@@ -60,8 +60,60 @@ describe("HTTP-CRUD Test" , function() {
 
   // ************************* CREATE route Test *************************
 
-  it("Test: Create route", function(done) {
+  it("Test: create an encounters", function(done) {
 
+    try {
+
+      let createReq = http.request({
+        host: "localhost",
+        port: portNumber,
+        path: "/encounter/post",
+        method: "POST",
+
+      }, (createResponse) => {
+
+        console.log("createBody: ");
+
+        let createBody = "";
+
+        //
+        createResponse.on("data", (chunk) => {
+          createBody += chunk;
+        });
+
+        //
+        createResponse.on("end", () => {
+          console.log("createBody2: ", 	createBody);
+
+
+          let data = createBody;
+          //console.dir(data);
+
+          // WIRD NUR GEPRÜFT, OB DIE ID VORHANDEN IST, MEHR NICHT??
+          assert.ok(undefined!==data);
+
+          done();
+        });
+      });
+
+
+      //
+      createReq.setHeader('Content-Type', 'application/json');
+
+      // write the data to the request body
+      // TESTID
+      createReq.write(JSON.stringify({_id: "5d4ae64e49b21e9cc4ede940"}));
+
+      // end of the request
+      createReq.end();
+
+      //
+    } catch (error){
+      console.dir(error);
+      assert.ok(false);
+      done();
+    }
+    /*
     try {
 
       let createReq = http.request({
@@ -112,7 +164,7 @@ describe("HTTP-CRUD Test" , function() {
       console.dir(error);
       assert.ok(false);
       done();
-    }
+    }*/
   });
 
 

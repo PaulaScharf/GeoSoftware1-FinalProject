@@ -2,13 +2,14 @@
 
 /**
  * create the initial map in the "allRoutesMap"-div, the proper map extract will be set later
- * @param {map} allRoutesMap
+ * @type {map} allRoutesMap
  */
+
 let encountersMap = L.map('allRoutesMap').setView([0, 0], 3);
 
 /**
  * OpenStreetMap tiles as a layer for the map "allRoutesMap"
- * @param {tileLayer} oSMLayer
+ * @type {tileLayer} oSMLayer
  */
 let oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -19,14 +20,14 @@ oSMLayer.addTo(encountersMap);
 
 /**
  * create a layerGroup for all routes, add this group to the existing map "allRoutesMap"
- * @param {layerGroup} routesGroup
+ * @type {layerGroup} routesGroup
  */
 let routesGroup = L.layerGroup().addTo(encountersMap);
 
 
 /**
  * create a layerGroup for all encounters, add this group to the existing map "allRoutesMap"
- * @param {layerGroup} encountersGroup
+ * @type {layerGroup} encountersGroup
  */
 let encountersGroup = L.layerGroup().addTo(encountersMap);
 
@@ -36,23 +37,47 @@ let markersGroup = L.layerGroup().addTo(map....);
 */
 // *****************************************************************
 
-
+/**
+ * This function takes the shared encounter and its corresponding coordinates and shows them in map and tables
+ * @private
+ * @author Paula Scharf 450334
+ */
 function processResult() {
     let result = JSON.parse(document.getElementById("result").innerHTML);
+    let counter = 0;
     for (let i = 0; i < result.length; i++) {
         let current = result[i];
         if (current.what === "route") {
-            showRoute(current);
+            showRoute(current, counter);
+            counter++;
         } else {
             showEncounter(current);
         }
     }
 }
 
-function showRoute(currentRoute) {
-    // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
-    // show the i-th route with a consecutive number and its creator, name, date, time and type (.................) in the table "routesTable" on starting page
-    createAndWriteTableWithSevenCells(1, currentRoute.creator, currentRoute.name, currentRoute.date, currentRoute.time, currentRoute.type, "routesTable");
+/**
+ * This function shows a route in its corresponding table (animal or user) and in the map.
+ * @private
+ * @author Paula Scharf 450334
+ * @param currentRoute
+ * @param counter
+ */
+function showRoute(currentRoute, counter) {
+    if (currentRoute.madeBy === "user") {
+
+        // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
+        // show the i-th route with a consecutive number and its creator, name, date, time and type (.................) in the table "routesTable" on starting page
+        createAndWriteTableWithSevenCells(counter, currentRoute.creator, currentRoute.name, currentRoute.date, currentRoute.time, currentRoute.type, "routesTable");
+    }
+
+    //
+    else if (currentRoute.madeBy === "animal") {
+
+        // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
+        // show the i-th animalroute with a consecutive number and its .......... date, time and ................... in the table "animalRoutesTable" on starting page
+        createAndWriteTableWithSevenCells(counter, currentRoute.study_id, currentRoute.individual_taxon_canonical_name, currentRoute.date, currentRoute.time, "und hier?", "animalRoutesTable");
+    }
 
 
     // ************** show the i-th route in the map "allRoutesMap" on the starting page, therefore do the following steps: **************
@@ -71,6 +96,12 @@ function showRoute(currentRoute) {
 
 }
 
+/**
+ * This function shows an encounter in the map and the table
+ * @private
+ * @author Paula Scharf 450334
+ * @param encounter
+ */
 function showEncounter(encounter) {
     // fill the table for the encounters with the encounters-array
     fillEncountersTable(encounter);
@@ -79,9 +110,10 @@ function showEncounter(encounter) {
 }
 
 /**
- *  fill the encounters table
+ * This function fills the encounters table
  * @private
  * @author Paula Scharf, matr.: 450 334
+ * @param currentEncounter - the to be shown encounter
  */
 function fillEncountersTable(currentEncounter) {
     // only show encounters, which are also shown on the map
@@ -94,6 +126,12 @@ function fillEncountersTable(currentEncounter) {
     }
 }
 
+/**
+ * This function fills the map with the given encounter
+ * @private
+ * @author Paula Scharf, matr.: 450334
+ * @param currentEncounter - the to be shown encounter
+ */
 function fillEncountersMap(currentEncounter) {
     // loop "over" all encounters in the current database "routeDB"
     let color = (currentEncounter.tookPlace === "yes") ? "#60ec07" : "#000bec";
@@ -248,9 +286,13 @@ class WeatherRequest
     }
 }
 
-
-
-
+/**
+ * This function makes an XMLHttpRequest to the geonames api to get context information for a specific encounter.
+ * @private
+ * @author Paula Scharf 450 334
+ * @param encounter
+ * @param id
+ */
 function terrainRequest(encounter, id) {
     let lat = encounter.intersectionX;
     let long = encounter.intersectionY;
@@ -312,6 +354,13 @@ function terrainRequest(encounter, id) {
 
 }
 
+/**
+ * This function writes the request-results of the geonames-xmlhttprequest into the encounters-table.
+ * @private
+ * @author Paula Scharf 450 334
+ * @param response
+ * @param id
+ */
 function writeRequestResultsIntoTable(response, id) {
     // show the terrain .....
     // .....

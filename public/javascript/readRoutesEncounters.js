@@ -55,8 +55,6 @@ JL().setOptions({
 */
 let allRoutes = [];
 
-console.log("allRoutes", allRoutes);
-
 
 // TODO: im hierdrunterstehenden JSDoc die .......... ausfüllen mit Beschreibung des 4. elements des arrys ("no search" etc.)
 /**
@@ -71,11 +69,16 @@ console.log("allRoutes", allRoutes);
 */
 let allEncounters = [];
 
+/**
+ * Global variable that indicates if the checkbox for only showing confirmed encounters is checked
+ * @type {boolean}
+ */
+let confirmActive = false;
+
 
 
 // TODO: entscheiden, ob onload oder nicht, weil dann folgende auch als globale variablen nötig:
-
-let allRoutesMap = null;
+let allRoutesMap;
 
 let routesGroup;
 
@@ -182,11 +185,9 @@ function getAndShowData() {
 
 
 /**
-*
-*
-*
+* This function takes the response of the ajax-call for getting all routes and writes it into to global array "allRoutes"
 * @author  Paula Scharf 450334
-* @param response ........
+* @param response - response of the ajax-call for getting all routes
 */
 function writeAllRoutesInTheGlobalArray(response) {
   //
@@ -205,9 +206,7 @@ function writeAllRoutesInTheGlobalArray(response) {
 // TODO: refactor all for-loops, so that they use "current..."
 // JSDOC ANPASSEN!!!
 /**
-* Takes .........
-* ........ Writes routes into table and shows routes in map (both on starting page) ............
-*
+* Writes routes into table and shows routes in map (both on starting page) ............
 *
 * @private
 * @author Katharina Poppinga 450146
@@ -235,7 +234,7 @@ function showAllRoutesOnStartingPage() {
 
       // NEUE/WEITERE ATTRIBUTE NOCH DAZU ....
       // show the i-th animalroute with a consecutive number and its .......... date, time and ................... in the table "animalRoutesTable" on starting page
-      createAndWriteTableWithSevenCells(i, currentRoute[0].study_id, currentRoute[0].creator, currentRoute[0].date, currentRoute[0].time, "und hier?", "animalRoutesTable");
+      createAndWriteTableWithSevenCells(i, currentRoute[0].study_id, currentRoute[0].individual_taxon_canonical_name, currentRoute[0].date, currentRoute[0].time, "und hier?", "animalRoutesTable");
     }
 
 
@@ -335,10 +334,14 @@ function getAllEncountersAndShow() {
         deleteEncounter(currentEncounter._id);
         //
       } else {
+        let parameters = {
+          routesSelected: true,
+          search: "no search"
+        };
         // give true as the second argument to indicate that all corresponding routes for this encounter are selected
         // give true as the fourth argument to indicate that ther is either no search active or this encounter is
         // currently being searched for
-        allEncounters.push([currentEncounter, true, noOfRoutes, "no search"]);
+        allEncounters.push([currentEncounter, parameters, noOfRoutes]);
       }
     }
     // ************************************************************************************************************
@@ -379,8 +382,8 @@ function showEncountersOnStartingPage() {
 
 
 /**
-*  fill the encounters table
-*
+*  This function fills the table for the encounters with all encounters that are selected or searched for.
+ * If the global variable "confirmActive" is set to true it also only shows confirmed encounters.
 *
 * @private
 * @author Paula Scharf, matr.: 450 334
@@ -392,7 +395,9 @@ function fillEncountersTable() {
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
     // only show encounters, which are also shown on the map
-    if (currentEncounter[1] && (currentEncounter[3] === "no search" || currentEncounter[3] === "searched for")) {
+    if (currentEncounter[1].routesSelected &&
+        (currentEncounter[1].search === "no search" || currentEncounter[1].search === "searched for") &&
+        (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
       createAndWriteTableWithThreeCells(i, currentEncounter[2].firstRoute + 1, currentEncounter[2].secondRoute + 1, "encountersTable");
       // if the encounter is new, then create a new weather request and a new terrain request
       if (typeof currentEncounter[0].weather === 'undefined') {
@@ -419,6 +424,12 @@ function fillEncountersTable() {
   }
 }
 
+/**
+ * This function fills the map with all encounters that are selected or searched for.
+ * If the global variable "confirmActive" is set to true it also only shows confirmed encounters.
+ * @private
+ * @author Paula Scharf, matr.: 450 334
+ */
 function fillEncountersMap() {
   encountersGroup.eachLayer(function (layer)
   {
@@ -428,15 +439,19 @@ function fillEncountersMap() {
   // loop "over" all encounters in the current database "routeDB"
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    let color = (currentEncounter[0].tookPlace === "yes") ? "#60ec07" : "#000bec";
+    let color = (currentEncounter[0].tookPlace === "yes") ? "#bfec00" : "#000bec";
 
     // make a circle out of the current encounter
     let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY],
         {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
-    currentCircle.bindPopup("encounter number " + (i + 1) + " between " + allRoutes[currentEncounter[2].firstRoute][0].creator + " and " + allRoutes[currentEncounter[2].secondRoute][0].creator);
+    let agent = ((allRoutes[currentEncounter[2].firstRoute][0].madeBy === "animal") ?
+        allRoutes[currentEncounter[2].firstRoute][0].individual_taxon_canonical_name : allRoutes[currentEncounter[2].firstRoute][0].creator)
+    currentCircle.bindPopup("encounter number " + (i + 1) + " between " + agent + " and " + allRoutes[currentEncounter[2].secondRoute][0].creator);
     // add the circle to the array encountersLatLongArray
     encountersLatLongArray.push(currentCircle);
-    if(currentEncounter[1] && (currentEncounter[3] === "no search" || currentEncounter[3] === "searched for")) {
+    if(currentEncounter[1].routesSelected &&
+        (currentEncounter[1].search === "no search" || currentEncounter[1].search === "searched for") &&
+        (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
       // add the encountersLatLongArray to the encountersGroup
       encountersLatLongArray[i].addTo(encountersGroup);
     }
@@ -491,7 +506,8 @@ function deleteButton(i, routeID){
  *
  * @private
  * @author Katharina Poppinga 450146
- * @param
+ * @param i
+ * @param routeID
  */
 function updateButton(i, routeID){
 
@@ -503,8 +519,10 @@ function updateButton(i, routeID){
 }
 
 /**
- *
- * @param bt_id
+ * This function creates the button for sharing/saving an encounter in the encounters-table.
+ * @private
+ * @author Paula Scharf 450334
+ * @param bt_id - number of row
  */
 function shareButton(bt_id) {
   // label the table cell, in which the routeCheckbox will be written, as "tableCellCheckbox"
@@ -526,8 +544,10 @@ function shareButton(bt_id) {
 }
 
 /**
- *
- * @param cb_id
+ * This function creates the checkbox for confirming an encounter in the encounters-table.
+ * @private
+ * @author Paula Scharf 450334
+ * @param cb_id - number of row
  */
 function encounterCheckbox(cb_id, disabled) {
   let currentEncounter = allEncounters[cb_id][0];
@@ -546,9 +566,15 @@ function encounterCheckbox(cb_id, disabled) {
   document.getElementById("encounterCheckbox" + cb_id).checked = checked;
 
   document.getElementById("encounterCheckbox" + cb_id).disabled = disabled;
-
 }
 
+/**
+ * This function changes the attribute "tookPlace" of an encounter if the "confirm encounter"-checkbox is checked.
+ * It also rewrites all the encounters in the map to change their color accordingly.
+ * @private
+ * @author Paula Scharf 450334
+ * @param cb_id - number of row or number of encounter in the global array
+ */
 function encounterConfirm(cb_id) {
   let checkbox = document.getElementById("encounterCheckbox" + cb_id);
   let currentEncounter = allEncounters[cb_id][0];
@@ -570,6 +596,12 @@ function encounterConfirm(cb_id) {
   fillEncountersMap();
 }
 
+/**
+ * This function makes an AJAX-request in order to update an encounter in the database
+ * @private
+ * @author Paula Scharf 450334
+ * @param encounter
+ */
 function updateEncounter(encounter) {
   $.ajax({
     // use a http POST request
@@ -631,11 +663,12 @@ function routeSelectionForMap(cb_id){
     allRoutes[cb_id][1] = true;
     // get all ids of encounters which have to be added
     let idsOfEncountersToBeAdded = encountersToBeAdded(cb_id);
+
     // add the encounters
     for (let i = 0; i < idsOfEncountersToBeAdded.length; i++) {
       encountersGroup.addLayer(encountersLatLongArray[idsOfEncountersToBeAdded[i]]);
       // set to true to indicate, that the route is currently selected
-      allEncounters[idsOfEncountersToBeAdded[i]][1] = true;
+      allEncounters[idsOfEncountersToBeAdded[i]][1].routesSelected = true;
     }
     // refill the encounters-table, so that it only shows selected encounters
     fillEncountersTable(allEncounters);
@@ -678,7 +711,7 @@ function encountersToBeRemoved(routeId) {
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
     // all encounters which belong to the deselected route have to be removed
-    if(currentEncounter[3] !== "searched for" && (currentEncounter[2].firstRoute === routeId || currentEncounter[2].secondRoute === routeId)) {
+    if(currentEncounter[1].search !== "searched for" && (currentEncounter[2].firstRoute === routeId || currentEncounter[2].secondRoute === routeId)) {
       result.push(i);
     }
   }
@@ -702,10 +735,12 @@ function encountersToBeAdded(routeId) {
   //
   for (let i = 0; i < allEncounters.length; i++) {
     // only routes which belong to the selected route and one other selected route have to be added
-    if (allEncounters[i][2].firstRoute === routeId && allRoutes[allEncounters[i][2].secondRoute][1]) {
+    if (allEncounters[i][2].firstRoute === routeId && allRoutes[allEncounters[i][2].secondRoute][1] &&
+        (confirmActive ? (allEncounters[i][0].tookPlace === "yes") : true)) {
       result.push(i);
     }
-    else if (allEncounters[i][2].secondRoute === routeId && allRoutes[allEncounters[i][2].firstRoute][1]) {
+    else if (allEncounters[i][2].secondRoute === routeId && allRoutes[allEncounters[i][2].firstRoute][1] &&
+        (confirmActive ? (allEncounters[i][0].tookPlace === "yes") : true)) {
       result.push(i);
     }
   }
@@ -751,16 +786,25 @@ function swapGeoJSONsLongLatToLatLongOrder(longLatCoordinatesRoute){
  * @author Paula Scharf, matr.: 450 334
  * @param obj - the routeCheckbox-object for the search
  */
-function searchEncounters(obj) {
+function searchEncounters(madeBy, obj) {
   // if the routeCheckbox is checked then do the search
   if($(obj).is(":checked")){
     let searchInput = {
-      name: document.getElementById("searchRouteName").value,
-      user: document.getElementById("searchRouteUser").value
+      name: "",
+      user: "",
+      animalName: "",
+      studyID: ""
+    };
+    if (madeBy === "animal") {
+      searchInput.animalName = document.getElementById("searchAnimalName").value;
+      searchInput.studyID = document.getElementById("searchStudyID").value;
+
+    } else {
+      searchInput.name = document.getElementById("searchRouteName").value;
+      searchInput.user =  document.getElementById("searchRouteUser").value;
     }
     // get the id of all routes to which the search applies for
     let routeIds = searchForRouteIds(searchInput);
-    console.log("routeIds: " + routeIds);
     for (let i = 0; i < allRoutes.length; i ++) {
       routesGroup.removeLayer(polylineRoutesLatLongArray[i]);
       if (routeIds.includes(i)) {
@@ -778,11 +822,11 @@ function searchEncounters(obj) {
     for (let i = 0; i < allEncounters.length; i++) {
       let currentEncounter = allEncounters[i];
       if (routeIds.includes(currentEncounter[2].firstRoute) || routeIds.includes(currentEncounter[2].secondRoute)) {
-        allEncounters[i][1] = true;
-        allEncounters[i][3] = "searched for";
+        allEncounters[i][1].routesSelected = true;
+        allEncounters[i][1].search = "searched for";
       } else {
-        allEncounters[i][1] = false;
-        allEncounters[i][3] = "not searched for";
+        allEncounters[i][1].routesSelected = false;
+        allEncounters[i][1].search = "not searched for";
       }
     }
     showEncountersOnStartingPage();
@@ -790,8 +834,10 @@ function searchEncounters(obj) {
   }else{
     // recolor all routes in red
     for (let i = 0; i < polylineRoutesLatLongArray.length; i++) {
+      let color = ((allRoutes[i][0].madeBy === "animal") ?
+          "#ec7e00" : "#ec0000")
       polylineRoutesLatLongArray[i].setStyle({
-        color: 'red'
+        color: color
       });
     }
     //TODO: reselect all routes
@@ -802,9 +848,9 @@ function searchEncounters(obj) {
       allEncounters[i][3] = "no search";
       // if both routes of an encounter are selected then indicate that the encounter is selected
       if (allRoutes[currentEncounter[2].firstRoute][1] && allRoutes[currentEncounter[2].secondRoute][1]) {
-        allEncounters[i][1] = true;
+        allEncounters[i][1].routesSelected = true;
       } else {
-        allEncounters[i][1] = false;
+        allEncounters[i][1].routesSelected = false;
       }
     }
     // show indicated encounters on the starting page
@@ -824,8 +870,10 @@ function searchForRouteIds(input) {
   for (let i = 0; i < allRoutes.length; i++) {
     let currentRoute = allRoutes[i];
     if(currentRoute[1] &&
-        ((input.name !== "" && currentRoute[0].name === input.name) || (input.name === "")) &&
-        ((input.user !== "" && currentRoute[0].creator === input.user) || (input.user === ""))) {
+        ((input.name === "") ? true: (currentRoute[0].name === input.name)) &&
+        ((input.user === "") ? true: (currentRoute[0].creator === input.user)) &&
+        ((input.animalName === "") ? true: (currentRoute[0].individual_taxon_canonical_name === input.animalName)) &&
+        ((input.studyID === "") ? true: (currentRoute[0].study_id === input.studyID))) {
       result.push(i);
     }
   }
@@ -884,7 +932,7 @@ class WeatherRequest
   */
   statechangecallback()
   {
-    if (this.status === 200 && this.readyState === 4)
+    if ((this.status === 200 || this.status === 429) && this.readyState === 4)
     {
       this.writeRequestResultsIntoTable();
     }
@@ -897,39 +945,15 @@ class WeatherRequest
     // show the weather as an icon
     // if you hover over this icon it will show the weather as a text
     if (this.responseText !== "") {
-      document.getElementById("weather" + (this.id)).innerHTML = "<span title='" + JSON.parse(this.responseText).weather[0].description + "'><img src=http://openweathermap.org/img/w/" + JSON.parse(this.responseText).weather[0].icon + ".png /img>";
-    }
-  }
-
-  /**
-  * @desc This function is called when there is an error with the request.
-  */
-  errorcallback(e) {
-    //console.dir("x: " + this.x);
-    console.dir("e: " + e);
-    //
-    if (this.status === 404)
-    {
-      document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split" + this.indiRoute.positionJ).innerHTML = "error: no connection to the server";
-
-
-      // KOMMENTAR ANPASSEN
-      // log the .... exception to the server and .....
-      //JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+      if (this.status === 200)
+        document.getElementById("weather" + (this.id)).innerHTML = "<span title='" + JSON.parse(this.responseText).weather[0].description + "'><img src=http://openweathermap.org/img/w/" + JSON.parse(this.responseText).weather[0].icon + ".png /img>";
+      } else if (this.status === 429){
+        document.getElementById("weather" + (this.id)).innerHTML = "too many requests";
+      }
     }
 
-    //
-    else
-    {
-      document.getElementById("weatherOriginal" + this.indiRoute.positionI + "split" + this.indiRoute.positionJ).innerHTML = "errorcallback: check web-console";
 
 
-      // KOMMENTAR ANPASSEN
-      // log the .... exception to the server and .....
-      // GENAUER SPEZIFIZIEREN?????
-      //JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
-    }
-  }
   /**
    * @desc This function is called when there is an error with the request.
    */
@@ -971,7 +995,9 @@ class WeatherRequest
 
 
 /**
- *
+ * This function makes an XMLHttpRequest to the geonames api to get context information for a specific encounter.
+ * @private
+ * @author Paula Scharf 450 334
  * @param encounter
  * @param id
  */
@@ -1042,7 +1068,9 @@ function getNewTerrainRequest(encounter, id) {
 }
 
 /**
- *
+ * This function writes the request-results of the geonames-xmlhttprequest into the encounters-table.
+ * @private
+ * @author Paula Scharf 450 334
  * @param response
  * @param id
  */
@@ -1053,9 +1081,29 @@ function writeRequestResultsIntoTable(response, id) {
     if (typeof JSON.parse(response).geonames !== "undefined" && typeof JSON.parse(response).geonames[0] !== "undefined") {
       document.getElementById("country" + (id)).innerHTML = JSON.parse(response).geonames[0].countryName;
       document.getElementById("terrain" + (id)).innerHTML = JSON.parse(response).geonames[0].fclName;
+    } else if (typeof JSON.parse(response).status !== "undefined" && JSON.parse(response).status.message === "the hourly limit of 1000 credits for geosoftw_k_p has been exceeded. Please throttle your requests or use the commercial service.") {
+      document.getElementById("country" + (id)).innerHTML = "too many requests";
+      document.getElementById("terrain" + (id)).innerHTML = "too many requests";
     } else {
       document.getElementById("country" + (id)).innerHTML = "country could not be identified";
       document.getElementById("terrain" + (id)).innerHTML = "terrain could not be identified";
     }
+  }
+}
+
+/**
+ * This function comes into play when the "show confirmed" checkbox is being checked.
+ * It makes sure that only the confirmed encounters are being shown in the map and in the table
+ * @private
+ * @author Paula Scharf 450 334
+ */
+function onlyShowConfirmed() {
+  let checkbox = document.getElementById("showConfirmedCheckbox");
+  if (checkbox.checked === true) {
+    confirmActive = true;
+    showEncountersOnStartingPage();
+  } else {
+    confirmActive = false;
+    showEncountersOnStartingPage();
   }
 }

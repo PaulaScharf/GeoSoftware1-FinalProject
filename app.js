@@ -95,7 +95,7 @@ app.use(cookieParser());
 app.use("/leaflet", express.static(path.join(__dirname, 'node_modules', 'leaflet', 'dist')));
 app.use("/leaflet-draw", express.static(path.join(__dirname, 'node_modules', 'leaflet-draw', 'dist')));
 app.use("/jquery", express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
-app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
+app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'pub-pkg-bootstrap-min')));
 app.use("/popper", express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist')));
 app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 'turf')));
 
