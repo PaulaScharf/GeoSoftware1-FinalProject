@@ -155,8 +155,8 @@ function fillEncountersMap(currentEncounter) {
     // add the circle to the array encountersLatLongArray
     //encountersLatLongArray.push(currentCircle);
     currentCircle.addTo(encountersGroup);
-    encountersMap.setView([currentEncounter.intersectionX, currentEncounter.intersectionY], 9);
-  }
+    encountersMap.fitBounds(currentCircle.getBounds());
+}
 
 
 

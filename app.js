@@ -196,12 +196,17 @@ app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', '
       httpResponse.on("end", () => {
         //  res.json(JSON.parse(body));
 
-        //
-        body = JSON.parse(body);
+        try {
+          //
+          body = JSON.parse(body);
 
-        console.log(body);
-        //
-        res.send(body);
+          //
+          res.send(body);
+        } catch(e) {
+          res.send({
+            errorMessage: "there was an error"
+          })
+        }
 
       });
 
@@ -209,7 +214,7 @@ app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', '
 
     }).on('error', (error) => {
       // give a notice, that the API request has failed and show the error-message on the console
-      console.log("Failure while getting animal tracking data from movebank API.", error);
+      console.log("Failure while getting animal tracking data from movebank API.", error.message);
 
       //httpResponse.on("error", (error) => {
       //console.error(error);
@@ -217,6 +222,73 @@ app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', '
 
 
   });
+
+app.get("/animalTrackingAPI/individualIds",  (req, res) => {
+
+  // catch error, WO???
+
+
+  // TODO: max_events_per_individual festlegen
+
+  //
+  var resource = "https://www.movebank.org/movebank/service/json-auth?entity_type=individual&study_id=" + req.query.studyID;
+
+  // console.log(resource);
+  // https://www.datarepository.movebank.org/handle/10255/move.610
+  //
+  var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
+  var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
+
+  //
+  const options = {
+
+    //  method: 'GET',
+    headers: {
+      'Authorization':'Basic ' + Buffer.from(loginname+':'+password).toString('base64')
+      //    "access-control-allow-origin": "localhost:3000",
+      //    "access-control-allow-methods": "GET, POST",
+      //    "access-control-allow-headers": "content-type"
+    }
+  };
+
+
+  // GET animal tracking api:
+  https.get(resource, options, (httpResponse) => {
+
+    var body = "";
+
+    httpResponse.on('data', (chunk) => {
+      body += chunk;
+    });
+
+    httpResponse.on("end", () => {
+      //  res.json(JSON.parse(body));
+      try {
+        //
+        body = JSON.parse(body);
+
+        //
+        res.send(body);
+      } catch(e) {
+        res.send({
+          errorMessage: "there was an error"
+        })
+      }
+
+    });
+
+
+
+    }).on('error', (error) => {
+      // give a notice, that the API request has failed and show the error-message on the console
+      console.log("Failure while getting animal tracking data from movebank API.", error);
+
+    //httpResponse.on("error", (error) => {
+    //console.error(error);
+  });
+
+
+});
 
   // *****************************************************************************
 

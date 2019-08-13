@@ -19,32 +19,37 @@
 </head>
 
 <body onload = "showAnimalMapData()">
-  <%- include('partial/navbar', {active: "Maintenance"}); %>
+<%- include('partial/navbar', {active: "Maintenance"}); %>
 
-  <main role="main">
-    <div class="row" style="padding:10px">
-      <div class="container-fluid">
-        <h1>Route Creator</h1>
-      </div>
+<main role="main">
+  <div class="row" style="padding:10px">
+    <div class="container-fluid">
+      <h1>Route Creator</h1>
     </div>
+  </div>
 
-    <p>Beschreibung der Seite, was sie tut / wozu sie da ist, nicht vergessen :D</p>
+  <p>24442409 1764627</p>
 
-    <div class="row" style="padding:10px;">
-      <div class="col-12 col-md-6">
-        <div id="createAnimalRouteMap"></div>
-      </div>
-      <div class="col-12 col-md-6">
-        <h2>Get and add Animalroute</h2>
+  <div class="row" style="padding:10px;">
+    <div class="col-12 col-md-6">
+      <div id="createAnimalRouteMap"></div>
+    </div>
+    <div class="col-12 col-md-6">
+      <h2>Get and add Animalroute</h2>
 
-        ID of study:<br />
-        <input type="number" value="2911040" name="studyId" id="studyID"><br />
+      ID of study:<br />
+      <input type="number" value="2911040" name="studyId" id="studyID"><br />
+      <button onclick="getIndividualID()">Get IDs of individuals</button><br />
+      <div id="individualIdDiv" style="display:none">
         ID of individual:<br />
-        <input type="text" value="4262-84830876" name="individualId" id="individualID"><br />
+        <select name="individualId" id="individualID">
+          <option value="" disabled selected>Select an ID</option>
+        </select>
         <br>
         <button onclick="getTrackingData()">Get tracking data</button>
-
-        <br><br><br>
+      </div>
+      <br><br><br>
+      <div id="getAnimalRouteDiv" style="display:none">
         <div>
           <h4>Currently chosen Animalroute</h4>
           <p><b>Individual Taxon Canonical Name:</b></p>
@@ -54,12 +59,12 @@
         </div>
         <br>
         <button onclick="postAnimalRoute()">Add chosen animalroute to database</button>
-
       </div>
     </div>
-  </main>
+  </div>
+</main>
 
-  <%- include('partial/footer', {active: "Home"}); %>
+<%- include('partial/footer', {active: "Home"}); %>
 
 </body>
 </html>

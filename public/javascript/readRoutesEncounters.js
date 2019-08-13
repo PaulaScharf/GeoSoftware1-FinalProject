@@ -79,7 +79,7 @@ let confirmActive = false;
 /**
 *
 *
-* @type {map????}
+* @type {map}
 */
 let allRoutesMap;
 
@@ -87,7 +87,7 @@ let allRoutesMap;
 /**
 *
 *
-* @type {layerGroup}
+* @type {featureGroup}
 */
 let routesGroup;
 
@@ -95,7 +95,7 @@ let routesGroup;
 /**
 *
 *
-* @type {layerGroup}
+* @type {featureGroup}
 */
 let encountersGroup;
 
@@ -146,10 +146,10 @@ function getAndShowData() {
   oSMLayer.addTo(allRoutesMap);
 
   // create a layerGroup for all routes, add this group to the existing map "allRoutesMap"
-  routesGroup = L.layerGroup().addTo(allRoutesMap);
+  routesGroup = L.featureGroup().addTo(allRoutesMap);
 
   // create a layerGroup for all encounters, add this group to the existing map "allRoutesMap"
-  encountersGroup = L.layerGroup().addTo(allRoutesMap);
+  encountersGroup = L.featureGroup().addTo(allRoutesMap);
 
   /*
   // create a layer group for all markers, add this group to the existing map "..."
@@ -269,11 +269,7 @@ function showAllRoutesOnStartingPage() {
     // extract the coordinates of the i-th route
     coordinatesRoute = currentRoute[0].geoJson.features[0].geometry.coordinates;
 
-    // for the first route of the database ...
-    if (i === 0) {
-      // ... center the map on the first point of the first route
-      allRoutesMap.setView([coordinatesRoute[i][0], coordinatesRoute[i][1]], 2);
-    }
+
 
     //
     let polylineOfRoute;
@@ -293,6 +289,11 @@ function showAllRoutesOnStartingPage() {
     if (currentRoute[1]) {
       // add the i-th polyline-element of the array polylineRoutesLatLongArray to the routesGroup and therefore to the map "allRoutesMap"
       polylineRoutesLatLongArray[i].addTo(routesGroup);
+      // for the first route of the database ...
+      if (i === allRoutes.length-1) {
+        // ... center the map on the first point of the first route
+        allRoutesMap.fitBounds(routesGroup.getBounds());
+      }
     }
   }
 }
@@ -454,7 +455,7 @@ function fillEncountersTable() {
       let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY],
         {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
         let agent = ((allRoutes[currentEncounter[2].firstRoute][0].madeBy === "animal") ?
-        allRoutes[currentEncounter[2].firstRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].firstRoute][0].creator)
+        allRoutes[currentEncounter[2].firstRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].firstRoute][0].creator);
         currentCircle.bindPopup("encounter number " + (i + 1) + " between " + agent + " and " + allRoutes[currentEncounter[2].secondRoute][0].creator);
         // add the circle to the array encountersLatLongArray
         encountersLatLongArray.push(currentCircle);
@@ -481,22 +482,22 @@ function fillEncountersTable() {
         // label the table cell, in which the routeCheckbox will be written, as "tableCellCheckbox"
         let tableCellCheckbox = document.getElementById("conseNum"+cb_id);
 
-        // add a routeCheckbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
-        tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" +cb_id+ "' checked onclick='routeSelectionForMap("+cb_id+")'>";
-      }
+    // add a routeCheckbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
+    tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" +cb_id+ "' checked onclick='routeSelectionForMap("+cb_id+")' style='margin-left: 10px; margin-right: 15px;'>";
+  }
 
 
 
-      /**
-      * Creates .....
-      *
-      *
-      *
-      * @private
-      * @author Katharina Poppinga 450146
-      * @param i
-      */
-      function deleteButton(i){
+  /**
+  * Creates .....
+  *
+  *
+  *
+  * @private
+  * @author Katharina Poppinga 450146
+  * @param i
+  */
+  function deleteButton(i){
 
         // label the table cell, in which the delete-button will be written, as "tableCellButtons"
         let tableCellDeleteButton = document.getElementById("conseNum"+i);
@@ -512,16 +513,16 @@ function fillEncountersTable() {
 
 
 
-      /**
-      * Creates .....
-      *
-      *
-      *
-      * @private
-      * @author Katharina Poppinga 450146
-      * @param i
-      */
-      function updateButton(i){
+/**
+ * Creates .....
+ *
+ *
+ *
+ * @private
+ * @author Katharina Poppinga 450146
+ * @param i
+ */
+function updateButton(i){
 
         // label the table cell, in which the update-button will be written, as "tableCellButtons"
         let tableCellUpdateButton = document.getElementById("conseNum"+i);
@@ -660,7 +661,6 @@ function fillEncountersTable() {
       * @private
       * @author Katharina Poppinga 450146, Paula Scharf 450334
       * @param {number} cb_id - ID of the routeCheckbox
-      * @param {array} idsOfEncounters - IDs of the corresponding encounters
       */
       function routeSelectionForMap(cb_id){
 
@@ -780,201 +780,207 @@ function fillEncountersTable() {
                 searchInput.animalName = document.getElementById("searchAnimalName").value;
                 searchInput.studyID = document.getElementById("searchStudyID").value;
 
-              } else {
-                searchInput.name = document.getElementById("searchRouteName").value;
-                searchInput.user =  document.getElementById("searchRouteUser").value;
-              }
-              // get the id of all routes to which the search applies for
-              let routeIds = searchForRouteIds(searchInput);
-              console.log(routeIds);
-              for (let i = 0; i < allRoutes.length; i ++) {
-                if (allRoutes[i][0].madeBy === madeBy) {
-                  routesGroup.removeLayer(polylineRoutesLatLongArray[i]);
-                  if (routeIds.includes(i)) {
-                    polylineRoutesLatLongArray[i].setStyle({
-                      color: '#ec1a9c'
-                    });
-                    routesGroup.addLayer(polylineRoutesLatLongArray[i]);
-                    document.getElementById("routeCheckbox" + i).checked = true;
-                    allRoutes[i][1] = true;
-                  } else {
-                    document.getElementById("routeCheckbox" + i).checked = false;
-                    allRoutes[i][1] = false;
-                  }
-                }
-              }
-              for (let i = 0; i < allEncounters.length; i++) {
-                let currentEncounter = allEncounters[i];
-                if (allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy) {
-                  if (routeIds.includes(currentEncounter[2].firstRoute)) {
-                    allEncounters[i][1].routesSelected = true;
-                    allEncounters[i][1].search = "searched for";
-                  } else {
-                    allEncounters[i][1].routesSelected = false;
-                    allEncounters[i][1].search = "not searched for";
-                  }
-                }
-                if (allRoutes[currentEncounter[2].secondRoute][0].madeBy === madeBy) {
-                  if (routeIds.includes(currentEncounter[2].secondRoute)) {
-                    allEncounters[i][1].routesSelected = true;
-                    allEncounters[i][1].search = "searched for";
-                  } else {
-                    allEncounters[i][1].routesSelected = false;
-                    allEncounters[i][1].search = "not searched for";
-                  }
-                }
-              }
-              showEncountersOnStartingPage();
-              // if the routeCheckbox is unchecked then undo the search
-            }else{
-              // recolor all routes in red or orange
-              for (let i = 0; i < polylineRoutesLatLongArray.length; i++) {
-                if (allRoutes[i][0].madeBy === madeBy) {
-                  let color = ((allRoutes[i][0].madeBy === "animal") ?
-                  "#ec7e00" : "#ec0000")
-                  polylineRoutesLatLongArray[i].setStyle({
-                    color: color
-                  });
-                }
-              }
-              for (let i = 0; i < allRoutes.length; i++) {
-                if (allRoutes[i][0].madeBy === madeBy) {
-                  if (!allRoutes[i][1]) {
+    } else {
+      searchInput.name = document.getElementById("searchRouteName").value;
+      searchInput.user =  document.getElementById("searchRouteUser").value;
+    }
+    // get the id of all routes to which the search applies for
+    let routeIds = searchForRouteIds(searchInput);
+    console.log(routeIds);
+    for (let i = 0; i < allRoutes.length; i ++) {
+      if (allRoutes[i][0].madeBy === madeBy) {
+        routesGroup.removeLayer(polylineRoutesLatLongArray[i]);
+        if (routeIds.includes(i)) {
+          polylineRoutesLatLongArray[i].setStyle({
+            color: '#ec1a9c'
+          });
+          routesGroup.addLayer(polylineRoutesLatLongArray[i]);
+          allRoutesMap.fitBounds(polylineRoutesLatLongArray[i].getBounds());
+          document.getElementById("routeCheckbox" + i).checked = true;
+          allRoutes[i][1] = true;
+        } else {
+          document.getElementById("routeCheckbox" + i).checked = false;
+          allRoutes[i][1] = false;
+        }
+      }
+    }
+    for (let i = 0; i < allEncounters.length; i++) {
+      let currentEncounter = allEncounters[i];
+      if (allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy) {
+        if (routeIds.includes(currentEncounter[2].firstRoute)) {
+          allEncounters[i][1].routesSelected = true;
+          allEncounters[i][1].search = "searched for";
+        } else {
+          allEncounters[i][1].routesSelected = false;
+          allEncounters[i][1].search = "not searched for";
+        }
+      }
+      if (allRoutes[currentEncounter[2].secondRoute][0].madeBy === madeBy) {
+        if (routeIds.includes(currentEncounter[2].secondRoute)) {
+          allEncounters[i][1].routesSelected = true;
+          allEncounters[i][1].search = "searched for";
+        } else {
+          allEncounters[i][1].routesSelected = false;
+          allEncounters[i][1].search = "not searched for";
+        }
+      }
+    }
+    showEncountersOnStartingPage();
+    // if the routeCheckbox is unchecked then undo the search
+  }else{
+    // recolor all routes in red or orange
+    for (let i = 0; i < polylineRoutesLatLongArray.length; i++) {
+      if (allRoutes[i][0].madeBy === madeBy) {
+        let color = ((allRoutes[i][0].madeBy === "animal") ?
+            "#ec7e00" : "#ec0000")
+        polylineRoutesLatLongArray[i].setStyle({
+          color: color
+        });
+      }
+    }
+    for (let i = 0; i < allRoutes.length; i++) {
+      if (allRoutes[i][0].madeBy === madeBy) {
+        if (!allRoutes[i][1]) {
 
-                    let checkbox = document.getElementById("routeCheckbox" + i);
-                    checkbox.checked = true;
-                    //
-                    let ev = document.createEvent('Event');
-                    //
-                    ev.initEvent('click', true, false);
-                    //
-                    checkbox.dispatchEvent(ev);
-                  }
-                }
-              }
+          let checkbox = document.getElementById("routeCheckbox" + i);
+          checkbox.checked = true;
+          //
+          let ev = document.createEvent('Event');
+          //
+          ev.initEvent('click', true, false);
+          //
+          checkbox.dispatchEvent(ev);
+        }
+      }
+    }
 
-              // reset the attributes of the encounter, that indicate if it is selected or searched for
-              for (let i = 0; i < allEncounters.length; i++) {
-                let currentEncounter = allEncounters[i];
-                if (allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy && allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy) {
-                  allEncounters[i][1].search = "no search";
-                  // if both routes of an encounter are selected then indicate that the encounter is selected
-                  if (allRoutes[currentEncounter[2].firstRoute][1] && allRoutes[currentEncounter[2].secondRoute][1]) {
-                    allEncounters[i][1].routesSelected = true;
-                  } else {
-                    allEncounters[i][1].routesSelected = false;
-                  }
-                }
-              }
-              // show indicated encounters on the starting page
-              showEncountersOnStartingPage();
-            }
+    // reset the attributes of the encounter, that indicate if it is selected or searched for
+    for (let i = 0; i < allEncounters.length; i++) {
+      let currentEncounter = allEncounters[i];
+      if (allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy && allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy) {
+        allEncounters[i][1].search = "no search";
+        // if both routes of an encounter are selected then indicate that the encounter is selected
+        if (allRoutes[currentEncounter[2].firstRoute][1] && allRoutes[currentEncounter[2].secondRoute][1]) {
+          allEncounters[i][1].routesSelected = true;
+        } else {
+          allEncounters[i][1].routesSelected = false;
+        }
+      }
+    }
+    // show indicated encounters on the starting page
+    showEncountersOnStartingPage();
+  }
 
-          }
+  }
 
-          /**
-          * get the position of the searched for routes in the allRoutes-array
-          * @author Paula Scharf, matr.: 450 334
-          * @param {obj} input - the search parameters
-          * @returns {Array} result - an array of indices
-          */
-          function searchForRouteIds(input) {
-            let result = [];
-            for (let i = 0; i < allRoutes.length; i++) {
-              let currentRoute = allRoutes[i];
-              console.log("input: ", input);
-              console.log("current route: ", currentRoute[0]);
-              if(((input.name === "") ? true: (currentRoute[0].name === input.name)) &&
-              ((input.user === "") ? true: (currentRoute[0].creator === input.user)) &&
-              ((input.animalName === "") ? true: (currentRoute[0].individualTaxonCanonicalName === input.animalName)) &&
-              ((input.studyID === "") ? true: (currentRoute[0].study_id === input.studyID))) {
-                result.push(i);
-              }
-            }
-            return result;
-          }
+/**
+ * get the position of the searched for routes in the allRoutes-array
+ * @author Paula Scharf, matr.: 450 334
+ * @param {object} input - the search parameters
+ * @returns {Array} result - an array of indices
+ */
+function searchForRouteIds(input) {
+  let result = [];
+  for (let i = 0; i < allRoutes.length; i++) {
+    let currentRoute = allRoutes[i];
+    console.log("input: ", input);
+    console.log("current route: ", currentRoute[0]);
+    if(((input.name === "") ? true: (currentRoute[0].name === input.name)) &&
+        ((input.user === "") ? true: (currentRoute[0].creator === input.user)) &&
+        ((input.animalName === "") ? true: (currentRoute[0].individualTaxonCanonicalName === input.animalName)) &&
+        ((input.studyID === "") ? true: (currentRoute[0].study_id === input.studyID))) {
+      result.push(i);
+    }
+  }
+  return result;
+}
 
 
           // TODO: put requests into seperate javascript file
 
-          /**
-          * @desc This class creates and holds a request to openweathermap.
-          * @author Paula Scharf 450334
-          */
-          class WeatherRequest
-          {
-            /**
-            * @desc This is the constructor of the class WeatherRequest.
-            * @param intersection
-            * @param id     ?????????????????????????
-            */
-            constructor(intersection, id)
-            {
-              var lat = intersection[0];
-              var long = intersection[1];
+    /**
+    * @desc This class creates and holds a request to openweathermap.
+    * @author Paula Scharf 450334
+    */
+    class WeatherRequest
+    {
+      /**
+      * @desc This is the constructor of the class WeatherRequest.
+      * @param intersection
+      * @param id     ?????????????????????????
+      */
+      constructor(intersection, id)
+      {
+        var lat = intersection[0];
+        var long = intersection[1];
 
-              //
-              this.resource = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + token.OPENWEATHERMAP_TOKEN;
+        //
+        this.resource = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + token.OPENWEATHERMAP_TOKEN;
 
-              //
-              this.x = new XMLHttpRequest();
-              this.x.intersection = intersection;
-              this.x.id = id;
-              this.x.writeRequestResultsIntoTable = this.writeRequestResultsIntoTable;
-              this.x.onload = this.loadcallback;
-              this.x.onerror = this.errorcallback;
-              this.x.onreadystatechange = this.statechangecallback;
-              this.openAndSendRequest();
-            }
+        //
+        this.x = new XMLHttpRequest();
+        this.x.intersection = intersection;
+        this.x.id = id;
+        this.x.writeRequestResultsIntoTable = this.writeRequestResultsIntoTable;
+        this.x.onload = this.loadcallback;
+        this.x.onerror = this.errorcallback;
+        this.x.onreadystatechange = this.statechangecallback;
+        this.openAndSendRequest();
 
-            //
-            openAndSendRequest()
-            {
-              this.x.open("GET", this.resource, true);
-              this.x.send();
-            }
+      }
 
-            /**
-            * @desc This function is called, when there is a change in the XMLHttpRequest "x".
-            * If it is called and the status is 200 and readyState is 4, it writes the weather into the table and creates an infoRequest.
-            */
-            statechangecallback()
-            {
-              if ((this.status === 200 || this.status === 429) && this.readyState === 4)
-              {
-                this.writeRequestResultsIntoTable();
-              }
-            }
+      //
+      openAndSendRequest()
+      {
+        this.x.open("GET", this.resource, true);
+        this.x.send();
+      }
 
-            /**
-            * @desc This function writes the weather into the associated cell in the table.
-            */
-            writeRequestResultsIntoTable() {
-              // show the weather as an icon
-              // if you hover over this icon it will show the weather as a text
-              if (this.responseText !== "") {
-                if (this.status === 200)
-                document.getElementById("weather" + (this.id)).innerHTML = "<span title='" + JSON.parse(this.responseText).weather[0].description + "'><img src=http://openweathermap.org/img/w/" + JSON.parse(this.responseText).weather[0].icon + ".png /img>";
-              } else if (this.status === 429){
-                document.getElementById("weather" + (this.id)).innerHTML = "too many requests";
-              }
-            }
+  /**
+  * @desc This function is called, when there is a change in the XMLHttpRequest "x".
+  * If it is called and the status is 200 and readyState is 4, it writes the weather into the table and creates an infoRequest.
+  */
+  statechangecallback()
+  {
+    if ((this.status === 200 || this.status === 429) && this.readyState === 4)
+    {
+      this.writeRequestResultsIntoTable();
+    }
+  }
+
+  /**
+   * @desc This function writes the weather into the associated cell in the table.
+   */
+  writeRequestResultsIntoTable() {
+    // show the weather as an icon
+    // if you hover over this icon it will show the weather as a text
+    if (this.responseText !== "") {
+      if (this.status === 200)
+        document.getElementById("weather" + (this.id)).innerHTML = "<span title='" + JSON.parse(this.responseText).weather[0].description + "'><img src=http://openweathermap.org/img/w/" + JSON.parse(this.responseText).weather[0].icon + ".png /img>";
+      }
+      if (this.status === 429){
+        document.getElementById("weather" + (this.id)).innerHTML = "too many requests";
+      }
+    }
 
 
 
-            /**
-            * @desc This function is called when there is an error with the request.
-            */
-            errorcallback(e) {
+      /**
+      * @desc This function is called when there is an error with the request.
+      */
+      errorcallback(e) {
+        //console.dir("x: " + this.x);
+        console.dir("e: " + e);
+        //
+        if (this.status === 404)
+        {
+          document.getElementById("weather" + (this.id)).innerHTML = "Error: No connection to the server.";
 
-              //
-              if (this.status === 404)
-              {
-                document.getElementById("weather" + (this.id)).innerHTML = "Error: No connection to the server.";
 
-                //
-                JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
-              }
+          // KOMMENTAR ANPASSEN
+          // log the .... exception to the server and .....
+          JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+        }
 
               //
               else

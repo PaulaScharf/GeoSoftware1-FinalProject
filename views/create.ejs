@@ -39,6 +39,7 @@
         <h2>Add Userroute</h2>
 
         <script type="text/javascript" language="javascript">
+          /*
         function checkform()
         {
           var f = document.forms["createForm"].elements;
@@ -57,9 +58,10 @@
             document.getElementById("errorMsg").style.display = "block";
           }
         }
+        */
         </script>
 
-        <form action="/item" method="POST" name="createForm" onsubmit="return validateJSONAndGeoJSON('createRoute')">
+        <form action="/item" method="POST" name="createForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('createRoute')">
           Username:<br />
           <input type="text" name="creator" onKeyup="checkform()"/><br>
           Name of route:<br />
@@ -67,14 +69,14 @@
           Route in correct GeoJSON syntax:<br />
           <textarea id="createRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()"></textarea>
           Timestamp:<br />
-          <input type="date" name="date" onchange="checkform()"/>
-          <input type="time" name="time" onKeyup="checkform()"/><br />
+          <input type="date" name="date" id="date" onchange="checkform(); checkTimestamp()"/>
+          <input type="time" name="time" id="time" onKeyup="checkform(); checkTimestamp()"/><br />
           Type:<br />
-          <input type="radio" name="type" value="planned" checked> planned<br>
-          <input type="radio" name="type" value="completed"> completed<br>
-          <input type="hidden" name="madeBy" onKeyup="checkform()" value = "user"/>
-          <input type="hidden" name="what" onKeyup="checkform()" value = "route"/>
-          <input type="hidden" name="status" onKeyup="checkform()" value = "new"/>
+          <input type="radio" name="type" id="plannedRadio" value="planned" checked> planned<br>
+          <input type="radio" name="type" id="completedRadio" value="completed"> completed<br>
+          <input type="hidden" name="madeBy" value = "user"/>
+          <input type="hidden" name="what" value = "route"/>
+          <input type="hidden" name="status" value = "new"/>
           <br/><br/>
           <input type="submit" value="Create" disabled="disabled" id="submitbutton"/>
           <div id="errorMsg">To create a route you need to fill in all blanks.</div>
@@ -99,6 +101,7 @@
 <!-- löschen und zu npm umwandeln !!
 <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/jsnlog/2.29.0/jsnlog.min.js"></script> -->
 
+<script src="javascript/formFunctions.js"></script>
 <script src="javascript/leafletDrawPolyline.js"></script>
 <script src="javascript/validationGeoJSON.js"></script>
 <script src="javascript/coordinateSwapping.js"></script>
