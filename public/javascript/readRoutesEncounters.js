@@ -3,7 +3,7 @@
 
 
 // TODO: importieren und ausprobieren
-//import {JL} from 'jsnlog';
+let JL = import('jsnlog');
 
 
 "use strict";  // JavaScript code is executed in "strict mode"
@@ -41,8 +41,8 @@ appender.setOptions({
 JL().setOptions({
 "appenders": [appender]
 });
-
 */
+
 
 
 // TODO: var zu let verändern
@@ -152,10 +152,10 @@ function getAndShowData() {
   oSMLayer.addTo(allRoutesMap);
 
   // create a layerGroup for all routes, add this group to the existing map "allRoutesMap"
-  routesGroup = L.layerGroup().addTo(allRoutesMap);
+  routesGroup = L.featureGroup().addTo(allRoutesMap);
 
   // create a layerGroup for all encounters, add this group to the existing map "allRoutesMap"
-  encountersGroup = L.layerGroup().addTo(allRoutesMap);
+  encountersGroup = L.featureGroup().addTo(allRoutesMap);
 
   /*
   // create a layer group for all markers, add this group to the existing map "..."
@@ -277,11 +277,7 @@ function showAllRoutesOnStartingPage() {
     // extract the coordinates of the i-th route
     coordinatesRoute = currentRoute[0].geoJson.features[0].geometry.coordinates;
 
-    // for the first route of the database ...
-    if (i === 0) {
-      // ... center the map on the first point of the first route
-      allRoutesMap.setView([coordinatesRoute[i][0], coordinatesRoute[i][1]], 2);
-    }
+
 
     //
     let polylineOfRoute;
@@ -301,6 +297,12 @@ function showAllRoutesOnStartingPage() {
     if (currentRoute[1]) {
       // add the i-th polyline-element of the array polylineRoutesLatLongArray to the routesGroup and therefore to the map "allRoutesMap"
       polylineRoutesLatLongArray[i].addTo(routesGroup);
+      // for the first route of the database ...
+      if (i === allRoutes.length-1) {
+        console.log(routesGroup.getBounds());
+        // ... center the map on the first point of the first route
+        allRoutesMap.fitBounds(routesGroup.getBounds());
+      }
     }
   }
 }
@@ -495,7 +497,7 @@ function fillEncountersMap() {
     let tableCellCheckbox = document.getElementById("conseNum"+cb_id);
 
     // add a routeCheckbox (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
-    tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" +cb_id+ "' checked onclick='routeSelectionForMap("+cb_id+")'>";
+    tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" +cb_id+ "' checked onclick='routeSelectionForMap("+cb_id+")' style='margin-left: 10px; margin-right: 15px;'>";
   }
 
   // TODO: BUTTON GENANNT, SIND ABER BISHER KEINE BUTTONS, SONDERN NUR LINKS
@@ -509,9 +511,8 @@ function fillEncountersMap() {
   * @private
   * @author Katharina Poppinga 450146
   * @param i
-  * @routeID
   */
-  function deleteButton(i, routeID){
+  function deleteButton(i){
 
     // label the table cell, in which the delete-button will be written, as "tableCellButtons"
     let tableCellDeleteButton = document.getElementById("conseNum"+i);
@@ -534,9 +535,8 @@ function fillEncountersMap() {
  * @private
  * @author Katharina Poppinga 450146
  * @param i
- * @param routeID
  */
-function updateButton(i, routeID){
+function updateButton(i){
 
     // label the table cell, in which the update-button will be written, as "tableCellButtons"
     let tableCellUpdateButton = document.getElementById("conseNum"+i);
@@ -812,6 +812,7 @@ function searchEncounters(madeBy, obj) {
             color: '#ec1a9c'
           });
           routesGroup.addLayer(polylineRoutesLatLongArray[i]);
+          allRoutesMap.fitBounds(polylineRoutesLatLongArray[i].getBounds());
           document.getElementById("routeCheckbox" + i).checked = true;
           allRoutes[i][1] = true;
         } else {
@@ -978,7 +979,8 @@ function searchForRouteIds(input) {
     if (this.responseText !== "") {
       if (this.status === 200)
         document.getElementById("weather" + (this.id)).innerHTML = "<span title='" + JSON.parse(this.responseText).weather[0].description + "'><img src=http://openweathermap.org/img/w/" + JSON.parse(this.responseText).weather[0].icon + ".png /img>";
-      } else if (this.status === 429){
+      }
+      if (this.status === 429){
         document.getElementById("weather" + (this.id)).innerHTML = "too many requests";
       }
     }

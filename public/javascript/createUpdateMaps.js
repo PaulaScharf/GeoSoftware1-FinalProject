@@ -1,4 +1,4 @@
-// jshint esversion: 6
+/// jshint esversion: 6
 // jshint maxerr: 1000
 
 "use strict";  // JavaScript code is executed in "strict mode"
@@ -70,8 +70,6 @@ function showMapData(specificMap) {
     // extract the coordinates of the route that shall be updated (old route)
     let coordinatesOldRoute = oldRouteGeoJSON.features[0].geometry.coordinates;
 
-    // ... center the map on the first point of the old route
-    map.setView([coordinatesOldRoute[0][1], coordinatesOldRoute[0][0]], 2);
 
     // outsource the swapping of the order of the coordinates (GeoJSONs long-lat order to needed lat-long order)
     let coordinatesOldLatLongOrder = swapGeoJSONsLongLatToLatLongOrder_Objects(coordinatesOldRoute);
@@ -81,6 +79,9 @@ function showMapData(specificMap) {
 
     // add the polyline-element of the old route to the map "updateMap"
     polylineOfOldRoute.addTo(map);
+
+    // ... center the map on the old route
+    map.fitBounds(polylineOfOldRoute.getBounds());
 
     // *********************************************************************************************************************
 

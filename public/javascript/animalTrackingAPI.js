@@ -109,7 +109,92 @@ function showAnimalMapData() {
   animalRoutesGroup = L.layerGroup().addTo(createAnimalRouteMap);
 }
 
+/**
+ * This function makes an Ajax request to get individual identifiers for a specific studyID.
+ * @private
+ * @author Paula Scharf 450334
+ */
+function getIndividualID() {
+  //
+  document.getElementById('animalName').innerHTML = "";
+  document.getElementById('animalDateTime').innerHTML = "";
 
+  //
+  animalRoutesGroup.clearLayers();
+
+  document.getElementById("individualIdDiv").style.display = "none";
+  document.getElementById("getAnimalRouteDiv").style.display = "none";
+
+  animalRoute = undefined;
+
+  let studyID = document.getElementById('studyID').value;
+
+  //
+  let iDs = {
+    studyID: studyID
+  };
+  // ********** AJAX request for getting animal tracking data from movebank API **********
+  $.ajax({
+    // use a http GET request
+    //type: "GET",
+    type: "GET",
+    // URL to send the request to
+    url: "/animalTrackingAPI/individualIds",
+
+    // data to send to the server
+    data: iDs,
+    //
+    xhrFields: {
+      withCredentials: true
+    },
+
+    // NÖTIG ODER UNSINNIG????
+    // timeout set to 5 seconds
+    timeout: 20000
+  })
+
+  // if the request is done successfully, ...
+      .done (function (response) {
+
+        // ... give a notice on the console that the AJAX request for getting the animal tracking API data has succeeded
+        console.log("AJAX request (getting individual Ids) is done successfully.");
+
+        if(typeof response.errorMessage !== "undefined") {
+          if (response.errorMessage === "there was an error") {
+            alert("There was an error. Please try another input.");
+          }
+        } else {
+
+          document.getElementById("individualIdDiv").style.display = "block";
+
+          //
+          showAnimalIds(response);
+        }
+      })
+
+      // if the request has failed, ...
+      .fail (function (xhr, status, error) {
+        // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error-message on the console
+        console.log("AJAX request (getting animal tracking data from API) has failed.", error);
+        alert("There was an error. Please try another input.");
+      });
+
+}
+
+/**
+ * This function takes the response of ajax request for getting individual identiefiers of a study and displays it in
+ * a dropdown menu on the page.
+ * @private
+ * @author Paula Scharf 450334
+ */
+function showAnimalIds(response) {
+  let select = document.getElementById("individualID");
+
+  // make a new option in the dropdown for every identifier
+  for (let i = 0; i < response.length; i++) {
+    select.options[select.options.length] = new Option(response[i].local_identifier, response[i].local_identifier);
+  }
+}
 
 /**
 *
@@ -117,6 +202,16 @@ function showAnimalMapData() {
 *
 */
 function getTrackingData() {
+  //
+  document.getElementById('animalName').innerHTML = "";
+  document.getElementById('animalDateTime').innerHTML = "";
+
+  //
+  animalRoutesGroup.clearLayers();
+
+  document.getElementById("getAnimalRouteDiv").style.display = "none";
+
+  animalRoute = undefined;
 
   //
   let studyID = document.getElementById('studyID').value;
@@ -136,8 +231,6 @@ function getTrackingData() {
     type: "GET",
     // URL to send the request to
     url: "/animalTrackingAPI",
-    // data type of the response
-    dataType: "json",
 
     // data to send to the server
     data: iDs,
@@ -148,7 +241,7 @@ function getTrackingData() {
 
     // NÖTIG ODER UNSINNIG????
     // timeout set to 5 seconds
-    timeout: 5000
+    timeout: 10000
   })
 
   // if the request is done successfully, ...
@@ -157,8 +250,17 @@ function getTrackingData() {
     // ... give a notice on the console that the AJAX request for getting the animal tracking API data has succeeded
     console.log("AJAX request (getting animal tracking data from API) is done successfully.");
 
+
+
     //
-    formatAndShowAnimalRoute(response);
+    if (response.individuals.length > 0) {
+      document.getElementById("individualIdDiv").style.display = "block";
+      document.getElementById("getAnimalRouteDiv").style.display = "block";
+      formatAndShowAnimalRoute(response);
+    } else {
+      alert("This individual doesnt seem to have any data stored. \n " +
+          "Please try a different individual or study.");
+    }
   })
 
   // if the request has failed, ...
@@ -182,6 +284,7 @@ function getTrackingData() {
 */
 function formatAndShowAnimalRoute(response) {
 
+  console.log(response);
   //
   let locations = response.individuals[0].locations;
 
@@ -395,13 +498,13 @@ function postAnimalRoute() {
           //
         } else {
           //
-          document.getElementById('studyID').value = "";
           document.getElementById('individualID').value = "";
           document.getElementById('animalName').innerHTML = "";
           document.getElementById('animalDateTime').innerHTML = "";
 
           //
           animalRoutesGroup.clearLayers();
+
 
           animalRoute = undefined;
           alert("The animalroute was successfully inserted into your database.");

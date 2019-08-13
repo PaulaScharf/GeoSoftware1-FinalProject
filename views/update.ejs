@@ -25,27 +25,6 @@
         return s;
     }
     %>
-    <script type="text/javascript" language="javascript">
-        function checkform()
-        {
-            var f = document.forms["updateForm"].elements;
-            var cansubmit = true;
-
-            for (var i = 1; i < 6; i++) {
-                if (f[i].value.length == 0) cansubmit = false;
-            }
-            document.getElementById('submitbutton').disabled = !cansubmit;
-
-            if(cansubmit) {
-                document.getElementById("errorMsg").style.display = "none";
-            }
-            else
-            {
-                document.getElementById("errorMsg").style.display = "block";
-            }
-        }
-    </script>
-
 
     <%- include('partial/navbar', {active: "Home"}); %>
 
@@ -64,7 +43,7 @@
             </div>
             <div class="col-12 col-md-6">
                 <h1>Edit Route</h1>
-                    <form action="/item/single" method="POST" name="updateForm" onsubmit="return validateJSONAndGeoJSON('updateRoute')">
+                    <form action="/item/single" method="POST" name="updateForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('updateRoute')">
                         <input type = "hidden" name = "_id" value="<%= result[0]._id %>"/>
                         Username:<br />
                         <input type="text" name="creator" onKeyup="checkform()" value="<%= result[0].creator %>"/><br>
@@ -98,6 +77,7 @@
 <script src="leaflet/leaflet.js"></script>
 <script src="leaflet-draw/leaflet.draw.js"></script>
 
+<script src="javascript/formFunctions.js"></script>
 <script src="javascript/leafletDrawPolyline.js"></script>
 <script src="javascript/validationGeoJSON.js"></script>
 <script src="javascript/coordinateSwapping.js"></script>

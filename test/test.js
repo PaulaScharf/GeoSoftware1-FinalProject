@@ -60,7 +60,7 @@ describe("HTTP-CRUD Test" , function() {
 
   // ************************* CREATE route Test *************************
 
-  it("Test: create an encounters", function(done) {
+  it("Test: create an encounter", function(done) {
 
     try {
 
@@ -90,7 +90,7 @@ describe("HTTP-CRUD Test" , function() {
           //console.dir(data);
 
           // WIRD NUR GEPRÜFT, OB DIE ID VORHANDEN IST, MEHR NICHT??
-          assert.ok(undefined!==data);
+          assert.ok(data === "5d4ae64e49b21e9cc4ede940");
 
           done();
         });
