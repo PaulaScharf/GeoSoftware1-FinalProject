@@ -21,8 +21,10 @@
 * @author Katharina Poppinga 450146
 * @param map map, in which the polyline shall be drawn (map, in which leaflet.draw shall be integrated)
 * @param outputTextarea ID of the textarea in which the new drawn polyline shall be written as a GeoJSON string
+* @param polylineOfOldRoute JUST FOR UPDATEMAP; CREATEMAP NONE
+* @param oldRouteGeoJSON JUST FOR UPDATEMAP; CREATEMAP NONE
 */
-function drawPolyline(map, outputTextarea) {
+function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) {
 
   // feature group for all drawn items, add this group to the existing map
   var drawnItems = L.featureGroup().addTo(map);
@@ -75,6 +77,7 @@ function drawPolyline(map, outputTextarea) {
     // write the new drawn polyline as a GeoJSON string into the given outputTextarea
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
+
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
     output.dispatchEvent(ev);
@@ -87,6 +90,7 @@ function drawPolyline(map, outputTextarea) {
     // write the updated/edited polyline as a GeoJSON string into the given outputTextarea
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
+
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
     output.dispatchEvent(ev);
@@ -107,8 +111,8 @@ function drawPolyline(map, outputTextarea) {
 
         // ... write the GeoJSON of the old route into the given outputTextarea
         let output = document.getElementById(outputTextarea);
-        //
-        output.value = JSON.stringify(polylineOfOldRoute.toGeoJSON(), null, 2);
+        output.value = JSON.stringify(oldRouteGeoJSON, null, 2);
+
         //
         let ev = document.createEvent('Event');
         //

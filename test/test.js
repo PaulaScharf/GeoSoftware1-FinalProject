@@ -25,6 +25,8 @@ var http = require("http");
 // FÜR ANIMAL API???
 var https = require("https");
 
+const path = require("path");
+
 
 //
 let portNumber = 3000;
@@ -39,7 +41,7 @@ describe("HTTP-CRUD Test" , function() {
 
   // ************************* Status-Code 200 Test *************************
 
-  it('test: Status-Code 200', function (done) {
+  it("Test: Status-Code 200", function (done) {
 
     try {
 
@@ -58,9 +60,10 @@ describe("HTTP-CRUD Test" , function() {
 
 
 
-  // ************************* CREATE route Test *************************
+  // ************************* CREATE encounter test *************************
 
-  it("Test: create an encounters", function(done) {
+
+  it("Test: create an encounter", function(done) {
 
     try {
 
@@ -90,7 +93,7 @@ describe("HTTP-CRUD Test" , function() {
           //console.dir(data);
 
           // WIRD NUR GEPRÜFT, OB DIE ID VORHANDEN IST, MEHR NICHT??
-          assert.ok(undefined!==data);
+          assert.ok(undefined !== data);
 
           done();
         });
@@ -113,14 +116,47 @@ describe("HTTP-CRUD Test" , function() {
       assert.ok(false);
       done();
     }
-    /*
+  });
+
+
+
+  // ************************* availability of the Animal Tracking API *************************
+
+
+  it("Test: availability Animal Tracking API", function (done) {
+
     try {
 
-      let createReq = http.request({
-        host: "localhost",
-        port: portNumber,
-        path: "/item",
-        method: "POST",
+//app.get("/animalTrackingAPI",  (req, res) => {
+
+      let study_id = 2911040;
+      let individualID = "4262-84830876";
+
+
+      let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + study_id + "&individual_local_identifiers[]=" + individualID + "&max_events_per_individual=200&sensor_type=gps";
+      //https://www.movebank.org/movebank/service/public/json?study_id=533575900&max_events_per_individual=200&sensor_type=gps
+
+
+      // ZURÜCK
+      let loginname = require(path.join(__dirname, '..', 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
+      let password = require(path.join(__dirname, '..', 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
+
+      //
+      const options = {
+
+        //  method: 'GET',
+        headers: {
+          'Authorization':'Basic ' + Buffer.from(loginname+':'+password).toString('base64')
+          //    "access-control-allow-origin": "localhost:3000",
+          //    "access-control-allow-methods": "GET, POST",
+          //    "access-control-allow-headers": "content-type"
+        }
+      };
+
+
+
+
+      let createReq = https.get(resource, options, (httpResponse) => {
 
       }, (createResponse) => {
 
@@ -132,69 +168,103 @@ describe("HTTP-CRUD Test" , function() {
         createResponse.on("data", (chunk) => {
           createBody += chunk;
         });
-        console.log("createBody2: ", 	createBody);
 
         //
         createResponse.on("end", () => {
+          console.log("createBody2: ", 	createBody);
+
+          createBody = JSON.parse(createBody);
+
+          //
+        //  res.send(createBody);
 
 
-          let data = JSON.parse(createBody);
+          let data = createBody;
           //console.dir(data);
 
           // WIRD NUR GEPRÜFT, OB DIE ID VORHANDEN IST, MEHR NICHT??
-          assert.ok(undefined !== data._id);
+          assert.ok(undefined !== data);
 
           done();
         });
-      });
+      }
 
 
-      //
-      createReq.setHeader('Content-Type', 'application/json');
 
-      // write the data to the request body
-      // TESTID
-      createReq.write(JSON.stringify({_id: "5d4ae64e49b21e9cc4ede940"}));
+  );
 
-      // end of the request
-      createReq.end();
 
-      //
-    } catch (error){
-      console.dir(error);
-      assert.ok(false);
-      done();
-    }*/
+
+      /*
+    }).on('error', (error) => {
+    // give a notice, that the API request has failed and show the error-message on the console
+    console.log("Failure while getting animal tracking data from movebank API.", error.message);
+
+    //httpResponse.on("error", (error) => {
+    //console.error(error);
   });
 
+  */
 
 
 
-  // ************************* availability of the Animal Tracking API *************************
+  //
+  createReq.setHeader('Content-Type', 'application/json');
 
-  // EVTL. ALS CLIENT TEST MIT qUNIT
+  // write the data to the request body
+  // TESTDATA
+  createReq.write(JSON.stringify(
+    {study_id: 2911040,
+    individualID: "4262-84830876"}));
+
+    // end of the request
+    createReq.end();
+
+    //
+  } catch (error){
+    console.dir(error);
+    assert.ok(false);
+    done();
+  }
+});
+
+
+
+});
 
 
 
 
 
 
-  // VORLAGEN:
 
 
-  // ************************* CREATE and READ Test *************************
-  /*
-  it("test create and read item", function(done) {
 
-  try{
 
-  let itemId;
 
-  let createReq = http.request({
-  host: "localhost",
-  port: portNumber,
-  path: "/item",
-  method: "POST",
+
+
+
+
+
+
+
+// VORLAGEN:
+
+
+// ************************* CREATE and READ Test *************************
+/*
+it("test create and read item", function(done) {
+
+try{
+
+let itemId;
+
+let createReq = http.request({
+host: "localhost",
+port: portNumber,
+path: "/item",
+method: "POST",
 }, (createResponse) => {
 
 let createBody = "";
@@ -407,4 +477,4 @@ done();
 });
 */
 
-});
+//});

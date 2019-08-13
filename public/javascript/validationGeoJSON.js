@@ -10,17 +10,6 @@
 */
 
 
-
-// TODO: INHALT SPÄTER IN ANDERE BESTEHENDE, PASSENDE (für create.ejs und singleRoute.ejs) JS-DATEI EINFÜGEN,
-// DANN DIESE DATEI LÖSCHEN
-
-
-// TODO:
-// bei update der route: (bei create alles ok)
-// TypeError: document.getElementById(idInputTextarea).value; is null, kommt erst nach dem updaten, wenn /item/single aufgerufen wird
-
-
-
 /**
 * Takes the ID of the textarea which contains the route input and checks whether this route input is in a correct JSON and a correct GeoJSON syntax.
 * If its syntax is correct, the corresponding action form will be submitted. If its syntax is incorrect, the
@@ -52,7 +41,7 @@ function validateJSONAndGeoJSON(idInputTextarea) {
   //
   if (validateGeoJSON(routeJSONInput)){
     return true;
-    // 
+    //
   } else {
     return false;
   }

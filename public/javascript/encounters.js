@@ -33,8 +33,6 @@ function getAllRoutes() {
     url: "/displayAll",
     // data type of the response
     dataType: "json",
-
-    // NÖTIG????
     // timeout set to 5 seconds
     timeout: 5000
   })
@@ -58,8 +56,8 @@ function getAllRoutes() {
 
       // if the request has failed, ...
       .fail(function (xhr, status, error) {
-        // ... give a notice that the AJAX request for reading all routes has failed and show the error-message on the console
-        console.log("AJAX request (reading all routes) has failed.", error.message);
+        // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
+        console.log("AJAX request (reading all routes) has failed.", error);
       });
 }
 
@@ -227,7 +225,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
  * @author name: Paula Scharf, matr.: 450 334
  */
 function postEncounter(encounter) {
-  console.log("post an Encounter", encounter);
+
   //
   $.ajax({
     // use a http POST request
@@ -236,8 +234,6 @@ function postEncounter(encounter) {
     url: "/encounter/post",
     //
     data: encounter,
-
-    // NÖTIG????
     // timeout set to 5 seconds
     timeout: 5000
   })
@@ -250,8 +246,8 @@ function postEncounter(encounter) {
 
       // if the request has failed, ...
       .fail(function (xhr, status, error) {
-        // ... give a notice that the AJAX request for posting an encounter has failed and show the error-message on the console
-        console.log("AJAX request (posting  an encounter) has failed.", error.message);
+        // ... give a notice that the AJAX request for posting an encounter has failed and show the error on the console
+        console.log("AJAX request (posting an encounter) has failed.", error);
       });
 }
 
@@ -272,8 +268,6 @@ function deleteEncounter(encounterId) {
     data: {
       _id: encounterId
     },
-
-    // NÖTIG????
     // timeout set to 5 seconds
     timeout: 5000
   })
@@ -286,8 +280,8 @@ function deleteEncounter(encounterId) {
 
       // if the request has failed, ...
       .fail(function (xhr, status, error) {
-        // ... give a notice that the AJAX request for deleting an encounter has failed and show the error-message on the console
-        console.log("AJAX request (deleting an encounter) has failed.", error.message);
+        // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
+        console.log("AJAX request (deleting an encounter) has failed.", error);
       });
 }
 
@@ -307,8 +301,6 @@ function updateStatusFromNewToOld(route) {
     url: "/encounter/update",
     //
     data: route,
-
-    // NÖTIG????
     // timeout set to 5 seconds
     timeout: 5000
   })
@@ -321,7 +313,7 @@ function updateStatusFromNewToOld(route) {
 
       // if the request has failed, ...
       .fail(function (xhr, status, error) {
-        // ... give a notice that the AJAX request for updating the status of a route has failed and show the error-message on the console
-        console.log("AJAX request (updating the status of a route) has failed.", error.message);
+        // ... give a notice that the AJAX request for updating the status of a route has failed and show the error on the console
+        console.log("AJAX request (updating the status of a route) has failed.", error);
       });
 }

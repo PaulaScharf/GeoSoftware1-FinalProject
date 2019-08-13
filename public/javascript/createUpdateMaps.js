@@ -11,11 +11,6 @@
 // please put in your own tokens at 'token.js'
 
 
-/**
-* ........
-* @type {???} polylineOfOldRoute
-*/
-let polylineOfOldRoute;
 
 
 // TODO: JSDoc
@@ -51,21 +46,19 @@ function showMapData(specificMap) {
 //
   if (specificMap === "createMap") {
   // enable drawing a route into the map "createMap" (using leaflet.draw) and write the corresponding GeoJSON string into textarea "createRoute"
-  drawPolyline(map, "createRoute");
+  drawPolyline(map, "createRoute", "none", "none");
 }
 
 
   //
   if (specificMap === "updateMap") {
 
-    // enable drawing a route into the map "updateMap" (using leaflet.draw) and write the corresponding GeoJSON string into textarea "updateRoute"
-    drawPolyline(map, "updateRoute");
-
-
     // ****************** display the old route (the route that shall be updated) in the map "updateMap" ******************
 
     //
     let oldRouteGeoJSON = JSON.parse(document.getElementById("updateRoute").innerHTML);
+
+    console.log("old: ", oldRouteGeoJSON);
 
     // extract the coordinates of the route that shall be updated (old route)
     let coordinatesOldRoute = oldRouteGeoJSON.features[0].geometry.coordinates;
@@ -77,12 +70,14 @@ function showMapData(specificMap) {
     let coordinatesOldLatLongOrder = swapGeoJSONsLongLatToLatLongOrder_Objects(coordinatesOldRoute);
 
     // make a leaflet-polyline from the coordinatesOldLatLongOrder
-    polylineOfOldRoute = L.polyline(coordinatesOldLatLongOrder, {color: '#ec0000'}, {weight: '3'});
+    let polylineOfOldRoute = L.polyline(coordinatesOldLatLongOrder, {color: '#ec0000'}, {weight: '3'});
 
     // add the polyline-element of the old route to the map "updateMap"
     polylineOfOldRoute.addTo(map);
 
     // *********************************************************************************************************************
 
+    // enable drawing a route into the map "updateMap" (using leaflet.draw) and write the corresponding GeoJSON string into textarea "updateRoute"
+    drawPolyline(map, "updateRoute", polylineOfOldRoute, oldRouteGeoJSON);
   }
 }

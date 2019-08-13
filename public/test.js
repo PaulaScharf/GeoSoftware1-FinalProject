@@ -10,18 +10,10 @@
 
 
 
-// WIE BZW. VON WO BZW. WANN DIESE TESTS AUFRUFEN ??????????
-
-
-
-// ********** qUnit client-Tests for testing the availability of all three APIs used in this project **********
+// ********** qUnit client-Tests for testing the availability of the OpenWeatherMap API and the Geonames API **********
 
 
 QUnit.config.reorder = false;
-
-
-// EVTL. NICHT BENÖTIGT
-var itemId;
 
 
 QUnit.module("API availability tests");
@@ -29,17 +21,17 @@ QUnit.module("API availability tests");
 
 // ************************* availability of the OpenWeatherMap API *************************
 
-
-// TODO: NOCH WEITERE STATUS CODES ABFANGEN ????? ODER WELCHE ÜBERHAUPT?
-
 QUnit.test("availability OpenWeatherMap API", function (assert) {
 
 
-  // note the function call done(); below after all async work completed
-  let done = assert.async();
+  // test-variables
+  let lat = 40.32346464521419;
+  let long = 23.463965480085898;
 
-  // WO VERWENDEN???
-  let readDone = false;
+
+  // finish the test not before all async work is completed
+  let done = assert.async(1);
+
 
 
   //
@@ -49,6 +41,7 @@ QUnit.test("availability OpenWeatherMap API", function (assert) {
   let xhrWeather = new XMLHttpRequest();
 
 
+  // LÖSCHEN??
   // print facts and data about the loading of the request and the status of the request in the console
   xhrWeather.onload = function() {
     //console.dir(xhrWeather);
@@ -56,10 +49,13 @@ QUnit.test("availability OpenWeatherMap API", function (assert) {
   };
 
 
+
+  // TODO: NOCH WEITERE STATUS CODES ABFANGEN ????? ODER WELCHE ÜBERHAUPT?
+
   // capture errors and ........
   xhrWeather.onerror = function(e) {
     //
-    assert.ok(false, "OpenWeatherMap not available, error: " + e);
+    assert.ok(false, "OpenWeatherMap API not available, error: " + e);
     //
     done();
   };
@@ -67,19 +63,13 @@ QUnit.test("availability OpenWeatherMap API", function (assert) {
 
   // if the value of the readyState-attribute is changed, the following lambda-function is executed
   xhrWeather.onreadystatechange = function() {
-    // if the operation is complete (readystate 4: done) and the request is succeeded
-    if (this.readyState === 4 && this.status === 200) {
-
-
-      // WAS HIER ÜBERPRÜFEN???? ODER ÜBERHAUPT ETWAS??
-      // parse the description of the weather, that is given in the response, into object and write this description into corresponding HTMLtable-cell
-      var weatherText = JSON.parse(this.responseText).weather[0].description;
+    // if the operation is complete (readystate 4: done) ...
+    if (this.readyState === 4) {
 
       //
-      assert.ok(/* hier überprüfen*/);
-      //
+      assert.equal(this.status, 200, "'readyState' has value 4 and 'status' has value 200.");
+        //
       done();
-
     }
   };
 
@@ -92,31 +82,61 @@ QUnit.test("availability OpenWeatherMap API", function (assert) {
 
 
 
-// ************************* availability of the Terrain API *************************
-
+// ************************* availability of the Geonames API *************************
 
 QUnit.test("availability Terrain API", function (assert) {
 
-  // ...
 
-  // http://api.geonames.org/findNearbyJSON?lat=" + lat + "&lng=" + long + "&username=" + token.usernameTerrainAPI;
-
-
-
-});
+  // test-variables
+  let lat = 40.32346464521419;
+  let long = 23.463965480085898;
 
 
+  // finish the test not before all async work is completed
+  let done = assert.async();
 
-// ************************* availability of the Animal Tracking API *************************
+  //
+  let resource = "http://api.geonames.org/findNearbyJSON?lat=" + lat + "&lng=" + long + "&username=" + token.usernameTerrainAPI;
 
-// EVTL. ALS SERVER TEST MIT MOCHA
-
-QUnit.test("availability Animal Tracking API", function (assert) {
-
-  // ...
-
-  // https://www.movebank.org/movebank/service/public/json?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=200&sensor_type=gps"
+  //
+  let xhrTerrain = new XMLHttpRequest();
 
 
+  // LÖSCHEN??
+  // print facts and data about the loading of the request and the status of the request in the console
+  xhrTerrain.onload = function() {
+    //console.dir(xhrTerrain);
+    //console.log(xhrTerrain.status);
+  };
+
+
+
+  // TODO: NOCH WEITERE STATUS CODES ABFANGEN ????? ODER WELCHE ÜBERHAUPT?
+
+  // capture errors and ........
+  xhrTerrain.onerror = function(e) {
+    //
+    assert.ok(false, "Geonames API not available, error: " + e);
+    //
+    done();
+  };
+
+
+  // if the value of the readyState-attribute is changed, the following lambda-function is executed
+  xhrTerrain.onreadystatechange = function() {
+    // if the operation is complete (readystate 4: done) ...
+    if (this.readyState === 4) {
+
+      //
+      assert.equal(this.status, 200, "'readyState' has value 4 and 'status' has value 200.");
+      //
+      done();
+    }
+  };
+
+  // initialize the request
+  xhrTerrain.open("GET", resource, true);
+  // send the request to the server
+  xhrTerrain.send();
 
 });

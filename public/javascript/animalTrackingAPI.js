@@ -11,9 +11,6 @@
 // please put in your own tokens at 'token.js'
 
 
-// TODO: HIER AUCH JSNLOG EINBAUEN
-
-
 
 
 // API used to gain animal tracking data: Movebank's REST API
@@ -145,8 +142,6 @@ function getTrackingData() {
     xhrFields: {
       withCredentials: true
     },
-
-    // NÖTIG ODER UNSINNIG????
     // timeout set to 5 seconds
     timeout: 5000
   })
@@ -163,8 +158,10 @@ function getTrackingData() {
 
   // if the request has failed, ...
   .fail (function (xhr, status, error) {
-    // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error-message on the console
-    console.log("AJAX request (getting animal tracking data from API) has failed.", error.message);
+    // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error on the console
+    console.log("AJAX request (getting animal tracking data from API) has failed.", error);
+
+
   });
 
 }
@@ -375,8 +372,6 @@ function postAnimalRoute() {
         //xhrFields: {
         //withCredentials: true
         //  },
-
-        // NÖTIG ODER UNSINNIG????
         // timeout set to 5 seconds
         timeout: 5000
       })
@@ -410,8 +405,8 @@ function postAnimalRoute() {
 
       // if the request has failed, ...
       .fail (function (xhr, status, error) {
-        // ... give a notice that the AJAX request for posting the animalroute has failed and show the error-message on the console
-        console.log("AJAX request (posting animalroute) has failed.", error.message);
+        // ... give a notice that the AJAX request for posting the animalroute has failed and show the error on the console
+        console.log("AJAX request (posting animalroute) has failed.", error);
       });
 
       //

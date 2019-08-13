@@ -15,6 +15,8 @@
 
 // TODO: ALLE KOMMENTARE UND JSDOC ANPASSEN, WENN TABELLEN FERTIG SIND!!
 
+// TODO: APPEND-TEIL DER FUNKTIONEN AUFTEILEN (AUSLAGERN)
+
 
 /**
  * Creates new table row with seven new table cells and appends the row and these cells to given table.
@@ -23,7 +25,6 @@
  *
  * @private
  * @author Katharina Poppinga 450146
- * @param tableCellID
  * @param insertFirst - first value, to write in first new created cell
  * @param insertSecond - second value, to write in second new created cell
  * .....
@@ -31,7 +32,7 @@
  *
  * @param {string} tableName - table to which the new created row and new created cells are appended
  */
-function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThird, insertFourth, insertFifth, insertSixth, tableName){
+function createUserRouteTable(insertFirst, insertSecond, insertThird, insertFourth, insertFifth, insertSixth, tableName){
 
   // create new table row and ANZAHL new table cells and write corresponding values into them
     let row = document.createElement("tr");
@@ -64,6 +65,47 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThir
 
 /**
  * Creates new table row with seven new table cells and appends the row and these cells to given table.
+ * In addition, this function writes the first given value into the first cell and second given value into the second cell and ..............
+ * The ......
+ *
+ * @private
+ * @author Katharina Poppinga 450146
+ * @param insertFirst - first value, to write in first new created cell
+ * @param insertSecond - second value, to write in second new created cell
+ * .....
+ *
+ *
+ * @param {string} tableName - table to which the new created row and new created cells are appended
+ */
+function createAnimalRouteTable(insertFirst, insertSecond, insertThird, insertFourth, insertFifth, tableName){
+
+  // create new table row and ANZAHL new table cells and write corresponding values into them
+    let row = document.createElement("tr");
+    let firstValue = document.createElement("td");
+    firstValue.id = "conseNum"+insertFirst;
+    firstValue.innerHTML = insertFirst + 1;
+    let secondValue = document.createElement("td");
+    secondValue.innerHTML = insertSecond;
+    let thirdValue = document.createElement("td");
+    thirdValue.innerHTML = insertThird;
+    let fourthValue = document.createElement("td");
+    fourthValue.innerHTML = insertFourth;
+    let fifthValue = document.createElement("td");
+    fifthValue.innerHTML = insertFifth;
+
+    // append new row and five new cells to given table
+    document.getElementById(tableName).appendChild(row);
+    row.appendChild(firstValue);
+    row.appendChild(secondValue);
+    row.appendChild(thirdValue);
+    row.appendChild(fourthValue);
+    row.appendChild(fifthValue);
+}
+
+
+
+/**
+ * Creates new table row with seven new table cells and appends the row and these cells to given table.
  * In addition, this function writes the first given value into the first cell and second given value into the second cell.
  * The third, fourth, fifth, sixth and seventh cells are getting IDs for writing in the weather and places-information in subsequently called functions.
  *
@@ -74,7 +116,7 @@ function createAndWriteTableWithSevenCells(insertFirst, insertSecond, insertThir
  * @param insertThird - third value, to write in second new created cell
  * @param {string} tableName - table to which the new created row and new created cells are appended
  */
-function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThird, tableName){
+function createEncountersTable(insertFirst, insertSecond, insertThird, tableName){
     // create new table row and three new table cells and write corresponding values into them
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
@@ -91,10 +133,10 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     sixthValue.setAttribute("id", "terrain" + insertFirst);
     let seventhValue = document.createElement("td");
     seventhValue.setAttribute("id", "confirm"+insertFirst);
-    let eigthValue = document.createElement("td");
-    eigthValue.setAttribute("id", "share"+insertFirst);
+    let eighthValue = document.createElement("td");
+    eighthValue.setAttribute("id", "share"+insertFirst);
 
-    // append new row and ANZAHL new cells to given table
+    // append new row and eight new cells to given table
     document.getElementById(tableName).appendChild(row);
     row.appendChild(firstValue);
     row.appendChild(secondValue);
@@ -103,10 +145,16 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     row.appendChild(fifthValue);
     row.appendChild(sixthValue);
     row.appendChild(seventhValue);
-    row.appendChild(eigthValue);
+    row.appendChild(eighthValue);
 }
 
-function createAndWriteTableForASingleEncounter(insertFirst, insertSecond, insertThird, tableName){
+
+/**
+*
+*
+*
+*/
+function createSingleEncounterTable(insertFirst, insertSecond, insertThird, tableName){
     // create new table row and three new table cells and write corresponding values into them
     let row = document.createElement("tr");
     let firstValue = document.createElement("td");
@@ -120,7 +168,7 @@ function createAndWriteTableForASingleEncounter(insertFirst, insertSecond, inser
     let fifthValue = document.createElement("td");
     fifthValue.setAttribute("id", "terrain" + insertThird);
 
-    // append new row and ANZAHL new cells to given table
+    // append new row and five new cells to given table
     document.getElementById(tableName).appendChild(row);
     row.appendChild(firstValue);
     row.appendChild(secondValue);
@@ -128,6 +176,8 @@ function createAndWriteTableForASingleEncounter(insertFirst, insertSecond, inser
     row.appendChild(fourthValue);
     row.appendChild(fifthValue);
 }
+
+
 
 /**
  * Removes all children of a given HTMLelement (DOM node).

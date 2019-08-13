@@ -25,8 +25,6 @@ var bodyParser = require('body-parser');
 // call express and save it in the function app
 const app = express();
 
-// ÜBERHAUPT NÖTIG?????? (für jsnlog installiert, um require client-seitig nutzen zu können)
-const browserify = require('browserify');
 
 const mongodb = require('mongodb');
 // WERDEN BEIDEN FOLGENDEN ÜBERHAUPT GENUTZT????
@@ -53,14 +51,6 @@ app.post("/jsnlog.logger", function (req, res) {
   // Send empty response. This is ok, because client side jsnlog does not use response from server.
   res.send('');
 });
-
-
-
-
-
-
-
-
 
 
 // *******************************************************************************
@@ -92,12 +82,14 @@ app.use(cookieParser());
 
 
 // routes for npm-installed client-libraries
-app.use("/leaflet", express.static(path.join(__dirname, 'node_modules', 'leaflet', 'dist')));
-app.use("/leaflet-draw", express.static(path.join(__dirname, 'node_modules', 'leaflet-draw', 'dist')));
 app.use("/jquery", express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
 app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 app.use("/popper", express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist')));
+app.use("/leaflet", express.static(path.join(__dirname, 'node_modules', 'leaflet', 'dist')));
+app.use("/leaflet-draw", express.static(path.join(__dirname, 'node_modules', 'leaflet-draw', 'dist')));
 app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 'turf')));
+app.use('/jsnlog', express.static(path.join(__dirname, 'node_modules', 'jsnlog')));
+app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', 'qunit')));
 
 
 
@@ -169,15 +161,15 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
     // catch error, WO???
 
 
-    // TODO: max_events_per_individual festlegen
+    //
+    let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=200&sensor_type=gps";
+
+    //https://www.movebank.org/movebank/service/public/json?study_id=533575900&max_events_per_individual=200&sensor_type=gps
+    //533575900
 
     //
-    var resource = "https://www.movebank.org/movebank/service/public/json?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=200&sensor_type=gps";
-
-    // https://www.datarepository.movebank.org/handle/10255/move.610
-    //
-    var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
-    var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
+    let loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
+    let password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
 
     //
     const options = {
@@ -195,7 +187,7 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
     // GET animal tracking api:
     https.get(resource, options, (httpResponse) => {
 
-      var body = "";
+      let body = "";
 
       httpResponse.on('data', (chunk) => {
         body += chunk;
@@ -207,6 +199,7 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
         //
         body = JSON.parse(body);
 
+        console.log(body);
         //
         res.send(body);
 
@@ -216,7 +209,7 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
 
     }).on('error', (error) => {
       // give a notice, that the API request has failed and show the error-message on the console
-      console.log("Failure while getting animal tracking data from movebank API.", error.message);
+      console.log("Failure while getting animal tracking data from movebank API.", error);
 
       //httpResponse.on("error", (error) => {
       //console.error(error);
@@ -226,6 +219,13 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
   });
 
   // *****************************************************************************
+
+
+
+  // AN ANDERE STELLE?
+  app.get("/test", (req, res) => {
+    res.render("test");
+  });
 
 
 
