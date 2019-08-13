@@ -139,7 +139,7 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
 
   // *********************** regarding animal tracking API ***********************
 
-  app.get("/createAnimalRoute", (req,res) => {
+  app.get("/createAnimalRoute", (req, res) => {
     res.render("createAnimalRoute");
   });
 
@@ -167,20 +167,21 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
   app.get("/animalTrackingAPI",  (req, res) => {
 
     // catch error, WO???
-    // ...
+
+
+    // TODO: max_events_per_individual festlegen
 
     //
-    var resource = "https://www.movebank.org/movebank/service/public/json?study_id=2911040&individual_local_identifiers[]=4262-84830876&max_events_per_individual=100&sensor_type=gps";
+    var resource = "https://www.movebank.org/movebank/service/public/json?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=200&sensor_type=gps";
 
+    // https://www.datarepository.movebank.org/handle/10255/move.610
+    //
     var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
     var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
 
-    console.log("test loginname: ", loginname);
-    console.log("test password: ", password);
-
     //
     const options = {
-      //  auth: loginname:password,
+
       //  method: 'GET',
       headers: {
         'Authorization':'Basic ' + Buffer.from(loginname+':'+password).toString('base64')
@@ -190,38 +191,41 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
       }
     };
 
-    console.log("/animalTrackingAPI request");
-
-
-    // ************* DIESER AUFRUF FUNKTIONIERT NICHT:
 
     // GET animal tracking api:
     https.get(resource, options, (httpResponse) => {
-
-      console.log("/animalTrackingAPI request https.get");
 
       var body = "";
 
       httpResponse.on('data', (chunk) => {
         body += chunk;
-        //process.stdout.write(chunk);
       });
 
       httpResponse.on("end", () => {
-        res.json(JSON.parse(body));
+        //  res.json(JSON.parse(body));
+
+        //
+        body = JSON.parse(body);
+
+        //
+        res.send(body);
+
       });
 
+
+
     }).on('error', (error) => {
+      // give a notice, that the API request has failed and show the error-message on the console
+      console.log("Failure while getting animal tracking data from movebank API.", error.message);
+
       //httpResponse.on("error", (error) => {
-      console.error(error);
+      //console.error(error);
     });
 
-    //  res.json(req.body);
-//res.render("createAnimalRoute");
+
   });
 
   // *****************************************************************************
-
 
 
 

@@ -27,6 +27,7 @@
     "morgan": "~1.9.1",
     "popper": "^1.0.1",
     "popper.js": "^1.15.0",
+    "pub-pkg-bootstrap-min": "^4.2.1",
     "qunit": "^2.9.2"
   },
   "description": "final project for the class 'Geosoftware I' in the summer semester 2019",
@@ -40,5 +41,8 @@
   "bugs": {
     "url": "https://github.com/PaulaScharf/GeoSoftware1-Projektaufgabe/issues"
   },
-  "homepage": "https://github.com/PaulaScharf/GeoSoftware1-Projektaufgabe#readme"
+  "homepage": "https://github.com/PaulaScharf/GeoSoftware1-Projektaufgabe#readme",
+  "devDependencies": {
+    "jsdoc": "^3.6.3"
+  }
 }
