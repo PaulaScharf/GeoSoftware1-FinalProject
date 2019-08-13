@@ -87,9 +87,6 @@ function checkForNewRoute(response, checkForUpdates) {
       status: "old"
     };
 
-    // the now processed route is added to the other already processed routes
-    alreadyKnownRoutes.push(currentRoute);
-
     //
     if (currentRoute[0].status === "new") {
       // calculate the encounters with other routes
@@ -98,17 +95,16 @@ function checkForNewRoute(response, checkForUpdates) {
       updateStatusFromNewToOld(route);
     }
     else if(currentRoute[0].status === "updated") {
-      let akrPreviously = alreadyKnownRoutes;
-      alreadyKnownRoutes = response;
 
       deleteAllEncountersOfRoute(currentRoute[0]._id);
       // calculate the encounters with other routes
       calculateEncounters(currentRoute[0].geoJson.features[0].geometry.coordinates, currentRoute[0]._id, checkForUpdates);
       // after the encounters of a route are calculated, its status is set to old
       updateStatusFromNewToOld(route);
-      alreadyKnownRoutes = akrPreviously;
     }
 
+    // the now processed route is added to the other already processed routes
+    alreadyKnownRoutes.push(currentRoute);
 
     console.log("checked " + currentRoute[0]._id);
   }

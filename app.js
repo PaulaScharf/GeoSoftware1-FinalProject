@@ -95,7 +95,7 @@ app.use(cookieParser());
 app.use("/leaflet", express.static(path.join(__dirname, 'node_modules', 'leaflet', 'dist')));
 app.use("/leaflet-draw", express.static(path.join(__dirname, 'node_modules', 'leaflet-draw', 'dist')));
 app.use("/jquery", express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
-app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'pub-pkg-bootstrap-min')));
+app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 app.use("/popper", express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist')));
 app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 'turf')));
 
@@ -174,6 +174,7 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
     //
     var resource = "https://www.movebank.org/movebank/service/public/json?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=200&sensor_type=gps";
 
+    // https://www.datarepository.movebank.org/handle/10255/move.610
     //
     var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
     var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;

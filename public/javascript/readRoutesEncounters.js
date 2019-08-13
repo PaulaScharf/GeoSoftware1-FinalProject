@@ -461,7 +461,7 @@ function fillEncountersMap() {
   // loop "over" all encounters in the current database "routeDB"
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    let color = (currentEncounter[0].tookPlace === "yes") ? "#bfec00" : "#000bec";
+    let color = (currentEncounter[0].tookPlace === "yes") ? "#009d42" : "#000bec";
 
     // make a circle out of the current encounter
     let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY],
@@ -508,15 +508,20 @@ function fillEncountersMap() {
   *
   * @private
   * @author Katharina Poppinga 450146
-  * @param
+  * @param i
+  * @routeID
   */
   function deleteButton(i, routeID){
 
     // label the table cell, in which the delete-button will be written, as "tableCellButtons"
     let tableCellDeleteButton = document.getElementById("conseNum"+i);
 
+    let id = allRoutes[i][0]._id;
     //
-    tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + " <a href='item/single?_id="+routeID+"'>delete</a>";
+    tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + " <form action='/item/single' method='GET' name='shareForm' style='display: inline;'>" +
+        "<input type='hidden' name='_id' value='" + id +"'/>" +
+        "<input type='submit' value='delete' id='deleteButton" + i + "'/>" +
+        "</form>";
   }
 
 
@@ -536,8 +541,12 @@ function updateButton(i, routeID){
     // label the table cell, in which the update-button will be written, as "tableCellButtons"
     let tableCellUpdateButton = document.getElementById("conseNum"+i);
 
+    let id = allRoutes[i][0]._id;
     //
-    tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <a href='item?_id="+routeID+"'>update</a>";
+    tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/item' method='GET' name='shareForm' style='display: inline;'>" +
+        "<input type='hidden' name='_id' value='" + id +"'/>" +
+        "<input type='submit' value='update' id='updateButton" + i + "'/>" +
+        "</form>";
   }
 
 /**
@@ -557,7 +566,7 @@ function shareButton(bt_id) {
     };
 
     // add a button (which calls the function routeSelectionForMap(bt_id) if clicked) to the content of the "tableCellCheckbox"
-    tableCellButton.innerHTML = "<form action='/encounter/getSingleEncounter' method='GET' name='shareForm'>" +
+    tableCellButton.innerHTML = "<form action='/getSingleEncounter' method='GET' name='shareForm'>" +
     "<input type='hidden' name='e_id' value='" + ids.e_id +"'/>" +
     "<input type='hidden' name='r1_id' value='" + ids.r1_id +"'/>" +
     "<input type='hidden' name='r2_id' value='" + ids.r2_id +"'/>" +
@@ -672,8 +681,6 @@ function updateEncounter(encounter) {
   */
   function routeSelectionForMap(cb_id){
 
-    console.log(routesGroup);
-
     // label the routeCheckbox
     let checkBox = document.getElementById("routeCheckbox" + cb_id);
 
@@ -708,7 +715,7 @@ function updateEncounter(encounter) {
       for (let i = 0; i < idsOfEncountersToBeRemoved.length; i++) {
         encountersGroup.removeLayer(encountersLatLongArray[idsOfEncountersToBeRemoved[i]]);
         // set to false to indicate, that the encounter is currently not selected
-        allEncounters[idsOfEncountersToBeRemoved[i]][1] = false;
+        allEncounters[idsOfEncountersToBeRemoved[i]][1].routesSelected = false;
       }
       // refill the encounters-table, so that it only shows selected encounters
       fillEncountersTable(allEncounters);
@@ -738,7 +745,6 @@ function updateEncounter(encounter) {
     }
   }
 
-    console.log(result);
     return result;
   }
 
@@ -785,6 +791,8 @@ function searchEncounters(madeBy, obj) {
       animalName: "",
       studyID: ""
     };
+    // read the search input depending on if the switch for searching user routes or the switch for animal routes
+    // has been activated
     if (madeBy === "animal") {
       searchInput.animalName = document.getElementById("searchAnimalName").value;
       searchInput.studyID = document.getElementById("searchStudyID").value;
@@ -795,52 +803,84 @@ function searchEncounters(madeBy, obj) {
     }
     // get the id of all routes to which the search applies for
     let routeIds = searchForRouteIds(searchInput);
+    console.log(routeIds);
     for (let i = 0; i < allRoutes.length; i ++) {
-      routesGroup.removeLayer(polylineRoutesLatLongArray[i]);
-      if (routeIds.includes(i)) {
-        polylineRoutesLatLongArray[i].setStyle({
-          color: '#ec1a9c'
-        });
-        routesGroup.addLayer(polylineRoutesLatLongArray[i]);
-        document.getElementById("routeCheckbox" + i).checked = true;
-        allRoutes[i][1] = true;
-      } else {
-        document.getElementById("routeCheckbox" + i).checked = false;
-        allRoutes[i][1] = false;
+      if (allRoutes[i][0].madeBy === madeBy) {
+        routesGroup.removeLayer(polylineRoutesLatLongArray[i]);
+        if (routeIds.includes(i)) {
+          polylineRoutesLatLongArray[i].setStyle({
+            color: '#ec1a9c'
+          });
+          routesGroup.addLayer(polylineRoutesLatLongArray[i]);
+          document.getElementById("routeCheckbox" + i).checked = true;
+          allRoutes[i][1] = true;
+        } else {
+          document.getElementById("routeCheckbox" + i).checked = false;
+          allRoutes[i][1] = false;
+        }
       }
     }
     for (let i = 0; i < allEncounters.length; i++) {
       let currentEncounter = allEncounters[i];
-      if (routeIds.includes(currentEncounter[2].firstRoute) || routeIds.includes(currentEncounter[2].secondRoute)) {
-        allEncounters[i][1].routesSelected = true;
-        allEncounters[i][1].search = "searched for";
-      } else {
-        allEncounters[i][1].routesSelected = false;
-        allEncounters[i][1].search = "not searched for";
+      if (allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy) {
+        if (routeIds.includes(currentEncounter[2].firstRoute)) {
+          allEncounters[i][1].routesSelected = true;
+          allEncounters[i][1].search = "searched for";
+        } else {
+          allEncounters[i][1].routesSelected = false;
+          allEncounters[i][1].search = "not searched for";
+        }
+      }
+      if (allRoutes[currentEncounter[2].secondRoute][0].madeBy === madeBy) {
+        if (routeIds.includes(currentEncounter[2].secondRoute)) {
+          allEncounters[i][1].routesSelected = true;
+          allEncounters[i][1].search = "searched for";
+        } else {
+          allEncounters[i][1].routesSelected = false;
+          allEncounters[i][1].search = "not searched for";
+        }
       }
     }
     showEncountersOnStartingPage();
     // if the routeCheckbox is unchecked then undo the search
   }else{
-    // recolor all routes in red
+    // recolor all routes in red or orange
     for (let i = 0; i < polylineRoutesLatLongArray.length; i++) {
-      let color = ((allRoutes[i][0].madeBy === "animal") ?
-          "#ec7e00" : "#ec0000")
-      polylineRoutesLatLongArray[i].setStyle({
-        color: color
-      });
+      if (allRoutes[i][0].madeBy === madeBy) {
+        let color = ((allRoutes[i][0].madeBy === "animal") ?
+            "#ec7e00" : "#ec0000")
+        polylineRoutesLatLongArray[i].setStyle({
+          color: color
+        });
+      }
     }
-    //TODO: reselect all routes
+    for (let i = 0; i < allRoutes.length; i++) {
+      if (allRoutes[i][0].madeBy === madeBy) {
+        if (!allRoutes[i][1]) {
+
+          let checkbox = document.getElementById("routeCheckbox" + i);
+          checkbox.checked = true;
+          //
+          let ev = document.createEvent('Event');
+          //
+          ev.initEvent('click', true, false);
+          //
+          checkbox.dispatchEvent(ev);
+        }
+      }
+    }
 
     // reset the attributes of the encounter, that indicate if it is selected or searched for
     for (let i = 0; i < allEncounters.length; i++) {
       let currentEncounter = allEncounters[i];
-      allEncounters[i][3] = "no search";
-      // if both routes of an encounter are selected then indicate that the encounter is selected
-      if (allRoutes[currentEncounter[2].firstRoute][1] && allRoutes[currentEncounter[2].secondRoute][1]) {
-        allEncounters[i][1].routesSelected = true;
-      } else {
-        allEncounters[i][1].routesSelected = false;
+      if (allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy && allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy) {
+        allEncounters[i][1].search = "no search";
+        // if both routes of an encounter are selected then indicate that the encounter is selected
+        if (allRoutes[currentEncounter[2].firstRoute][1] && allRoutes[currentEncounter[2].secondRoute][1]) {
+          allEncounters[i][1].routesSelected = true;
+        } else {
+          allEncounters[i][1].routesSelected = false;
+        }
       }
     }
     // show indicated encounters on the starting page
@@ -859,8 +899,9 @@ function searchForRouteIds(input) {
   let result = [];
   for (let i = 0; i < allRoutes.length; i++) {
     let currentRoute = allRoutes[i];
-    if(currentRoute[1] &&
-        ((input.name === "") ? true: (currentRoute[0].name === input.name)) &&
+    console.log("input: ", input);
+    console.log("current route: ", currentRoute[0]);
+    if(((input.name === "") ? true: (currentRoute[0].name === input.name)) &&
         ((input.user === "") ? true: (currentRoute[0].creator === input.user)) &&
         ((input.animalName === "") ? true: (currentRoute[0].individualTaxonCanonicalName === input.animalName)) &&
         ((input.studyID === "") ? true: (currentRoute[0].study_id === input.studyID))) {

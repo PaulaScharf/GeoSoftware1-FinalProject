@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
     <!-- installed CSS -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap-v4.2.1.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/leaflet/leaflet.css"/>
     <link rel="stylesheet" href="/leaflet-draw/leaflet.draw.css"/>
 
@@ -41,18 +41,18 @@
                 <table class="table" style="max-width:600px; margin-left: auto; margin-right: auto;">
                     <thead class="thead-dark" id="encounterTableHead">
                     <tr>
+                        <th colspan="2" align="center">Coordinates</th>
                         <th colspan="3" align="center">Context-information</th>
                     </tr>
                     <tr>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
                         <th>Country</th>
                         <th>Weather</th>
                         <th>Terrain</th>
                     </tr>
                     </thead>
                     <tbody id="encountersTable">
-                    <td id="country0"></td>
-                    <td id="weather0"></td>
-                    <td id="terrain0"></td>
                     </tbody>
                 </table>
             </div>
@@ -107,7 +107,7 @@
 
 <script src="/jquery/jquery.min.js"></script>
 <script src="/popper/umd/popper.min.js"></script>
-<script src="bootstrap/js/bootstrap-v4.2.1.bundle.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="/leaflet/leaflet.js"></script>
 <script src="/turf/turf.min.js"></script>
 

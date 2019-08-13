@@ -130,6 +130,7 @@ function showEncounter(encounter) {
  * @param currentEncounter - the to be shown encounter
  */
 function fillEncountersTable(currentEncounter) {
+    createAndWriteTableForASingleEncounter(currentEncounter.intersectionX, currentEncounter.intersectionY, 0, "encountersTable")
     // only show encounters, which are also shown on the map
     // if the encounter is new, then create a new weather request and a new terrain request
     currentEncounter.weather = new WeatherRequest([currentEncounter.intersectionX, currentEncounter.intersectionY], 0);

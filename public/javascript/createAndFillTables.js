@@ -106,6 +106,28 @@ function createAndWriteTableWithThreeCells(insertFirst, insertSecond, insertThir
     row.appendChild(eigthValue);
 }
 
+function createAndWriteTableForASingleEncounter(insertFirst, insertSecond, insertThird, tableName){
+    // create new table row and three new table cells and write corresponding values into them
+    let row = document.createElement("tr");
+    let firstValue = document.createElement("td");
+    firstValue.innerHTML = insertFirst;
+    let secondValue = document.createElement("td");
+    secondValue.innerHTML = insertSecond;
+    let thirdValue = document.createElement("td");
+    thirdValue.setAttribute("id", "country" + insertThird);
+    let fourthValue = document.createElement("td");
+    fourthValue.setAttribute("id", "weather" + insertThird);
+    let fifthValue = document.createElement("td");
+    fifthValue.setAttribute("id", "terrain" + insertThird);
+
+    // append new row and ANZAHL new cells to given table
+    document.getElementById(tableName).appendChild(row);
+    row.appendChild(firstValue);
+    row.appendChild(secondValue);
+    row.appendChild(thirdValue);
+    row.appendChild(fourthValue);
+    row.appendChild(fifthValue);
+}
 
 /**
  * Removes all children of a given HTMLelement (DOM node).

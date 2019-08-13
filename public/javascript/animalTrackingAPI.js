@@ -387,22 +387,23 @@ function postAnimalRoute() {
         console.log("AJAX request (posting animalroute) is done successfully.");
 
 
-        //
-        document.getElementById('studyID').value = "";
-        document.getElementById('individualID').value = "";
-        document.getElementById('animalName').innerHTML = "";
-        document.getElementById('animalDateTime').innerHTML = "";
-
-        //
-        animalRoutesGroup.clearLayers();
-
         // TODO: SO SINNVOLL ODER GIBT ES WEITERE FÄLLE??
         //
         if (response === "") {
           //
-          alert("The animalroute could not inserted into your database.");
+          alert("The animalroute could not be inserted into your database.");
           //
         } else {
+          //
+          document.getElementById('studyID').value = "";
+          document.getElementById('individualID').value = "";
+          document.getElementById('animalName').innerHTML = "";
+          document.getElementById('animalDateTime').innerHTML = "";
+
+          //
+          animalRoutesGroup.clearLayers();
+
+          animalRoute = undefined;
           alert("The animalroute was successfully inserted into your database.");
         }
       })
