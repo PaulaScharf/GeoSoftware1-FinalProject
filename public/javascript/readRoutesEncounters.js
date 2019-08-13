@@ -24,20 +24,20 @@
 // TODO: ALLROUTESMAP UMBENENNEN IN AUCH BEGEGNUNGEN
 
 
-
+/*
 // TODO: muss in allen JS-dateien stehen, die JSNLoggen
-var appender = JL.createAjaxAppender("Appender");
+var appender = //JL.createAjaxAppender("Appender");
 appender.setOptions({
   "maxBatchSize": 100
 });
 
 
-JL().setOptions({
+//JL().setOptions({
   "appenders": [appender]
 });
 
 
-
+*/
 
 // TODO: var zu let verändern
 
@@ -165,7 +165,7 @@ function getAndShowData() {
     // use a http GET request
     type: "GET",
     // URL to send the request to
-    url: "/displayAll",
+    url: "/routes/readAll",
     // data type of the response
     dataType: "json",
     // timeout set to 5 seconds
@@ -311,7 +311,7 @@ function getAllEncountersAndShow() {
     // use a http GET request
     type: "GET",
     // URL to send the request to
-    url: "/encounter/getAll",
+    url: "/encounter/readAll",
     // data type of the response
     dataType: "json",
     // timeout set to 5 seconds
@@ -505,7 +505,7 @@ function fillEncountersTable() {
         let id = allRoutes[i][0]._id;
 
         //
-        tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + " <form action='/item/single' method='GET' name='shareForm' style='display: inline;'>" +
+        tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + " <form action='/routes/delete' method='GET' name='shareForm' style='display: inline;'>" +
         "<input type='hidden' name='_id' value='" + id +"'/>" +
         "<input type='submit' value='delete' id='deleteButton" + i + "'/>" +
         "</form>";
@@ -529,7 +529,7 @@ function updateButton(i){
 
         let id = allRoutes[i][0]._id;
         //
-        tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/item' method='GET' name='shareForm' style='display: inline;'>" +
+        tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/routes/read' method='GET' name='shareForm' style='display: inline;'>" +
         "<input type='hidden' name='_id' value='" + id +"'/>" +
         "<input type='submit' value='update' id='updateButton" + i + "'/>" +
         "</form>";
@@ -647,7 +647,7 @@ function updateButton(i){
           // WIE NUR FÜR TIMEOUT MACHEN ??? BRINGT HIER SONST NICHTS
           // WAS BEI ANDEREN ERRORS?
           // NOTFALLS LÖSCHEN, BEI ALLEN AJAX
-          //JL("ajaxEncounterUpdateTimeout").fatal("ajax: '/encounter/update' timeout");
+          ////JL("ajaxEncounterUpdateTimeout").fatal("ajax: '/encounter/update' timeout");
 
         });
       }
@@ -979,7 +979,7 @@ function searchForRouteIds(input) {
 
           // KOMMENTAR ANPASSEN
           // log the .... exception to the server and .....
-          JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+          //JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
         }
 
               //
@@ -989,7 +989,7 @@ function searchForRouteIds(input) {
                 console.dir(e);
 
                 //
-                JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
+                //JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
               }
             }
 
@@ -1036,7 +1036,7 @@ function searchForRouteIds(input) {
                 document.getElementById("terrain" + (this.id)).innerHTML = "Error: No connection to the server.";
 
                 //
-                JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+                //JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
               }
 
               //
@@ -1047,7 +1047,7 @@ function searchForRouteIds(input) {
                 console.dir(e);
 
                 //
-                JL("terrainRequestError").fatalException("Error: Status-Code " + this.status, e);
+                //JL("terrainRequestError").fatalException("Error: Status-Code " + this.status, e);
               }
             };
 

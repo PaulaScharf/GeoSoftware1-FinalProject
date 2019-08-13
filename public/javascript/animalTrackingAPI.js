@@ -305,7 +305,7 @@ function formatAndShowAnimalRoute(response) {
     // get the taxon
     individualTaxonCanonicalName: response.individuals[0].individual_taxon_canonical_name,
     // TODO: stringify wegbekommen !!!!!!!!!!!!!!!!!!
-    geoJson: animalRouteGeoJSON,
+    geoJson: JSON.stringify(animalRouteGeoJSON),
     // date of the first entry in the locations-array
     date: date,
     // time of the first entry in the locations-array
@@ -404,7 +404,7 @@ function showAnimalRoute(animalRoute) {
   // extract the coordinates of the animalroute
   // TODO: vorher stringify löschen, dann hier parse löschen
   //let coordinatesGeoJSON = animalRoute.geoJson.features[0].geometry.coordinates;
-  let coordinatesGeoJSON = animalRouteGeoJSON.features[0].geometry.coordinates;
+  let coordinatesGeoJSON = JSON.parse(animalRouteGeoJSON).features[0].geometry.coordinates;
 
   //
   let coordinatesLatLong = swapGeoJSONsLongLatToLatLongOrder_Objects(coordinatesGeoJSON);
@@ -455,7 +455,7 @@ function postAnimalRoute() {
 
     // if there is no exception thrown, .......... parse the ....... into object ........
     // json prüfen, beides????????
-    let animalRouteJSON = animalRoute.geoJson;
+    let animalRouteJSON = JSON.parse(animalRoute.geoJson);
 
 
     //geojson prüfen
@@ -469,7 +469,7 @@ function postAnimalRoute() {
         // use a http POST request
         type: "POST",
         // URL to send the request to
-        url: "/item/createAnimal",
+        url: "/routes/createAnimal",
         // data to send to the server
         data: animalRoute,
 

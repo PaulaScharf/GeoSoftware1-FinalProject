@@ -30,7 +30,7 @@ function getAllRoutes() {
     // use a http GET request
     type: "GET",
     // URL to send the request to
-    url: "/displayAll",
+    url: "/routes/readAll",
     // data type of the response
     dataType: "json",
     // timeout set to 5 seconds
@@ -220,7 +220,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 
 
 /**
- * This function calls the /encounter/post route with ajax, to save a given encounter in the database.
+ * This function calls the /encounter/create route with ajax, to save a given encounter in the database.
  * @param encounter - the encounter to be saved
  * @author name: Paula Scharf, matr.: 450 334
  */
@@ -231,7 +231,7 @@ function postEncounter(encounter) {
     // use a http POST request
     type: "POST",
     // URL to send the request to
-    url: "/encounter/post",
+    url: "/encounter/create",
     //
     data: encounter,
     // timeout set to 5 seconds

@@ -23,7 +23,7 @@ var router = express.Router();
 
 // *********** READ/find ***********
 // get a single route and render the update.ejs view with that route
-var getItemController = function(req, res) {
+var getRoutesController = function(req, res) {
 
   console.log("get item " + req.query._id);
   //
@@ -45,12 +45,9 @@ var getItemController = function(req, res) {
 
 // *********** CREATE/insert (with html-form) ***********
 // add a route from the req.body and redirect to the create.ejs
-var postItemController = function(req, res) {
+var postRoutesController = function(req, res) {
 
   console.log("insert item " + req.body._id);
-
-  // your only able to add an item, if it contains at least the route-coordinates and a name
-  if (req.body.geoJson != '' && req.body.name != '') {
 
     // convert the coordinate-string to Json
     req.body.geoJson = JSON.parse(req.body.geoJson);
@@ -63,17 +60,12 @@ var postItemController = function(req, res) {
       // after the item (route) is successfully created, go back to the create-page
       res.render("create")
     });
-  }
-  else {
-    // if the item did not comply go back to the create-page (to try again)
-    res.render("create");
-  }
 };
 
 
 // *********** UPDATE (with html-form) ***********
 // update an item in the database and redirect to the startpage
-var putItemController = function (req, res) {
+var putRoutesController = function (req, res) {
 
   console.log("update item " + req.body._id);
 
@@ -102,7 +94,7 @@ var putItemController = function (req, res) {
 
 // *********** DELETE ***********
 // delete an item from the database and redirect to the startpage
-var deleteItemController = function(req, res) {
+var deleteRoutesController = function(req, res) {
 
   console.log("delete item " + req.query._id);
   //
@@ -143,23 +135,47 @@ var postAnimalController = function(req, res) {
   });
 };
 
+// **********************************************************************
+
+// get all routes in the database and send them back
+var displayAllController = function(req, res) {
+  req.db.collection('routeDB').find({what: "route"}).toArray((error, result) => {
+    if(error){
+      // give a notice, that the reading has failed and show the error-message on the console
+      console.log("Failure in reading from 'routeDB'.", error.message);
+      console.dir(error);
+    }
+    else {
+      // ... give a notice, that the reading has succeeded and show the result on the console
+      console.log("Successfully read the routes from 'routeDB'.", result);
+      res.json(result);
+    }
+  });
+};
+
 
 
 
 // TODO: aufteilen
 // routes for get and create
-router.route("/")
-.get(getItemController)
-.post(postItemController);
+router.route("/read")
+    .get(getRoutesController);
+router.route("/create")
+    .post(postRoutesController);
 
-// routes for delete and update (we could'nt use the update and delete methods,
+// routes for delete and update (we could not use the update and delete methods,
 // because they are not available for html-forms)
-router.route("/single")
-.get(deleteItemController)
-.post(putItemController);
+router.route("/delete")
+    .get(deleteRoutesController);
+router.route("/update")
+    .post(putRoutesController);
 
 // routes for animal.....
-router.route("/createAnimal").post(postAnimalController);
+router.route("/createAnimal")
+    .post(postAnimalController);
+
+//
+router.get("/readAll", displayAllController);
 
 
 module.exports = router;

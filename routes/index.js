@@ -85,8 +85,7 @@ var singleEncounterPageController = function(req, res) {
   });
 };
 
-//
-router.get("/displayAll", displayAllController);
+
 //
 router.route("/getSingleEncounter")
     .get(singleEncounterPageController);

@@ -57,7 +57,7 @@ app.post("/jsnlog.logger", function (req, res) {
 
 // TODO: PATH.JOIN VERWENDEN, ANSTATT DIRNAME UND /
 var indexRouter = require('./routes/index');
-var itemsRouter = require('./routes/items');
+var routesRouter = require('./routes/routes');
 var encountersRouter = require('./routes/encounters');
 
 
@@ -314,7 +314,7 @@ app.get("/animalTrackingAPI/individualIds",  (req, res) => {
   app.use('/', indexRouter);
 
   // CRUD functionality for routes
-  app.use('/item', itemsRouter);
+  app.use('/routes', routesRouter);
 
   //
   app.use('/encounter', encountersRouter);

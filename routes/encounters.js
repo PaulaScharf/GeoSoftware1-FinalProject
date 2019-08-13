@@ -25,7 +25,7 @@ var router = express.Router();
 
 // *********** CREATE/insert (with html-form) ***********
 // add an encounter from the req.body and ...
-var postItemController = function(req, res) {
+var postEncounterController = function(req, res) {
     console.log("insert encounter");
 
     // insert one item (one encounter) into current database
@@ -40,7 +40,7 @@ var postItemController = function(req, res) {
 
 
 //
-var putItemController = function (req, res) {
+var putEncounterController = function (req, res) {
 
     console.log("update item");
 
@@ -68,7 +68,7 @@ var putItemController = function (req, res) {
 
 
 //
-var getAllItemController = function(req,res) {
+var getAllEncountersController = function(req,res) {
     req.db.collection('routeDB').find({what: "encounter"}).toArray((error, result) => {
         if(error){
             // give a notice, that the reading has failed and show the error-message on the console
@@ -85,7 +85,7 @@ var getAllItemController = function(req,res) {
 
 
 // delete an encounter from the database and .............
-var deleteItemController = function(req, res) {
+var deleteEncounterController = function(req, res) {
 
     console.log("delete item " + req.query._id);
     //
@@ -107,17 +107,17 @@ var deleteItemController = function(req, res) {
 // **********************************
 
 //
-router.route("/post")
-    .post(postItemController);
+router.route("/create")
+    .post(postEncounterController);
 //
 router.route("/update")
-    .post(putItemController);
+    .post(putEncounterController);
 //
-router.route("/getAll")
-    .get(getAllItemController);
+router.route("/readAll")
+    .get(getAllEncountersController);
 //
 router.route("/delete")
-    .get(deleteItemController);
+    .get(deleteEncounterController);
 
 
 
