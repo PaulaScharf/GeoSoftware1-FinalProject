@@ -106,6 +106,8 @@ function showAnimalMapData() {
   animalRoutesGroup = L.layerGroup().addTo(createAnimalRouteMap);
 }
 
+
+
 /**
  * This function makes an Ajax request to get individual identifiers for a specific studyID.
  * @private
@@ -130,6 +132,7 @@ function getIndividualID() {
   let iDs = {
     studyID: studyID
   };
+
   // ********** AJAX request for getting animal tracking data from movebank API **********
   $.ajax({
     // use a http GET request
@@ -144,9 +147,7 @@ function getIndividualID() {
     xhrFields: {
       withCredentials: true
     },
-
-    // NÖTIG ODER UNSINNIG????
-    // timeout set to 5 seconds
+    // timeout set to 20 seconds
     timeout: 20000
   })
 
@@ -156,7 +157,7 @@ function getIndividualID() {
         // ... give a notice on the console that the AJAX request for getting the animal tracking API data has succeeded
         console.log("AJAX request (getting individual Ids) is done successfully.");
 
-        if(typeof response.errorMessage !== "undefined") {
+        if (typeof response.errorMessage !== "undefined") {
           if (response.errorMessage === "there was an error") {
             alert("There was an error. Please try another input.");
           }
@@ -171,7 +172,7 @@ function getIndividualID() {
 
       // if the request has failed, ...
       .fail (function (xhr, status, error) {
-        // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error-message on the console
+        // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error on the console
         console.log("AJAX request (getting animal tracking data from API) has failed.", error);
         alert("There was an error. Please try another input.");
       });
@@ -235,7 +236,7 @@ function getTrackingData() {
     xhrFields: {
       withCredentials: true
     },
-    // timeout set to 5 seconds
+    // timeout set to 10 seconds
     timeout: 10000
   })
 
@@ -251,7 +252,10 @@ function getTrackingData() {
     if (response.individuals.length > 0) {
       document.getElementById("individualIdDiv").style.display = "block";
       document.getElementById("getAnimalRouteDiv").style.display = "block";
+
       formatAndShowAnimalRoute(response);
+
+      //
     } else {
       alert("This individual doesnt seem to have any data stored. \n " +
           "Please try a different individual or study.");
@@ -262,10 +266,7 @@ function getTrackingData() {
   .fail (function (xhr, status, error) {
     // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error on the console
     console.log("AJAX request (getting animal tracking data from API) has failed.", error);
-
-
   });
-
 }
 
 
@@ -281,12 +282,13 @@ function getTrackingData() {
 */
 function formatAndShowAnimalRoute(response) {
 
-  console.log(response);
   //
   let locations = response.individuals[0].locations;
 
-  //
+  // animalRouteGeoJSON is an object
   let animalRouteGeoJSON = makeAnimalRouteGeoJSON(locations);
+
+console.log(animalRouteGeoJSON);
 
   // timestamps are provided in milliseconds since 1970-01-01 UTC
   // get the timestamp of the first coordinate of the animalroute (it is only one timestamp saved for one route, like it is for the userroutes, too)
@@ -305,7 +307,8 @@ function formatAndShowAnimalRoute(response) {
     // get the taxon
     individualTaxonCanonicalName: response.individuals[0].individual_taxon_canonical_name,
     // TODO: stringify wegbekommen !!!!!!!!!!!!!!!!!!
-    geoJson: JSON.stringify(animalRouteGeoJSON),
+    //geoJson: JSON.stringify(animalRouteGeoJSON),
+    geoJson: animalRouteGeoJSON,
     // date of the first entry in the locations-array
     date: date,
     // time of the first entry in the locations-array
@@ -399,17 +402,17 @@ function showAnimalRoute(animalRoute) {
 
   // **************** show animalroute in map "createAnimalRouteMap" ****************
 
+  // animalRouteGeoJSON is an object
   let animalRouteGeoJSON = animalRoute.geoJson;
+  // let animalRouteGeoJSON = JSON.parse(animalRoute.geoJson);
 
   // extract the coordinates of the animalroute
   // TODO: vorher stringify löschen, dann hier parse löschen
   //let coordinatesGeoJSON = animalRoute.geoJson.features[0].geometry.coordinates;
-  let coordinatesGeoJSON = JSON.parse(animalRouteGeoJSON).features[0].geometry.coordinates;
+  let coordinatesGeoJSON = animalRouteGeoJSON.features[0].geometry.coordinates;
 
   //
   let coordinatesLatLong = swapGeoJSONsLongLatToLatLongOrder_Objects(coordinatesGeoJSON);
-
-  console.log(coordinatesLatLong);
 
   // ... center the map on the first point of the animalroute
   createAnimalRouteMap.setView([coordinatesLatLong[0].lat, coordinatesLatLong[0].lng], 4);
@@ -455,12 +458,16 @@ function postAnimalRoute() {
 
     // if there is no exception thrown, .......... parse the ....... into object ........
     // json prüfen, beides????????
-    let animalRouteJSON = JSON.parse(animalRoute.geoJson);
-
+    // animalRouteJSON is an object
+    let animalRouteJSON = animalRoute.geoJson;
+    //let animalRouteJSON = JSON.parse(animalRoute.geoJson);
 
     //geojson prüfen
     //
     if (validateGeoJSON(animalRouteJSON)) {
+
+
+console.log(animalRoute);
 
       // ... save this route in the database "routeDB":
 
@@ -501,9 +508,9 @@ function postAnimalRoute() {
 
           //
           animalRoutesGroup.clearLayers();
-
-
+          //
           animalRoute = undefined;
+          //
           alert("The animalroute was successfully inserted into your database.");
         }
       })
@@ -517,7 +524,7 @@ function postAnimalRoute() {
       //
     } else {
 
-      alert("The GeoJSON-part of the animalroute has no valid syntax.\n" + exception);
+      alert("The GeoJSON-part of the animalroute has no valid syntax.");
     }
   }
 }

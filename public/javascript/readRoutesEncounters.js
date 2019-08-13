@@ -209,6 +209,8 @@ function writeAllRoutesInTheGlobalArray(response) {
     allRoutes.push([response[i], true]);
     // TODO: ATTRIBUT UMBENENNEN, DA ES KEIN GEOJSON IST
     //
+console.log(allRoutes);
+
     allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder_Arrays(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
 
   }

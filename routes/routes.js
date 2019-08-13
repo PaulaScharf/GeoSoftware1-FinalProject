@@ -114,14 +114,16 @@ var deleteRoutesController = function(req, res) {
 
 
 
-// *********** CREATE/insert animalroute (with html-form) ***********
+// *********** CREATE/insert animalroute ***********
 // add an animalroute from the req.body and redirect to createAnimalRoute.ejs
 var postAnimalController = function(req, res) {
 
   console.log("insert animalroute");
 
-  // convert the ... string to JSON
-  //req.body.geoJson = req.body.geoJson;
+  console.log(req.body);
+
+  //
+  req.body.geoJson = JSON.parse(req.body.geoJson);
 
   // insert one item (one animalroute) into current database
   req.db.collection('routeDB').insertOne(req.body, (error, result) => {
@@ -155,8 +157,6 @@ var displayAllController = function(req, res) {
 
 
 
-
-// TODO: aufteilen
 // routes for get and create
 router.route("/read")
     .get(getRoutesController);
