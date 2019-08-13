@@ -129,10 +129,7 @@ var postAnimalController = function(req, res) {
   console.log("insert animalroute");
 
   // convert the ... string to JSON
-  req.body.geoJson = JSON.parse(req.body.geoJson);
-
-  //
-  req.body.status = "new";
+  //req.body.geoJson = req.body.geoJson;
 
   // insert one item (one animalroute) into current database
   req.db.collection('routeDB').insertOne(req.body, (error, result) => {

@@ -92,7 +92,7 @@ describe("HTTP-CRUD Test" , function() {
           //console.dir(data);
 
           // WIRD NUR GEPRÜFT, OB DIE ID VORHANDEN IST, MEHR NICHT??
-          assert.ok(data === "5d4ae64e49b21e9cc4ede940");
+          assert.ok(undefined !== data);
 
           done();
         });
@@ -103,8 +103,7 @@ describe("HTTP-CRUD Test" , function() {
       createReq.setHeader('Content-Type', 'application/json');
 
       // write the data to the request body
-      // TESTID
-      createReq.write(JSON.stringify({_id: "5d4ae64e49b21e9cc4ede940"}));
+      createReq.write(JSON.stringify({foo: "bar"}));
 
       // end of the request
       createReq.end();

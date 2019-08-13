@@ -305,7 +305,7 @@ function formatAndShowAnimalRoute(response) {
     // get the taxon
     individualTaxonCanonicalName: response.individuals[0].individual_taxon_canonical_name,
     // TODO: stringify wegbekommen !!!!!!!!!!!!!!!!!!
-    geoJson: JSON.stringify(animalRouteGeoJSON),
+    geoJson: animalRouteGeoJSON,
     // date of the first entry in the locations-array
     date: date,
     // time of the first entry in the locations-array
@@ -399,7 +399,7 @@ function showAnimalRoute(animalRoute) {
 
   // **************** show animalroute in map "createAnimalRouteMap" ****************
 
-  let animalRouteGeoJSON = JSON.parse(animalRoute.geoJson);
+  let animalRouteGeoJSON = animalRoute.geoJson;
 
   // extract the coordinates of the animalroute
   // TODO: vorher stringify löschen, dann hier parse löschen
@@ -451,9 +451,11 @@ function postAnimalRoute() {
       return;
     }
 
+    // TODO: stringify?
+
     // if there is no exception thrown, .......... parse the ....... into object ........
     // json prüfen, beides????????
-    let animalRouteJSON = JSON.parse(animalRoute.geoJson);
+    let animalRouteJSON = animalRoute.geoJson;
 
 
     //geojson prüfen

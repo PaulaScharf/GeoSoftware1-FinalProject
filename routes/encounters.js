@@ -27,7 +27,6 @@ var router = express.Router();
 // add an encounter from the req.body and ...
 var postItemController = function(req, res) {
     console.log("insert encounter");
-    // TODO: your only able to add an encounter if it contains atleast ...
 
     // insert one item (one encounter) into current database
     req.db.collection('routeDB').insertOne(req.body, (error, result) => {
