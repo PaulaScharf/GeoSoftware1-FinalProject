@@ -10,87 +10,74 @@
 */
 
 
+// TODO: KOMMENTARE zuende schreiben
+
 
 var express = require('express');
-var router = express.Router();
-
 const mongodb = require('mongodb');
 
-/* GET home page. */
+var router = express.Router();
+
+
+// getting the homepage
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
 
-
-// get all routes and send them to the secretArea.html  ?????????
+// TODO: IN ROUTES.JS SCHREIBEN?
+//
 var createController = function (req, res, next) {
   res.render("create");
 };
 
-router.get("/create", createController);
 
-
-/*
-// get ........... ???????
+// TODO: IN ROUTES.JS SCHREIBEN?
+//
 var createAnimalRouteController = function (req, res, next) {
   res.render("createAnimalRoute");
 };
 
-router.get("/createAnimalRoute", createAnimalRouteController);
-*/
 
+// ******************************* one enounter and its corresponding routes *******************************
 
-
-// --------------------------------------------------------------------------------------------------------------------
-//route handler for getting all created (gps-)routes and sending/rendering them
-
-
-// get all routes in the database and send them back
-var displayAllController = function(req, res) {
-  req.db.collection('routeDB').find({what: "route"}).toArray((error, result) => {
-    if(error){
-      // give a notice, that the reading has failed and show the error-message on the console
-      console.log("Failure in reading from 'routeDB'.", error.message);
-      console.dir(error);
-    }
-    else {
-      // ... give a notice, that the reading has succeeded and show the result on the console
-      console.log("Successfully read the routes from 'routeDB'.", result);
-      res.json(result);
-    }
-  });
-};
-
+// *********** READ ***********
 // get a single encounter and the corresponding routes and render the singleroute.ejs view with that route
 var singleEncounterPageController = function(req, res) {
 
-  console.log("get items " + req.query.e_id + ", " + req.query.r1_id + ", " + req.query.r2_id);
+  console.log("Get items " + req.query.e_id + ", " + req.query.r1_id + ", " + req.query.r2_id);
+
   //
   req.db.collection('routeDB').find({_id: {"$in" : [new mongodb.ObjectID(req.query.e_id),
-        new mongodb.ObjectID(req.query.r1_id),
-        new mongodb.ObjectID(req.query.r2_id)]}}).toArray((error, result) => {
+    new mongodb.ObjectID(req.query.r1_id),
+    new mongodb.ObjectID(req.query.r2_id)]}}).toArray((error, result) => {
 
-    if(error){
-      // give a notice, that the reading has failed and show the error-message on the console
-      console.log("Failure while reading from 'routeDB'.", error.message);
-      // in case of an error while reading, do routing to "error.ejs"
-      res.render('error');
-      // if no error occurs ...
-    } else {
-      console.log(result);
-      //
-      res.render("singleEncounter", { result });
-    }
-  });
-};
-
-
-//
-router.route("/getSingleEncounter")
-    .get(singleEncounterPageController);
-
-// --------------------------------------------------------------------------------------------------------------------
+      if (error) {
+        // give a notice, that reading one enounter and its corresponding routes has failed and show the error on the console
+        console.log("Failure in reading encounter and corresponding routes from 'routeDB'.", error);
+        // in case of an error while reading, do routing to "error.ejs"
+        res.render('error');
+        // if no error occurs ...
+      } else {
+        // ... give a notice, that reading one enounter and its corresponding routes has succeeded and show the result on the console
+        console.log("Successfully read all routes from 'routeDB'.", result);
+        // ... and render singleroute.ejs view with the enounter and its corresponding routes
+        res.render("singleEncounter", { result });
+      }
+    });
+  };
 
 
-module.exports = router;
+  // *******************************************************************************************************
+
+  //
+  router.route("/create").get(createController);
+  //
+  router.route("/createAnimalRoute").get(createAnimalRouteController);
+
+  // route for reading one encounter and its corresponding routes
+  router.route("/getSingleEncounter").get(singleEncounterPageController);
+
+  // *******************************************************************************************************
+
+  module.exports = router;

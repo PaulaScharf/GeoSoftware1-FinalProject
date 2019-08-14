@@ -38,29 +38,6 @@
       <div class="col-12 col-md-6">
         <h2>Add Userroute</h2>
 
-        <script type="text/javascript" language="javascript">
-          /*
-        function checkform()
-        {
-          var f = document.forms["createForm"].elements;
-          var cansubmit = true;
-
-          for (var i = 1; i < 5; i++) {
-            if (f[i].value.length === 0) cansubmit = false;
-          }
-          document.getElementById('submitbutton').disabled = !cansubmit;
-
-          if(cansubmit) {
-            document.getElementById("errorMsg").style.display = "none";
-          }
-          else
-          {
-            document.getElementById("errorMsg").style.display = "block";
-          }
-        }
-        */
-        </script>
-
         <form action="/routes/create" method="POST" name="createForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('createRoute')">
           Username:<br />
           <input type="text" name="creator" onKeyup="checkform()"/><br>

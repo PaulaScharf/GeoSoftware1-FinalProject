@@ -109,10 +109,10 @@ function showAnimalMapData() {
 
 
 /**
- * This function makes an Ajax request to get individual identifiers for a specific studyID.
- * @private
- * @author Paula Scharf 450334
- */
+* This function makes an Ajax request to get individual identifiers for a specific studyID.
+* @private
+* @author Paula Scharf 450334
+*/
 function getIndividualID() {
   //
   document.getElementById('animalName').innerHTML = "";
@@ -136,11 +136,11 @@ function getIndividualID() {
   // ********** AJAX request for getting animal tracking data from movebank API **********
   $.ajax({
     // use a http GET request
-    //type: "GET",
     type: "GET",
     // URL to send the request to
     url: "/animalTrackingAPI/individualIds",
-
+    // type of the data that is sent to the server
+    //contentType: "application/json; charset=utf-8",
     // data to send to the server
     data: iDs,
     //
@@ -152,39 +152,39 @@ function getIndividualID() {
   })
 
   // if the request is done successfully, ...
-      .done (function (response) {
+  .done (function (response) {
 
-        // ... give a notice on the console that the AJAX request for getting the animal tracking API data has succeeded
-        console.log("AJAX request (getting individual Ids) is done successfully.");
+    // ... give a notice on the console that the AJAX request for getting the animal tracking API data has succeeded
+    console.log("AJAX request (getting individual Ids) is done successfully.");
 
-        if (typeof response.errorMessage !== "undefined") {
-          if (response.errorMessage === "there was an error") {
-            alert("There was an error. Please try another input.");
-          }
-        } else {
-
-          document.getElementById("individualIdDiv").style.display = "block";
-
-          //
-          showAnimalIds(response);
-        }
-      })
-
-      // if the request has failed, ...
-      .fail (function (xhr, status, error) {
-        // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error on the console
-        console.log("AJAX request (getting animal tracking data from API) has failed.", error);
+    if (typeof response.errorMessage !== "undefined") {
+      if (response.errorMessage === "There was an error.") {
         alert("There was an error. Please try another input.");
-      });
+      }
+    } else {
 
+      document.getElementById("individualIdDiv").style.display = "block";
+
+      //
+      showAnimalIds(response);
+    }
+  })
+
+  // if the request has failed, ...
+  .fail (function (xhr, status, error) {
+    // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error on the console
+    console.log("AJAX request (getting animal tracking data from API) has failed.", error);
+    alert("There was an error. Please try another input.");
+  });
 }
 
+
 /**
- * This function takes the response of ajax request for getting individual identiefiers of a study and displays it in
- * a dropdown menu on the page.
- * @private
- * @author Paula Scharf 450334
- */
+* This function takes the response of ajax request for getting individual identiefiers of a study and displays it in
+* a dropdown menu on the page.
+* @private
+* @author Paula Scharf 450334
+*/
 function showAnimalIds(response) {
   let select = document.getElementById("individualID");
 
@@ -193,6 +193,7 @@ function showAnimalIds(response) {
     select.options[select.options.length] = new Option(response[i].local_identifier, response[i].local_identifier);
   }
 }
+
 
 /**
 *
@@ -225,13 +226,13 @@ function getTrackingData() {
   // ********** AJAX request for getting animal tracking data from movebank API **********
   $.ajax({
     // use a http GET request
-    //type: "GET",
     type: "GET",
     // URL to send the request to
     url: "/animalTrackingAPI",
-
     // data to send to the server
     data: iDs,
+    // type of the data that is sent to the server
+    //contentType: "application/json; charset=utf-8",
     //
     xhrFields: {
       withCredentials: true
@@ -258,7 +259,7 @@ function getTrackingData() {
       //
     } else {
       alert("This individual doesnt seem to have any data stored. \n " +
-          "Please try a different individual or study.");
+      "Please try a different individual or study.");
     }
   })
 
@@ -288,7 +289,7 @@ function formatAndShowAnimalRoute(response) {
   // animalRouteGeoJSON is an object
   let animalRouteGeoJSON = makeAnimalRouteGeoJSON(locations);
 
-console.log(animalRouteGeoJSON);
+  console.log(animalRouteGeoJSON);
 
   // timestamps are provided in milliseconds since 1970-01-01 UTC
   // get the timestamp of the first coordinate of the animalroute (it is only one timestamp saved for one route, like it is for the userroutes, too)
@@ -304,6 +305,8 @@ console.log(animalRouteGeoJSON);
   animalRoute = {
     // get the study-id
     study_id: response.individuals[0].study_id,
+    // get the individual-id
+    individual_id: response.individuals[0].individual_local_identifier,
     // get the taxon
     individualTaxonCanonicalName: response.individuals[0].individual_taxon_canonical_name,
     // TODO: stringify wegbekommen !!!!!!!!!!!!!!!!!!
@@ -433,6 +436,8 @@ function showAnimalRoute(animalRoute) {
 */
 function postAnimalRoute() {
 
+console.log(animalRoute);
+
   // if there is no animalroute gotten/chosen from movebank API ...
   if (typeof animalRoute === "undefined") {
     // ... tell the user that he/she first has to choose an animalroute by getting tracking data of a study from movebank API
@@ -454,20 +459,54 @@ function postAnimalRoute() {
       return;
     }
 
-    // TODO: stringify?
-
-    // if there is no exception thrown, .......... parse the ....... into object ........
-    // json prüfen, beides????????
-    // animalRouteJSON is an object
-    let animalRouteJSON = animalRoute.geoJson;
-    //let animalRouteJSON = JSON.parse(animalRoute.geoJson);
-
-    //geojson prüfen
-    //
-    if (validateGeoJSON(animalRouteJSON)) {
 
 
-console.log(animalRoute);
+// TODO: HIER PRÜFEN, OB DIESE ROUTE BEREITS IN DB VORHANDEN IST
+// anhand von study_id und individual_id ?
+
+// check whether exactly this route is already stored in the database:
+
+
+// request: find eine animalroute mit:
+// überprüfe auf gleichheit:
+
+animalRoute.study_id
+animalRoute.individual_id
+
+$.ajax({
+  // use a http GET request
+  type: "GET",
+  // URL to send the request to
+  url: "/routes/readAnimal",
+  // data to send to the server, send as String for independence of server-side programming language
+  data: JSON.stringify(animalRoute),
+  // type of the data that is sent to the server
+  contentType: "application/json; charset=utf-8",
+  // timeout set to 5 seconds
+  timeout: 5000
+})
+
+// if the request is done successfully, ...
+.done (function (response) {
+
+
+})
+  // if the request has failed, ...
+  .fail (function (xhr, status, error) {
+
+    // ... give a notice that the AJAX request for posting the animalroute has failed and show the error on the console
+    console.log("AJAX request (posting animalroute) has failed.", error);
+  });
+
+
+
+
+
+
+    // if there is no exception thrown, check whether 'animalRoute.geoJson' contains valid GeoJSON
+    if (validateGeoJSON(animalRoute.geoJson)) {
+
+      console.log(animalRoute);
 
       // ... save this route in the database "routeDB":
 
@@ -477,23 +516,18 @@ console.log(animalRoute);
         type: "POST",
         // URL to send the request to
         url: "/routes/createAnimal",
-        // data to send to the server
-        data: animalRoute,
-
-        // NÖTIG ODER UNSINNIG????
-        //xhrFields: {
-        //withCredentials: true
-        //  },
+        // data to send to the server, send as String for independence of server-side programming language
+        data: JSON.stringify(animalRoute),
+        // type of the data that is sent to the server
+        contentType: "application/json; charset=utf-8",
         // timeout set to 5 seconds
         timeout: 5000
       })
 
       // if the request is done successfully, ...
       .done (function (response) {
-        // ... give a notice on the console that the AJAX request for posting the animalroute has succeeded
-        console.log("AJAX request (posting animalroute) is done successfully.");
 
-
+        // TODO: PAULA SPRECHEN, REIHENFOLGE
         // TODO: SO SINNVOLL ODER GIBT ES WEITERE FÄLLE??
         //
         if (response === "") {
@@ -513,10 +547,14 @@ console.log(animalRoute);
           //
           alert("The animalroute was successfully inserted into your database.");
         }
+
+        // ... give a notice on the console that the AJAX request for posting the animalroute has succeeded
+        console.log("AJAX request (posting animalroute) is done successfully.");
       })
 
       // if the request has failed, ...
       .fail (function (xhr, status, error) {
+
         // ... give a notice that the AJAX request for posting the animalroute has failed and show the error on the console
         console.log("AJAX request (posting animalroute) has failed.", error);
       });

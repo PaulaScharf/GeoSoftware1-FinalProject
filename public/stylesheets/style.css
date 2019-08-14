@@ -46,7 +46,7 @@ th, td {
   padding: 10px;
 }
 
-#allRoutesMap, #createAnimalRouteMap, #createMap, #updateMap {
+#indexMap, #createAnimalRouteMap, #createMap, #updateMap, #singleEncounterMap {
   height: 600px;
 }
 

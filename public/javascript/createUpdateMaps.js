@@ -8,13 +8,6 @@
 * @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
 */
 
-// please put in your own tokens at 'token.js'
-
-
-
-
-// TODO: JSDoc
-
 
 /**
 *

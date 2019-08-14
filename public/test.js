@@ -23,52 +23,27 @@ QUnit.module("API availability tests");
 
 QUnit.test("availability OpenWeatherMap API", function (assert) {
 
-
-  // test-variables
+  // test-variables (one test case)
   let lat = 40.32346464521419;
   let long = 23.463965480085898;
 
-
-  // finish the test not before all async work is completed
+  // do not finish the test before all async work is completed
   let done = assert.async(1);
 
-
-
-  //
+  // the URL to test:
   let resource = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + token.OPENWEATHERMAP_TOKEN;
 
-  //
+  // construct a new XMLhttp-request; with this, do the following:
   let xhrWeather = new XMLHttpRequest();
-
-
-  // LÖSCHEN??
-  // print facts and data about the loading of the request and the status of the request in the console
-  xhrWeather.onload = function() {
-    //console.dir(xhrWeather);
-    //console.log(xhrWeather.status);
-  };
-
-
-
-  // TODO: NOCH WEITERE STATUS CODES ABFANGEN ????? ODER WELCHE ÜBERHAUPT?
-
-  // capture errors and ........
-  xhrWeather.onerror = function(e) {
-    //
-    assert.ok(false, "OpenWeatherMap API not available, error: " + e);
-    //
-    done();
-  };
-
 
   // if the value of the readyState-attribute is changed, the following lambda-function is executed
   xhrWeather.onreadystatechange = function() {
-    // if the operation is complete (readystate 4: done) ...
-    if (this.readyState === 4) {
 
-      //
+    // if the operation is complete (readystate 4: done)
+    if (this.readyState === 4) {
+      // if status code is NOT 200, the API is NOT correctly available/usable
       assert.equal(this.status, 200, "'readyState' has value 4 and 'status' has value 200.");
-        //
+      // finish the test considering assert.async(1)
       done();
     }
   };
@@ -77,7 +52,6 @@ QUnit.test("availability OpenWeatherMap API", function (assert) {
   xhrWeather.open("GET", resource, true);
   // send the request to the server
   xhrWeather.send();
-
 });
 
 
@@ -86,50 +60,27 @@ QUnit.test("availability OpenWeatherMap API", function (assert) {
 
 QUnit.test("availability Terrain API", function (assert) {
 
-
-  // test-variables
+  // test-variables (one test case)
   let lat = 40.32346464521419;
   let long = 23.463965480085898;
-
-
-  // finish the test not before all async work is completed
+  
+  // do not finish the test before all async work is completed
   let done = assert.async();
 
-  //
+  // the URL to test:
   let resource = "http://api.geonames.org/findNearbyJSON?lat=" + lat + "&lng=" + long + "&username=" + token.usernameTerrainAPI;
 
-  //
+  // construct a new XMLhttp-request; with this, do the following:
   let xhrTerrain = new XMLHttpRequest();
-
-
-  // LÖSCHEN??
-  // print facts and data about the loading of the request and the status of the request in the console
-  xhrTerrain.onload = function() {
-    //console.dir(xhrTerrain);
-    //console.log(xhrTerrain.status);
-  };
-
-
-
-  // TODO: NOCH WEITERE STATUS CODES ABFANGEN ????? ODER WELCHE ÜBERHAUPT?
-
-  // capture errors and ........
-  xhrTerrain.onerror = function(e) {
-    //
-    assert.ok(false, "Geonames API not available, error: " + e);
-    //
-    done();
-  };
-
 
   // if the value of the readyState-attribute is changed, the following lambda-function is executed
   xhrTerrain.onreadystatechange = function() {
-    // if the operation is complete (readystate 4: done) ...
-    if (this.readyState === 4) {
 
-      //
+    // if the operation is complete (readystate 4: done)
+    if (this.readyState === 4) {
+      // if status code is NOT 200, the API is NOT correctly available/usable
       assert.equal(this.status, 200, "'readyState' has value 4 and 'status' has value 200.");
-      //
+      // finish the test considering assert.async(1)
       done();
     }
   };
@@ -138,5 +89,4 @@ QUnit.test("availability Terrain API", function (assert) {
   xhrTerrain.open("GET", resource, true);
   // send the request to the server
   xhrTerrain.send();
-
 });

@@ -12,10 +12,6 @@
 * @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
 */
 
-// please put in your own tokens at 'token.js'
-
-
-
 
 /**
 * Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part).This means this function takes one array (with all coordinates)
