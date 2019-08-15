@@ -46,7 +46,7 @@
             </div>
             <div class="col-12 col-md-6">
                 <h1>Edit Route</h1>
-                    <form action="/item/update" method="POST" name="updateForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('updateRoute')">
+                    <form action="/routes/update" method="POST" name="updateForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('updateRoute')">
                         <input type = "hidden" name = "_id" value="<%= result[0]._id %>"/>
                         Username:<br />
                         <input type="text" name="creator" onKeyup="checkform()" value="<%= result[0].creator %>"/><br>
@@ -78,8 +78,8 @@
 <script src="jquery/jquery.min.js"></script>
 <script src="popper/umd/popper.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="leaflet/leaflet.js"></script>
-<script src="leaflet-draw/leaflet.draw.js"></script>
+<script src="../leaflet/leaflet.js"></script>
+<script src="../leaflet-draw/leaflet.draw.js"></script>
 
 <script src="javascript/formFunctions.js"></script>
 <script src="javascript/leafletDrawPolyline.js"></script>

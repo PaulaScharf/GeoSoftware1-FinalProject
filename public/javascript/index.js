@@ -85,7 +85,7 @@ let polylineRoutes = [];
 let circleEncounters = [];
 
 
-
+JL("ajaxReadingAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
 // ****************************** functions ******************************
 
 /**
@@ -149,14 +149,14 @@ function getAndShowData() {
       // if the request has failed, ...
       .fail (function (xhr, status, error) {
 
-    // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
-    console.log("AJAX request (reading all routes) has failed.", error);
+        // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
+        console.log("AJAX request (reading all routes) has failed.", error);
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
-    if (error === "timeout") {
-      JL("ajaxReadingAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
-    }
-  });
+        // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+        if (error === "timeout") {
+          JL("ajaxReadingAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
+        }
+      });
 }
 
 
@@ -187,8 +187,6 @@ function writeAllRoutesInTheGlobalArray(response) {
  * @author Katharina Poppinga 450146
  */
 function showAllRoutesOnStartingPage() {
-
-  console.log(allRoutes);
 
   // coordinates of a route (in GeoJSONs long-lat order)
   let coordinatesRoute;
@@ -295,6 +293,11 @@ function getAllEncountersAndShow() {
       .fail (function (xhr, status, error) {
         // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
         console.log("AJAX request (reading all encounters) has failed.", error);
+
+        // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+        if (error === "timeout") {
+          JL("ajaxReadAllEncountersTimeout").fatalException("ajax: '/encounter/readAll' timeout");
+        }
       });
 }
 
@@ -304,65 +307,50 @@ function getAllEncountersAndShow() {
  * @param response - response of the ajax-call for getting all encounters
  */
 function writeAllEncountersInTheGlobalArray(response) {
-  response.forEach((currentEncounter) => {
-    //let currentEncounter = response[i];
 
-    //
-    let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
-    // go through all routes, to determine their index in the allRoutes-array and give that information
-    // to the encounter
-    for (let k = 0; k < allRoutes.length; k++) {
-      let currentRoute = allRoutes[k];
-      if (currentRoute[0]._id === currentEncounter.firstRoute) {
-        noOfRoutes.firstRoute = k;
-      }
+    response.forEach((currentEncounter) => {
       //
-      else if (currentRoute[0]._id === currentEncounter.secondRoute) {
-        noOfRoutes.secondRoute = k;
+      let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
+      // go through all routes, to determine their index in the allRoutes-array and give that information
+      // to the encounter
+      for (let k = 0; k < allRoutes.length; k++) {
+        let currentRoute = allRoutes[k];
+        if (currentRoute[0]._id === currentEncounter.firstRoute) {
+          noOfRoutes.firstRoute = k;
+        }
+        //
+        else if (currentRoute[0]._id === currentEncounter.secondRoute) {
+          noOfRoutes.secondRoute = k;
+        }
       }
-    }
-    console.log("no of first route: " + noOfRoutes.firstRoute);
-    console.log("no of second route: " + noOfRoutes.secondRoute);
-    // if the attributes "firstRoute" and "secondRoute" both contain values
-    if (noOfRoutes.firstRoute !== undefined && noOfRoutes.secondRoute  !== undefined) {
-      let parameters = {
-        routesSelected: true,
-        search: "no search"
-      };
-      // give true as the second argument to indicate that all corresponding routes for this encounter are selected
-      // give true as the fourth argument to indicate that ther is either no search active or this encounter is
-      // currently being searched for
-      allEncounters.push([currentEncounter, parameters, noOfRoutes]);
-      // if the "firstRoute" or "secondRoute" is undefined
-    } else {
-      console.log("Route is undefined");
-      // delete the current encounter from the db if any of the corresponding routes are missing
-      deleteEncounter(currentEncounter._id);
-    }
+      // if the attributes "firstRoute" and "secondRoute" both contain values
+      if (noOfRoutes.firstRoute !== "undefined" && noOfRoutes.secondRoute !== "undefined") {
+        let parameters = {
+          routesSelected: true,
+          search: "no search"
+        };
+        // give true as the second argument to indicate that all corresponding routes for this encounter are selected
+        // give true as the fourth argument to indicate that ther is either no search active or this encounter is
+        // currently being searched for
+        allEncounters.push([currentEncounter, parameters, noOfRoutes]);
+        // if the "firstRoute" or "secondRoute" is undefined
+      } else {
+        // delete the current encounter from the db if any of the corresponding routes are missing
+        deleteEncounter(currentEncounter._id);
+      }
 
-    // ************************************************************************************************************
+      // ************************************************************************************************************
 
-    // check if a route was added or updated and adjust the encounters accordingly
-    checkForNewRoute(allRoutes, true);
+      // check if a route was added or updated and adjust the encounters accordingly
+      checkForNewRoute(allRoutes, true);
 
-    //console.log(allEncounters);
+      //console.log(allEncounters);
 
-    showEncountersOnStartingPage();
+      showEncountersOnStartingPage();
 
-    // ... give a notice on the console that the AJAX request for reading all encounters has succeeded
-    console.log("AJAX request (reading all encounters) is done successfully.");
-  })
-
-  // if the request has failed, ...
-  .fail (function (xhr, status, error) {
-    // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
-    console.log("AJAX request (reading all encounters) has failed.", error);
-
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
-    if (error === "timeout") {
-      JL("ajaxReadAllEncountersTimeout").fatalException("ajax: '/encounter/readAll' timeout");
-    }
-  });
+      // ... give a notice on the console that the AJAX request for reading all encounters has succeeded
+      console.log("AJAX request (reading all encounters) is done successfully.");
+    });
 }
 
 
@@ -389,7 +377,6 @@ function showEncountersOnStartingPage() {
  * @author Paula Scharf, matr.: 450 334
  */
 function fillEncountersTable() {
-  console.dir(allEncounters);
   // clear the table
   deleteAllChildrenOfElement("encountersTable");
   // fill the table
@@ -632,17 +619,17 @@ function updateEncounter(encounter) {
         console.log("AJAX request (updating an encounter) is done successfully.");
       })
 
-        // if the request has failed, ...
-        .fail(function (xhr, status, error) {
-          // ... give a notice that the AJAX request for .......... has failed and show the error on the console
-          console.log("AJAX request (updating an encounter) has failed.", error);
+      // if the request has failed, ...
+      .fail(function (xhr, status, error) {
+        // ... give a notice that the AJAX request for .......... has failed and show the error on the console
+        console.log("AJAX request (updating an encounter) has failed.", error);
 
-          // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
-          if (error === "timeout") {
-            JL("ajaxUpdateEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
-          }
-        });
-      }
+        // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+        if (error === "timeout") {
+          JL("ajaxUpdateEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
+        }
+      });
+}
 
 
 /**
@@ -709,8 +696,6 @@ function routeSelectionForMap(cb_id){
  */
 function encountersToBeRemoved(routeId) {
 
-  console.log("calculate encounters to be removed");
-
   let result = [];
 
   for (let i = 0; i < allEncounters.length; i++) {
@@ -770,14 +755,13 @@ function searchEncounters(madeBy, searchCheckbox) {
     if (madeBy === "animal") {
       searchInput.animalName = document.getElementById("searchAnimalName").value;
       searchInput.studyID = document.getElementById("searchStudyID").value;
-
+      console.log(searchInput.studyID);
     } else {
       searchInput.name = document.getElementById("searchRouteName").value;
       searchInput.user =  document.getElementById("searchRouteUser").value;
     }
     // get the id of all routes to which the search applies for
     let routeIds = searchForRouteIds(searchInput);
-    console.log(routeIds);
     for (let i = 0; i < allRoutes.length; i ++) {
       if (allRoutes[i][0].madeBy === madeBy) {
         routesGroup.removeLayer(polylineRoutes[i]);
@@ -874,13 +858,11 @@ function searchForRouteIds(input) {
   //
   for (let i = 0; i < allRoutes.length; i++) {
     let currentRoute = allRoutes[i];
-    console.log("input: ", input);
-    console.log("current route: ", currentRoute[0]);
     // only check the attributes that have a value in the search form
-    if(((input.name === "") ? true: (currentRoute[0].name === input.name)) &&
-        ((input.user === "") ? true: (currentRoute[0].creator === input.user)) &&
-        ((input.animalName === "") ? true: (currentRoute[0].individualTaxonCanonicalName === input.animalName)) &&
-        ((input.studyID === "") ? true: (currentRoute[0].study_id === input.studyID))) {
+    if(((input.name === "") ? true: (currentRoute[0].name == input.name)) &&
+        ((input.user === "") ? true: (currentRoute[0].creator == input.user)) &&
+        ((input.animalName === "") ? true: (currentRoute[0].individualTaxonCanonicalName == input.animalName)) &&
+        ((input.studyID === "") ? true: (currentRoute[0].study_id == input.studyID))) {
       result.push(i);
     }
   }

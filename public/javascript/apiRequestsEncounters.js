@@ -147,8 +147,6 @@ class WeatherRequest
 */
 function getNewTerrainRequest(encounter, id) {
 
-  console.log("Get new terrain request ",  encounter._id);
-
   let lat = encounter.intersectionX;
   let long = encounter.intersectionY;
 
@@ -158,10 +156,10 @@ function getNewTerrainRequest(encounter, id) {
   //
   let xx = new XMLHttpRequest();
   xx.writeRequestResultsIntoTable = writeRequestResultsIntoTable;
-  xx.updateEncounter = updateEncounter;
+  xx.postEncounter = postEncounter;
   xx.id = id;
   xx.encounter = encounter;
-
+  xx.response;
   xx.onload = function () {
     console.log("Geonames: Status-Code: " + this.status + " , readyState: " + this.readyState);
   };
@@ -170,8 +168,8 @@ function getNewTerrainRequest(encounter, id) {
     //
     if (this.status === 404)
     {
-      document.getElementById("country" + (this.id)).innerHTML = "Error: No connection to the server.";
-      document.getElementById("terrain" + (this.id)).innerHTML = "Error: No connection to the server.";
+      //document.getElementById("country" + (this.id)).innerHTML = "Error: No connection to the server.";
+      //document.getElementById("terrain" + (this.id)).innerHTML = "Error: No connection to the server.";
 
       //
       //JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
@@ -180,8 +178,8 @@ function getNewTerrainRequest(encounter, id) {
     //
     else
     {
-      document.getElementById("country" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
-      document.getElementById("terrain" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
+      //document.getElementById("country" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
+      //document.getElementById("terrain" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
       console.dir(e);
 
       //
@@ -191,18 +189,15 @@ function getNewTerrainRequest(encounter, id) {
 
   xx.onreadystatechange = function () {
     //
-    if (this.status === 200 && this.readyState === 4)
+    if (this.readyState === 4)
     {
-      this.writeRequestResultsIntoTable(this.responseText, this.id);
+        // TODO: this.status === 200 &&
+      //this.writeRequestResultsIntoTable(this.responseText, this.id);
       // if the id of the correspondingencounter in the database is known, then save the terrain-info as an attribute
       // of the encounter in the database
-      if(typeof encounter._id !== "undefined") {
-        let encounter = {
-          _id: this.encounter._id,
-          terrain: this.responseText
-        };
-        this.updateEncounter(encounter);
-      }
+        this.encounter.terrain = this.responseText;
+        this.postEncounter(encounter);
+
     }
   };
   xx.open("GET", resource, true);
@@ -289,4 +284,49 @@ function updateEncounter(encounter) {
         // ... give a notice that the AJAX request for .......... has failed and show the error on the console
         console.log("AJAX request (updating an encounter) has failed.", error);
       });
+}
+
+/**
+ * This function calls the /encounter/create route with ajax, to save a given encounter in the database.
+ * @author name: Paula Scharf, matr.: 450 334
+ * @param encounter - the encounter to be saved
+ * @param id - the index of the encounter in the global encounters-array ("allEncounters")
+ */
+function postEncounter(encounter, id) {
+
+    //
+    $.ajax({
+        // use a http POST request
+        type: "POST",
+        // URL to send the request to
+        url: "/encounter/create",
+        // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
+        // type of the data that is sent to the server
+        contentType: "application/json; charset=utf-8",
+        //
+        data: JSON.stringify(encounter),
+        // timeout set to 7 seconds
+        timeout: 7000
+    })
+
+    // if the request is done successfully, ...
+        .done (function (response) {
+            if (typeof id !== "undefined") {
+                allEncounters[id][0]._id = response;
+                shareButton(id);
+            }
+            // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+            console.log("AJAX request (posting an encounter) is done successfully.");
+        })
+
+        // if the request has failed, ...
+        .fail(function (xhr, status, error) {
+            // ... give a notice that the AJAX request for posting an encounter has failed and show the error on the console
+            console.log("AJAX request (posting an encounter) has failed.", error);
+
+            // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+            if (error === "timeout") {
+                JL("ajaxCreateEncounterTimeout").fatalException("ajax: '/encounter/create' timeout");
+            }
+        });
 }

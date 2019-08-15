@@ -36,7 +36,7 @@ var getAllEncountersController = function(req,res) {
     }
     else {
       // ... give a notice, that the reading has succeeded and show the result on the console
-      console.log("Successfully read the encounters from 'routeDB'.", result);
+      console.log("Successfully read the encounters from 'routeDB'.");
       // ... and send the result to the ajax request
       res.json(result);
     }

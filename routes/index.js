@@ -67,6 +67,34 @@ var singleEncounterPageController = function(req, res) {
     });
   };
 
+// *********** CREATE/insert (with html-form) ***********
+// add a route from the req.body and redirect to the create.ejs
+var postRoutesController = function(req, res) {
+
+  console.log("Insert route " + req.body._id);
+
+  // TODO: MÜSSTE DURCH BODY PARSER EIGENTLICH AUTOMATISCH GEHEN, WARUM NICHT? WG. NUR geoJson??
+  // convert the coordinate-string to Json
+  req.body.geoJson = JSON.parse(req.body.geoJson);
+
+  // insert one item (one route) into current database
+  req.db.collection('routeDB').insertOne(req.body, (error, result) => {
+
+    if (error) {
+      // give a notice, that the inserting has failed and show the error on the console
+      console.log("Failure while inserting userroute into 'routeDB'.", error);
+      // in case of an error while inserting, do routing to "error.ejs"
+      res.render('error');
+      // if no error occurs ...
+    } else {
+      // ... give a notice, that inserting the userroute has succeeded
+      console.log("Successfully inserted userroute into 'routeDB'.");
+      // ... and go back to the create-page
+      res.render("create");
+    }
+  });
+};
+
 
   // *******************************************************************************************************
 
@@ -77,6 +105,8 @@ var singleEncounterPageController = function(req, res) {
 
   // route for reading one encounter and its corresponding routes
   router.route("/getSingleEncounter").get(singleEncounterPageController);
+// route for creating/inserting one userroute
+router.route("/create").post(postRoutesController);
 
   // *******************************************************************************************************
 

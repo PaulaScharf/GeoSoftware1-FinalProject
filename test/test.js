@@ -170,7 +170,8 @@ describe ("Mocha tests" , function() {
           "access-control-allow-origin": "localhost:3000",
           "access-control-allow-methods": "GET, POST",
           "access-control-allow-headers": "content-type"
-        }
+        },
+        timeout: 5000
       };
 
       //

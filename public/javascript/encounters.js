@@ -121,7 +121,6 @@ function checkForNewRoute(response, checkForUpdates) {
 */
 function deleteAllEncountersOfRoute(routeId) {
 
-  console.log("Delete encounters of new route " + routeId);
   //
   for (let i = 0; i < allEncounters.length; i++) {
     //
@@ -150,7 +149,6 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
   //
   for (let i = 0; i < alreadyKnownRoutes.length; i++) {
     if (oneId !== alreadyKnownRoutes[i][0]._id || alreadyKnownRoutes[i][0].status !== "updated") {
-      console.log("Compare: " + oneId + " with " + alreadyKnownRoutes[i][0]._id);
       intersectionOfRoutes(oneRoute, alreadyKnownRoutes[i][0].geoJson.features[0].geometry.coordinates, oneId, alreadyKnownRoutes[i][0]._id, checkForUpdates);
     }
   }
@@ -191,8 +189,6 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
     };
     let copyOfEncounter = encounter;
 
-    console.log("Copy of encounter: ");
-    console.log(copyOfEncounter);
     // add the new encounter to the allEncounters-array, if it was created because a route was updated
     if (checkForUpdates) {
       let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
@@ -206,17 +202,22 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
           noOfRoutes.secondRoute = k;
         }
       }
-      let parameters = {
-        routesSelected: true,
-        search: "no search"
-      };
-      console.log("Push an encounter.");
-      // give true as the second argument to indicate that the encounter should be visible on the map
-      // and in the table
-      allEncounters.push([encounter, parameters, noOfRoutes])
+      if (typeof encounter.firstRoute !== "undefined" && encounter.secondRoute !== "undefined") {
+        let parameters = {
+          routesSelected: true,
+          search: "no search"
+        };
+        // give true as the second argument to indicate that the encounter should be visible on the map
+        // and in the table
+        allEncounters.push([encounter, parameters, noOfRoutes])
+      }
+    }
+    let index;
+    if (typeof allEncounters !== "undefined") {
+      index = allEncounters.length-1;
     }
     // save the new encounter in the database
-    postEncounter(copyOfEncounter, allEncounters.length-1);
+    getNewTerrainRequest(copyOfEncounter, index);
   });
 }
 
@@ -246,10 +247,10 @@ function postEncounter(encounter, id) {
 
   // if the request is done successfully, ...
   .done (function (response) {
-    console.log(id);
-    allEncounters[id][0]._id = response;
-    console.log(allEncounters[id]);
-    shareButton(id);
+    if (typeof id !== "undefined") {
+      allEncounters[id][0]._id = response;
+      shareButton(id);
+    }
     // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
     console.log("AJAX request (posting an encounter) is done successfully.");
   })
