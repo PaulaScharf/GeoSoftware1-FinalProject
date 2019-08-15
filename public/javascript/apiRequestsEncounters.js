@@ -10,7 +10,7 @@
 
 // please put in your own tokens at 'token.js'
 
-/*
+
 // enable to send JSNLog messages to the server
 let appender = JL.createAjaxAppender("Appender");
 appender.setOptions({
@@ -20,7 +20,7 @@ JL().setOptions({
   "appenders": [appender]
 });
 
-*/
+
 // ********************************** Weather request - OpenWeatherMap API **********************************
 
 /**
@@ -264,9 +264,6 @@ function updateEncounter(encounter) {
     url: "/encounter/update",
     //
     data: encounter,
-    // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
-    // type of the data that is sent to the server
-    //contentType: "application/json; charset=utf-8",
     // timeout set to 7 seconds
     timeout: 7000
   })
@@ -304,7 +301,6 @@ function postEncounter(encounter, id) {
         type: "POST",
         // URL to send the request to
         url: "/encounter/create",
-        // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
         // type of the data that is sent to the server
         contentType: "application/json; charset=utf-8",
         //

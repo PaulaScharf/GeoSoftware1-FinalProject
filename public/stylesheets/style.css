@@ -18,12 +18,12 @@ padding: 5px 10px;
 text-align: center;
 }
 
-caption, td {
-  text-align: left;
-}
-
 h1 {
   color: blue;
+  text-align: center;
+}
+
+h3 {
   text-align: center;
 }
 
@@ -36,12 +36,13 @@ table, th, td {
   border-collapse: collapse;
 }
 
-caption, td {
-  text-align: left;
+td, th {
+  padding: 10px;
+  vertical-align: middle;
 }
 
-th, td {
-  padding: 10px;
+td {
+  text-align: left;
 }
 
 #indexMap, #createAnimalRouteMap, #createMap, #updateMap, #singleEncounterMap {

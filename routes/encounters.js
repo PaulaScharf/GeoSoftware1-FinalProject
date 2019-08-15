@@ -19,7 +19,6 @@ var router = express.Router();
 
 // ********************************* CRUD-functionality for encounters: *********************************
 
-
 // *********** READ ***********
 // get all encounters
 //

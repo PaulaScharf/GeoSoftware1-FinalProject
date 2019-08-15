@@ -236,7 +236,6 @@ function postEncounter(encounter, id) {
     type: "POST",
     // URL to send the request to
     url: "/encounter/create",
-    // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
     // type of the data that is sent to the server
     contentType: "application/json; charset=utf-8",
     //
@@ -281,8 +280,7 @@ function deleteEncounter(encounterId) {
     type: "GET",
     // URL to send the request to
     url: "/encounter/delete",
-    // type of the data that is sent to the server
-    //contentType: "application/json; charset=utf-8",
+    // data to send to the server
     data: {
       _id: encounterId
     },

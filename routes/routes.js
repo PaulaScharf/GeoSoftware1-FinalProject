@@ -46,13 +46,13 @@ var putRoutesController = function (req, res) {
 
     if (error) {
       // give a notice, that the updating has failed and show the error on the console
-      console.log("Failure while updating userroute in 'routeDB'.", error);
+      console.log("Failure while updating user route in 'routeDB'.", error);
       // in case of an error while updating, do routing to "error.ejs"
       res.render('error');
       // if no error occurs ...
     } else {
       // ... give a notice, that updating the userroute has succeeded
-      console.log("Successfully updated userroute in 'routeDB'.");
+      console.log("Successfully updated user route in 'routeDB'.");
       // ... and go back to the startpage through the indexRouter
       res.redirect("/");
     }
@@ -88,17 +88,11 @@ var deleteRoutesController = function(req, res) {
 };
 
 
-
-
-
 // route for updating one userroute (not with update method, because this is not available for html-form)
 router.route("/update").post(putRoutesController);
-
 // route for deleting one user- or animalroute (not with delete method, because this is not available for html-form)
 router.route("/delete").get(deleteRoutesController);
 
-
-// *******************************************************************************************************
 
 
 // ******************************* CRUD-functionality for ANIMAL routes: *********************************
@@ -107,7 +101,7 @@ router.route("/delete").get(deleteRoutesController);
 // get a single animalroute
 var getAnimalController = function(req, res) {
 
-  console.log("Search for already existing animalroute.");
+  console.log("Search for already existing animal route.");
 
   // find animalroute in database with the same study_id and the same individual_id
   // that the user has chosen to insert again (these values come from ajax)
@@ -118,13 +112,13 @@ var getAnimalController = function(req, res) {
 
     if (error) {
       // give a notice, that the reading has failed and show the error on the console
-      console.log("Failure while reading animalroute from 'routeDB'.", error);
+      console.log("Failure while reading animal route from 'routeDB'.", error);
       // in case of an error while reading, do routing to "error.ejs"
       res.render('error');
       // if no error occurs ...
     } else {
       // ... give a notice, that reading the animalroute has succeeded
-      console.log("Successfully read animalroute from 'routeDB'.");
+      console.log("Successfully read animal route from 'routeDB'.");
       // ... send the result to the ajax request
       res.send(result);
     }
@@ -136,20 +130,20 @@ var getAnimalController = function(req, res) {
 // add an animalroute into the database
 var postAnimalController = function(req, res) {
 
-  console.log("Insert animalroute " + req.body._id);
+  console.log("Insert animal route " + req.body._id);
 
   // insert one animalroute into current database
   req.db.collection('routeDB').insertOne(req.body, (error, result) => {
 
     if (error) {
       // give a notice, that the inserting has failed and show the error on the console
-      console.log("Failure while inserting animalroute into 'routeDB'.", error);
+      console.log("Failure while inserting animal route into 'routeDB'.", error);
       // in case of an error while inserting, do routing to "error.ejs"
       res.render('error');
       // if no error occurs ...
     } else {
       // ... give a notice, that inserting the animalroute has succeeded
-      console.log("Successfully inserted animalroute into 'routeDB'.");
+      console.log("Successfully inserted animal route into 'routeDB'.");
       // ... send the result to the ajax request
       res.send(result);
     }
@@ -158,17 +152,13 @@ var postAnimalController = function(req, res) {
 
 
 // animalroutes are not allowed to be updated
-
 // for DELETE animalroute see 'deleteRoutesController'
-
 
 // route for reading/finding one animalroute
 router.route("/readAnimal").post(getAnimalController);
-
 // route for creating/inserting one animalroute
 router.route("/createAnimal").post(postAnimalController);
 
-// *******************************************************************************************************
 
 
 // ******************************************* ALL routes: ***********************************************
