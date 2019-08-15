@@ -436,19 +436,18 @@ function showAnimalRoute(animalRoute) {
 */
 function postAnimalRoute() {
 
-console.log(animalRoute);
+  console.log(animalRoute);
 
   // if there is no animalroute gotten/chosen from movebank API ...
   if (typeof animalRoute === "undefined") {
     // ... tell the user that he/she first has to choose an animalroute by getting tracking data of a study from movebank API
     alert("First, you have to choose an animalroute by getting tracking data of a study from movebank API.")
   }
-  // if there is an animalroute gotten/chosen from movebank API ...
+  // if there is an animalroute gotten/chosen from movebank API,
+  // check the syntax because animalRoute is a global variable
   else {
 
-    // da global variable, nochmal prüfen:
-
-    // check whether animalRoute is valid JSON that can be parsed, if not throw an exception and tell the user .....???
+    // check whether animalRoute is valid JSON that can be parsed, if not throw an exception, tell the user and do not continue
     try {
       JSON.stringify(animalRoute);
     }
@@ -460,109 +459,114 @@ console.log(animalRoute);
     }
 
 
+    // check whether exactly this route is already stored in the database to
+    // prevent from inserting it again (that would cause much encounter-calculating and could paralyze the app)
+    $.ajax({
+      // use a http POST request
+      type: "POST",
+      // URL to send the request to
+      url: "/routes/readAnimal",
+      // data to send to the server, send as String for independence of server-side programming language
+      data: JSON.stringify(animalRoute),
+      // type of the data that is sent to the server
+      contentType: "application/json; charset=utf-8",
+      // timeout set to 5 seconds
+      timeout: 5000
+    })
 
-// TODO: HIER PRÜFEN, OB DIESE ROUTE BEREITS IN DB VORHANDEN IST
-// anhand von study_id und individual_id ?
+    // if the request is done successfully, ...
+    .done (function (response) {
 
-// check whether exactly this route is already stored in the database:
+      console.log(response);
+
+      // if the chosen route already exists in the database ...
+      if (response !== "") {
+        // ... tell the user about it
+        alert("This animalroute is already stored in your database. Please choose a different one.");
+        // ... and do not call the following expressions so that the user can choose a different route
+        return;
+
+        // if this route does not exist in the database ...
+      } else {
+        // ... check whether 'animalRoute.geoJson' contains valid GeoJSON and, if so, ...
+        if (validateGeoJSON(animalRoute.geoJson)) {
+
+          // TODO: SO WAR VALIDIERUNG DÄMLICH
+          // ... insert the chosen animalroute into the database
+          insertAnimalroute();
+
+          // if 'animalRoute.geoJson' does not contain valid GeoJSON, tell the user and do not insert into database
+        } else {
+          alert("The GeoJSON-part of the animalroute has no valid syntax.");
+        }
+      }
+    })
 
 
-// request: find eine animalroute mit:
-// überprüfe auf gleichheit:
+    // if the ajax-request has failed, ...
+    .fail (function (xhr, status, error) {
 
-animalRoute.study_id
-animalRoute.individual_id
-
-$.ajax({
-  // use a http GET request
-  type: "GET",
-  // URL to send the request to
-  url: "/routes/readAnimal",
-  // data to send to the server, send as String for independence of server-side programming language
-  data: JSON.stringify(animalRoute),
-  // type of the data that is sent to the server
-  contentType: "application/json; charset=utf-8",
-  // timeout set to 5 seconds
-  timeout: 5000
-})
-
-// if the request is done successfully, ...
-.done (function (response) {
+      // ... give a notice that the AJAX request for finding the animalroute has failed and show the error on the console
+      console.log("AJAX request (reading/finding animalroute) has failed.", error);
+    });
+  }
+}
 
 
-})
+/**
+*
+*
+* @private
+* @author Katharina Poppinga 450146
+*/
+function insertAnimalroute(){
+
+  console.log(animalRoute);
+
+  // ********** AJAX request for posting the animalroute into the database "routeDB" **********
+  $.ajax({
+    // use a http POST request
+    type: "POST",
+    // URL to send the request to
+    url: "/routes/createAnimal",
+    // data to send to the server, send as String for independence of server-side programming language
+    data: JSON.stringify(animalRoute),
+    // type of the data that is sent to the server
+    contentType: "application/json; charset=utf-8",
+    // timeout set to 5 seconds
+    timeout: 5000
+  })
+
+  // if the request is done successfully, ...
+  .done (function (response) {
+
+    //
+    if (response === "") {
+      //
+      alert("The animalroute could not be inserted into your database.");
+      //
+    } else {
+      //
+      document.getElementById('individualID').value = "";
+      document.getElementById('animalName').innerHTML = "";
+      document.getElementById('animalDateTime').innerHTML = "";
+
+      //
+      animalRoutesGroup.clearLayers();
+      //
+      animalRoute = undefined;
+      //
+      alert("The animalroute was successfully inserted into your database.");
+    }
+
+    // ... give a notice on the console that the AJAX request for posting the animalroute has succeeded
+    console.log("AJAX request (posting animalroute) is done successfully.");
+  })
+
   // if the request has failed, ...
   .fail (function (xhr, status, error) {
 
     // ... give a notice that the AJAX request for posting the animalroute has failed and show the error on the console
     console.log("AJAX request (posting animalroute) has failed.", error);
   });
-
-
-
-
-
-
-    // if there is no exception thrown, check whether 'animalRoute.geoJson' contains valid GeoJSON
-    if (validateGeoJSON(animalRoute.geoJson)) {
-
-      console.log(animalRoute);
-
-      // ... save this route in the database "routeDB":
-
-      // ********** AJAX request for posting the animalroute into the database "routeDB" **********
-      $.ajax({
-        // use a http POST request
-        type: "POST",
-        // URL to send the request to
-        url: "/routes/createAnimal",
-        // data to send to the server, send as String for independence of server-side programming language
-        data: JSON.stringify(animalRoute),
-        // type of the data that is sent to the server
-        contentType: "application/json; charset=utf-8",
-        // timeout set to 5 seconds
-        timeout: 5000
-      })
-
-      // if the request is done successfully, ...
-      .done (function (response) {
-
-        // TODO: PAULA SPRECHEN, REIHENFOLGE
-        // TODO: SO SINNVOLL ODER GIBT ES WEITERE FÄLLE??
-        //
-        if (response === "") {
-          //
-          alert("The animalroute could not be inserted into your database.");
-          //
-        } else {
-          //
-          document.getElementById('individualID').value = "";
-          document.getElementById('animalName').innerHTML = "";
-          document.getElementById('animalDateTime').innerHTML = "";
-
-          //
-          animalRoutesGroup.clearLayers();
-          //
-          animalRoute = undefined;
-          //
-          alert("The animalroute was successfully inserted into your database.");
-        }
-
-        // ... give a notice on the console that the AJAX request for posting the animalroute has succeeded
-        console.log("AJAX request (posting animalroute) is done successfully.");
-      })
-
-      // if the request has failed, ...
-      .fail (function (xhr, status, error) {
-
-        // ... give a notice that the AJAX request for posting the animalroute has failed and show the error on the console
-        console.log("AJAX request (posting animalroute) has failed.", error);
-      });
-
-      //
-    } else {
-
-      alert("The GeoJSON-part of the animalroute has no valid syntax.");
-    }
-  }
 }

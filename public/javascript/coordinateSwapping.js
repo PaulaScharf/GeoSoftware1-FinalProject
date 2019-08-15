@@ -61,7 +61,7 @@ function swapGeoJSONsLongLatToLatLongOrder_Objects(longLatCoordinatesRoute){
     let latLong;
 
     // array for (later in this function) containing the route-coordinates with its points as objects in lat,long-coordinate-order
-    var latLongCoordinatesRoute = [];
+    let latLongCoordinatesRoute = [];
 
     let c;
     // loop "over" all points in given route

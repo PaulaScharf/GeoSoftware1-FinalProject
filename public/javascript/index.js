@@ -160,6 +160,11 @@ function getAndShowData() {
 
     // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
     console.log("AJAX request (reading all routes) has failed.", error);
+
+    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    if (error === "timeout") {
+      JL("ajaxReadingAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
+    }
   });
 }
 
@@ -194,10 +199,10 @@ function writeAllRoutesInTheGlobalArray(response) {
 */
 function showAllRoutesOnStartingPage() {
 
-console.log(allRoutes);
+  console.log(allRoutes);
 
   // coordinates of a route (in GeoJSONs long-lat order)
-  var coordinatesRoute;
+  let coordinatesRoute;
 
   // loop "over" all routes in the current database "routeDB"
   for (let i = 0; i < allRoutes.length; i++) {
@@ -337,6 +342,11 @@ function getAllEncountersAndShow() {
   .fail (function (xhr, status, error) {
     // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
     console.log("AJAX request (reading all encounters) has failed.", error);
+
+    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    if (error === "timeout") {
+      JL("ajaxReadAllEncountersTimeout").fatalException("ajax: '/encounter/readAll' timeout");
+    }
   });
 }
 
@@ -508,8 +518,8 @@ function fillEncountersTable() {
         // label the table cell, in which the routeCheckbox will be written, as "tableCellCheckbox"
         let tableCellButton = document.getElementById("share"+bt_id);
 
-console.log(allEncounters);
-console.log("allEncounters");
+        console.log(allEncounters);
+        console.log("allEncounters");
 
         let ids = {
           e_id : allEncounters[bt_id][0]._id,
@@ -613,6 +623,11 @@ console.log("allEncounters");
         .fail(function (xhr, status, error) {
           // ... give a notice that the AJAX request for .......... has failed and show the error on the console
           console.log("AJAX request (updating an encounter) has failed.", error);
+
+          // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+          if (error === "timeout") {
+            JL("ajaxUpdateEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
+          }
         });
       }
 

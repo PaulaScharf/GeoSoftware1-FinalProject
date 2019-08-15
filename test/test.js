@@ -26,7 +26,7 @@ const portNumber = 3000;
 
 
 // test suite for all server-side tests
-describe ("HTTP-CRUD Test" , function() {
+describe ("Mocha tests" , function() {
 
 
   // ************************* Status-Code 200 Test *************************
@@ -55,14 +55,18 @@ describe ("HTTP-CRUD Test" , function() {
     //
     let itemID;
 
+    //
     try {
-      let createReq = http.request({
+      //
+      let optionsCreate = {
         host: "localhost",
         port: portNumber,
         path: "/encounter/create",
         method: "POST",
+      };
 
-      }, (createResponse) => {
+      //
+      let createRequest = http.request(optionsCreate, (createResponse) => {
 
         let createBody = "";
 
@@ -76,58 +80,61 @@ describe ("HTTP-CRUD Test" , function() {
 
           assert.ok(createResponse.statusCode === 200);
 
-          console.log(createBody);
           itemID = createBody;
           //
           assert.ok(undefined !== itemID);
+          done();
 
 
+          // delete the created item after test has finished:
 
-
-
-
-          // TODO: delete created item after test has finished, funktioniert so noch nicht !!!!!!!
-
-          // delete the created test-entry from database:
+          //
+          itemID = JSON.parse(itemID);
+          //
           try {
-
-            http.request({
+            //
+            let optionsDelete = {
               host: "localhost",
               port: portNumber,
-              path: "/item?_id=" + itemID,
-              method: "DELETE"
-            }, (res) => {
+              path: "/encounter/delete?_id=" + itemID,
+              method: "GET"
+            };
 
-              let body = "";
+            //
+            let deleteRequest = http.request(optionsDelete, (deleteResponse) => {
 
-              res.on("data", (chunk) => {
-                body += chunk;
-                  console.log(body);
+              let deleteBody = "";
+
+              deleteResponse.on("data", (chunk) => {
+                deleteBody += chunk;
               });
 
-              res.on("end", () => {
-                console.log("delete");
+              deleteResponse.on("end", () => {
               });
             });
 
+            //
+            deleteRequest.setHeader('Content-Type', 'application/json');
+
+            // end of the request
+            deleteRequest.end();
+
+            //
           } catch (error){
             console.dir(error);
           }
 
-done();
-
         });
       });
 
-
       //
-      createReq.setHeader('Content-Type', 'application/json');
+      createRequest.setHeader('Content-Type', 'application/json');
 
       // write the data to the request body
-      createReq.write(JSON.stringify({foo: "bar"}));
+      createRequest.write(JSON.stringify({foo: "bar"}));
 
       // end of the request
-      createReq.end();
+      createRequest.end();
 
       //
     } catch (error){
@@ -135,8 +142,6 @@ done();
       assert.ok(false);
       done();
     }
-
-
   });
 
 
