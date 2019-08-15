@@ -16,10 +16,10 @@
 */
 function checkform() {
 
-  var f = document.getElementById("createUpdateForm").elements;
-  var cansubmit = true;
+  let f = document.getElementById("createUpdateForm").elements;
+  let cansubmit = true;
 
-  for (var i = 1; i < 5; i++) {
+  for (let i = 1; i < 5; i++) {
     if (f[i].value.length === 0) cansubmit = false;
   }
   document.getElementById('submitbutton').disabled = !cansubmit;

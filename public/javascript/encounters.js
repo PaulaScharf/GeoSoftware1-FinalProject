@@ -13,7 +13,7 @@
 * already known/processed routes
 * @type {Array}
 */
-var alreadyKnownRoutes = [];
+let alreadyKnownRoutes = [];
 
 
 
@@ -56,6 +56,11 @@ function getAllRoutes() {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
     console.log("AJAX request (reading all routes) has failed.", error);
+
+    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    if (error === "timeout") {
+      JL("ajaxReadAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
+    }
   });
 }
 
@@ -171,14 +176,13 @@ console.log(firstId);
 console.log(secondId);
 
 
-
   console.log("First route:", firstRoute);
   console.log("Second route:", secondRoute);
-  var line1 = turf.lineString(firstRoute);
-  var line2 = turf.lineString(secondRoute);
+  let line1 = turf.lineString(firstRoute);
+  let line2 = turf.lineString(secondRoute);
   // these nested for-loops go through all adjascent point pairs in each route
   // check for intersections between two lines
-  var result = turf.lineIntersect(line1, line2);
+  let result = turf.lineIntersect(line1, line2);
   // if the result contains coordinates, then there in an intersection
   console.log(result);
   for (let i = 0; i < result.features.length; i++) {
@@ -257,6 +261,11 @@ function postEncounter(encounter) {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for posting an encounter has failed and show the error on the console
     console.log("AJAX request (posting an encounter) has failed.", error);
+
+    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    if (error === "timeout") {
+      JL("ajaxCreateEncounterTimeout").fatalException("ajax: '/encounter/create' timeout");
+    }
   });
 }
 
@@ -293,6 +302,11 @@ function deleteEncounter(encounterId) {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
     console.log("AJAX request (deleting an encounter) has failed.", error);
+
+    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    if (error === "timeout") {
+      JL("ajaxDeleteEncounterTimeout").fatalException("ajax: '/encounter/delete' timeout");
+    }
   });
 }
 
@@ -328,5 +342,10 @@ function updateStatusFromNewToOld(route) {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for updating the status of a route has failed and show the error on the console
     console.log("AJAX request (updating the status of a route) has failed.", error);
+
+    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    if (error === "timeout") {
+      JL("ajaxUpdateEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
+    }
   });
 }

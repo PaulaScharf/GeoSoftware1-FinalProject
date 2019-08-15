@@ -38,8 +38,8 @@ class WeatherRequest
   */
   constructor(intersection, id)
   {
-    var lat = intersection[0];
-    var long = intersection[1];
+    let lat = intersection[0];
+    let long = intersection[1];
 
     //
     this.resource = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + token.OPENWEATHERMAP_TOKEN;
