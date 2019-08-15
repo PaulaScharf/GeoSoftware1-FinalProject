@@ -63,7 +63,7 @@
 
 /**
 * Global variable which ....
-* @type {object oder was???????}
+* @type {object}
 */
 let animalRoute;
 
@@ -366,8 +366,7 @@ function makeAnimalRouteGeoJSON(locations) {
 
 
   // creating the GeoJSON FeatureCollection output by setting its attributes:
-  let animalRouteGeoJSON = {
-
+  return {
     type: "FeatureCollection",
     features: [
       {
@@ -381,9 +380,6 @@ function makeAnimalRouteGeoJSON(locations) {
       }
     ]
   };
-
-  //
-  return animalRouteGeoJSON;
 }
 
 
@@ -394,7 +390,7 @@ function makeAnimalRouteGeoJSON(locations) {
 *
 * @private
 * @author Katharina Poppinga 450146
-* @param animalroute
+* @param animalRoute
 */
 function showAnimalRoute(animalRoute) {
 
@@ -477,18 +473,17 @@ $.ajax({
   // use a http GET request
   type: "GET",
   // URL to send the request to
-  url: "/routes/readAnimal",
+  url: "/item/readAnimal",
   // data to send to the server, send as String for independence of server-side programming language
   data: JSON.stringify(animalRoute),
   // type of the data that is sent to the server
   contentType: "application/json; charset=utf-8",
   // timeout set to 5 seconds
-  timeout: 5000
+  timeout: 7000
 })
 
 // if the request is done successfully, ...
 .done (function (response) {
-
 
 })
   // if the request has failed, ...
@@ -515,19 +510,18 @@ $.ajax({
         // use a http POST request
         type: "POST",
         // URL to send the request to
-        url: "/routes/createAnimal",
+        url: "/item/createAnimal",
         // data to send to the server, send as String for independence of server-side programming language
         data: JSON.stringify(animalRoute),
         // type of the data that is sent to the server
         contentType: "application/json; charset=utf-8",
         // timeout set to 5 seconds
-        timeout: 5000
+        timeout: 7000
       })
 
       // if the request is done successfully, ...
       .done (function (response) {
 
-        // TODO: PAULA SPRECHEN, REIHENFOLGE
         // TODO: SO SINNVOLL ODER GIBT ES WEITERE FÄLLE??
         //
         if (response === "") {
@@ -539,6 +533,7 @@ $.ajax({
           document.getElementById('individualID').value = "";
           document.getElementById('animalName').innerHTML = "";
           document.getElementById('animalDateTime').innerHTML = "";
+          document.getElementById("getAnimalRouteDiv").style.display = "none";
 
           //
           animalRoutesGroup.clearLayers();
