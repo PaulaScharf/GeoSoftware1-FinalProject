@@ -12,10 +12,6 @@
 * @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
 */
 
-// please put in your own tokens at 'token.js'
-
-
-
 
 /**
 * Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part).This means this function takes one array (with all coordinates)
@@ -65,7 +61,7 @@ function swapGeoJSONsLongLatToLatLongOrder_Objects(longLatCoordinatesRoute){
     let latLong;
 
     // array for (later in this function) containing the route-coordinates with its points as objects in lat,long-coordinate-order
-    var latLongCoordinatesRoute = [];
+    let latLongCoordinatesRoute = [];
 
     let c;
     // loop "over" all points in given route

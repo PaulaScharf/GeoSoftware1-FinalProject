@@ -9,6 +9,9 @@
 * @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
 */
 
+// using standard port 3000
+var port = 3000;
+
 
 // load modules:
 // load http-module and save it in const-OBJECT http
@@ -25,49 +28,17 @@ var bodyParser = require('body-parser');
 // call express and save it in the function app
 const app = express();
 
-// ÜBERHAUPT NÖTIG?????? (für jsnlog installiert, um require client-seitig nutzen zu können)
-const browserify = require('browserify');
 
 const mongodb = require('mongodb');
-// WERDEN BEIDEN FOLGENDEN ÜBERHAUPT GENUTZT????
+
 var createError = require('http-errors');
-var cookieParser = require('cookie-parser');
 
-
-// JSNLog
 var JL = require('jsnlog').JL;
 var jsnlog_nodejs = require('jsnlog-nodejs').jsnlog_nodejs;
 
 
-// ******************** folgendes an andere Stelle dieser Datei??? ********************
-
-// KOMMENTARE ÄNDERN, DA VON DOC WEBSITE
-// ensure that the JSON objects received from the client get parsed correctly.
-app.use(bodyParser.json())
-
-// jsnlog.js on the client-side by default sends log messages to /jsnlog.logger, using POST.
-app.post("/jsnlog.logger", function (req, res) {
-  //app.post('*.logger', function (req, res) {
-  jsnlog_nodejs(JL, req.body);
-
-  // Send empty response. This is ok, because client side jsnlog does not use response from server.
-  res.send('');
-});
-
-
-
-
-
-
-
-
-
-
-// *******************************************************************************
-
-// TODO: PATH.JOIN VERWENDEN, ANSTATT DIRNAME UND /
 var indexRouter = require('./routes/index');
-var itemsRouter = require('./routes/items');
+var routesRouter = require('./routes/routes');
 var encountersRouter = require('./routes/encounters');
 
 
@@ -82,115 +53,197 @@ app.use(express.static(path.join(__dirname, 'public')));
 // use built-in middleware which parses incoming requests with JSON payloads so that explicit parse expressions for every JSON are not necessary
 app.use(express.json());
 
-// use built-in middleware which parses urlencoded bodies
-// https://expressjs.com/en/4x/api.html#express.urlencoded
+// use built-in middleware which parses urlencoded bodies, https://expressjs.com/en/4x/api.html#express.urlencoded
 app.use(express.urlencoded({ extended: false }));
-
-// WOZU ?????
-app.use(cookieParser());
-
 
 
 // routes for npm-installed client-libraries
-app.use("/leaflet", express.static(path.join(__dirname, 'node_modules', 'leaflet', 'dist')));
-app.use("/leaflet-draw", express.static(path.join(__dirname, 'node_modules', 'leaflet-draw', 'dist')));
 app.use("/jquery", express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
 app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 app.use("/popper", express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist')));
+app.use("/leaflet", express.static(path.join(__dirname, 'node_modules', 'leaflet', 'dist')));
+app.use("/leaflet-draw", express.static(path.join(__dirname, 'node_modules', 'leaflet-draw', 'dist')));
 app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 'turf')));
+app.use('/jsnlog', express.static(path.join(__dirname, 'node_modules', 'jsnlog')));
+app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', 'qunit')));
 
 
 
-// TODO: DATENBANKVERBINDUNG SOLL AUTOMATISCH FÜR MIT UND (!!!) OHNE DOCKER FUNKTIONIEREN
-// connect to MongoDB and use database "routeDB":
-// asynchronous scope
-(async () => {
-  // try to connect to mongodb on localhost:27017, if not possible throw an exception/error:
-  try {
-    // await blocks and waits for connection, because here synchronous execution is desired
-    app.locals.dbConnection = await mongodb.MongoClient.connect(
-      // connectionString / connection URL:
-      "mongodb://localhost:27017",
-      {
-        useNewUrlParser: true,
-        autoReconnect: true
-      });
+// ************************** mondo-database connection ***************************
+/**
+*
+* Try to connect to mongodb on localhost:27017 (if not using docker),
+* if not possible try to connect on mongodbservice:27017 (if using docker),
+* if not possible throw an exception/error.
+*
+*/
+function connectMongoDb() {
 
-      // connect to and use database "routeDB" (create this database, if it does not exist)
-      app.locals.db = await app.locals.dbConnection.db("routeDB");
-      // tell the user that the connection is established and databse "routeDB" will be used for following operations
-      console.log("Using DB: " + app.locals.db.databaseName);
+  // connect to MongoDB and use database "routeDB":
+  // asynchronous scope
+  (async () => {
 
-      // tell the user the URL for starting the application / where the routes are shown
-      console.log("URL for starting and viewing the routes: http://localhost:" + port + "/");
+    // try to connect to mongodb on localhost:27017
+    try {
+      // await blocks and waits for connection, because here synchronous execution is desired
+      app.locals.dbConnection = await mongodb.MongoClient.connect(
+        // connectionString / connection URL:
+        "mongodb://localhost:27017",
+        {
+          useNewUrlParser: true,
+          autoReconnect: true
+        });
 
-      // catch possible errors and tell the user about them:
-    } catch (error) {
-      console.dir(error);
-      console.log(error.message);
-    }
-  }) ();
+        // connect to and use database "routeDB" (create this database, if it does not exist)
+        app.locals.db = await app.locals.dbConnection.db("routeDB");
+        // tell the user that the connection is established and databse "routeDB" will be used for following operations
+        console.log("Using DB: " + app.locals.db.databaseName);
+
+        // tell the user the URL for starting the application / where the routes are shown
+        console.log("URL for starting the app: http://localhost:" + port + "/");
+
+        // catch possible errors and tell the user about them:
+      } catch (error) {
+
+        // for using docker:
+        // try to connect to mongodb on mongodbservice:27017
+        try {
+          // await blocks and waits for connection, because here synchronous execution is desired
+          app.locals.dbConnection = await mongodb.MongoClient.connect(
+            // connectionString / connection URL: docker container "mongodbservice"
+            "mongodb://mongodbservice:27017",
+            {
+              useNewUrlParser: true,
+              autoReconnect: true
+            });
+
+            // connect to and use database "routeDB" (create this database, if it does not exist)
+            app.locals.db = await app.locals.dbConnection.db("routeDB");
+            // tell the user that the connection is established and databse "routeDB" will be used for following operations
+            console.log("Using DB: " + app.locals.db.databaseName);
+
+            // tell the user the URL for starting the application / where the routes are shown
+            console.log("URL for starting the app: http://localhost:" + port + "/");
 
 
-  // using standard port 3000
-  var port = 3000;
+            // if it is not possible to connect on localhost:27017 or mongodbservice:27017,
+            // catch possible errors and tell the user about them:
+          } catch (error) {
+
+            // TODO: ? APP NICHT STARTEN
+
+            console.log(error.message);
+            console.dir(error);
+
+            // retry until db-server is up
+            setTimeout(connectMongoDb, 3000);
+          }
+        }
+      }
+    )();
+  }
+
+  // connect to MongoDB
+  connectMongoDb();
 
 
-
-  // *********************** regarding animal tracking API ***********************
-
-  app.get("/createAnimalRoute", (req, res) => {
-    res.render("createAnimalRoute");
-  });
-
-
-  // FÜR ANIMAL TRACKING API??
-  // middleware for ... CORS: origin-response
+  // taken from template of Assignment 8:
+  // middleware for making the db connection available via the request object
   app.use((req, res, next) => {
-    res.set("access-control-allow-origin", "localhost:3000");
+    req.db = app.locals.db;
     next();
   });
 
 
-  // FÜR ANIMAL TRACKING API??
-  // middleware for options header... CORS: origin-response
-  app.options("localhost:3000", (res, next) => {
-    res.set({
-      "access-control-allow-methods": "GET, POST",
-      "access-control-allow-headers": "content-type"
-    });
-    res.status(204).end();
+  // ********************************** JSNLog ***********************************
+
+  // "ensure that the JSON objects received from the client get parsed correctly"
+  app.use(bodyParser.json());
+
+  // jsnlog.js on the client-side sends log messages to /jsnlog.logger, using POST
+  app.post("/jsnlog.logger", function (req, res) {
+    jsnlog_nodejs(JL, req.body);
+
+    // jsnlog on the client-side does not use the response from server, therefore send an empty response
+    res.send('');
   });
 
+
+  // **************************** Animal tracking API ****************************
 
   //
   app.get("/animalTrackingAPI",  (req, res) => {
 
-    // catch error, WO???
-
-
-    // TODO: max_events_per_individual festlegen
+    //
+    let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=100&sensor_type=gps";
 
     //
-    var resource = "https://www.movebank.org/movebank/service/public/json?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=200&sensor_type=gps";
+    let loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
+    let password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
 
-    // https://www.datarepository.movebank.org/handle/10255/move.610
+    //
+    const options = {
+      headers: {
+        "Authorization":"Basic " + Buffer.from(loginname+':'+password).toString('base64'),
+        "access-control-allow-origin": "localhost:3000",
+        "access-control-allow-methods": "GET, POST",
+        "access-control-allow-headers": "content-type"
+      },
+      timeout: 5000
+    };
+
+    // GET animal tracking api:
+    https.get(resource, options, (httpResponse) => {
+
+      let body = "";
+
+      httpResponse.on('data', (chunk) => {
+        body += chunk;
+      });
+
+      httpResponse.on("end", () => {
+
+        try {
+          //
+          body = JSON.parse(body);
+
+          //
+          res.send(body);
+
+        } catch(e) {
+          res.send({
+            errorMessage: "There was an error."
+          })
+        }
+      });
+
+    }).on('error', (error) => {
+      // give a notice, that the API request has failed and show the error on the console
+      console.log("Failure while getting animal tracking data from movebank API.", error);
+    });
+  });
+
+
+  //
+  app.get("/animalTrackingAPI/individualIds",  (req, res) => {
+
+    //
+    var resource = "https://www.movebank.org/movebank/service/json-auth?entity_type=individual&study_id=" + req.query.studyID;
+
     //
     var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
     var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
 
     //
     const options = {
-
-      //  method: 'GET',
       headers: {
-        'Authorization':'Basic ' + Buffer.from(loginname+':'+password).toString('base64')
-        //    "access-control-allow-origin": "localhost:3000",
-        //    "access-control-allow-methods": "GET, POST",
-        //    "access-control-allow-headers": "content-type"
-      }
+        "Authorization":"Basic " + Buffer.from(loginname+':'+password).toString('base64'),
+        "access-control-allow-origin": "localhost:3000",
+        "access-control-allow-methods": "GET, POST",
+        "access-control-allow-headers": "content-type"
+      },
+      timeout: 5000
     };
-
 
     // GET animal tracking api:
     https.get(resource, options, (httpResponse) => {
@@ -203,50 +256,44 @@ app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 't
 
       httpResponse.on("end", () => {
         //  res.json(JSON.parse(body));
+        try {
+          //
+          body = JSON.parse(body);
 
-        //
-        body = JSON.parse(body);
+          //
+          res.send(body);
 
-        //
-        res.send(body);
-
+        } catch(e) {
+          res.send({
+            errorMessage: "There was an error."
+          })
+        }
       });
 
-
-
     }).on('error', (error) => {
-      // give a notice, that the API request has failed and show the error-message on the console
-      console.log("Failure while getting animal tracking data from movebank API.", error.message);
-
-      //httpResponse.on("error", (error) => {
-      //console.error(error);
+      // give a notice, that the API request has failed and show the error on the console
+      console.log("Failure while getting animal tracking data from movebank API.", error);
     });
-
-
   });
+
 
   // *****************************************************************************
-
-
-
-  // taken from template of Assignment 8:
-  // middleware for making the db connection available via the request object
-  app.use((req, res, next) => {
-    req.db = app.locals.db;
-    next();
-  });
-
 
 
   //
   app.use('/', indexRouter);
 
   // CRUD functionality for routes
-  app.use('/item', itemsRouter);
+  app.use('/routes', routesRouter);
 
-  //
+  // CRUD functionality for encounters
   app.use('/encounter', encountersRouter);
 
+
+  // route for the client-side tests using qUnit
+  app.get("/test", (req, res) => {
+    res.render("test");
+  });
 
 
   // taken from template of Assignment 8:

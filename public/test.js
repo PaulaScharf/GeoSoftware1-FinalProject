@@ -10,18 +10,10 @@
 
 
 
-// WIE BZW. VON WO BZW. WANN DIESE TESTS AUFRUFEN ??????????
-
-
-
-// ********** qUnit client-Tests for testing the availability of all three APIs used in this project **********
+// ********** qUnit client-Tests for testing the availability of the OpenWeatherMap API and the Geonames API **********
 
 
 QUnit.config.reorder = false;
-
-
-// EVTL. NICHT BENÖTIGT
-var itemId;
 
 
 QUnit.module("API availability tests");
@@ -29,57 +21,30 @@ QUnit.module("API availability tests");
 
 // ************************* availability of the OpenWeatherMap API *************************
 
-
-// TODO: NOCH WEITERE STATUS CODES ABFANGEN ????? ODER WELCHE ÜBERHAUPT?
-
 QUnit.test("availability OpenWeatherMap API", function (assert) {
 
+  // test-variables (one test case)
+  let lat = 40.32346464521419;
+  let long = 23.463965480085898;
 
-  // note the function call done(); below after all async work completed
-  let done = assert.async();
+  // do not finish the test before all async work is completed
+  let done = assert.async(1);
 
-  // WO VERWENDEN???
-  let readDone = false;
-
-
-  //
+  // the URL to test:
   let resource = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + token.OPENWEATHERMAP_TOKEN;
 
-  //
+  // construct a new XMLhttp-request; with this, do the following:
   let xhrWeather = new XMLHttpRequest();
-
-
-  // print facts and data about the loading of the request and the status of the request in the console
-  xhrWeather.onload = function() {
-    //console.dir(xhrWeather);
-    //console.log(xhrWeather.status);
-  };
-
-
-  // capture errors and ........
-  xhrWeather.onerror = function(e) {
-    //
-    assert.ok(false, "OpenWeatherMap not available, error: " + e);
-    //
-    done();
-  };
-
 
   // if the value of the readyState-attribute is changed, the following lambda-function is executed
   xhrWeather.onreadystatechange = function() {
-    // if the operation is complete (readystate 4: done) and the request is succeeded
-    if (this.readyState === 4 && this.status === 200) {
 
-
-      // WAS HIER ÜBERPRÜFEN???? ODER ÜBERHAUPT ETWAS??
-      // parse the description of the weather, that is given in the response, into object and write this description into corresponding HTMLtable-cell
-      var weatherText = JSON.parse(this.responseText).weather[0].description;
-
-      //
-      assert.ok(/* hier überprüfen*/);
-      //
+    // if the operation is complete (readystate 4: done)
+    if (this.readyState === 4) {
+      // if status code is NOT 200, the API is NOT correctly available/usable
+      assert.equal(this.status, 200, "'readyState' has value 4 and 'status' has value 200.");
+      // finish the test considering assert.async(1)
       done();
-
     }
   };
 
@@ -87,36 +52,41 @@ QUnit.test("availability OpenWeatherMap API", function (assert) {
   xhrWeather.open("GET", resource, true);
   // send the request to the server
   xhrWeather.send();
-
 });
 
 
 
-// ************************* availability of the Terrain API *************************
-
+// ************************* availability of the Geonames API *************************
 
 QUnit.test("availability Terrain API", function (assert) {
 
-  // ...
+  // test-variables (one test case)
+  let lat = 40.32346464521419;
+  let long = 23.463965480085898;
+  
+  // do not finish the test before all async work is completed
+  let done = assert.async();
 
-  // http://api.geonames.org/findNearbyJSON?lat=" + lat + "&lng=" + long + "&username=" + token.usernameTerrainAPI;
+  // the URL to test:
+  let resource = "http://api.geonames.org/findNearbyJSON?lat=" + lat + "&lng=" + long + "&username=" + token.usernameTerrainAPI;
 
+  // construct a new XMLhttp-request; with this, do the following:
+  let xhrTerrain = new XMLHttpRequest();
 
+  // if the value of the readyState-attribute is changed, the following lambda-function is executed
+  xhrTerrain.onreadystatechange = function() {
 
-});
+    // if the operation is complete (readystate 4: done)
+    if (this.readyState === 4) {
+      // if status code is NOT 200, the API is NOT correctly available/usable
+      assert.equal(this.status, 200, "'readyState' has value 4 and 'status' has value 200.");
+      // finish the test considering assert.async(1)
+      done();
+    }
+  };
 
-
-
-// ************************* availability of the Animal Tracking API *************************
-
-// EVTL. ALS SERVER TEST MIT MOCHA
-
-QUnit.test("availability Animal Tracking API", function (assert) {
-
-  // ...
-
-  // https://www.movebank.org/movebank/service/public/json?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=200&sensor_type=gps"
-
-
-
+  // initialize the request
+  xhrTerrain.open("GET", resource, true);
+  // send the request to the server
+  xhrTerrain.send();
 });

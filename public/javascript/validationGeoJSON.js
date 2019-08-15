@@ -10,17 +10,6 @@
 */
 
 
-
-// TODO: INHALT SPÄTER IN ANDERE BESTEHENDE, PASSENDE (für create.ejs und singleRoute.ejs) JS-DATEI EINFÜGEN,
-// DANN DIESE DATEI LÖSCHEN
-
-
-// TODO:
-// bei update der route: (bei create alles ok)
-// TypeError: document.getElementById(idInputTextarea).value; is null, kommt erst nach dem updaten, wenn /item/single aufgerufen wird
-
-
-
 /**
 * Takes the ID of the textarea which contains the route input and checks whether this route input is in a correct JSON and a correct GeoJSON syntax.
 * If its syntax is correct, the corresponding action form will be submitted. If its syntax is incorrect, the
@@ -48,14 +37,9 @@ function validateJSONAndGeoJSON(idInputTextarea) {
 
   // if there is no exception thrown, parse the already saved content routeInput into object routeJSONInput
   let routeJSONInput = JSON.parse(routeInput);
-
   //
-  if (validateGeoJSON(routeJSONInput)){
-    return true;
-    // 
-  } else {
-    return false;
-  }
+  return (validateGeoJSON(routeJSONInput));
+
 }
 
 
@@ -66,7 +50,7 @@ function validateJSONAndGeoJSON(idInputTextarea) {
 * false will be returned.
 *
 * @author Katharina Poppinga 450146
-* @param
+* @param routeJSON
 * @return {boolean} true, if the route input is in a correct GeoJSON syntax, false if not
 */
 function validateGeoJSON(routeJSON) {
@@ -96,6 +80,8 @@ function validateGeoJSON(routeJSON) {
       // check the following in the only item in the array 'routeJSONInput.features':
       if ((routeJSON.features[0].type === "Feature") && (routeJSON.features[0].geometry.type === "LineString") &&
       (routeJSON.features[0].geometry.coordinates.length >= 2 )) {
+
+        // TODO: this for-loop only loops once...
 
         // loop "over" all elements in the array 'routeJSONInput.features[i].geometry.coordinates[0]', (over all coordinate-pairs at its best)
         for (let j = 0; j < routeJSON.features[0].geometry.coordinates.length; j++) {

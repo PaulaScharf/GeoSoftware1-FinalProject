@@ -1,3 +1,6 @@
+<!-- final project, Geosoftware1, SoSe2019 -->
+<!-- author: name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +33,7 @@
 
     <div class="row" style="padding:10px">
         <div class="col-sm-12">
-            <div id="allRoutesMap"></div>
+            <div id="singleEncounterMap"></div>
         </div>
     </div>
     <br>
@@ -38,7 +41,7 @@
     <div class="row" style="padding:10px">
         <div class="col-sm">
             <div id="encounterTableDiv">
-                <table class="table" style="max-width:600px; margin-left: auto; margin-right: auto;">
+                <table class="table" style="max-width:800px; margin-left: auto; margin-right: auto;">
                     <thead class="thead-dark" id="encounterTableHead">
                     <tr>
                         <th colspan="2" align="center">Coordinates</th>
@@ -66,11 +69,12 @@
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
-                    <th rowspan="2">Consecutive number of the route</th>
-                    <th rowspan="2">Username</th>
-                    <th rowspan="2">Name of route</th>
-                    <th colspan="2" rowspan="2">Date and time</th>
-                    <th rowspan="2">Type of route</th>
+                    <th>Consecutive number of route</th>
+                    <th>Username</th>
+                    <th>Name of route</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Type of route</th>
                 </tr>
                 </thead>
                 <tbody id="routesTable">
@@ -84,11 +88,11 @@
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
-                    <th rowspan="2">Consecutive number of the route</th>
-                    <th rowspan="2">Animalname/species</th>
-                    <th rowspan="2">?</th>
-                    <th colspan="2" rowspan="2">?</th>
-                    <th rowspan="2">?</th>
+                    <th>Consecutive number of route</th>
+                    <th>StudyID</th>
+                    <th>Individual Taxon Canonical Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
                 </tr>
                 </thead>
                 <tbody id="animalRoutesTable">
@@ -110,8 +114,10 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="/leaflet/leaflet.js"></script>
 <script src="/turf/turf.min.js"></script>
+<script src="jsnlog/jsnlog.min.js"></script>
 
 <script src="/javascript/createAndFillTables.js"></script>
 <script src="/javascript/coordinateSwapping.js"></script>
+<script src="javascript/apiRequestsEncounters.js"></script>
 <script src="/javascript/singleEncounter.js"></script>
 <script src="/javascript/tokens.js"></script>

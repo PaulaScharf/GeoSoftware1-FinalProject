@@ -10,10 +10,6 @@
 */
 
 
-// TODO: ALLE ERRORS ABFANGEN
-
-// KOMMENTARE ANPASSEN
-
 
 var express = require('express');
 const mongodb = require('mongodb');
@@ -21,105 +17,128 @@ const mongodb = require('mongodb');
 var router = express.Router();
 
 
-// ****************************************************************** CRUD-functionality: ******************************************************************
-
-// *********** CREATE/insert (with html-form) ***********
-// add an encounter from the req.body and ...
-var postItemController = function(req, res) {
-    console.log("insert encounter");
-    // TODO: your only able to add an encounter if it contains atleast ...
-
-    // insert one item (one encounter) into current database
-    req.db.collection('routeDB').insertOne(req.body, (error, result) => {
-        if (error) {
-            console.dir(error);
-        }
-        // after the encounter is successfully created, ...??
-        res.send(result.insertedId);
-    });
-};
+// ********************************* CRUD-functionality for encounters: *********************************
 
 
+// *********** READ ***********
+// get all encounters
 //
-var putItemController = function (req, res) {
+var getAllEncountersController = function(req,res) {
+  //
+  req.db.collection('routeDB').find({what: "encounter"}).toArray((error, result) => {
 
-    console.log("update item");
-
-    // convert the coordinate-string to Json
-    //req.body.geoJson = JSON.parse(req.body.geoJson);
-    //
-    let objectId = new mongodb.ObjectID(req.body._id);
-    // delete the id from the body
-    delete req.body._id;
-
-    console.log("update item" + objectId + " to the following:")
-    console.log(req.body);
-
-    // update the encounter in the db with the id of the req.body (which is given in the form)
-    req.db.collection('routeDB').updateOne({_id:objectId}, {$set: req.body}, (error, result) => {
-
-        if(error){
-            console.dir(error);
-        }
-
-        //
-        res.send();
-    });
+    if (error) {
+      // give a notice, that reading all encounters has failed and show the error on the console
+      console.log("Failure in reading all encounters from 'routeDB'.", error);
+      // in case of an error while reading, do routing to "error.ejs"
+      res.render('error');
+      // if no error occurs ...
+    }
+    else {
+      // ... give a notice, that the reading has succeeded and show the result on the console
+      console.log("Successfully read the encounters from 'routeDB'.");
+      // ... and send the result to the ajax request
+      res.json(result);
+    }
+  });
 };
 
 
-//
-var getAllItemController = function(req,res) {
-    req.db.collection('routeDB').find({what: "encounter"}).toArray((error, result) => {
-        if(error){
-            // give a notice, that the reading has failed and show the error-message on the console
-            console.log("Failure in reading from 'routeDB'.", error.message);
-            console.dir(error);
-        }
-        else {
-            // ... give a notice, that the reading has succeeded and show the result on the console
-            console.log("Successfully read the encounters from 'routeDB'.", result);
-            res.json(result);
-        }
-    });
+// *********** CREATE/insert ***********
+// add an encounter from the req.body
+var postEncounterController = function(req, res) {
+
+  console.log("Insert encounter");
+
+  // insert one encounter into current database
+  req.db.collection('routeDB').insertOne(req.body, (error, result) => {
+
+    if (error) {
+      // give a notice, that the inserting has failed and show the error on the console
+      console.log("Failure while inserting encounter into 'routeDB'.", error);
+      // in case of an error while inserting, do routing to "error.ejs"
+      res.render('error');
+      // if no error occurs ...
+    } else {
+      // ... give a notice, that inserting the encounter has succeeded
+      console.log("Successfully inserted encounter " + result.insertedId + " into 'routeDB'.");
+      res.send(result.insertedId);
+    }
+  });
 };
 
 
+// *********** UPDATE ***********
+// update an encounter in the database
+var putEncounterController = function (req, res) {
+
+  console.log("Update encounter " + req.body._id);
+
+  //
+  let objectId = new mongodb.ObjectID(req.body._id);
+
+  // delete the id from the body
+  delete req.body._id;
+
+  console.log("Update an encounter " + objectId + " to the following:")
+  console.log(req.body);
+
+  // update the encounter in the database with the id of the req.body
+  req.db.collection('routeDB').updateOne({_id:objectId}, {$set: req.body}, (error, result) => {
+
+    if (error) {
+      // give a notice, that the updating has failed and show the error on the console
+      console.log("Failure while updating an item in 'routeDB'.", error);
+      // in case of an error while updating, do routing to "error.ejs"
+      res.render('error');
+      // if no error occurs ...
+    } else {
+      // ... give a notice, that updating the encounter has succeeded
+      console.log("Successfully updated an item in 'routeDB'.");
+      // ... and ??????
+      res.send();
+    }
+  });
+};
+
+
+// *********** DELETE ***********
 // delete an encounter from the database and .............
-var deleteItemController = function(req, res) {
+var deleteEncounterController = function(req, res) {
 
-    console.log("delete item " + req.query._id);
-    //
-    let objectId = new mongodb.ObjectID(req.query._id);
+  console.log("Delete encounter " + req.query._id);
 
-    // delete the encounter with the given id
-    req.db.collection('routeDB').deleteOne({_id:objectId}, (error, result) => {
+  //
+  let objectId = new mongodb.ObjectID(req.query._id);
 
-        if(error){
-            console.dir(error);
-        }
-    });
-    //
-    // TODO: FEHLER BEHEBEN, TRITT AUF BEI/NACH(?) DEM LÖSCHEN VON BEGEGNUNGEN, NACHDEM ROUTEN GELÖSCHT WURDEN
-    // AJAX request (deleting an encounter) has failed. JSON.parse: unexpected end of data at line 1 column 1 of the JSON data
-    res.send();
+  // delete the encounter with the given id
+  req.db.collection('routeDB').deleteOne({_id:objectId}, (error, result) => {
+
+    if(error){
+      // give a notice, that the deleting has failed and show the error on the console
+      console.log("Failure while deleting encounter from 'routeDB'.", error);
+      // in case of an error while deleting, do routing to "error.ejs"
+      res.render('error');
+      // if no error occurs ...
+    } else {
+      // ... give a notice, that deleting the encounter has succeeded
+      console.log("Successfully deleted encounter from 'routeDB'.");
+      // ... and ????
+      res.send();
+    }
+  });
 };
 
-// **********************************
 
-//
-router.route("/post")
-    .post(postItemController);
-//
-router.route("/update")
-    .post(putItemController);
-//
-router.route("/getAll")
-    .get(getAllItemController);
-//
-router.route("/delete")
-    .get(deleteItemController);
+// route for reading all encounters
+router.route("/readAll").get(getAllEncountersController);
+// route for creating/inserting one encounter
+router.route("/create").post(postEncounterController);
+// route for updating one encounter
+router.route("/update").post(putEncounterController);
+// route for deleting one encounter
+router.route("/delete").get(deleteEncounterController);
 
-
+// *******************************************************************************************************
 
 module.exports = router;

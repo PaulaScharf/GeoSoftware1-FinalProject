@@ -8,8 +8,6 @@
 * @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
 */
 
-// please put in your own tokens at 'token.js'
-
 
 
 /**
@@ -21,11 +19,13 @@
 * @author Katharina Poppinga 450146
 * @param map map, in which the polyline shall be drawn (map, in which leaflet.draw shall be integrated)
 * @param outputTextarea ID of the textarea in which the new drawn polyline shall be written as a GeoJSON string
+* @param polylineOfOldRoute JUST FOR UPDATEMAP; CREATEMAP NONE
+* @param oldRouteGeoJSON JUST FOR UPDATEMAP; CREATEMAP NONE
 */
-function drawPolyline(map, outputTextarea) {
+function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) {
 
   // feature group for all drawn items, add this group to the existing map
-  var drawnItems = L.featureGroup().addTo(map);
+  let drawnItems = L.featureGroup().addTo(map);
 
   // add a toolbar for drawing to the existing map
   map.addControl(new L.Control.Draw({
@@ -75,6 +75,7 @@ function drawPolyline(map, outputTextarea) {
     // write the new drawn polyline as a GeoJSON string into the given outputTextarea
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
+
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
     output.dispatchEvent(ev);
@@ -82,11 +83,12 @@ function drawPolyline(map, outputTextarea) {
 
 
   // specify a listener: if the polyline is edited, the following function will be executed:
-  map.on(L.Draw.Event.EDITED, function (event) {
+  map.on(L.Draw.Event.EDITED, function () {
 
     // write the updated/edited polyline as a GeoJSON string into the given outputTextarea
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
+
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
     output.dispatchEvent(ev);
@@ -94,7 +96,7 @@ function drawPolyline(map, outputTextarea) {
 
 
   // specify a listener: if the polyline is deleted, the following function will be executed:
-  map.on(L.Draw.Event.DELETED, function (event) {
+  map.on(L.Draw.Event.DELETED, function () {
 
     // if there are no items (polylines) in the feature group of drawnItems (it means that the polyline is really deleted):
     if (drawnItems.getLayers().length === 0){
@@ -107,8 +109,8 @@ function drawPolyline(map, outputTextarea) {
 
         // ... write the GeoJSON of the old route into the given outputTextarea
         let output = document.getElementById(outputTextarea);
-        //
-        output.value = JSON.stringify(polylineOfOldRoute.toGeoJSON(), null, 2);
+        output.value = JSON.stringify(oldRouteGeoJSON, null, 2);
+
         //
         let ev = document.createEvent('Event');
         //

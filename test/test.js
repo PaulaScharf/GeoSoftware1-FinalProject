@@ -13,36 +13,27 @@
 
 
 // ********** Mocha server-Tests **********
-// starting with npm test (after called npm start)
+// starting them with npm test (after called npm start)
 
 
+// load necessary modules:
+const assert = require("assert");
+const http = require("http");
+const https = require("https");
+const path = require("path");
 
-//
-var assert = require("assert");
-//
-var http = require("http");
-
-// FÜR ANIMAL API???
-var https = require("https");
-
-
-//
-let portNumber = 3000;
+const portNumber = 3000;
 
 
-
-
-// test suite for ....
-// UMEBNENNEN
-describe("HTTP-CRUD Test" , function() {
+// test suite for all server-side tests
+describe ("Mocha tests" , function() {
 
 
   // ************************* Status-Code 200 Test *************************
 
-  it('test: Status-Code 200', function (done) {
+  it ("Test: Status-Code 200", function (done) {
 
     try {
-
       http.get('http://localhost:'+portNumber, function (res) {
         assert.equal(200, res.statusCode);
         done();
@@ -57,22 +48,25 @@ describe("HTTP-CRUD Test" , function() {
 
 
 
+  // ************************* CREATE encounter test *************************
 
-  // ************************* CREATE route Test *************************
+  it ("Test: create an encounter", function(done) {
 
-  it("Test: create an encounters", function(done) {
+    //
+    let itemID;
 
+    //
     try {
-
-      let createReq = http.request({
+      //
+      let optionsCreate = {
         host: "localhost",
         port: portNumber,
-        path: "/encounter/post",
+        path: "/encounter/create",
         method: "POST",
+      };
 
-      }, (createResponse) => {
-
-        console.log("createBody: ");
+      //
+      let createRequest = http.request(optionsCreate, (createResponse) => {
 
         let createBody = "";
 
@@ -83,29 +77,64 @@ describe("HTTP-CRUD Test" , function() {
 
         //
         createResponse.on("end", () => {
-          console.log("createBody2: ", 	createBody);
 
+          assert.ok(createResponse.statusCode === 200);
 
-          let data = createBody;
-          //console.dir(data);
-
-          // WIRD NUR GEPRÜFT, OB DIE ID VORHANDEN IST, MEHR NICHT??
-          assert.ok(undefined!==data);
-
+          itemID = createBody;
+          //
+          assert.ok(undefined !== itemID);
           done();
+
+
+          // delete the created item after test has finished:
+
+          //
+          itemID = JSON.parse(itemID);
+          //
+          try {
+            //
+            let optionsDelete = {
+              host: "localhost",
+              port: portNumber,
+              path: "/encounter/delete?_id=" + itemID,
+              method: "GET"
+            };
+
+            //
+            let deleteRequest = http.request(optionsDelete, (deleteResponse) => {
+
+              let deleteBody = "";
+
+              deleteResponse.on("data", (chunk) => {
+                deleteBody += chunk;
+              });
+
+              deleteResponse.on("end", () => {
+              });
+            });
+
+            //
+            deleteRequest.setHeader('Content-Type', 'application/json');
+
+            // end of the request
+            deleteRequest.end();
+
+            //
+          } catch (error){
+            console.dir(error);
+          }
+
         });
       });
 
-
       //
-      createReq.setHeader('Content-Type', 'application/json');
+      createRequest.setHeader('Content-Type', 'application/json');
 
       // write the data to the request body
-      // TESTID
-      createReq.write(JSON.stringify({_id: "5d4ae64e49b21e9cc4ede940"}));
+      createRequest.write(JSON.stringify({foo: "bar"}));
 
       // end of the request
-      createReq.end();
+      createRequest.end();
 
       //
     } catch (error){
@@ -113,298 +142,71 @@ describe("HTTP-CRUD Test" , function() {
       assert.ok(false);
       done();
     }
-    /*
-    try {
-
-      let createReq = http.request({
-        host: "localhost",
-        port: portNumber,
-        path: "/item",
-        method: "POST",
-
-      }, (createResponse) => {
-
-        console.log("createBody: ");
-
-        let createBody = "";
-
-        //
-        createResponse.on("data", (chunk) => {
-          createBody += chunk;
-        });
-        console.log("createBody2: ", 	createBody);
-
-        //
-        createResponse.on("end", () => {
-
-
-          let data = JSON.parse(createBody);
-          //console.dir(data);
-
-          // WIRD NUR GEPRÜFT, OB DIE ID VORHANDEN IST, MEHR NICHT??
-          assert.ok(undefined !== data._id);
-
-          done();
-        });
-      });
-
-
-      //
-      createReq.setHeader('Content-Type', 'application/json');
-
-      // write the data to the request body
-      // TESTID
-      createReq.write(JSON.stringify({_id: "5d4ae64e49b21e9cc4ede940"}));
-
-      // end of the request
-      createReq.end();
-
-      //
-    } catch (error){
-      console.dir(error);
-      assert.ok(false);
-      done();
-    }*/
   });
-
 
 
 
   // ************************* availability of the Animal Tracking API *************************
 
-  // EVTL. ALS CLIENT TEST MIT qUNIT
+  it ("Test: availability Animal Tracking API", function (done) {
 
+    //
+    try {
+      //
+      let study_id = 2911040;
+      let individualID = "4262-84830876";
 
+      //
+      let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + study_id + "&individual_local_identifiers[]=" + individualID + "&max_events_per_individual=200&sensor_type=gps";
 
+      //
+      let loginname = require(path.join(__dirname, '..', 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
+      let password = require(path.join(__dirname, '..', 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
 
+      //
+      const options = {
+        headers: {
+          "Authorization":"Basic " + Buffer.from(loginname+':'+password).toString('base64'),
+          "access-control-allow-origin": "localhost:3000",
+          "access-control-allow-methods": "GET, POST",
+          "access-control-allow-headers": "content-type"
+        },
+        timeout: 5000
+      };
 
+      //
+      https.get(resource, options, (response) => {
 
-  // VORLAGEN:
+        //
+        assert.ok(response.statusCode === 200);
 
+        //
+        let body = "";
 
-  // ************************* CREATE and READ Test *************************
-  /*
-  it("test create and read item", function(done) {
+        //
+        response.on("data", (chunk) => {
+          body += chunk;
+        });
 
-  try{
+        //
+        response.on("end", () => {
 
-  let itemId;
+          //
+          body = JSON.parse(body);
 
-  let createReq = http.request({
-  host: "localhost",
-  port: portNumber,
-  path: "/item",
-  method: "POST",
-}, (createResponse) => {
+          //
+          assert.ok(undefined !== body);
 
-let createBody = "";
+          done();
+        });
+      }
+    );
 
-createResponse.on("data", (chunk) => {
-createBody += chunk;
+    //
+  } catch (error) {
+    console.dir(error);
+    assert.ok(false);
+    done();
+  }
 });
-
-createResponse.on("end", () => {
-let data = JSON.parse(createBody);
-//console.dir(data);
-itemId = data._id;
-assert.ok(undefined!==data._id);
-
-let readReq = http.request({
-host: "localhost",
-port: portNumber,
-path: "/item?_id=" + itemId,
-method: "GET",
-}, (readResponse) => {
-
-let readBody = "";
-
-readResponse.on("data", (chunk) => {
-readBody += chunk;
-});
-
-readResponse.on("end", () => {
-let data = JSON.parse(readBody);
-//console.dir(data);
-assert.ok(undefined!==data._id && data._id==itemId);
-done();
-});
-});
-
-
-// Write data to request body:
-
-readReq.setHeader('Content-Type', 'application/json');
-readReq.end();
-});
-});
-
-
-// Write data to request body:
-
-createReq.setHeader('Content-Type', 'application/json');
-createReq.write(JSON.stringify({foo: "bar"}));
-createReq.end();
-
-} catch(error){
-console.dir(error);
-assert.ok(false);
-done();
-}
-});
-*/
-
-
-// ************************* CREATE and UPDATE Test *************************
-/*
-it("test create and update item", function(done) {
-try{
-
-let itemId;
-
-let createReq = http.request({
-host: "localhost",
-port: portNumber,
-path: "/item",
-method: "POST",
-}, (createResponse) => {
-
-let createBody = "";
-
-createResponse.on("data", (chunk) => {
-createBody += chunk;
-});
-
-createResponse.on("end", () => {
-
-let data = JSON.parse(createBody);
-//console.dir(data);
-itemId = data._id;
-assert.ok(undefined!==data._id);
-
-let req = http.request({
-host: "localhost",
-port: portNumber,
-path: "/item",
-method: "PUT",
-}, (res) => {
-
-let body = "";
-
-res.on("data", (chunk) => {
-body += chunk;
-});
-
-res.on("end", () => {
-try{
-let data = JSON.parse(body);
-//console.dir(data);
-assert.ok(undefined!==data._id && data._id==itemId);
-done();
-} catch(error){
-console.dir(error);
-assert.ok(false);
-done();
-}
-});
-});
-
-
-// Write data to request body:
-
-req.setHeader('Content-Type', 'application/json');
-req.write(JSON.stringify({_id: itemId, foo: "bar updated", foo2: "foo2 added"}));
-req.end();
-});
-});
-
-
-// Write data to request body:
-
-createReq.setHeader('Content-Type', 'application/json');
-createReq.write(JSON.stringify({foo: "bar created"}));
-createReq.end();
-
-} catch(error){
-console.dir(error);
-assert.ok(false);
-done();
-}
-});
-
-*/
-
-// ************************* CREATE and DELETE Test *************************
-/*
-it("test create and delete item", function(done) {
-
-try{
-
-let itemId;
-
-let createReq = http.request({
-host: "localhost",
-port: portNumber,
-path: "/item",
-method: "POST"
-}, (createResponse) => {
-
-let createBody = "";
-
-createResponse.on("data", (chunk) => {
-createBody += chunk;
-});
-
-createResponse.on("end", () => {
-
-let data = JSON.parse(createBody);
-itemId = data._id;
-assert.ok(undefined!==data._id);
-
-let reqBody = JSON.stringify({_id: itemId});
-
-let req = http.request({
-host: "localhost",
-port: portNumber,
-path: "/item?_id=" + itemId,
-method: "DELETE"
-}, (res) => {
-
-let body = "";
-
-res.on("data", (chunk) => {
-body += chunk;
-});
-
-res.on("end", () => {
-//console.dir({_id: itemId});
-let data = JSON.parse(body);
-//console.dir(data);
-assert.ok(undefined!==data._id && data._id==itemId);
-done();
-
-});
-});
-
-
-// Write data to request body:
-
-req.end();
-});
-});
-
-
-// Write data to request body:
-
-createReq.setHeader('Content-Type', 'application/json');
-createReq.write(JSON.stringify({foo: "bar"}));
-createReq.end();
-
-} catch(error){
-console.dir(error);
-assert.ok(false);
-done();
-}
-});
-*/
-
 });
