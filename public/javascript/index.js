@@ -500,7 +500,7 @@ function deleteButton(i){
   let id = allRoutes[i][0]._id;
 
   //
-  tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + " <form action='/item/delete' method='GET' name='deleteButtonForm' style='display: inline;'>" +
+  tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + " <form action='/routes/delete' method='GET' name='deleteButtonForm' style='display: inline;'>" +
       "<input type='hidden' name='_id' value='" + id +"'/>" +
       "<input type='submit' value='delete' id='deleteButton" + i + "'/>" +
       "</form>";
@@ -523,7 +523,7 @@ function updateButton(i){
 
   let id = allRoutes[i][0]._id;
   //
-  tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/item/read' method='GET' name='updateButtonForm' style='display: inline;'>" +
+  tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/routes/read' method='GET' name='updateButtonForm' style='display: inline;'>" +
       "<input type='hidden' name='_id' value='" + id +"'/>" +
       "<input type='submit' value='update' id='updateButton" + i + "'/>" +
       "</form>";

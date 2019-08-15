@@ -288,7 +288,7 @@ function connectMongoDb() {
   app.use('/', indexRouter);
 
   // CRUD functionality for routes
-  app.use('/item', routesRouter);
+  app.use('/routes', routesRouter);
 
   // CRUD functionality for encounters
   app.use('/encounter', encountersRouter);
