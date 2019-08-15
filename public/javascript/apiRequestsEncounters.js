@@ -10,7 +10,7 @@
 
 // please put in your own tokens at 'token.js'
 
-
+/*
 // enable to send JSNLog messages to the server
 let appender = JL.createAjaxAppender("Appender");
 appender.setOptions({
@@ -20,7 +20,7 @@ JL().setOptions({
   "appenders": [appender]
 });
 
-
+*/
 // ********************************** Weather request - OpenWeatherMap API **********************************
 
 /**

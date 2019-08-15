@@ -21,28 +21,7 @@ var router = express.Router();
 // ********************************* CRUD-functionality for USER routes: *********************************
 // routehandlers for get, post, put, and delete of user routes:
 
-// *********** READ ***********
-// get a single route and render the update.ejs view with that route
-var getRoutesController = function(req, res) {
 
-  console.log("Get route " + req.query._id);
-  //
-  req.db.collection('routeDB').find({_id: new mongodb.ObjectID(req.query._id)}).toArray((error, result) => {
-
-    if (error) {
-      // give a notice, that the reading has failed and show the error on the console
-      console.log("Failure while reading userroute from 'routeDB'.", error);
-      // in case of an error while reading, do routing to "error.ejs"
-      res.render('error');
-      // if no error occurs ...
-    } else {
-      // ... give a notice, that reading the userroute has succeeded
-      console.log("Successfully read userroute from 'routeDB'.");
-      // ... and go to the update-page (with taking along the result/the route)
-      res.render("update", {result});
-    }
-  });
-};
 
 
 
@@ -113,8 +92,6 @@ var deleteRoutesController = function(req, res) {
 };
 
 
-// route for reading one userroute
-router.route("/read").get(getRoutesController);
 
 
 

@@ -100,9 +100,10 @@ function showRoute(currentRoute, counter) {
 
   // extract the coordinates of the i-th route
   let coordinatesRoute = swapGeoJSONsLongLatToLatLongOrder_Objects(currentRoute.geoJson.features[0].geometry.coordinates);
-
+  // if the current route is a userroute, color it red, otherwise orange
+  let color = ((currentRoute.madeBy === "user") ? '#ec0000' : '#ec7e00');
   // make a leaflet-polyline from the coordinatesRoute
-  let polylineOfRoute = L.polyline(coordinatesRoute, {color: '#ec0000'}, {weight: '3'});
+  let polylineOfRoute = L.polyline(coordinatesRoute, {color: color}, {weight: '3'});
 
   polylineOfRoute.addTo(routesGroup);
 }
@@ -152,7 +153,7 @@ function fillEncountersTable(currentEncounter) {
 */
 function fillEncountersMap(currentEncounter) {
   // loop "over" all encounters in the current database "routeDB"
-  let color = (currentEncounter.tookPlace === "yes") ? "#60ec07" : "#000bec";
+  let color = (currentEncounter.tookPlace === "yes") ? "#009d42" : "#000bec";
 
   // make a circle out of the current encounter
   let currentCircle = L.circle([currentEncounter.intersectionX, currentEncounter.intersectionY],

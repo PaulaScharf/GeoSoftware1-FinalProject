@@ -506,7 +506,7 @@ function updateButton(i){
 
   let id = allRoutes[i][0]._id;
   //
-  tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/routes/read' method='GET' name='updateButtonForm' style='display: inline;'>" +
+  tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/read' method='GET' name='updateButtonForm' style='display: inline;'>" +
       "<input type='hidden' name='_id' value='" + id +"'/>" +
       "<input type='submit' value='update' id='updateButton" + i + "'/>" +
       "</form>";
