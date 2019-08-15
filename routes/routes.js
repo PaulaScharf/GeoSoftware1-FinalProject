@@ -20,11 +20,7 @@ var router = express.Router();
 
 // ********************************* CRUD-functionality for USER routes: *********************************
 // routehandlers for get, post, put, and delete of user routes:
-
-
-
-
-
+// CREATE and READ can be found in 'index.js'
 
 
 // *********** UPDATE (with html-form) ***********
