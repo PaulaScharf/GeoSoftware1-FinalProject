@@ -37,14 +37,9 @@ function validateJSONAndGeoJSON(idInputTextarea) {
 
   // if there is no exception thrown, parse the already saved content routeInput into object routeJSONInput
   let routeJSONInput = JSON.parse(routeInput);
-
   //
-  if (validateGeoJSON(routeJSONInput)){
-    return true;
-    //
-  } else {
-    return false;
-  }
+  return (validateGeoJSON(routeJSONInput));
+
 }
 
 
@@ -55,7 +50,7 @@ function validateJSONAndGeoJSON(idInputTextarea) {
 * false will be returned.
 *
 * @author Katharina Poppinga 450146
-* @param
+* @param routeJSON
 * @return {boolean} true, if the route input is in a correct GeoJSON syntax, false if not
 */
 function validateGeoJSON(routeJSON) {
@@ -85,6 +80,8 @@ function validateGeoJSON(routeJSON) {
       // check the following in the only item in the array 'routeJSONInput.features':
       if ((routeJSON.features[0].type === "Feature") && (routeJSON.features[0].geometry.type === "LineString") &&
       (routeJSON.features[0].geometry.coordinates.length >= 2 )) {
+
+        // TODO: this for-loop only loops once...
 
         // loop "over" all elements in the array 'routeJSONInput.features[i].geometry.coordinates[0]', (over all coordinate-pairs at its best)
         for (let j = 0; j < routeJSON.features[0].geometry.coordinates.length; j++) {
