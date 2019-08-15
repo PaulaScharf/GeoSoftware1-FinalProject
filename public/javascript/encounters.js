@@ -59,7 +59,7 @@ function getAllRoutes() {
 
     // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
     if (error === "timeout") {
-      JL("ajaxReadAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
+      JL("ajaxReadingAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
     }
   });
 }
@@ -261,7 +261,7 @@ function postEncounter(encounter, id) {
 
     // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
     if (error === "timeout") {
-      JL("ajaxCreateEncounterTimeout").fatalException("ajax: '/encounter/create' timeout");
+      JL("ajaxCreatingEncounterTimeout").fatalException("ajax: '/encounter/create' timeout");
     }
   });
 }
@@ -302,7 +302,7 @@ function deleteEncounter(encounterId) {
 
     // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
     if (error === "timeout") {
-      JL("ajaxDeleteEncounterTimeout").fatalException("ajax: '/encounter/delete' timeout");
+      JL("ajaxDeletingEncounterTimeout").fatalException("ajax: '/encounter/delete' timeout");
     }
   });
 }
@@ -342,7 +342,7 @@ function updateStatusFromNewToOld(route) {
 
     // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
     if (error === "timeout") {
-      JL("ajaxUpdateEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
+      JL("ajaxUpdatingEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
     }
   });
 }

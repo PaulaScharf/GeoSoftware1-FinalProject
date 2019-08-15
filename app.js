@@ -30,17 +30,15 @@ const app = express();
 
 
 const mongodb = require('mongodb');
-// WERDEN BEIDEN FOLGENDEN ÜBERHAUPT GENUTZT????
+
 var createError = require('http-errors');
-var cookieParser = require('cookie-parser');
 
 var JL = require('jsnlog').JL;
 var jsnlog_nodejs = require('jsnlog-nodejs').jsnlog_nodejs;
 
 
-// TODO: PATH.JOIN VERWENDEN, ANSTATT DIRNAME UND /
 var indexRouter = require('./routes/index');
-var routesRouter = require('./routes/items');
+var routesRouter = require('./routes/routes');
 var encountersRouter = require('./routes/encounters');
 
 
@@ -57,9 +55,6 @@ app.use(express.json());
 
 // use built-in middleware which parses urlencoded bodies, https://expressjs.com/en/4x/api.html#express.urlencoded
 app.use(express.urlencoded({ extended: false }));
-
-// TODO: WOZU ?????
-app.use(cookieParser());
 
 
 // routes for npm-installed client-libraries
@@ -180,7 +175,7 @@ function connectMongoDb() {
   app.get("/animalTrackingAPI",  (req, res) => {
 
     //
-    let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=200&sensor_type=gps";
+    let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=100&sensor_type=gps";
 
     //
     let loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
@@ -193,7 +188,8 @@ function connectMongoDb() {
         "access-control-allow-origin": "localhost:3000",
         "access-control-allow-methods": "GET, POST",
         "access-control-allow-headers": "content-type"
-      }
+      },
+      timeout: 5000
     };
 
     // GET animal tracking api:
@@ -206,7 +202,6 @@ function connectMongoDb() {
       });
 
       httpResponse.on("end", () => {
-        //  res.json(JSON.parse(body));
 
         try {
           //
@@ -246,7 +241,8 @@ function connectMongoDb() {
         "access-control-allow-origin": "localhost:3000",
         "access-control-allow-methods": "GET, POST",
         "access-control-allow-headers": "content-type"
-      }
+      },
+      timeout: 5000
     };
 
     // GET animal tracking api:

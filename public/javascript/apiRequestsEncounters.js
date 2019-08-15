@@ -10,17 +10,16 @@
 
 // please put in your own tokens at 'token.js'
 
-/*
-//
-let appender = //JL.createAjaxAppender("Appender");
+
+// enable to send JSNLog messages to the server
+let appender = JL.createAjaxAppender("Appender");
 appender.setOptions({
   "maxBatchSize": 100
 });
-
-//JL().setOptions({
+JL().setOptions({
   "appenders": [appender]
 });
-*/
+
 
 // ********************************** Weather request - OpenWeatherMap API **********************************
 
@@ -100,16 +99,15 @@ class WeatherRequest
   * @desc This function is called when there is an error with the request.
   */
   errorcallback(e) {
-    //console.dir("x: " + this.x);
+
     console.dir("e: " + e);
     //
     if (this.status === 404)
     {
       document.getElementById("weather" + (this.id)).innerHTML = "Error: No connection to the server.";
 
-      // KOMMENTAR ANPASSEN
-      // log the .... exception to the server and .....
-      //JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+      // send JSNLog message to the own server-side to tell that there is no connection to the OWM API server
+      JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
     }
 
     //
@@ -118,8 +116,8 @@ class WeatherRequest
       document.getElementById("weather" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
       console.dir(e);
 
-      //
-      //JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
+      // send JSNLog message to the own server-side to tell that there is an error, including the status-code
+      JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
     }
   }
 
@@ -128,7 +126,7 @@ class WeatherRequest
   * @desc This function is called when the request is loaded for the first time.
   */
   loadcallback() {
-    //console.dir(x);
+    //
     console.log("OpenWeatherMap: status: " + this.status + " , readyState: " + this.readyState);
   }
 }
@@ -173,8 +171,8 @@ function getNewTerrainRequest(encounter, id) {
       document.getElementById("country" + (this.id)).innerHTML = "Error: No connection to the server.";
       document.getElementById("terrain" + (this.id)).innerHTML = "Error: No connection to the server.";
 
-      //
-      //JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+      // send JSNLog message to the own server-side to tell that there is no connection to the Geonames API server
+      JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
     }
 
     //
@@ -184,8 +182,8 @@ function getNewTerrainRequest(encounter, id) {
       document.getElementById("terrain" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
       console.dir(e);
 
-      //
-      //JL("terrainRequestError").fatalException("Error: Status-Code " + this.status, e);
+      // send JSNLog message to the own server-side to tell that there is an error, including the status-code
+      JL("terrainRequestError").fatalException("Error: Status-Code " + this.status, e);
     }
   };
 
@@ -258,11 +256,11 @@ function onlyShowConfirmed() {
 
 
 /**
- * This function makes an AJAX-request in order to update an encounter in the database
- * @private
- * @author Paula Scharf 450334
- * @param encounter
- */
+* This function makes an AJAX-request in order to update an encounter in the database
+* @private
+* @author Paula Scharf 450334
+* @param encounter
+*/
 function updateEncounter(encounter) {
   $.ajax({
     // use a http POST request
@@ -274,19 +272,25 @@ function updateEncounter(encounter) {
     // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
     // type of the data that is sent to the server
     //contentType: "application/json; charset=utf-8",
-    // timeout set to 5 seconds
+    // timeout set to 7 seconds
     timeout: 7000
   })
 
   // if the request is done successfully, ...
-      .done (function () {
-        // ... give a notice on the console that the AJAX request for ....... has succeeded
-        console.log("AJAX request (updating an encounter) is done successfully.");
-      })
+  .done (function () {
+    // ... give a notice on the console that the AJAX request for ....... has succeeded
+    console.log("AJAX request (updating an encounter) is done successfully.");
+  })
 
-      // if the request has failed, ...
-      .fail(function (xhr, status, error) {
-        // ... give a notice that the AJAX request for .......... has failed and show the error on the console
-        console.log("AJAX request (updating an encounter) has failed.", error);
-      });
+  // if the request has failed, ...
+  .fail(function (xhr, status, error) {
+    // ... give a notice that the AJAX request for .......... has failed and show the error on the console
+    console.log("AJAX request (updating an encounter) has failed.", error);
+
+    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
+    if (error === "timeout") {
+      JL("ajaxUpdatingEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
+    }
+  });
 }

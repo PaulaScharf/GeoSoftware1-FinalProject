@@ -54,10 +54,11 @@
           <table class="table">
             <thead class="thead-dark" id="userRoutesTableHead">
               <tr>
-                <th>Consecutive number of the route</th>
+                <th>Consecutive number of route</th>
                 <th>Username</th>
                 <th>Name of route</th>
-                <th colspan="2">Date and time</th>
+                <th>Date</th>
+                <th>Time</th>
                 <th>Type of route</th>
               </tr>
             </thead>
@@ -70,9 +71,9 @@
 
       <div class="col-sm-5">
         <h3 style="margin-left: auto; margin-right: auto;">Search User Routes</h3>
-        Name of route:    <input type="text" id="searchRouteName" placeholder="Search names of routes" title="Type in a name">
-        <br />
         Username:    <input type="text" id="searchRouteUser" placeholder="Search users of routes" title="Type in a username">
+        <br>
+        Name of route:    <input type="text" id="searchRouteName" placeholder="Search names of routes" title="Type in a name">
         <div>
           <label class="switch">
             <input type="checkbox" onchange="searchEncounters('user', this)">
@@ -91,10 +92,11 @@
           <table class="table">
             <thead class="thead-dark" id="animalRoutesTableHead">
               <tr>
-                <th>Consecutive number of the route</th>
+                <th>Consecutive number of route</th>
                 <th>StudyID</th>
                 <th>Individual Taxon Canonical Name</th>
-                <th colspan="2">Date and time</th>
+                <th>Date</th>
+                <th>Time</th>
               </tr>
             </thead>
             <tbody id="animalRoutesTable">
@@ -107,7 +109,7 @@
       <div class="col-sm-5">
         <h3 style="margin-left: auto; margin-right: auto;">Search Animal Routes</h3>
         StudyID:    <input type="text" id="searchStudyID" placeholder="Search studyID" title="Type in a studyID">
-        <br />
+        <br>
         Individual Taxon Canonical Name:    <input type="text" id="searchAnimalName" placeholder="Search " title="Type in a user">
         <div>
           <label class="switch">
@@ -126,11 +128,11 @@
           <table class="table">
             <thead class="thead-dark" id="encounterTableHead">
               <tr>
-                <th rowspan="2">Consecutive number of the encounter</th>
+                <th rowspan="2">Consecutive number of encounter</th>
                 <th rowspan="2">Number of first route</th>
                 <th rowspan="2">Number of second route</th>
                 <th colspan="3" align="center">Context-information</th>
-                <th colspan="1" align="center"><input type='checkbox' id='showConfirmedCheckbox' onclick="onlyShowConfirmed()">  show confirmed</th>
+                <th colspan="1" align="center"><input type='checkbox' id='showConfirmedCheckbox' onclick="onlyShowConfirmed()">  show only confirmed</th>
                 <th rowspan="2">Share Encounter</th>
               </tr>
               <tr>
@@ -161,7 +163,7 @@
 <script src="leaflet/leaflet.js"></script>
 <script src="leaflet-draw/leaflet.draw.js"></script>
 <script src="turf/turf.min.js"></script>
-<!--script src="jsnlog/jsnlog.js"></script-->
+<script src="jsnlog/jsnlog.min.js"></script>
 
 <script src="javascript/createAndFillTables.js"></script>
 <script src="javascript/coordinateSwapping.js"></script>

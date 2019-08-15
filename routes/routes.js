@@ -15,6 +15,9 @@
 var express = require('express');
 const mongodb = require('mongodb');
 
+// load path-module and save it in const-OBJECT path
+const path = require("path");
+
 var router = express.Router();
 
 
@@ -68,7 +71,7 @@ var postRoutesController = function(req, res) {
       // ... give a notice, that inserting the userroute has succeeded
       console.log("Successfully inserted userroute into 'routeDB'.");
       // ... and go back to the create-page
-      res.render("create");
+      res.render(path.join(__dirname, '..', 'views', 'create'));
     }
   });
 };
@@ -85,7 +88,7 @@ var putRoutesController = function (req, res) {
   req.body.geoJson = JSON.parse(req.body.geoJson);
 
   let objectId = new mongodb.ObjectID(req.body._id);
-  // TODO: SICHER NÖTIG?
+
   // delete the id from the body
   delete req.body._id;
 
