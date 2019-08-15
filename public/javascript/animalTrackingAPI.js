@@ -433,6 +433,17 @@ function postAnimalRoute() {
 
       // if the chosen route already exists in the database ...
       if (response !== "") {
+        //
+        document.getElementById('animalName').innerHTML = "";
+        document.getElementById('animalDateTime').innerHTML = "";
+
+
+        document.getElementById("getAnimalRouteDiv").style.display = "none";
+
+        //
+        animalRoutesGroup.clearLayers();
+        //
+        animalRoute = undefined;
         // ... tell the user about it
         alert("This animalroute is already stored in your database. Please choose a different one.");
         // ... and do not call the following expressions so that the user can choose a different route
@@ -505,16 +516,21 @@ function insertAnimalroute(){
       //
     } else {
       //
-      document.getElementById('individualID').value = "";
       document.getElementById('animalName').innerHTML = "";
       document.getElementById('animalDateTime').innerHTML = "";
+
+
+      document.getElementById("getAnimalRouteDiv").style.display = "none";
 
       //
       animalRoutesGroup.clearLayers();
       //
       animalRoute = undefined;
       //
+
       alert("The animalroute was successfully inserted into your database.");
+
+      getAllRoutes();
     }
 
     // ... give a notice on the console that the AJAX request for posting the animalroute has succeeded

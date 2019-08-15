@@ -38,7 +38,7 @@
       <div class="col-12 col-md-6">
         <h2>Add Userroute</h2>
 
-        <form action="/routes/create" method="POST" name="createForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('createRoute')">
+        <form action="/create" method="POST" name="createForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('createRoute')">
           Username:<br>
           <input type="text" name="creator" onKeyup="checkform()"/><br>
           Name of route:<br>
@@ -76,6 +76,7 @@
 <script src="turf/turf.min.js"></script>
 
 <script src="javascript/formFunctions.js"></script>
+<script src="javascript/apiRequestsEncounters.js"></script>
 <script src="javascript/leafletDrawPolyline.js"></script>
 <script src="javascript/validationGeoJSON.js"></script>
 <script src="javascript/coordinateSwapping.js"></script>
