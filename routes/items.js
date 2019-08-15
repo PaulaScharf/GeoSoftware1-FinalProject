@@ -83,8 +83,6 @@ var putRoutesController = function (req, res) {
   // TODO: MÜSSTE DURCH BODY PARSER EIGENTLICH AUTOMATISCH GEHEN, WARUM NICHT? WG. NUR geoJson??
   // convert the coordinate-string to Json
   req.body.geoJson = JSON.parse(req.body.geoJson);
-  //
-  req.body.status = "updated";
 
   let objectId = new mongodb.ObjectID(req.body._id);
   // TODO: SICHER NÖTIG?

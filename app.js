@@ -40,7 +40,7 @@ var jsnlog_nodejs = require('jsnlog-nodejs').jsnlog_nodejs;
 
 // TODO: PATH.JOIN VERWENDEN, ANSTATT DIRNAME UND /
 var indexRouter = require('./routes/index');
-var routesRouter = require('./routes/routes');
+var routesRouter = require('./routes/items');
 var encountersRouter = require('./routes/encounters');
 
 
@@ -288,7 +288,7 @@ function connectMongoDb() {
   app.use('/', indexRouter);
 
   // CRUD functionality for routes
-  app.use('/routes', routesRouter);
+  app.use('/item', routesRouter);
 
   // CRUD functionality for encounters
   app.use('/encounter', encountersRouter);

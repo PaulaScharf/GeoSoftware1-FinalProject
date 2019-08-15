@@ -63,7 +63,7 @@
 
 /**
 * Global variable which ....
-* @type {object oder was???????}
+* @type {object}
 */
 let animalRoute;
 
@@ -366,8 +366,7 @@ function makeAnimalRouteGeoJSON(locations) {
 
 
   // creating the GeoJSON FeatureCollection output by setting its attributes:
-  let animalRouteGeoJSON = {
-
+  return {
     type: "FeatureCollection",
     features: [
       {
@@ -381,9 +380,6 @@ function makeAnimalRouteGeoJSON(locations) {
       }
     ]
   };
-
-  //
-  return animalRouteGeoJSON;
 }
 
 
@@ -394,7 +390,7 @@ function makeAnimalRouteGeoJSON(locations) {
 *
 * @private
 * @author Katharina Poppinga 450146
-* @param animalroute
+* @param animalRoute
 */
 function showAnimalRoute(animalRoute) {
 
@@ -470,8 +466,8 @@ function postAnimalRoute() {
       data: JSON.stringify(animalRoute),
       // type of the data that is sent to the server
       contentType: "application/json; charset=utf-8",
-      // timeout set to 5 seconds
-      timeout: 5000
+      // timeout set to 7 seconds
+      timeout: 7000
     })
 
     // if the request is done successfully, ...
@@ -533,8 +529,8 @@ function insertAnimalroute(){
     data: JSON.stringify(animalRoute),
     // type of the data that is sent to the server
     contentType: "application/json; charset=utf-8",
-    // timeout set to 5 seconds
-    timeout: 5000
+    // timeout set to 7 seconds
+    timeout: 7000
   })
 
   // if the request is done successfully, ...
