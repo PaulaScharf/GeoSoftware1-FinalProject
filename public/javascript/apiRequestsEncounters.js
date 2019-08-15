@@ -10,17 +10,17 @@
 
 // please put in your own tokens at 'token.js'
 
-
+/*
 //
-var appender = JL.createAjaxAppender("Appender");
+let appender = //JL.createAjaxAppender("Appender");
 appender.setOptions({
   "maxBatchSize": 100
 });
 
-JL().setOptions({
+//JL().setOptions({
   "appenders": [appender]
 });
-
+*/
 
 // ********************************** Weather request - OpenWeatherMap API **********************************
 
@@ -109,7 +109,7 @@ class WeatherRequest
 
       // KOMMENTAR ANPASSEN
       // log the .... exception to the server and .....
-      JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+      //JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
     }
 
     //
@@ -119,7 +119,7 @@ class WeatherRequest
       console.dir(e);
 
       //
-      JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
+      //JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
     }
   }
 
@@ -158,7 +158,6 @@ function getNewTerrainRequest(encounter, id) {
   //
   let xx = new XMLHttpRequest();
   xx.writeRequestResultsIntoTable = writeRequestResultsIntoTable;
-  // TODO: was ist hier updateEncounter ?
   xx.updateEncounter = updateEncounter;
   xx.id = id;
   xx.encounter = encounter;
@@ -175,7 +174,7 @@ function getNewTerrainRequest(encounter, id) {
       document.getElementById("terrain" + (this.id)).innerHTML = "Error: No connection to the server.";
 
       //
-      JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
+      //JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
     }
 
     //
@@ -186,7 +185,7 @@ function getNewTerrainRequest(encounter, id) {
       console.dir(e);
 
       //
-      JL("terrainRequestError").fatalException("Error: Status-Code " + this.status, e);
+      //JL("terrainRequestError").fatalException("Error: Status-Code " + this.status, e);
     }
   };
 
@@ -255,4 +254,39 @@ function onlyShowConfirmed() {
     confirmActive = false;
     showEncountersOnStartingPage();
   }
+}
+
+
+/**
+ * This function makes an AJAX-request in order to update an encounter in the database
+ * @private
+ * @author Paula Scharf 450334
+ * @param encounter
+ */
+function updateEncounter(encounter) {
+  $.ajax({
+    // use a http POST request
+    type: "POST",
+    // URL to send the request to
+    url: "/encounter/update",
+    //
+    data: encounter,
+    // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
+    // type of the data that is sent to the server
+    //contentType: "application/json; charset=utf-8",
+    // timeout set to 5 seconds
+    timeout: 7000
+  })
+
+  // if the request is done successfully, ...
+      .done (function () {
+        // ... give a notice on the console that the AJAX request for ....... has succeeded
+        console.log("AJAX request (updating an encounter) is done successfully.");
+      })
+
+      // if the request has failed, ...
+      .fail(function (xhr, status, error) {
+        // ... give a notice that the AJAX request for .......... has failed and show the error on the console
+        console.log("AJAX request (updating an encounter) has failed.", error);
+      });
 }

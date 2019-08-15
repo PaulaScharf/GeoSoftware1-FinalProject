@@ -46,7 +46,7 @@
             </div>
             <div class="col-12 col-md-6">
                 <h1>Edit Route</h1>
-                    <form action="/routes/update" method="POST" name="updateForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('updateRoute')">
+                    <form action="/item/update" method="POST" name="updateForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('updateRoute')">
                         <input type = "hidden" name = "_id" value="<%= result[0]._id %>"/>
                         Username:<br />
                         <input type="text" name="creator" onKeyup="checkform()" value="<%= result[0].creator %>"/><br>
@@ -61,6 +61,7 @@
                         Type:<br />
                         <input type="radio" name="type" value="planned" <%if(result[0].type === "planned") {%>checked<%}%>> planned<br>
                         <input type="radio" name="type" value="completed" <%if(result[0].type === "completed") {%>checked<%}%>> completed<br>
+                        <input type="hidden" name="status" value = "updated"/>
                         <br/><br/>
                         <input type="submit" value="Update route" id="submitbutton"/>
                         <div id="errorMsg" style="display: none;">To update a route you need to fill in all blanks.</div>
