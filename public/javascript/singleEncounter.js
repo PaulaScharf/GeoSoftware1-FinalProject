@@ -56,13 +56,13 @@ let encountersGroup = L.layerGroup().addTo(encountersMap);
 * @author Paula Scharf 450334
 */
 function processResult() {
-  //
+  // retrieve the result of the databank-read from the hidden element on the page
   let result = JSON.parse(document.getElementById("result").innerHTML);
   let counter = 0;
-  //
+  // got through the result array containing routes and the encounter
   for (let i = 0; i < result.length; i++) {
     let current = result[i];
-    //
+    // call the corresponding function for displaying  a route or an encounter
     if (current.what === "route") {
       showRoute(current, counter);
       counter++;
@@ -132,12 +132,12 @@ function showEncounter(encounter) {
 */
 function fillEncountersTable(currentEncounter) {
   //
-  createSingleEncounterTable(currentEncounter.intersectionX, currentEncounter.intersectionY, 0, "encountersTable")
+  createSingleEncounterTable(currentEncounter.intersectionX, currentEncounter.intersectionY, 0, "encountersTable");
   // only show encounters, which are also shown on the map
   // if the encounter is new, then create a new weather request and a new terrain request
   currentEncounter.weather = new WeatherRequest([currentEncounter.intersectionX, currentEncounter.intersectionY], 0);
   if (typeof currentEncounter.terrain === 'undefined') {
-    terrainRequest(currentEncounter, 0);
+    getNewTerrainRequest(currentEncounter, 0);
   } else {
     writeRequestResultsIntoTable(currentEncounter.terrain, 0);
   }
@@ -158,8 +158,8 @@ function fillEncountersMap(currentEncounter) {
   let currentCircle = L.circle([currentEncounter.intersectionX, currentEncounter.intersectionY],
     {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
     //currentCircle.bindPopup("encounter number " + (i + 1) + " between " + allRoutes[currentEncounter[2].firstRoute][0].creator + " and " + allRoutes[currentEncounter[2].secondRoute][0].creator);
-    // add the circle to the array encountersLatLongArray
-    //encountersLatLongArray.push(currentCircle);
+    // add the circle to the array circleEncounters
+    //circleEncounters.push(currentCircle);
     currentCircle.addTo(encountersGroup);
     encountersMap.fitBounds(currentCircle.getBounds());
 }

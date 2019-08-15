@@ -25,7 +25,7 @@
 function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) {
 
   // feature group for all drawn items, add this group to the existing map
-  var drawnItems = L.featureGroup().addTo(map);
+  let drawnItems = L.featureGroup().addTo(map);
 
   // add a toolbar for drawing to the existing map
   map.addControl(new L.Control.Draw({
@@ -83,7 +83,7 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
 
 
   // specify a listener: if the polyline is edited, the following function will be executed:
-  map.on(L.Draw.Event.EDITED, function (event) {
+  map.on(L.Draw.Event.EDITED, function () {
 
     // write the updated/edited polyline as a GeoJSON string into the given outputTextarea
     let output = document.getElementById(outputTextarea);
@@ -96,7 +96,7 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
 
 
   // specify a listener: if the polyline is deleted, the following function will be executed:
-  map.on(L.Draw.Event.DELETED, function (event) {
+  map.on(L.Draw.Event.DELETED, function () {
 
     // if there are no items (polylines) in the feature group of drawnItems (it means that the polyline is really deleted):
     if (drawnItems.getLayers().length === 0){

@@ -48,7 +48,7 @@ var getAllEncountersController = function(req,res) {
 // add an encounter from the req.body
 var postEncounterController = function(req, res) {
 
-  console.log("Insert encounter " + req.body._id);
+  console.log("Insert encounter");
 
   // insert one encounter into current database
   req.db.collection('routeDB').insertOne(req.body, (error, result) => {
@@ -61,9 +61,7 @@ var postEncounterController = function(req, res) {
       // if no error occurs ...
     } else {
       // ... give a notice, that inserting the encounter has succeeded
-      console.log("Successfully inserted encounter into 'routeDB'.");
-      // TODO: WARUM WIRD HIER ID GESENDET, ABER IM AJAX NICHT VERWENDET?
-      // ... and ????????
+      console.log("Successfully inserted encounter " + result.insertedId + " into 'routeDB'.");
       res.send(result.insertedId);
     }
   });
@@ -82,7 +80,7 @@ var putEncounterController = function (req, res) {
   // delete the id from the body
   delete req.body._id;
 
-  console.log("Update encounter " + objectId + " to the following:")
+  console.log("Update an item " + objectId + " to the following:")
   console.log(req.body);
 
   // update the encounter in the database with the id of the req.body
@@ -90,13 +88,13 @@ var putEncounterController = function (req, res) {
 
     if (error) {
       // give a notice, that the updating has failed and show the error on the console
-      console.log("Failure while updating encounter in 'routeDB'.", error);
+      console.log("Failure while updating an item in 'routeDB'.", error);
       // in case of an error while updating, do routing to "error.ejs"
       res.render('error');
       // if no error occurs ...
     } else {
       // ... give a notice, that updating the encounter has succeeded
-      console.log("Successfully updated encounter in 'routeDB'.");
+      console.log("Successfully updated an item in 'routeDB'.");
       // ... and ??????
       res.send();
     }
