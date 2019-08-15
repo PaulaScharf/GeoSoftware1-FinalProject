@@ -51,7 +51,7 @@ var postRoutesController = function(req, res) {
 
   console.log("Insert route " + req.body._id);
 
-  // TODO: MÜSSTE DURCH BODY PARSER EIGENTLICH AUTOMATISCH GEHEN, WARUM NICHT? WG. NUR geoJson??
+  // TODO: MÜSSTE DURCH BODY PARSER EIGENTLICH AUTOMATISCH GEHEN, WARUM NICHT?????
   // convert the coordinate-string to Json
   req.body.geoJson = JSON.parse(req.body.geoJson);
 
@@ -80,7 +80,7 @@ var putRoutesController = function (req, res) {
 
   console.log("Update route " + req.body._id);
 
-  // TODO: MÜSSTE DURCH BODY PARSER EIGENTLICH AUTOMATISCH GEHEN, WARUM NICHT? WG. NUR geoJson??
+  // TODO: MÜSSTE DURCH BODY PARSER EIGENTLICH AUTOMATISCH GEHEN, WARUM NICHT?????
   // convert the coordinate-string to Json
   req.body.geoJson = JSON.parse(req.body.geoJson);
 
@@ -161,14 +161,9 @@ router.route("/delete").get(deleteRoutesController);
 // get a single animalroute
 var getAnimalController = function(req, res) {
 
-  console.log("Search for already existing animalroute.");
-
-  // find animalroute in database with the same study_id and the same individual_id
-  // that the user has chosen to insert again (these values come from ajax)
-  req.db.collection('routeDB').findOne({
-    "study_id" : req.body.study_id,
-    "individual_id" : req.body.individual_id
-  }, (error, result) => {
+  console.log("Find animalroute " + req.query._id);
+/*  //
+  req.db.collection('routeDB').findOne({_id: new mongodb.ObjectID(req.query._id)}).((error, result) => {
 
     if (error) {
       // give a notice, that the reading has failed and show the error on the console
@@ -182,7 +177,7 @@ var getAnimalController = function(req, res) {
       // ... send the result to the ajax request
       res.send(result);
     }
-  });
+  });*/
 };
 
 
@@ -217,7 +212,7 @@ var postAnimalController = function(req, res) {
 
 
 // route for reading/finding one animalroute
-router.route("/readAnimal").post(getAnimalController);
+router.route("/readAnimal").get(getAnimalController);
 
 // route for creating/inserting one animalroute
 router.route("/createAnimal").post(postAnimalController);

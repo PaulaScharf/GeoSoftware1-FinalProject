@@ -32,7 +32,7 @@ function getAllRoutes() {
     // data type of the response
     dataType: "json",
     // timeout set to 5 seconds
-    timeout: 5000
+    timeout: 7000
   })
 
   // if the request is done successfully, ...
@@ -41,7 +41,7 @@ function getAllRoutes() {
     let allRoutes = [];
     //
     for (let i = 0; i < response.length; i++) {
-      allRoutes.push([response[i], true])
+      allRoutes.push([response[i], true]);
       allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder_Arrays(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
     }
 
@@ -56,11 +56,6 @@ function getAllRoutes() {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
     console.log("AJAX request (reading all routes) has failed.", error);
-
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
-    if (error === "timeout") {
-      JL("ajaxReadAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
-    }
   });
 }
 
@@ -76,13 +71,10 @@ function getAllRoutes() {
 */
 function checkForNewRoute(response, checkForUpdates) {
 
-  console.log("Check for new routes.");
-
   // go through all routes
   for (let i = 0; i < response.length; i++) {
     //
     let currentRoute = response[i];
-    console.log(currentRoute[0]);
     let route = {
       _id: currentRoute[0]._id,
       status: "old"
@@ -96,12 +88,16 @@ function checkForNewRoute(response, checkForUpdates) {
       updateStatusFromNewToOld(route);
     }
     else if (currentRoute[0].status === "updated") {
+      let temp = alreadyKnownRoutes;
+      alreadyKnownRoutes = response;
 
       deleteAllEncountersOfRoute(currentRoute[0]._id);
       // calculate the encounters with other routes
       calculateEncounters(currentRoute[0].geoJson.features[0].geometry.coordinates, currentRoute[0]._id, checkForUpdates);
       // after the encounters of a route are calculated, its status is set to old
       updateStatusFromNewToOld(route);
+
+      alreadyKnownRoutes = temp;
     }
 
     // the now processed route is added to the other already processed routes
@@ -148,7 +144,7 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
 
   //
   for (let i = 0; i < alreadyKnownRoutes.length; i++) {
-    if (oneId !== alreadyKnownRoutes[i][0]._id) {
+    if (oneId !== alreadyKnownRoutes[i][0]._id || alreadyKnownRoutes[i][0].status !== "updated") {
       console.log("Compare: " + oneId + " with " + alreadyKnownRoutes[i][0]._id);
       intersectionOfRoutes(oneRoute, alreadyKnownRoutes[i][0].geoJson.features[0].geometry.coordinates, oneId, alreadyKnownRoutes[i][0]._id, checkForUpdates);
     }
@@ -168,30 +164,22 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
 * @param firstId           id of the first route
 * @param secondId          id of the second route
 * @param checkForUpdates   if true, add the new encounter to the allEncounters-array
-* @author name: Paula Scharf, matr.: 450 334
+* @author name: Paula Scharf 450 334
 */
 function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkForUpdates) {
 
-console.log(firstId);
-console.log(secondId);
-
-
-  console.log("First route:", firstRoute);
-  console.log("Second route:", secondRoute);
   let line1 = turf.lineString(firstRoute);
   let line2 = turf.lineString(secondRoute);
   // these nested for-loops go through all adjascent point pairs in each route
   // check for intersections between two lines
   let result = turf.lineIntersect(line1, line2);
-  // if the result contains coordinates, then there in an intersection
-  console.log(result);
-  for (let i = 0; i < result.features.length; i++) {
-    let intersectionCoordinates = result.features[i].geometry.coordinates;
+  // if the result contains coordinates, then there is an intersection
+  result.features.forEach((intersection) => {
     // create an encounter object for the calculated intersection
     let encounter = {
       what: "encounter",
-      intersectionX: intersectionCoordinates[0],
-      intersectionY: intersectionCoordinates[1],
+      intersectionX: intersection.geometry.coordinates[0],
+      intersectionY: intersection.geometry.coordinates[1],
       firstRoute: firstId,
       secondRoute: secondId,
       tookPlace: "maybe"
@@ -200,9 +188,6 @@ console.log(secondId);
 
     console.log("Copy of encounter: ");
     console.log(copyOfEncounter);
-    // save the new encounter in the database
-    postEncounter(copyOfEncounter);
-    // TODO: bad style
     // add the new encounter to the allEncounters-array, if it was created because a route was updated
     if (checkForUpdates) {
       let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
@@ -225,16 +210,19 @@ console.log(secondId);
       // and in the table
       allEncounters.push([encounter, parameters, noOfRoutes])
     }
-  }
+    // save the new encounter in the database
+    postEncounter(copyOfEncounter, allEncounters.length-1);
+  });
 }
 
 
 /**
 * This function calls the /encounter/create route with ajax, to save a given encounter in the database.
-* @param encounter - the encounter to be saved
 * @author name: Paula Scharf, matr.: 450 334
-*/
-function postEncounter(encounter) {
+ * @param encounter - the encounter to be saved
+ * @param id - the index of the encounter in the global encounters-array ("allEncounters")
+ */
+function postEncounter(encounter, id) {
 
   //
   $.ajax({
@@ -248,11 +236,15 @@ function postEncounter(encounter) {
     //
     data: JSON.stringify(encounter),
     // timeout set to 5 seconds
-    timeout: 5000
+    timeout: 7000
   })
 
   // if the request is done successfully, ...
-  .done (function () {
+  .done (function (response) {
+    console.log(id);
+    allEncounters[id][0]._id = response;
+    console.log(allEncounters[id]);
+    shareButton(id);
     // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
     console.log("AJAX request (posting an encounter) is done successfully.");
   })
@@ -261,11 +253,6 @@ function postEncounter(encounter) {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for posting an encounter has failed and show the error on the console
     console.log("AJAX request (posting an encounter) has failed.", error);
-
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
-    if (error === "timeout") {
-      JL("ajaxCreateEncounterTimeout").fatalException("ajax: '/encounter/create' timeout");
-    }
   });
 }
 
@@ -289,7 +276,7 @@ function deleteEncounter(encounterId) {
       _id: encounterId
     },
     // timeout set to 5 seconds
-    timeout: 5000
+    timeout: 7000
   })
 
   // if the request is done successfully, ...
@@ -302,11 +289,6 @@ function deleteEncounter(encounterId) {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
     console.log("AJAX request (deleting an encounter) has failed.", error);
-
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
-    if (error === "timeout") {
-      JL("ajaxDeleteEncounterTimeout").fatalException("ajax: '/encounter/delete' timeout");
-    }
   });
 }
 
@@ -329,11 +311,11 @@ function updateStatusFromNewToOld(route) {
     //
     data: JSON.stringify(route),
     // timeout set to 5 seconds
-    timeout: 5000
+    timeout: 7000
   })
 
   // if the request is done successfully, ...
-  .done (function (response) {
+  .done (function () {
     // ... give a notice on the console that the AJAX request for updating the status of a route has succeeded
     console.log("AJAX request (updating the status of a route) is done successfully.");
   })
@@ -342,10 +324,5 @@ function updateStatusFromNewToOld(route) {
   .fail(function (xhr, status, error) {
     // ... give a notice that the AJAX request for updating the status of a route has failed and show the error on the console
     console.log("AJAX request (updating the status of a route) has failed.", error);
-
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
-    if (error === "timeout") {
-      JL("ajaxUpdateEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
-    }
   });
 }
