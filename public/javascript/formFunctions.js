@@ -67,3 +67,26 @@ function checkTimestamp() {
     }
   }
 }
+
+/**
+ *
+ * @private
+ * @author Paula Scharf 450 334
+ * @param {String} madeBy -
+ */
+function searchEdited(madeBy) {
+  // if the function is called from the animal-searchbar, then select the animal-search-checkbox, otherwise the
+  // user-search-checkbox
+  let elementId = ((madeBy === "animal") ? "animalSearchCheckbox" : "userSearchCheckbox");
+  let checkbox = document.getElementById(elementId);
+  // if  the checkbox is checked, uncheck it and create a change-event that triggers the necessary functions
+  // to undo the search
+  if (checkbox.checked) {
+    // unchecking
+    checkbox.checked = false;
+    // creating and releasing the change-event
+    let ev = document.createEvent('Event');
+    ev.initEvent('change', true, false);
+    checkbox.dispatchEvent(ev);
+  }
+}

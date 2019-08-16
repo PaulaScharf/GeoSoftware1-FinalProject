@@ -102,17 +102,20 @@ class WeatherRequest
 
     console.dir("e: " + e);
     //
-    if (this.status === 404)
-    {
+    if (this.status === 404) {
       document.getElementById("weather" + (this.id)).innerHTML = "Error: No connection to the server.";
 
       // send JSNLog message to the own server-side to tell that there is no connection to the OWM API server
       JL("weatherRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
     }
+    else if (this.status === 0) {
+      document.getElementById("weather" + (this.id)).innerHTML = "Error: No connection to the internet";
 
+      // send JSNLog message to the own server-side to tell that there is an error, including the status-code
+      JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
+    }
     //
-    else
-    {
+    else {
       document.getElementById("weather" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
       console.dir(e);
 
@@ -264,6 +267,9 @@ function updateEncounter(encounter) {
     url: "/encounter/update",
     //
     data: encounter,
+    // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
+    // type of the data that is sent to the server
+    //contentType: "application/json; charset=utf-8",
     // timeout set to 7 seconds
     timeout: 7000
   })
@@ -301,6 +307,7 @@ function postEncounter(encounter, id) {
         type: "POST",
         // URL to send the request to
         url: "/encounter/create",
+        // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
         // type of the data that is sent to the server
         contentType: "application/json; charset=utf-8",
         //

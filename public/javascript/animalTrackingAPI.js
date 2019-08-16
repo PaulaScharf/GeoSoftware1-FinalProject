@@ -127,7 +127,7 @@ function getIndividualID() {
   .fail (function (xhr, status, error) {
     // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error on the console
     console.log("AJAX request (getting animal tracking data from API) has failed.", error);
-    alert("There was an error. Please try another input.");
+    alert("There was an error. Please try again later.");
 
     // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
     // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
@@ -215,7 +215,7 @@ function getTrackingData() {
 
       //
     } else {
-      alert("This individual does not seem to have any data stored.\n" +
+      alert("This individual doesnt seem to have any data stored. \n " +
       "Please try a different individual or study.");
     }
   })

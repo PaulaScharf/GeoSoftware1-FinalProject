@@ -378,30 +378,28 @@ function fillEncountersTable() {
   // fill the table
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    // only show encounters, which are also shown on the map
-    if (currentEncounter[1].routesSelected &&
-        (currentEncounter[1].search === "no search" || currentEncounter[1].search === "searched for") &&
-        // if the "show confirmed" checkbox is active then check if the encounter is confirmed/ took place.
-        // if the checkbox is not active then give true regardless
-        (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
-      createEncountersTable(i, currentEncounter[2].firstRoute + 1, currentEncounter[2].secondRoute + 1, "encountersTable");
-      // if the encounter is new, then create a new weather request and a new terrain request
-      if (typeof currentEncounter[0].weather === 'undefined') {
-        currentEncounter[0].weather = new WeatherRequest([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY], i);
-        // if the encounter is old, reuse the response of the already existing corresponding weather and terrain requests
-      } else {
-        currentEncounter[0].weather.x.writeRequestResultsIntoTable();
-      }
-      if (typeof currentEncounter[0].terrain === 'undefined') {
-        getNewTerrainRequest(currentEncounter[0], i);
-      } else {
-        writeRequestResultsIntoTable(currentEncounter[0].terrain, i);
-      }
-      let isFirstPlanned = (allRoutes[currentEncounter[2].firstRoute][0].type === "planned");
-      let isSecondPlanned = (allRoutes[currentEncounter[2].secondRoute][0].type === "planned");
+    if(typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined" && typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined") {
+      // only show encounters, which are also shown on the map
+      if (currentEncounter[1].routesSelected &&
+          (currentEncounter[1].search === "no search" || currentEncounter[1].search === "searched for") &&
+          // if the "show confirmed" checkbox is active then check if the encounter is confirmed/ took place.
+          // if the checkbox is not active then give true regardless
+          (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
+        createEncountersTable(i, currentEncounter[2].firstRoute + 1, currentEncounter[2].secondRoute + 1, "encountersTable");
+        if (typeof currentEncounter[0].terrain === 'undefined') {
+          getNewTerrainRequest(currentEncounter[0], i);
+        } else {
+          writeRequestResultsIntoTable(currentEncounter[0].terrain, i);
+        }
+        let isFirstPlanned = (allRoutes[currentEncounter[2].firstRoute][0].type === "planned");
+        let isSecondPlanned = (allRoutes[currentEncounter[2].secondRoute][0].type === "planned");
 
-      encounterCheckbox(i, (isFirstPlanned || isSecondPlanned));
-      shareButton(i);
+        encounterCheckbox(i, (isFirstPlanned || isSecondPlanned));
+        shareButton(i);
+      }
+    } else {
+      deleteEncounter(currentEncounter[0]._id);
+      allEncounters.splice(i, 1);
     }
   }
 }

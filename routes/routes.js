@@ -67,7 +67,7 @@ var deleteRoutesController = function(req, res) {
   console.log("Delete route " + req.query._id);
 
   //
-  let objectId = new mongodb.ObjectID(req.query._id);
+  let objectId = new mongodb.ObjectID(req.query._d);
 
   // delete the route with the given id
   req.db.collection('routeDB').deleteOne({_id:objectId}, (error, result) => {

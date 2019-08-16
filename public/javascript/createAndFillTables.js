@@ -11,6 +11,8 @@
 
 // TODO: APPEND-TEIL DER FUNKTIONEN AUFTEILEN (AUSLAGERN)
 
+let textAlign = "text-align: center;";
+
 
 /**
 * Creates new table row with six new table cells and appends the row and these cells to given table.
@@ -34,7 +36,7 @@ function createUserRouteTable(insertFirst, insertSecond, insertThird, insertFour
   let firstValue = document.createElement("td");
   firstValue.id = "conseNum" + insertFirst;
   firstValue.innerHTML = insertFirst + 1;
-  firstValue.style.cssText = 'text-align: center;';
+  firstValue.style.cssText = textAlign;
   let secondValue = document.createElement("td");
   secondValue.innerHTML = insertSecond;
   let thirdValue = document.createElement("td");
@@ -78,7 +80,7 @@ function createAnimalRouteTable(insertFirst, insertSecond, insertThird, insertFo
   let firstValue = document.createElement("td");
   firstValue.id = "conseNum" + insertFirst;
   firstValue.innerHTML = insertFirst + 1;
-  firstValue.style.cssText = 'text-align: center;';
+  firstValue.style.cssText = textAlign;
   let secondValue = document.createElement("td");
   secondValue.innerHTML = insertSecond;
   let thirdValue = document.createElement("td");
@@ -116,26 +118,23 @@ function createEncountersTable(insertFirst, insertSecond, insertThird, tableBody
   let row = document.createElement("tr");
   let firstValue = document.createElement("td");
   firstValue.innerHTML = insertFirst + 1;
-  firstValue.style.cssText = 'text-align: center;';
+  firstValue.style.cssText = textAlign;
   let secondValue = document.createElement("td");
   secondValue.innerHTML = insertSecond;
-  secondValue.style.cssText = 'text-align: center;';
+  secondValue.style.cssText = textAlign;
   let thirdValue = document.createElement("td");
   thirdValue.innerHTML = insertThird;
-  thirdValue.style.cssText = 'text-align: center;';
+  thirdValue.style.cssText = textAlign;
   let fourthValue = document.createElement("td");
   fourthValue.setAttribute("id", "country" + insertFirst);
   let fifthValue = document.createElement("td");
-  fifthValue.setAttribute("id", "weather" + insertFirst);
-  fifthValue.style.cssText = 'text-align: center;';
+  fifthValue.setAttribute("id", "terrain" + insertFirst);
   let sixthValue = document.createElement("td");
-  sixthValue.setAttribute("id", "terrain" + insertFirst);
+  sixthValue.setAttribute("id", "confirm" + insertFirst);
+  sixthValue.style.cssText = textAlign;
   let seventhValue = document.createElement("td");
-  seventhValue.setAttribute("id", "confirm" + insertFirst);
-  seventhValue.style.cssText = 'text-align: center;';
-  let eighthValue = document.createElement("td");
-  eighthValue.setAttribute("id", "share" + insertFirst);
-  eighthValue.style.cssText = 'text-align: center;';
+  seventhValue.setAttribute("id", "share" + insertFirst);
+  seventhValue.style.cssText = textAlign;
 
   // append new row and eight new cells to given table
   document.getElementById(tableBodyID).appendChild(row);
@@ -146,7 +145,6 @@ function createEncountersTable(insertFirst, insertSecond, insertThird, tableBody
   row.appendChild(fifthValue);
   row.appendChild(sixthValue);
   row.appendChild(seventhValue);
-  row.appendChild(eighthValue);
 }
 
 
@@ -174,7 +172,7 @@ function createSingleEncounterTable(insertFirst, insertSecond, insertThird, tabl
   thirdValue.setAttribute("id", "country" + insertThird);
   let fourthValue = document.createElement("td");
   fourthValue.setAttribute("id", "weather" + insertThird);
-  fourthValue.style.cssText = 'text-align: center;';
+  fourthValue.style.cssText = textAlign;
   let fifthValue = document.createElement("td");
   fifthValue.setAttribute("id", "terrain" + insertThird);
 
