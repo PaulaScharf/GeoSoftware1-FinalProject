@@ -1,11 +1,7 @@
 // jshint esversion: 6
 // jshint maxerr: 1000
 
-
-
 "use strict";  // JavaScript code is executed in "strict mode"
-
-
 
 /**
 * @desc final project, Geosoftware1, SoSe2019
@@ -14,11 +10,11 @@
 
 
 /**
-* Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part).This means this function takes one array (with all coordinates)
-* containing arrays (individual long-lat-pairs) of a route.
-* Swaps these coordinate-pairs. Returns one array containing arrays with the routes' coordinates as lat-long-pairs.
+* Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part) and swaps these coordinate-pairs.
+* This means this function takes one array (with all coordinates) containing arrays (individual long-lat-pairs) of a route.
+* and returns one array containing arrays with the routes' coordinates as lat-long-pairs.
 *
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga, matr.: 450146
 * @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
 * @return latLongCoordinatesRoute - one array containing arrays with the coordinates of the route as lat-long-pairs
 */
@@ -47,11 +43,11 @@ function swapGeoJSONsLongLatToLatLongOrder_Arrays(longLatCoordinatesRoute){
 
 
 /**
-* Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part).This means this function takes one array (with all coordinates)
-* containing arrays (individual long-lat-pairs) of a route.
-* Swaps these coordinate-pairs. Returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
+* Takes the coordinates of a route as valid GeoJSON (just the geometry.coordinates-part) and swaps these coordinate-pairs.
+* This means this function takes one array (with all coordinates) containing arrays (individual long-lat-pairs) of a route.
+* and returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
 *
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga, matr.: 450146
 * @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
 * @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
 */

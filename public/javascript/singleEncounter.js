@@ -16,44 +16,67 @@
 // TODO: FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
 
 
-// ****************************** map ******************************
+// ****************************** global variables *****************************
+
+
+// TODO: LAYERGROUPS KOMMENTARE ÜBERPRÜFEN
 
 /**
-* create the initial map in the "singleEncounterMap"-div, the proper map extract will be set later
-* @type {map}
+* A Leaflet-map in which the shared encounter is shown.
+* @type {Map}
 */
+let encountersMap;
 
-let encountersMap = L.map('singleEncounterMap').setView([0, 0], 3);
 
 /**
-* OpenStreetMap tiles as a layer for the map "singleEncounterMap"
+* An OpenStreetMap tileLayer.
 * @type {tileLayer}
 */
-let oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+let oSMLayer;
+
+
+/**
+* A leaflet-layerGroup for both routes belonging to the shared encounter.
+* @type {layerGroup}
+*/
+let routesGroup;
+
+
+/**
+* A leaflet-layerGroup for the shared encounter.
+* @type {layerGroup}
+*/
+let encountersGroup;
+
+
+// *****************************************************************************
+
+
+// create the initial map in the "singleEncounterMap"-div, the proper map extract will be set later
+encountersMap = L.map('singleEncounterMap').setView([0, 0], 3);
+
+// OpenStreetMap tiles as a layer for the map "singleEncounterMap"
+oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
-// add the OpenStreetMap tile layer to the map "singleEncounterMap"
+// add the OpenStreetMap tileLayer to the map "singleEncounterMap"
 oSMLayer.addTo(encountersMap);
 
-/**
-* create a layerGroup for all routes, add this group to the existing map "singleEncounterMap"
-* @type {layerGroup}
-*/
-let routesGroup = L.layerGroup().addTo(encountersMap);
+// create a layerGroup for both routes, add this group to the existing map "singleEncounterMap" ......................................
+routesGroup = L.layerGroup().addTo(encountersMap);
+
+// create a layerGroup for all encounters, add this group to the existing map "singleEncounterMap" ......................................
+encountersGroup = L.layerGroup().addTo(encountersMap);
 
 
-/**
-* create a layerGroup for all encounters, add this group to the existing map "singleEncounterMap"
-* @type {layerGroup}
-*/
-let encountersGroup = L.layerGroup().addTo(encountersMap);
 
+// ********************************* functions *********************************
 
 /**
 * This function takes the shared encounter and its corresponding coordinates and shows them in map and tables.
 * @private
-* @author Paula Scharf 450334
+* @author Paula Scharf, matr.: 450334
 */
 function processResult() {
   // retrieve the result of the databank-read from the hidden element on the page
@@ -76,7 +99,7 @@ function processResult() {
 /**
 * This function shows a route in its corresponding table (animal or user) and in the map.
 * @private
-* @author Paula Scharf 450334
+* @author Paula Scharf, matr.: 450334
 * @param currentRoute
 * @param counter
 */
@@ -84,23 +107,23 @@ function showRoute(currentRoute, counter) {
   //
   if (currentRoute.madeBy === "user") {
 
-    // show the i-th userroute with a consecutive number and its creator, name, date, time and type in the table "routesTable"
+    // show the user route with a consecutive number and its creator, name, date, time and type in the table "routesTable"
     createUserRouteTable(counter, currentRoute.creator, currentRoute.name, currentRoute.date, currentRoute.time, currentRoute.type, "routesTable");
   }
 
   //
   else if (currentRoute.madeBy === "animal") {
 
-    // show the i-th animalroute with a consecutive number and its studyID, individualTaxonCanonicalName, date and time in the table "animalRoutesTable"
+    // show the animal route with a consecutive number and its studyID, individualTaxonCanonicalName, date and time in the table "animalRoutesTable"
     createAnimalRouteTable(counter, currentRoute.study_id, currentRoute.individualTaxonCanonicalName, currentRoute.date, currentRoute.time, "animalRoutesTable");
   }
 
 
-  // ************** show the i-th route in the map "singleEncounterMap", therefore do the following steps: **************
+  // ************** show the route in the map "singleEncounterMap", therefore do the following steps: **************
 
-  // extract the coordinates of the i-th route
+  // extract the coordinates of the route
   let coordinatesRoute = swapGeoJSONsLongLatToLatLongOrder_Objects(currentRoute.geoJson.features[0].geometry.coordinates);
-  // if the current route is a userroute, color it red, otherwise orange
+  // if the current route is a user route, color it red, otherwise orange
   let color = ((currentRoute.madeBy === "user") ? '#ec0000' : '#ec7e00');
   // make a leaflet-polyline from the coordinatesRoute
   let polylineOfRoute = L.polyline(coordinatesRoute, {color: color}, {weight: '3'});
@@ -109,11 +132,10 @@ function showRoute(currentRoute, counter) {
 }
 
 
-
 /**
 * This function shows an encounter in the map and the table.
 * @private
-* @author Paula Scharf 450334
+* @author Paula Scharf, matr.: 450334
 * @param encounter
 */
 function showEncounter(encounter) {
@@ -128,7 +150,7 @@ function showEncounter(encounter) {
 /**
 * This function fills the encounters table.
 * @private
-* @author Paula Scharf, matr.: 450 334
+* @author Paula Scharf, matr.: 450334
 * @param currentEncounter - the to be shown encounter
 */
 function fillEncountersTable(currentEncounter) {
@@ -158,6 +180,9 @@ function fillEncountersMap(currentEncounter) {
   // make a circle out of the current encounter
   let currentCircle = L.circle([currentEncounter.intersectionX, currentEncounter.intersectionY],
     {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
+
+    // TODO: WAS IST MIT DEM AUSKOMMENTIERTEN?
+
     //currentCircle.bindPopup("encounter number " + (i + 1) + " between " + allRoutes[currentEncounter[2].firstRoute][0].creator + " and " + allRoutes[currentEncounter[2].secondRoute][0].creator);
     // add the circle to the array circleEncounters
     //circleEncounters.push(currentCircle);

@@ -69,14 +69,14 @@
           </select>
           <br>
           Max. number of locations:<br>
-          <input type="number" value="200" name="maxEventsPerIndividual" id="maxEventsPerIndividual"><br>
+          <input type="number" value="100" name="maxEventsPerIndividual" id="maxEventsPerIndividual"><br>
           <br>
           <button onclick="getTrackingData()">Get tracking data</button>
         </div>
         <br><br><br>
         <div id="getAnimalRouteDiv" style="display:none">
           <div>
-            <h4>Currently chosen Animalroute</h4>
+            <h4>Currently chosen animal route</h4>
             <br>
             <p><b>Individual Taxon Canonical Name:</b></p>
             <p id="animalName"></p>
@@ -84,7 +84,7 @@
             <p id="animalDateTime"></p>
           </div>
           <br>
-          <button onclick="postAnimalRoute()">Add chosen animalroute to database</button>
+          <button onclick="postAnimalRoute()">Add chosen animal route to database</button>
         </div>
       </div>
     </div>

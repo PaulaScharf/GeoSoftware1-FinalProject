@@ -9,9 +9,9 @@
 */
 
 
-// please put in your own tokens:
+// please put in your own tokens here:
 
-// TODO: VOR ABGABE HIER ALLES AUSXXEN
+// TODO: VOR ABGABE HIER ALLES AUS-XXEN
 
 // KOMMENTARE ÄNDERN, ODER SCHREIBEN, DASS VON MATTHIAS ÜBERNOMMEN
 

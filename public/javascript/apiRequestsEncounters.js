@@ -25,7 +25,7 @@ JL().setOptions({
 
 /**
 * @desc This class creates and holds a request to openweathermap.
-* @author Paula Scharf 450334
+* @author Paula Scharf, matr.: 450334
 */
 class WeatherRequest
 
@@ -142,7 +142,7 @@ class WeatherRequest
 * This function makes an XMLHttpRequest to the geonames API to get context
 * information (terrain and country) for a specific encounter.
 * @private
-* @author Paula Scharf 450 334
+* @author Paula Scharf, matr.: 450334
 * @param encounter
 * @param id
 */
@@ -160,15 +160,19 @@ function getNewTerrainRequest(encounter, id) {
   xx.postEncounter = postEncounter;
   xx.id = id;
   xx.encounter = encounter;
+  // TODO:
   xx.response;
   xx.onload = function () {
-    console.log("Geonames: Status-Code: " + this.status + " , readyState: " + this.readyState);
+
+  console.log("Geonames: Status-Code: " + this.status + " , readyState: " + this.readyState);
   };
 
   xx.onerror = function (e) {
     //
     if (this.status === 404)
     {
+
+      // TODO: ÄNDERN IN POSTENCOUNTER-OBJECT
       //document.getElementById("country" + (this.id)).innerHTML = "Error: No connection to the server.";
       //document.getElementById("terrain" + (this.id)).innerHTML = "Error: No connection to the server.";
 
@@ -209,7 +213,7 @@ function getNewTerrainRequest(encounter, id) {
 /**
 * This function writes the request-results of the geonames-XMLHttpRequest into the encounters-table.
 * @private
-* @author Paula Scharf 450 334
+* @author Paula Scharf, matr.: 450334
 * @param response
 * @param id
 */
@@ -237,7 +241,7 @@ function writeRequestResultsIntoTable(response, id) {
 * This function comes into play when the "show confirmed" checkbox is being checked.
 * It makes sure that only the confirmed encounters are being shown in the map and in the table.
 * @private
-* @author Paula Scharf 450 334
+* @author Paula Scharf, matr.: 450334
 */
 function onlyShowConfirmed() {
 
@@ -245,18 +249,18 @@ function onlyShowConfirmed() {
   //
   if (checkbox.checked === true) {
     confirmActive = true;
-    showEncountersOnStartingPage();
+    showEncountersOnMainPage();
   } else {
     confirmActive = false;
-    showEncountersOnStartingPage();
+    showEncountersOnMainPage();
   }
 }
 
 
 /**
-* This function makes an AJAX-request in order to update an encounter in the database
+* This function makes an AJAX-request in order to update an encounter in the database.
 * @private
-* @author Paula Scharf 450334
+* @author Paula Scharf, matr.: 450334
 * @param encounter
 */
 function updateEncounter(encounter) {
@@ -294,8 +298,8 @@ function updateEncounter(encounter) {
 }
 
 /**
- * This function calls the /encounter/create route with ajax, to save a given encounter in the database.
- * @author name: Paula Scharf, matr.: 450 334
+ * This function calls the '/encounter/create' route with ajax, to save a given encounter in the database.
+ * @author Paula Scharf, matr.: 450334
  * @param encounter - the encounter to be saved
  * @param id - the index of the encounter in the global encounters-array ("allEncounters")
  */

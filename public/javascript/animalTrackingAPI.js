@@ -14,33 +14,41 @@
 // JSDoc: * @throws request failed: [object ProgressEvent]
 
 
+// TODO: KOMMENTARE, JSDoc
+
+
+// ****************************** global variables ******************************
+
+
+// TODO:
 /**
 * Global variable which ....
-* @type {object}
+* @type {Object}
 */
 let animalRoute;
 
 
 /**
-* Global variable which ....
-* @type {map}
+* A Leaflet-map in which the chosen animal route is shown.
+* @type {Map}
 */
 let createAnimalRouteMap;
 
 
 /**
-* Global variable which ....
+* A leaflet-layerGroup for the chosen animal route.
 * @type {layerGroup}
 */
 let animalRoutesGroup;
 
 
+// ********************************* functions *********************************
 
 /**
 *
 *
 *
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga, matr.: 450146
 */
 function showAnimalMapData() {
 
@@ -60,11 +68,10 @@ function showAnimalMapData() {
 }
 
 
-
 /**
-* This function makes an Ajax request to get individual identifiers for a specific studyID.
+* This function makes an AJAX-request to get individual identifiers for a specific studyID.
 * @private
-* @author Paula Scharf 450334
+* @author Paula Scharf, matr.: 450334
 */
 function getIndividualID() {
   //
@@ -139,10 +146,10 @@ function getIndividualID() {
 
 
 /**
-* This function takes the response of ajax request for getting individual identiefiers of a study and displays it in
+* This function takes the response of the AJAX-request for getting individual identiefiers of a study and displays it in
 * a dropdown menu on the page.
 * @private
-* @author Paula Scharf 450334
+* @author Paula Scharf, matr.: 450334
 */
 function showAnimalIds(response) {
   let select = document.getElementById("individualID");
@@ -157,7 +164,7 @@ function showAnimalIds(response) {
 /**
 *
 *
-*
+* @author Katharina Poppinga, matr.: 450146, Paula Scharf, matr.: 450334
 */
 function getTrackingData() {
   //
@@ -238,14 +245,13 @@ function getTrackingData() {
 }
 
 
-
 /**
 * Takes the response of the Animal Tracking API request .....................
 * and ......
 *
 *
 * @private
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga, matr.: 450146
 * @param response response of the ......... request ........
 */
 function formatAndShowAnimalRoute(response) {
@@ -255,8 +261,6 @@ function formatAndShowAnimalRoute(response) {
 
   // animalRouteGeoJSON is an object
   let animalRouteGeoJSON = makeAnimalRouteGeoJSON(locations);
-
-  console.log(animalRouteGeoJSON);
 
   // timestamps are provided in milliseconds since 1970-01-01 UTC
   // get the timestamp of the first coordinate of the animalroute (it is only one timestamp saved for one route, like it is for the userroutes, too)
@@ -295,14 +299,13 @@ function formatAndShowAnimalRoute(response) {
 }
 
 
-
 /**
 * Takes the locations-part of the response from the animal tracking API .....................
 * and makes a route (as a GeoJSON feature) from/of the individual lat- and long-coordinates.......
 *
 *
 * @private
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga, matr.: 450146
 * @param locations array of ...............
 * @return animalRouteGeoJSON - the locations of the animalroute as a GeoJSON FeatureCollection
 */
@@ -312,7 +315,6 @@ function makeAnimalRouteGeoJSON(locations) {
 
   // new array for the coordinates of the route, written in GeoJSON (only the geometry.coordinates part of the GeoJSON format)
   let coordinatesGeoJSON = [];
-
 
   //
   let lat, long;
@@ -345,13 +347,12 @@ function makeAnimalRouteGeoJSON(locations) {
 }
 
 
-
 /**
 *
 *
 *
 * @private
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga, matr.: 450146
 * @param animalRoute
 */
 function showAnimalRoute(animalRoute) {
@@ -383,21 +384,18 @@ function showAnimalRoute(animalRoute) {
 }
 
 
-
 /**
 *
 *
 *
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga, matr.: 450146
 */
 function postAnimalRoute() {
-
-  console.log(animalRoute);
 
   // if there is no animalroute gotten/chosen from movebank API ...
   if (typeof animalRoute === "undefined") {
     // ... tell the user that he/she first has to choose an animalroute by getting tracking data of a study from movebank API
-    alert("First, you have to choose an animalroute by getting tracking data of a study from movebank API.")
+    alert("First, you have to choose an animalroute by getting tracking data of a study from movebank API.");
   }
   // if there is an animalroute gotten/chosen from movebank API,
   // check the syntax because animalRoute is a global variable
@@ -469,7 +467,6 @@ function postAnimalRoute() {
       }
     })
 
-
     // if the ajax-request has failed, ...
     .fail (function (xhr, status, error) {
 
@@ -490,7 +487,7 @@ function postAnimalRoute() {
 *
 *
 * @private
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga, matr.: 450146
 */
 function insertAnimalroute(){
 

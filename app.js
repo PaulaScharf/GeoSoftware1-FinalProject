@@ -24,10 +24,10 @@ const path = require("path");
 
 // ********** load third-modules: (after installed using cmd: npm install ...) **********
 const express = require('express');
-var bodyParser = require('body-parser');
 // call express and save it in the function app
 const app = express();
 
+var bodyParser = require('body-parser');
 const mongodb = require('mongodb');
 var createError = require('http-errors');
 
@@ -131,7 +131,7 @@ function connectMongoDb() {
         // catch possible errors and tell the user about them:
       } catch (error) {
 
-        // TODO: ? APP NICHT STARTEN
+        // TODO: NOCH WAS??
 
         console.log(error.message);
         console.dir(error);
@@ -215,7 +215,7 @@ app.post("/animalTrackingAPI/individualIds", (req, res) => {
         // ... send a message
         res.send({
           errorMessage: "There was an error."
-        })
+        });
       }
     });
 
@@ -271,7 +271,7 @@ app.post("/animalTrackingAPI", (req, res) => {
         // ... send a message
         res.send({
           errorMessage: "There was an error."
-        })
+        });
       }
     });
 

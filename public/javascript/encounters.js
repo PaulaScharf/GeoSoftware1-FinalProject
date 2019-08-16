@@ -10,7 +10,7 @@
 
 
 /**
-* already known/processed routes
+* Already known/processed routes.
 * @type {Array}
 */
 let alreadyKnownRoutes = [];
@@ -18,9 +18,9 @@ let alreadyKnownRoutes = [];
 
 
 /**
-* This function reads all routes from the db and also checks if some of them are new and therefor require a
-* calculation of encounters
-* @author name: Paula Scharf, matr.: 450 334
+* This function reads all routes from the database and also checks if some of them are new and therefor require a
+* calculation of encounters.
+* @author Paula Scharf, matr.: 450334
 */
 function getAllRoutes() {
 
@@ -67,12 +67,13 @@ function getAllRoutes() {
 
 
 // TODO: instead of checkForUpdates you could also change the status
+// TODO: JSDoc
 /**
-* this route checks, if the ajax-response contains a new route.
+* this route checks, if the AJAX-response contains a new route.
 * If the route is new, then the encounters are calculated for it.
 * @param response          the response of the ajax-request in readRoutesEncounters.js
 * @param checkForUpdates   if true, also delete the old encounters associated with a new route
-* @author name: Paula Scharf, matr.: 450 334
+* @author Paula Scharf, matr.: 450334
 */
 function checkForNewRoute(response, checkForUpdates) {
 
@@ -107,17 +108,14 @@ function checkForNewRoute(response, checkForUpdates) {
 
     // the now processed route is added to the other already processed routes
     alreadyKnownRoutes.push(currentRoute);
-
-    //console.log("checked " + currentRoute[0]._id);
   }
 }
 
 
-
 /**
-* This function deletes all encounters which are associated to the route with the given id
-* @param routeId - the id  of the route
-* @author name: Paula Scharf, matr.: 450 334
+* This function deletes all encounters which are associated to the route with the given ID.
+* @param routeId - the ID of the route
+* @author Paula Scharf, matr.: 450334
 */
 function deleteAllEncountersOfRoute(routeId) {
 
@@ -136,13 +134,12 @@ function deleteAllEncountersOfRoute(routeId) {
 }
 
 
-
 /**
 * This function calculates all encounters of a given route with all other routes.
 * @param oneRoute        -  a route (only the coordinates)
-* @param oneId           -  id of oneRoute
+* @param oneId           -  ID of oneRoute
 * @param checkForUpdates -
-* @author name: Paula Scharf, matr.: 450 334
+* @author Paula Scharf, matr.: 450334
 */
 function calculateEncounters(oneRoute, oneId, checkForUpdates) {
 
@@ -155,7 +152,6 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
 }
 
 
-
 /**
 * This function calculates the intersections of between all the straight lines that make up two given routes.
 *
@@ -164,10 +160,10 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
 *
 * @param firstRoute        a route (only the coordinates)
 * @param secondRoute       a second route (only the coordinates)
-* @param firstId           id of the first route
-* @param secondId          id of the second route
+* @param firstId           ID of the first route
+* @param secondId          ID of the second route
 * @param checkForUpdates   if true, add the new encounter to the allEncounters-array
-* @author name: Paula Scharf 450 334
+* @author Paula Scharf, matr.: 450334
 */
 function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkForUpdates) {
 
@@ -209,7 +205,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
         };
         // give true as the second argument to indicate that the encounter should be visible on the map
         // and in the table
-        allEncounters.push([encounter, parameters, noOfRoutes])
+        allEncounters.push([encounter, parameters, noOfRoutes]);
       }
     }
     let index;
@@ -223,8 +219,8 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 
 
 /**
-* This function calls the /encounter/create route with ajax, to save a given encounter in the database.
-* @author name: Paula Scharf, matr.: 450 334
+* This function calls the '/encounter/create' route with AJAX, to save a given encounter in the database.
+* @author Paula Scharf, matr.: 450334
  * @param encounter - the encounter to be saved
  * @param id - the index of the encounter in the global encounters-array ("allEncounters")
  */
@@ -267,11 +263,10 @@ function postEncounter(encounter, id) {
 }
 
 
-
 /**
-* This function calls the encounter/delete route with ajax, to delete an encounter with a given id from the db
-* @param encounterId   - the id of the encounter
-* @author name: Paula Scharf, matr.: 450 334
+* This function calls the '/encounter/delete' route with AJAX, to delete an encounter with a given ID from the database.
+* @param encounterId   - the ID of the encounter
+* @author Paula Scharf, matr.: 450334
 */
 function deleteEncounter(encounterId) {
   //
@@ -307,11 +302,10 @@ function deleteEncounter(encounterId) {
 }
 
 
-
 /**
-* This function calls the encounter/update route with ajax, to update a route in the database.
+* This function calls the '/encounter/update' route with AJAX, to update a route in the database.
 * @param route - the new route
-* @author name: Paula Scharf, matr.: 450 334
+* @author Paula Scharf, matr.: 450334
 */
 function updateStatusFromNewToOld(route) {
 

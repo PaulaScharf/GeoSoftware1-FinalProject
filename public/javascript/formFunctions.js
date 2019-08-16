@@ -10,11 +10,11 @@
 
 
 /**
- * This function checks wether all the necessary elements of the form for creating/updating a route have been filled.
- * It is called whenever the content of an element of the form changes or a key is pressed inside the element.
- * @private
- * @author Paula Scharf 450 334
- */
+* This function checks wether all the necessary elements of the form for creating/updating a route have been filled.
+* It is called whenever the content of an element of the form changes or a key is pressed inside the element.
+* @private
+* @author Paula Scharf, matr.: 450334
+*/
 function checkform() {
 
   let form = document.getElementById("createUpdateForm").elements;
@@ -37,10 +37,10 @@ function checkform() {
 
 /**
 * This function checks wether the chosen timestamp is ahead or behind the current time.
- * If it is ahead it disables the option to set the type of the route to "completed"
- * (because a route the lies in the future could not have been completed).
+* If it is ahead it disables the option to set the type of the route to "completed"
+* (because a route the lies in the future could not have been completed).
 * @private
-* @author Paula Scharf 450 334
+* @author Paula Scharf, matr.: 450334
 */
 function checkTimestamp() {
   let datetimeString = document.getElementById("date").value;
@@ -68,12 +68,13 @@ function checkTimestamp() {
   }
 }
 
+// TODO: parameterbeschreibung
 /**
- *
- * @private
- * @author Paula Scharf 450 334
- * @param {String} madeBy -
- */
+*
+* @private
+* @author Paula Scharf, matr.: 450 334
+* @param {String} madeBy -
+*/
 function searchEdited(madeBy) {
   // if the function is called from the animal-searchbar, then select the animal-search-checkbox, otherwise the
   // user-search-checkbox

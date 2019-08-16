@@ -11,16 +11,18 @@
 
 
 /**
+* Adds a toolbar for drawing polylines to the given leaflet-map and therefore allows to draw a route (just one at a time) in this map.
+* In addition, writes the drawn polyline in GeoJSON syntax in the given textarea.
+* If the given map is the "updateMap" and the drawn route is deleted, the third and fourth parameter are used, too.
+* They restore the old route which was saved before updating.
 *
-*
-*
-* using leaflet.draw
+* This function uses leaflet.draw.
 * @private
-* @author Katharina Poppinga 450146
-* @param map map, in which the polyline shall be drawn (map, in which leaflet.draw shall be integrated)
+* @author Katharina Poppinga, matr.: 450146
+* @param map leaflet-map, in which the polyline shall be drawn (map, in which leaflet.draw shall be integrated)
 * @param outputTextarea ID of the textarea in which the new drawn polyline shall be written as a GeoJSON string
-* @param polylineOfOldRoute JUST FOR UPDATEMAP; CREATEMAP NONE
-* @param oldRouteGeoJSON JUST FOR UPDATEMAP; CREATEMAP NONE
+* @param polylineOfOldRoute just used, if parameter 'map' has the value "updateMap": old route as a polyline
+* @param oldRouteGeoJSON just used, if parameter 'map' has the value "updateMap": old route as a GeoJSON
 */
 function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) {
 
@@ -36,8 +38,6 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
       polyline: {
         // allow the crossing of line segments
         allowIntersection: true,
-
-        // HIER NOCH ANPASSEN ?
       },
       // the following types must not be drawn
       circle: false,
@@ -46,8 +46,6 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
       polygon: false,
       rectangle: false
     },
-
-    // FOLGENDES NOCH ANPASSEN
     // customize the editing options of the toolbar
     edit: {
       featureGroup: drawnItems,
@@ -76,6 +74,8 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
 
+// TODO: kommentarerklärung
+    //
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
     output.dispatchEvent(ev);
@@ -89,6 +89,7 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
 
+    //
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
     output.dispatchEvent(ev);
@@ -113,9 +114,7 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
 
         //
         let ev = document.createEvent('Event');
-        //
         ev.initEvent('keyup', true, false);
-        //
         output.dispatchEvent(ev);
 
         // if the current used map is not the "updateMap" ...
@@ -123,13 +122,11 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
 
         // ... write just nothing into the given outputTextarea
         let output = document.getElementById(outputTextarea);
-        //
         output.value = "";
+
         //
         let ev = document.createEvent('Event');
-        //
         ev.initEvent('keyup', true, false);
-        //
         output.dispatchEvent(ev);
       }
     }

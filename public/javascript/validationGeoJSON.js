@@ -14,7 +14,7 @@
 * Takes the ID of the textarea which contains the route and checks whether this route is in a correct JSON and a correct GeoJSON syntax.
 * If its syntax is correct, true is returned. If its syntax is incorrect, the user is given a notice and false is returned.
 *
-* @author Katharina Poppinga 450146
+* @author Katharina Poppinga, matr.: 450146
 * @param idInputTextarea ID of the textarea which contains the route input
 * @return {boolean} true, if the route input is in a correct GeoJSON syntax, false if not
 */
@@ -45,14 +45,14 @@ function validateJSONAndGeoJSON(idInputTextarea) {
 
 
 /**
-* Takes .... which contains the route input ...... and checks whether this route input is in a correct GeoJSON syntax.
-* If its syntax is correct, true will be returned. If its syntax is incorrect, the user is given a notice and
-* false will be returned.
+* Takes a route in correct JSON syntax and checks whether this route is in correct GeoJSON syntax.
+* If its syntax is correct GeoJSON, true is returned. If not, the user is given a notice and
+* false is returned.
 *
 * @private
-* @author Katharina Poppinga 450146
-* @param routeJSON the route (in JSON format!) to check for a correct GeoJSON syntax
-* @return {boolean} true, if the route input is in a correct GeoJSON syntax, false if not
+* @author Katharina Poppinga, matr.: 450146
+* @param routeJSON the route (in JSON syntax!) to check for a correct GeoJSON syntax
+* @return {boolean} true, if the route is in correct GeoJSON syntax, false if not
 */
 function validateGeoJSON(routeJSON) {
 

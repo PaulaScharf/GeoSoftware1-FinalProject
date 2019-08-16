@@ -79,7 +79,7 @@ var putEncounterController = function (req, res) {
   // delete the id from the body
   delete req.body._id;
 
-  console.log("Update an encounter " + objectId + " to the following:")
+  console.log("Update an encounter " + objectId + " to the following:");
   console.log(req.body);
 
   // update the encounter in the database with the id of the req.body
