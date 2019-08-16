@@ -54,13 +54,13 @@ var postEncounterController = function(req, res) {
 
     if (error) {
       // give a notice, that the inserting has failed and show the error on the console
-      console.log("Failure while inserting encounter into 'routeDB'.", error);
+      console.log("Failure while inserting an encounter into 'routeDB'.", error);
       // in case of an error while inserting, do routing to "error.ejs"
       res.render('error');
       // if no error occurs ...
     } else {
       // ... give a notice, that inserting the encounter has succeeded
-      console.log("Successfully inserted encounter " + result.insertedId + " into 'routeDB'.");
+      console.log("Successfully inserted an encounter " + result.insertedId + " into 'routeDB'.");
       res.send(result.insertedId);
     }
   });
@@ -87,13 +87,13 @@ var putEncounterController = function (req, res) {
 
     if (error) {
       // give a notice, that the updating has failed and show the error on the console
-      console.log("Failure while updating an item in 'routeDB'.", error);
+      console.log("Failure while updating an encounter in 'routeDB'.", error);
       // in case of an error while updating, do routing to "error.ejs"
       res.render('error');
       // if no error occurs ...
     } else {
       // ... give a notice, that updating the encounter has succeeded
-      console.log("Successfully updated an item in 'routeDB'.");
+      console.log("Successfully updated an encounter in 'routeDB'.");
       // ... and ??????
       res.send();
     }
@@ -115,13 +115,13 @@ var deleteEncounterController = function(req, res) {
 
     if(error){
       // give a notice, that the deleting has failed and show the error on the console
-      console.log("Failure while deleting encounter from 'routeDB'.", error);
+      console.log("Failure while deleting an encounter from 'routeDB'.", error);
       // in case of an error while deleting, do routing to "error.ejs"
       res.render('error');
       // if no error occurs ...
     } else {
       // ... give a notice, that deleting the encounter has succeeded
-      console.log("Successfully deleted encounter from 'routeDB'.");
+      console.log("Successfully deleted an encounter from 'routeDB'.");
       // ... and ????
       res.send();
     }
