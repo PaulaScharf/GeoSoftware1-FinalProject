@@ -4,185 +4,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Required meta tags -->
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
+    <!-- Required meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
-  <!-- installed CSS -->
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-  <link rel="stylesheet" href="leaflet/leaflet.css"/>
-  <link rel="stylesheet" href="leaflet-draw/leaflet.draw.css"/>
+    <!-- installed CSS -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/leaflet/leaflet.css"/>
+    <link rel="stylesheet" href="/leaflet-draw/leaflet.draw.css"/>
 
-  <!-- locally created css -->
-  <link rel="stylesheet" href="../stylesheets/style.css">
+    <!-- locally created css -->
+    <link rel="stylesheet" href="../stylesheets/style.css">
 
 
 
-  <title>Final Project</title>
+    <title>Final Project</title>
 </head>
 
 <body onload = "getAndShowData()">
 
-  <%- include('partial/navbar', {active: "Home"}); %>
+<%- include('partial/navbar', {active: "Home"}); %>
 
-  <main role="main">
+<main role="main">
     <div class="row" style="padding:10px">
-      <div class="container-fluid">
-        <h1>Final Project</h1>
-      </div>
+        <div class="container-fluid">
+            <h1>Final Project</h1>
+        </div>
     </div>
 
     <div class="row" style="padding:10px">
-      <div class="col-sm-12">
-        <div>This application shows user and animal routes and their encounters all over the world.<br>
-          DATABASE ERWÄHNEN?<br>
-          For creating and inserting routes, use the menu item 'Maintenance'. There you can create your own routes by drawing them into a map or inserting a GeoJSON.
-          Furthermore there is an option to search real animal routes from Movebank API which you can insert, too.<br>
-          The tables underneath the map provide some information about the inserted routes and their encounters plus options to update or delete the created routes.</div>
-        <br>
-        <div id="indexMap"></div>
-        <div>This map shows all marked routes which you can also see in the tables underneath.
-          User routes are coloured red, animal routes are coloured orange.
-          Confirmed encounters are shown in green, not confirmed ones in blue.
-          If 'show only confirmed' in the encounters table is selected, you will see only confirmed encounters - but still all routes - in the map.
+        <div class="col-sm-12">
+            <div>This application shows user and animal routes and their encounters all over the world.<br>
+                DATABASE ERWÄHNEN?<br>
+                For creating and inserting routes, use the menu item 'Maintenance'. There you can create your own routes by drawing them into a map or inserting a GeoJSON.
+                Furthermore there is an option to search real animal routes from Movebank API which you can insert, too.<br>
+                The tables underneath the map provide some information about the inserted routes and their encounters plus options to update or delete the created routes.</div>
+            <br>
+            <div id="indexMap"></div>
+            <div>This map shows all marked routes which you can also see in the tables underneath.
+                User routes are coloured red, animal routes are coloured orange.
+                Confirmed encounters are shown in green, not confirmed ones in blue.
+                If 'show only confirmed' in the encounters table is selected, you will see only confirmed encounters - but still all routes - in the map.
+            </div>
         </div>
-      </div>
     </div>
 
     <div class="row" style="padding:10px; margin-bottom:40px; margin-top:40px;">
 
-      <div class="col-sm-7">
-        <h3>User routes</h3>
-        <div id="userRoutesTableDiv">
-          <table class="table">
-            <thead class="thead-dark" id="userRoutesTableHead">
-              <tr>
-                <th>Consecutive number of route</th>
-                <th>Username</th>
-                <th>Name of route</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Type of route</th>
-              </tr>
-            </thead>
-            <tbody id="routesTable">
-            </tbody>
-          </table>
-        </div>
-        <div>This table shows routes created by users as just planned or already completed.<br>
-          A marked checkbox gives you the option to show or hide the corresponding route in the map above.<br>
-          With the slider on the right the routes can be searched by their name and/or (?) their username.</div>
+        <div class="col-sm-7">
+            <h3>User routes</h3>
+            <div id="userRoutesTableDiv">
+                <table class="table">
+                    <thead class="thead-dark" id="userRoutesTableHead">
+                    <tr>
+                        <th>Consecutive number of route</th>
+                        <th>Username</th>
+                        <th>Name of route</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Type of route</th>
+                    </tr>
+                    </thead>
+                    <tbody id="routesTable">
+                    </tbody>
+                </table>
+            </div>
+            <div>This table shows routes created by users as just planned or already completed.<br>
+                A marked checkbox gives you the option to show or hide the corresponding route in the map above.<br>
+                With the slider on the right the routes can be searched by their name and/or (?) their username.</div>
         </div>
 
         <div class="col-sm-5">
-          <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Search User Routes</h3>
-          Username:    <input type="text" id="searchRouteUser" placeholder="Search users of routes" title="Type in a username">
-          <br>
-          Name of route:    <input type="text" id="searchRouteName" placeholder="Search names of routes" title="Type in a name">
-          <div>
-            <label class="switch">
-              <input type="checkbox" onchange="searchEncounters('user', this)">
-              <span class="slider round"></span>
-            </label>
-          </div>
+            <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Search User Routes</h3>
+            Username:    <input type="text" id="searchRouteUser" placeholder="Search users of routes" title="Type in a username">
+            <br>
+            Name of route:    <input type="text" id="searchRouteName" placeholder="Search names of routes" title="Type in a name">
+            <div>
+                <label class="switch">
+                    <input type="checkbox" onchange="searchEncounters('user', this)">
+                    <span class="slider round"></span>
+                </label>
+            </div>
         </div>
 
-      </div>
+    </div>
 
-      <div class="row" style="padding:10px; margin-bottom:40px; margin-top:40px;">
+    <div class="row" style="padding:10px; margin-bottom:40px; margin-top:40px;">
 
         <div class="col-sm-7">
-          <h3>Animal routes</h3>
-          <div id="animalRoutesTableDiv">
-            <table class="table">
-              <thead class="thead-dark" id="animalRoutesTableHead">
-                <tr>
-                  <th>Consecutive number of route</th>
-                  <th>StudyID</th>
-                  <th>Individual Taxon Canonical Name</th>
-                  <th>Date</th>
-                  <th>Time</th>
-                </tr>
-              </thead>
-              <tbody id="animalRoutesTable">
-              </tbody>
-            </table>
-          </div>
-          <div>This table shows routes based on animal tracking data gotten from Movebank API.<br>
-              A marked checkbox gives you the option to show or hide the corresponding route in the map above.<br>
-            With the slider on the right the routes can be searched by their corresponding study ID and/or (?) the Individual Taxon Canonical Name of the animal.</div>
-          </div>
+            <h3>Animal routes</h3>
+            <div id="animalRoutesTableDiv">
+                <table class="table">
+                    <thead class="thead-dark" id="animalRoutesTableHead">
+                    <tr>
+                        <th>Consecutive number of route</th>
+                        <th>StudyID</th>
+                        <th>Individual Taxon Canonical Name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                    </thead>
+                    <tbody id="animalRoutesTable">
+                    </tbody>
+                </table>
+            </div>
+            <div>This table shows routes based on animal tracking data gotten from Movebank API.<br>
+                A marked checkbox gives you the option to show or hide the corresponding route in the map above.<br>
+                With the slider on the right the routes can be searched by their corresponding study ID and/or (?) the Individual Taxon Canonical Name of the animal.</div>
+        </div>
 
-          <div class="col-sm-5">
+        <div class="col-sm-5">
             <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Search Animal Routes</h3>
             StudyID:    <input type="text" id="searchStudyID" placeholder="Search studyID" title="Type in a studyID">
             <br>
             Individual Taxon Canonical Name:    <input type="text" id="searchAnimalName" placeholder="Search " title="Type in a user">
             <div>
-              <label class="switch">
-                <input type="checkbox" onchange="searchEncounters('animal', this)">
-                <span class="slider round"></span>
-              </label>
+                <label class="switch">
+                    <input type="checkbox" onchange="searchEncounters('animal', this)">
+                    <span class="slider round"></span>
+                </label>
             </div>
-          </div>
-
         </div>
 
-        <div class="row" style="padding:10px; margin-bottom:40px; margin-top:40px;">
-          <div class="col-sm">
+    </div>
+
+    <div class="row" style="padding:10px; margin-bottom:40px; margin-top:40px;">
+        <div class="col-sm">
             <h3>Encounters</h3>
             <div id="encounterTableDiv">
-              <table class="table">
-                <thead class="thead-dark" id="encounterTableHead">
-                  <tr>
-                    <th rowspan="2">Consecutive number of encounter</th>
-                    <th rowspan="2">Number of first route</th>
-                    <th rowspan="2">Number of second route</th>
-                    <th colspan="2" align="center">Context-information</th>
-                    <th colspan="1" align="center">
-                        <div style="white-space:nowrap">
-                            <input type='checkbox' id='showConfirmedCheckbox' name="showConfirmedCheckbox" onclick="onlyShowConfirmed()">
-                            <label for="showConfirmedCheckbox">only show confirmed</label>
-                        </div>
-                    </th>
-                    <th rowspan="2">Share Encounter</th>
-                  </tr>
-                  <tr>
-                    <th>Country</th>
-                    <th>Terrain</th>
-                    <th>Confirm encounter</th>
-                  </tr>
-                </thead>
-                <tbody id="encountersTable">
-                </tbody>
-              </table>
+                <table class="table">
+                    <thead class="thead-dark" id="encounterTableHead">
+                    <tr>
+                        <th rowspan="2">Consecutive number of encounter</th>
+                        <th rowspan="2">Number of first route</th>
+                        <th rowspan="2">Number of second route</th>
+                        <th colspan="2" align="center">Context-information</th>
+                        <th colspan="1" align="center">
+                            <div style="white-space:nowrap">
+                                <input type='checkbox' id='showConfirmedCheckbox' name="showConfirmedCheckbox" onclick="onlyShowConfirmed()">
+                                <label for="showConfirmedCheckbox">only show confirmed</label>
+                            </div>
+                        </th>
+                        <th rowspan="2">Share Encounter</th>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <th>Terrain</th>
+                        <th>Confirm encounter</th>
+                    </tr>
+                    </thead>
+                    <tbody id="encountersTable">
+                    </tbody>
+                </table>
             </div>
             <div>This table shows all encounters between any of the routes above. NUMMERNZUGEHÖTIGKEIT ERKLÄREN<br>
-              Because the users do not specify timestamps for each point of their routes, the calculated encounters initially are just potential ones.
-              By marking an encounter as 'confirmed' a user can save the encounter as having actually taken place.<br>
-              To have some additional information, if you want to visit a place of these again now, the current weather and the terrain of the encounters' location and its country is shown.<br>
-              To share a specific encounter with other people, you can use the URL given by its 'share'-button.</div>
-            </div>
-          </div>
+                Because the users do not specify timestamps for each point of their routes, the calculated encounters initially are just potential ones.
+                By marking an encounter as 'confirmed' a user can save the encounter as having actually taken place.<br>
+                To have some additional information, if you want to visit a place of these again now, the current weather and the terrain of the encounters' location and its country is shown.<br>
+                To share a specific encounter with other people, you can use the URL given by its 'share'-button.</div>
+        </div>
+    </div>
 
-        </main>
+</main>
 
-        <%- include('partial/footer'); %>
+<%- include('partial/footer'); %>
 
-      </body>
-      </html>
+</body>
+</html>
 
-      <script src="jquery/jquery.min.js"></script>
-      <script src="popper/umd/popper.min.js"></script>
-      <script src="bootstrap/js/bootstrap.min.js"></script>
-      <script src="leaflet/leaflet.js"></script>
-      <script src="leaflet-draw/leaflet.draw.js"></script>
-      <script src="turf/turf.min.js"></script>
-      <script src="jsnlog/jsnlog.min.js"></script>
 
-      <script src="javascript/apiRequestsEncounters.js"></script>
-      <script src="javascript/createAndFillTables.js"></script>
-      <script src="javascript/coordinateSwapping.js"></script>
-      <script src="javascript/encounters.js"></script>
-      <script src="javascript/index.js"></script>
-      <script src="javascript/tokens.js"></script>
+<script src="/turf/turf.min.js"></script>
+<script src="/jsnlog/jsnlog.min.js"></script>
+<script src="/jquery/jquery.min.js"></script>
+<script src="/popper/umd/popper.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/leaflet/leaflet.js"></script>
+<script src="/leaflet-draw/leaflet.draw.js"></script>
+
+<script src="/javascript/apiRequestsEncounters.js"></script>
+<script src="/javascript/createAndFillTables.js"></script>
+<script src="/javascript/coordinateSwapping.js"></script>
+<script src="/javascript/encounters.js"></script>
+<script src="/javascript/index.js"></script>
+<script src="/javascript/tokens.js"></script>
