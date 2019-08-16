@@ -1,5 +1,5 @@
 {
-  "name": "geosoftware1-projektaufgabe",
+  "name": "GeoSoftware1-FinalProject",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,6 @@
     "@turf/turf": "^5.0.4",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
-    "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "^2.6.1",
     "express": "~4.16.1",
@@ -31,14 +30,14 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PaulaScharf/GeoSoftware1-Projektaufgabe.git"
+    "url": "git+https://github.com/PaulaScharf/GeoSoftware1-FinalProject.git"
   },
   "author": "Katharina Poppinga (450146), Paula Scharf (450334)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/PaulaScharf/GeoSoftware1-Projektaufgabe/issues"
+    "url": "https://github.com/PaulaScharf/GeoSoftware1-FinalProject/issues"
   },
-  "homepage": "https://github.com/PaulaScharf/GeoSoftware1-Projektaufgabe#readme",
+  "homepage": "https://github.com/PaulaScharf/GeoSoftware1-FinalProject#readme",
   "devDependencies": {
     "jsdoc": "^3.6.3"
   }

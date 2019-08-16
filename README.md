@@ -13,7 +13,7 @@
 2. wait for activation email
 3.
 
-## Github Repository
+## GitHub Repository
 [GeoSoftware1-FinalProject](https://github.com/PaulaScharf/GeoSoftware1-FinalProject.git)
 
 ---
