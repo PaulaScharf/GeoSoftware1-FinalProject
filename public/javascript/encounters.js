@@ -276,7 +276,7 @@ function postEncounter(encounter, id) {
 function deleteEncounter(encounterId) {
   //
   $.ajax({
-    // use a http POST request
+    // use a http GET request
     type: "GET",
     // URL to send the request to
     url: "/encounter/delete",

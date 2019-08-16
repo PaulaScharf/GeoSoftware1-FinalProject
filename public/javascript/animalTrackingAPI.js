@@ -82,20 +82,20 @@ function getIndividualID() {
   let studyID = document.getElementById('studyID').value;
 
   //
-  let iDs = {
+  let iD = {
     studyID: studyID
   };
 
   // ********** AJAX request for getting animal tracking data from movebank API **********
   $.ajax({
-    // use a http GET request
-    type: "GET",
+    // use a http POST request
+    type: "POST",
     // URL to send the request to
     url: "/animalTrackingAPI/individualIds",
     // type of the data that is sent to the server
-    //contentType: "application/json; charset=utf-8",
+    contentType: "application/json; charset=utf-8",
     // data to send to the server
-    data: iDs,
+    data: JSON.stringify(iD),
     //
     xhrFields: {
       withCredentials: true
@@ -174,24 +174,26 @@ function getTrackingData() {
   //
   let studyID = document.getElementById('studyID').value;
   let individualID = document.getElementById('individualID').value;
+  let maxEventsPerIndividual = document.getElementById('maxEventsPerIndividual').value;
 
   //
   let iDs = {
     studyID: studyID,
-    individualID: individualID
+    individualID: individualID,
+    maxEventsPerIndividual: maxEventsPerIndividual
   };
 
 
   // ********** AJAX request for getting animal tracking data from movebank API **********
   $.ajax({
-    // use a http GET request
-    type: "GET",
+    // use a http POST request
+    type: "POST",
     // URL to send the request to
     url: "/animalTrackingAPI",
-    // data to send to the server
-    data: iDs,
     // type of the data that is sent to the server
-    //contentType: "application/json; charset=utf-8",
+    contentType: "application/json; charset=utf-8",
+    // data to send to the server
+    data: JSON.stringify(iDs),
     //
     xhrFields: {
       withCredentials: true
@@ -202,6 +204,8 @@ function getTrackingData() {
 
   // if the request is done successfully, ...
   .done (function (response) {
+
+    console.log(response);
 
     // ... give a notice on the console that the AJAX request for getting the animal tracking API data has succeeded
     console.log("AJAX request (getting animal tracking data from API) is done successfully.");

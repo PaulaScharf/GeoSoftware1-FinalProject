@@ -13,7 +13,7 @@
 var port = 3000;
 
 
-// load modules:
+// ********** load modules: **********
 // load http-module and save it in const-OBJECT http
 const http = require("http");
 // load http-module and save it in const-OBJECT http
@@ -22,21 +22,20 @@ const https = require("https");
 const path = require("path");
 
 
-// load third-modules: (after installed using cmd: npm install ...)
+// ********** load third-modules: (after installed using cmd: npm install ...) **********
 const express = require('express');
 var bodyParser = require('body-parser');
 // call express and save it in the function app
 const app = express();
 
-
 const mongodb = require('mongodb');
-
 var createError = require('http-errors');
 
 var JL = require('jsnlog').JL;
 var jsnlog_nodejs = require('jsnlog-nodejs').jsnlog_nodejs;
+// ********************
 
-
+// set the routers-paths
 var indexRouter = require('./routes/index');
 var routesRouter = require('./routes/routes');
 var encountersRouter = require('./routes/encounters');
@@ -57,7 +56,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-// routes for npm-installed client-libraries
+// set the routes for npm-installed client-libraries
 app.use("/jquery", express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
 app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 app.use("/popper", express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist')));
@@ -92,7 +91,32 @@ function connectMongoDb() {
         {
           useNewUrlParser: true,
           autoReconnect: true
-        });
+        }
+      );
+
+      // connect to and use database "routeDB" (create this database, if it does not exist)
+      app.locals.db = await app.locals.dbConnection.db("routeDB");
+      // tell the user that the connection is established and databse "routeDB" will be used for following operations
+      console.log("Using DB: " + app.locals.db.databaseName);
+
+      // tell the user the URL for starting the application / where the routes are shown
+      console.log("URL for starting the app: http://localhost:" + port + "/");
+
+      // catch possible errors and tell the user about them:
+    } catch (error) {
+
+      // for using docker:
+      // try to connect to mongodb on mongodbservice:27017
+      try {
+        // await blocks and waits for connection, because here synchronous execution is desired
+        app.locals.dbConnection = await mongodb.MongoClient.connect(
+          // connectionString / connection URL: docker container "mongodbservice"
+          "mongodb://mongodbservice:27017",
+          {
+            useNewUrlParser: true,
+            autoReconnect: true
+          }
+        );
 
         // connect to and use database "routeDB" (create this database, if it does not exist)
         app.locals.db = await app.locals.dbConnection.db("routeDB");
@@ -102,218 +126,200 @@ function connectMongoDb() {
         // tell the user the URL for starting the application / where the routes are shown
         console.log("URL for starting the app: http://localhost:" + port + "/");
 
+
+        // if it is not possible to connect on localhost:27017 or mongodbservice:27017,
         // catch possible errors and tell the user about them:
       } catch (error) {
 
-        // for using docker:
-        // try to connect to mongodb on mongodbservice:27017
-        try {
-          // await blocks and waits for connection, because here synchronous execution is desired
-          app.locals.dbConnection = await mongodb.MongoClient.connect(
-            // connectionString / connection URL: docker container "mongodbservice"
-            "mongodb://mongodbservice:27017",
-            {
-              useNewUrlParser: true,
-              autoReconnect: true
-            });
+        // TODO: ? APP NICHT STARTEN
 
-            // connect to and use database "routeDB" (create this database, if it does not exist)
-            app.locals.db = await app.locals.dbConnection.db("routeDB");
-            // tell the user that the connection is established and databse "routeDB" will be used for following operations
-            console.log("Using DB: " + app.locals.db.databaseName);
+        console.log(error.message);
+        console.dir(error);
 
-            // tell the user the URL for starting the application / where the routes are shown
-            console.log("URL for starting the app: http://localhost:" + port + "/");
-
-
-            // if it is not possible to connect on localhost:27017 or mongodbservice:27017,
-            // catch possible errors and tell the user about them:
-          } catch (error) {
-
-            // TODO: ? APP NICHT STARTEN
-
-            console.log(error.message);
-            console.dir(error);
-
-            // retry until db-server is up
-            setTimeout(connectMongoDb, 3000);
-          }
-        }
+        // retry until db-server is up
+        setTimeout(connectMongoDb, 3000);
       }
-    )();
+    }
   }
+)();
+}
 
-  // connect to MongoDB
-  connectMongoDb();
-
-
-  // taken from template of Assignment 8:
-  // middleware for making the db connection available via the request object
-  app.use((req, res, next) => {
-    req.db = app.locals.db;
-    next();
-  });
+// connect to MongoDB
+connectMongoDb();
 
 
-  // ********************************** JSNLog ***********************************
-
-  // "ensure that the JSON objects received from the client get parsed correctly"
-  app.use(bodyParser.json());
-
-  // jsnlog.js on the client-side sends log messages to /jsnlog.logger, using POST
-  app.post("/jsnlog.logger", function (req, res) {
-    jsnlog_nodejs(JL, req.body);
-
-    // jsnlog on the client-side does not use the response from server, therefore send an empty response
-    res.send('');
-  });
+// taken from template of Assignment 8:
+// middleware for making the db connection available via the request object
+app.use((req, res, next) => {
+  req.db = app.locals.db;
+  next();
+});
 
 
-  // **************************** Animal tracking API ****************************
+// ********************************** JSNLog ***********************************
 
-  //
-  app.get("/animalTrackingAPI",  (req, res) => {
+// "ensure that the JSON objects received from the client get parsed correctly"
+app.use(bodyParser.json());
 
-    //
-    let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + req.query.studyID + "&individual_local_identifiers[]=" + req.query.individualID + "&max_events_per_individual=100&sensor_type=gps";
+// jsnlog.js on the client-side sends log messages to /jsnlog.logger, using POST
+app.post("/jsnlog.logger", function (req, res) {
+  jsnlog_nodejs(JL, req.body);
 
-    //
-    let loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
-    let password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
+  // jsnlog on the client-side does not use the response from server, therefore send an empty response
+  res.send('');
+});
 
-    //
-    const options = {
-      headers: {
-        "Authorization":"Basic " + Buffer.from(loginname+':'+password).toString('base64'),
-        "access-control-allow-origin": "localhost:3000",
-        "access-control-allow-methods": "GET, POST",
-        "access-control-allow-headers": "content-type"
-      },
-      timeout: 5000
-    };
 
-    // GET animal tracking api:
-    https.get(resource, options, (httpResponse) => {
+// **************************** Animal tracking API ****************************
 
-      let body = "";
+// http-POST to forward user input for studyID when requesting the animal tracking API
+app.post("/animalTrackingAPI/individualIds", (req, res) => {
 
-      httpResponse.on('data', (chunk) => {
-        body += chunk;
-      });
+  // request-resource for the following https-GET request for individualIDs of the animal tracking API
+  var resource = "https://www.movebank.org/movebank/service/json-auth?entity_type=individual&study_id=" + req.body.studyID;
 
-      httpResponse.on("end", () => {
+  // loginname and password needed for authorization during the get-request
+  var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
+  var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
 
-        try {
-          //
-          body = JSON.parse(body);
+  // define options for the following https-GET request
+  const options = {
+    // set the headers for the get-request
+    headers: {
+      "Authorization":"Basic " + Buffer.from(loginname+':'+password).toString('base64'),
+      "access-control-allow-origin": "localhost:3000",
+      "access-control-allow-methods": "GET, POST",
+      "access-control-allow-headers": "content-type"
+    },
+    // timeout set to 5 seconds
+    timeout: 5000
+  };
 
-          //
-          res.send(body);
+  // GET animal tracking api:
+  https.get(resource, options, (httpResponse) => {
 
-        } catch(e) {
-          res.send({
-            errorMessage: "There was an error."
-          })
-        }
-      });
+    var body = "";
 
-    }).on('error', (error) => {
-      // give a notice, that the API request has failed and show the error on the console
-      console.log("Failure while getting animal tracking data from movebank API.", error);
+    httpResponse.on('data', (chunk) => {
+      body += chunk;
     });
-  });
 
+    httpResponse.on("end", () => {
 
-  //
-  app.get("/animalTrackingAPI/individualIds",  (req, res) => {
+      try {
+        body = JSON.parse(body);
+        res.send(body);
 
-    //
-    var resource = "https://www.movebank.org/movebank/service/json-auth?entity_type=individual&study_id=" + req.query.studyID;
-
-    //
-    var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
-    var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
-
-    //
-    const options = {
-      headers: {
-        "Authorization":"Basic " + Buffer.from(loginname+':'+password).toString('base64'),
-        "access-control-allow-origin": "localhost:3000",
-        "access-control-allow-methods": "GET, POST",
-        "access-control-allow-headers": "content-type"
-      },
-      timeout: 5000
-    };
-
-    // GET animal tracking api:
-    https.get(resource, options, (httpResponse) => {
-
-      var body = "";
-
-      httpResponse.on('data', (chunk) => {
-        body += chunk;
-      });
-
-      httpResponse.on("end", () => {
-        //  res.json(JSON.parse(body));
-        try {
-          //
-          body = JSON.parse(body);
-
-          //
-          res.send(body);
-
-        } catch(e) {
-          res.send({
-            errorMessage: "There was an error."
-          })
-        }
-      });
-
-    }).on('error', (error) => {
-      // give a notice, that the API request has failed and show the error on the console
-      console.log("Failure while getting animal tracking data from movebank API.", error);
+        // if an error occurs in parsing and sending the body ...
+      } catch(e) {
+        // ... send a message
+        res.send({
+          errorMessage: "There was an error."
+        })
+      }
     });
+
+    // if an error occurs while getting the animal tracking api ...
+  }).on('error', (error) => {
+    // ... give a notice, that the API request has failed and show the error on the console
+    console.log("Failure while getting animal tracking data from movebank API.", error);
   });
+});
 
 
-  // *****************************************************************************
 
+// http-POST to forward user inputs for studyID, individualID and maxEventsPerIndividual when requesting the animal tracking API
+app.post("/animalTrackingAPI", (req, res) => {
 
-  //
-  app.use('/', indexRouter);
+  // request-resource for the following https-GET request
+  let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + req.body.studyID + "&individual_local_identifiers[]=" + req.body.individualID + "&max_events_per_individual=" + req.body.maxEventsPerIndividual + "&sensor_type=gps";
 
-  // CRUD functionality for routes
-  app.use('/routes', routesRouter);
+  // loginname and password needed for authorization during the get-request
+  let loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
+  let password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
 
-  // CRUD functionality for encounters
-  app.use('/encounter', encountersRouter);
+  // define options for the following https-GET request
+  const options = {
+    // set the headers for the get-request
+    headers: {
+      "Authorization":"Basic " + Buffer.from(loginname+':'+password).toString('base64'),
+      "access-control-allow-origin": "localhost:3000",
+      "access-control-allow-methods": "GET, POST",
+      "access-control-allow-headers": "content-type"
+    },
+    // timeout set to 5 seconds
+    timeout: 5000
+  };
 
+  // GET animal tracking api:
+  https.get(resource, options, (httpResponse) => {
 
-  // route for the client-side tests using qUnit
-  app.get("/test", (req, res) => {
-    res.render("test");
+    let body = "";
+
+    httpResponse.on('data', (chunk) => {
+      body += chunk;
+    });
+
+    httpResponse.on("end", () => {
+
+      try {
+        body = JSON.parse(body);
+        res.send(body);
+
+        // if an error occurs in parsing and sending the body ...
+      } catch(e) {
+        // ... send a message
+        res.send({
+          errorMessage: "There was an error."
+        })
+      }
+    });
+
+    // if an error occurs while getting the animal tracking api ...
+  }).on('error', (error) => {
+    // ... give a notice, that the API request has failed and show the error on the console
+    console.log("Failure while getting animal tracking data from movebank API.", error);
   });
+});
 
 
-  // taken from template of Assignment 8:
-  // catch 404 and forward to error handler
-  app.use(function(req, res, next) {
-    next(createError(404));
-  });
+// *****************************************************************************
 
 
-  // taken from template of Assignment 8:
-  // error handler
-  app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+// index-router
+app.use('/', indexRouter);
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-  });
+// CRUD functionality for routes
+app.use('/routes', routesRouter);
+
+// CRUD functionality for encounters
+app.use('/encounter', encountersRouter);
 
 
-  module.exports = app;
+// route for the client-side tests using qUnit
+app.get("/test", (req, res) => {
+  res.render("test");
+});
+
+
+// taken from template of Assignment 8:
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+
+// taken from template of Assignment 8:
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+
+module.exports = app;
