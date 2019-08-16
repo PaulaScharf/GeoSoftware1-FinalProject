@@ -7,13 +7,14 @@
     2. run ``npm start`` in the terminal
 
 ## How to install your own API-keys
+...
 
 ## Github Repository
-[Geosoftware1-Projektaufgabe](https://github.com/PaulaScharf/GeoSoftware1-Projektaufgabe.git)
+[GeoSoftware1-FinalProject](https://github.com/PaulaScharf/GeoSoftware1-FinalProject.git)
 
 ---
 
-## Aufgabenstellung (oder "task" nennen?)
+## Task
 
 Mögliche Begegnungen mit Kontext
 

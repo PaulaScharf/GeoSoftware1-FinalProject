@@ -215,7 +215,7 @@ function getTrackingData() {
 
       //
     } else {
-      alert("This individual doesnt seem to have any data stored. \n " +
+      alert("This individual does not seem to have any data stored.\n" +
       "Please try a different individual or study.");
     }
   })
@@ -454,7 +454,7 @@ function postAnimalRoute() {
         // ... check whether 'animalRoute.geoJson' contains valid GeoJSON and, if so, ...
         if (validateGeoJSON(animalRoute.geoJson)) {
 
-          // TODO: SO WAR VALIDIERUNG DÄMLICH
+          // TODO: SO WÄRE VALIDIERUNG DÄMLICH
           // ... insert the chosen animalroute into the database
           insertAnimalroute();
 

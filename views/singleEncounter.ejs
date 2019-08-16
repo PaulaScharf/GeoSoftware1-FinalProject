@@ -4,107 +4,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
+  <!-- Required meta tags -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
 
-    <!-- installed CSS -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/leaflet/leaflet.css"/>
-    <link rel="stylesheet" href="/leaflet-draw/leaflet.draw.css"/>
+  <!-- installed CSS -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/leaflet/leaflet.css"/>
+  <link rel="stylesheet" href="/leaflet-draw/leaflet.draw.css"/>
 
-    <!-- locally created css -->
-    <link rel="stylesheet" href="../stylesheets/style.css">
+  <!-- locally created css -->
+  <link rel="stylesheet" href="../stylesheets/style.css">
 
 
-    <title>Final Project</title>
+  <title>Final Project</title>
 </head>
 
 <body onload = "processResult()">
-<p id="result" style="display:none"><%= JSON.stringify(result) %></p>
-<%- include('partial/navbar', {active: "Home"}); %>
+  <p id="result" style="display:none"><%= JSON.stringify(result) %></p>
+  <%- include('partial/navbar', {active: "Home"}); %>
 
-<main role="main">
+  <main role="main">
     <div class="row" style="padding:10px">
-        <div class="container-fluid">
-            <h1 style="color:blue; text-align:center">Your encounter</h1>
-        </div>
+      <div class="container-fluid">
+        <h1>Your encounter</h1>
+      </div>
     </div>
 
     <div class="row" style="padding:10px">
-        <div class="col-sm-12">
-            <div id="singleEncounterMap"></div>
-        </div>
+      <div class="col-sm-12">
+        <div id="singleEncounterMap"></div>
+      </div>
     </div>
     <br>
 
     <div class="row" style="padding:10px">
-        <div class="col-sm">
-            <div id="encounterTableDiv">
-                <table class="table" style="max-width:800px; margin-left: auto; margin-right: auto;">
-                    <thead class="thead-dark" id="encounterTableHead">
-                    <tr>
-                        <th colspan="2" align="center">Coordinates</th>
-                        <th colspan="3" align="center">Context-information</th>
-                    </tr>
-                    <tr>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
-                        <th>Country</th>
-                        <th>Weather</th>
-                        <th>Terrain</th>
-                    </tr>
-                    </thead>
-                    <tbody id="encountersTable">
-                    </tbody>
-                </table>
-            </div>
+      <div class="col-sm">
+        <div id="encounterTableDiv">
+          <h3>Encounter</h3>
+          <table class="table" style="max-width:800px; margin-left: auto; margin-right: auto;">
+            <thead class="thead-dark" id="encounterTableHead">
+              <tr>
+                <th colspan="2" align="center">Coordinates</th>
+                <th colspan="3" align="center">Context-information</th>
+              </tr>
+              <tr>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Country</th>
+                <th>Weather</th>
+                <th>Terrain</th>
+              </tr>
+            </thead>
+            <tbody id="encountersTable">
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
 
     <div class="row" style="padding:10px">
 
-        <div class="col-sm">
-            <h3 style="text-align:center">User routes</h3>
-            <table class="table">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Consecutive number of route</th>
-                    <th>Username</th>
-                    <th>Name of route</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Type of route</th>
-                </tr>
-                </thead>
-                <tbody id="routesTable">
-                </tbody>
-            </table>
-        </div>
+      <div class="col-sm">
+        <h3>User routes</h3>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Consecutive number of route</th>
+              <th>Username</th>
+              <th>Name of route</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Type of route</th>
+            </tr>
+          </thead>
+          <tbody id="routesTable">
+          </tbody>
+        </table>
+      </div>
 
 
-        <div class="col-sm">
-            <h3 style="text-align:center">Animal routes</h3>
-            <table class="table">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Consecutive number of route</th>
-                    <th>StudyID</th>
-                    <th>Individual Taxon Canonical Name</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                </tr>
-                </thead>
-                <tbody id="animalRoutesTable">
-                </tbody>
-            </table>
-        </div>
+      <div class="col-sm">
+        <h3>Animal routes</h3>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Consecutive number of route</th>
+              <th>StudyID</th>
+              <th>Individual Taxon Canonical Name</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="animalRoutesTable">
+          </tbody>
+        </table>
+      </div>
 
     </div>
 
-</main>
+  </main>
 
-<%- include('partial/footer'); %>
+  <%- include('partial/footer'); %>
 
 </body>
 </html>

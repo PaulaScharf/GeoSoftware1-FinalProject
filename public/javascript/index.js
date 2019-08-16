@@ -602,9 +602,6 @@ function updateEncounter(encounter) {
     url: "/encounter/update",
     //
     data: encounter,
-    // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
-    // type of the data that is sent to the server
-    //contentType: "application/json; charset=utf-8",
     // timeout set to 7 seconds
     timeout: 7000
   })
