@@ -37,11 +37,11 @@
         <div>This application shows user and animal routes and their encounters all over the world.<br>
           DATABASE ERWÄHNEN?<br>
           For creating and inserting routes, use the menu item 'Maintenance'. There you can create your own routes by drawing them into a map or inserting a GeoJSON.
-          Furthermore there is a search for real animal routes in Movebank API which you can insert, too.<br>
+          Furthermore there is an option to search real animal routes from Movebank API which you can insert, too.<br>
           The tables underneath the map provide some information about the inserted routes and their encounters plus options to update or delete the created routes.</div>
         <br>
         <div id="indexMap"></div>
-        <div>This map shows all marked routes in/from (?) the tables underneath.
+        <div>This map shows all marked routes which you can also see in the tables underneath.
           User routes are coloured red, animal routes are coloured orange.
           Confirmed encounters are shown in green, not confirmed ones in blue.
           If 'show only confirmed' in the encounters table is selected, you will see only confirmed encounters - but still all routes - in the map.
@@ -70,8 +70,8 @@
           </table>
         </div>
         <div>This table shows routes created by users as just planned or already completed.<br>
-          A marked checkbox shows the corresponding route in the map above.<br>
-          With the slider on the right the routes can be searched for their name and/or (?) their username.</div>
+          A marked checkbox gives you the option to show or hide the corresponding route in the map above.<br>
+          With the slider on the right the routes can be searched by their name and/or (?) their username.</div>
         </div>
 
         <div class="col-sm-5">
@@ -109,8 +109,8 @@
             </table>
           </div>
           <div>This table shows routes based on animal tracking data gotten from Movebank API.<br>
-            A marked checkbox shows the corresponding route in the map above.<br>
-            With the slider on the right the routes can be searched for their corresponding study ID and/or (?) the Individual Taxon Canonical Name of the animal.</div>
+              A marked checkbox gives you the option to show or hide the corresponding route in the map above.<br>
+            With the slider on the right the routes can be searched by their corresponding study ID and/or (?) the Individual Taxon Canonical Name of the animal.</div>
           </div>
 
           <div class="col-sm-5">
@@ -138,13 +138,17 @@
                     <th rowspan="2">Consecutive number of encounter</th>
                     <th rowspan="2">Number of first route</th>
                     <th rowspan="2">Number of second route</th>
-                    <th colspan="3" align="center">Context-information</th>
-                    <th colspan="1" align="center"><input type='checkbox' id='showConfirmedCheckbox' onclick="onlyShowConfirmed()">  show only confirmed</th>
+                    <th colspan="2" align="center">Context-information</th>
+                    <th colspan="1" align="center">
+                        <div style="white-space:nowrap">
+                            <input type='checkbox' id='showConfirmedCheckbox' name="showConfirmedCheckbox" onclick="onlyShowConfirmed()">
+                            <label for="showConfirmedCheckbox">only show confirmed</label>
+                        </div>
+                    </th>
                     <th rowspan="2">Share Encounter</th>
                   </tr>
                   <tr>
                     <th>Country</th>
-                    <th>Weather</th>
                     <th>Terrain</th>
                     <th>Confirm encounter</th>
                   </tr>

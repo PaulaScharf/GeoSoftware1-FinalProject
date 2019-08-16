@@ -19,40 +19,41 @@
 </head>
 
 <body onload = "showAnimalMapData()">
-  <%- include('partial/navbar', {active: "Maintenance"}); %>
+<%- include('partial/navbar', {active: "Maintenance"}); %>
 
-  <main role="main">
-    <div class="row" style="padding:10px">
-      <div class="container-fluid">
-        <h1>Route Creator</h1>
-      </div>
+<main role="main">
+  <div class="row" style="padding:10px">
+    <div class="container-fluid">
+      <h1>Route Creator</h1>
     </div>
+  </div>
 
-    <div class="row" style="padding:10px;">
-      <div class="col-12 col-sm-12">
-        <div>This animal route creator allows you to request real animal tracking data from Movebank API.<br>
-          For this, a study ID is needed. You can use
-          <a href="https://www.movebank.org/panel_embedded_movebank_webapp" target="_blank" rel="noopener">this overview</a>
-          provided by Movebank to search for study IDs.
-          They are called Movebank ID and findable after selecting a search result or a circle in the map
-          and clicking on 'Open in Studies Page'. You are not allowed to get data for all findable IDs,
-          so three (?) study IDs recommended to use are 2911040, 24442409 and 1764627. LETZTE LÖSCHEN<br>
-          Setting a study leads to the possibility of choosing the ID of an individual animal from/out of (?)
-          this study and requesting its data. You can also regulate the maximum number of locations you want to get for that individual.
+  <div class="row" style="padding:10px;">
+    <div class="col-12 col-sm-12">
+      <div>This animal route creator allows you to request real animal tracking data from Movebank API.<br>
+        For this, a study ID is needed. You can use
+        <a href="https://www.movebank.org/panel_embedded_movebank_webapp" target="_blank" rel="noopener">this overview</a>
+        provided by Movebank to search for study IDs.
+        They are called Movebank ID and you can find them after selecting a search result or a circle in the map
+        and clicking on 'Open in Studies Page'. However not all Ids that you may find work with our application,
+        so we recommend these three study IDs for starters: 2911040, 24442409 and 1764627. LETZTE LÖSCHEN<br>
+        After inserting a study Id you can retrieve the Ids of all individual animals in that study.
+        Then simply choose an Id and request its data.
+          You can also regulate the maximum number of locations you want to get for that individual.
           It is recommended to try a low number at first and just increase if your computer (GENAUER?) is able to process
           potentially upcoming encounters. (?)
           <br>
-          The requested data contains i.a. the taxon which is shown and the consecutive GPS measured (?) coordinates of the individual animal
-          which are put together to a route that is displayed in the map on the left.
-          After seeing over this you can insert the route into your/the (?) database.
-        </div>
-        <br>
+        The requested data contains i.a. the taxon which is shown and the consecutive coordinates of the animal
+        which are put together to a route that is displayed in the map on the left.
+        After seeing over this you can insert the route into your/the (?) database.
       </div>
-      <div class="col-12 col-md-6">
-        <div id="createAnimalRouteMap"></div>
-      </div>
-      <div class="col-12 col-md-6">
-        <h2>Get and Add Animal Route</h2>
+      <br>
+    </div>
+    <div class="col-12 col-md-6">
+      <div id="createAnimalRouteMap"></div>
+    </div>
+    <div class="col-12 col-md-6">
+      <h2>Get and Add Animal Route</h2>
 
         ID of study:<br>
         <input type="number" value="2911040" name="studyId" id="studyID"><br>

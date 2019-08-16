@@ -5,9 +5,13 @@
 - without docker:
     1. run ``npm install`` in the terminal
     2. run ``npm start`` in the terminal
+    3. open [localhost:3000](localhost:3000) in a browser
 
 ## How to install your own API-keys
-...
+#### Geonames
+1. create an account for [geonames](https://www.geonames.org/login)
+2. wait for activation email
+3.
 
 ## Github Repository
 [GeoSoftware1-FinalProject](https://github.com/PaulaScharf/GeoSoftware1-FinalProject.git)
