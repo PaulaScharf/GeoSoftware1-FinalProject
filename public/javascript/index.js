@@ -182,6 +182,56 @@ function writeAllRoutesInTheGlobalArray(response) {
 function showAllRoutesOnMainPage() {
 
   fillRoutesTable();
+  fillRoutesMap();
+}
+
+/**
+ * This function fills both route-tables on the main page with all the routes in the allRoutes-Array
+ * @private
+ * @author Katharina Poppinga, matr.: 450146; Paula Scharf, matr.: 450334
+ */
+function fillRoutesTable() {
+  // clear the tables
+  deleteAllChildrenOfElement("routesTable");
+  deleteAllChildrenOfElement("animalRoutesTable");
+
+  // loop "over" all routes in the current database "routeDB"
+  for (let i = 0; i < allRoutes.length; i++) {
+
+    let currentRoute = allRoutes[i];
+
+    // if the route is a user route ...
+    if (currentRoute[0].madeBy === "user") {
+      // ... show it with a consecutive number and its creator, name, date, time and type in the table "routesTable" on the main page
+      createUserRouteTable(i, currentRoute[0].creator, currentRoute[0].name, currentRoute[0].date, currentRoute[0].time, currentRoute[0].type, "routesTable");
+    }
+
+    // if the route is an animal route ...
+    else {
+      // ... show it with a consecutive number and its studyID, individualTaxonCanonicalName, date and time in the table "animalRoutesTable" on the main page
+      createAnimalRouteTable(i, currentRoute[0].study_id, currentRoute[0].individualTaxonCanonicalName, currentRoute[0].date, currentRoute[0].time, "animalRoutesTable");
+    }
+
+    // outsource the creation of the checkbox for showing or not showing the i-th route in the map
+    routeCheckbox(i, currentRoute[1]);
+
+    // if the route is a user route ...
+    if (currentRoute[0].madeBy === "user") {
+      // .. add a button for updating it to the routes-table
+      updateButton(i);
+    }
+
+    // add a button for deleting the i-th route to its corresponding table
+    deleteButton(i);
+  }
+}
+
+/**
+ * This function fills the map on the main page with all the routes in the allRoutes-Array
+ * @private
+ * @author Katharina Poppinga, matr.: 450146; Paula Scharf, matr.: 450334
+ */
+function fillRoutesMap() {
   // coordinates of a route (in GeoJSONs long-lat order)
   let coordinatesRoute;
   // loop "over" all routes in the current database "routeDB"
@@ -226,47 +276,6 @@ function showAllRoutesOnMainPage() {
         indexMap.fitBounds(allRoutesGroup.getBounds());
       }
     }
-  }
-}
-
-/**
- * This function fills both route-tables on the main page with all the routes in the allRoutes-Array
- * @private
- * @author Katharina Poppinga, matr.: 450146; Paula Scharf, matr.: 450334
- */
-function fillRoutesTable() {
-  // clear the tables
-  deleteAllChildrenOfElement("routesTable");
-  deleteAllChildrenOfElement("animalRoutesTable");
-
-  // loop "over" all routes in the current database "routeDB"
-  for (let i = 0; i < allRoutes.length; i++) {
-
-    let currentRoute = allRoutes[i];
-
-    // if the route is a user route ...
-    if (currentRoute[0].madeBy === "user") {
-      // ... show it with a consecutive number and its creator, name, date, time and type in the table "routesTable" on the main page
-      createUserRouteTable(i, currentRoute[0].creator, currentRoute[0].name, currentRoute[0].date, currentRoute[0].time, currentRoute[0].type, "routesTable");
-    }
-
-    // if the route is an animal route ...
-    else {
-      // ... show it with a consecutive number and its studyID, individualTaxonCanonicalName, date and time in the table "animalRoutesTable" on the main page
-      createAnimalRouteTable(i, currentRoute[0].study_id, currentRoute[0].individualTaxonCanonicalName, currentRoute[0].date, currentRoute[0].time, "animalRoutesTable");
-    }
-
-    // outsource the creation of the checkbox for showing or not showing the i-th route in the map
-    routeCheckbox(i);
-
-    // if the route is a user route ...
-    if (currentRoute[0].madeBy === "user") {
-      // .. add a button for updating it to the routes-table
-      updateButton(i);
-    }
-
-    // add a button for deleting the i-th route to its corresponding table
-    deleteButton(i);
   }
 }
 
@@ -465,14 +474,17 @@ function fillEncountersTable() {
       * @private
       * @author Katharina Poppinga, matr.: 450146
       * @param {number} i - part of the ID for the checkbox
+      * @param {boolean} checked - indicate if a route is selected
       */
-      function routeCheckbox(i){
+      function routeCheckbox(i, checked){
 
         // label the table cell, in which the checkbox for the route will be written, as "tableCellCheckbox"
         let tableCellCheckbox = document.getElementById("conseNum"+i);
 
         // add the checkbox for the route (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
         tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" + i + "' checked onclick='routeSelectionForMap(" + i + ")' style='margin-left: 10px; margin-right: 15px;'>";
+
+        document.getElementById("routeCheckbox" + i).checked = checked;
       }
 
 
@@ -647,8 +659,26 @@ function deleteRoute(id) {
         fillEncountersMap();
       }
 
+/**
+ * This function comes into play when the "show confirmed" checkbox is being checked.
+ * It makes sure that only the confirmed encounters are being shown in the map and in the table.
+ * @private
+ * @author Paula Scharf, matr.: 450334
+ */
+function onlyShowConfirmed() {
 
-      /**
+  let checkbox = document.getElementById("showConfirmedCheckbox");
+  //
+  if (checkbox.checked === true) {
+    confirmActive = true;
+    showEncountersOnMainPage();
+  } else {
+    confirmActive = false;
+    showEncountersOnMainPage();
+  }
+}
+
+/**
       * This function makes an AJAX-request in order to update an encounter in the database.
       * @private
       * @author Paula Scharf, matr.: 450334

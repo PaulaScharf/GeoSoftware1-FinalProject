@@ -67,9 +67,8 @@ function getAllRoutes() {
 
 
 // TODO: instead of checkForUpdates you could also change the status
-// TODO: JSDoc
 /**
-* this route checks, if the AJAX-response contains a new route.
+* This route checks, if the AJAX-response contains a new route.
 * If the route is new, then the encounters are calculated for it.
 * @param response          the response of the ajax-request in readRoutesEncounters.js
 * @param checkForUpdates   if true, also delete the old encounters associated with a new route

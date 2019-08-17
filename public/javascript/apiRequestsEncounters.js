@@ -236,67 +236,6 @@ function writeRequestResultsIntoTable(response, id) {
   }
 }
 
-
-/**
-* This function comes into play when the "show confirmed" checkbox is being checked.
-* It makes sure that only the confirmed encounters are being shown in the map and in the table.
-* @private
-* @author Paula Scharf, matr.: 450334
-*/
-function onlyShowConfirmed() {
-
-  let checkbox = document.getElementById("showConfirmedCheckbox");
-  //
-  if (checkbox.checked === true) {
-    confirmActive = true;
-    showEncountersOnMainPage();
-  } else {
-    confirmActive = false;
-    showEncountersOnMainPage();
-  }
-}
-
-
-/**
-* This function makes an AJAX-request in order to update an encounter in the database.
-* @private
-* @author Paula Scharf, matr.: 450334
-* @param encounter
-*/
-function updateEncounter(encounter) {
-
-  $.ajax({
-    // use a http POST request
-    type: "POST",
-    // URL to send the request to
-    url: "/encounter/update",
-    //
-    data: JSON.stringify(encounter),
-    // type of the data that is sent to the server
-    contentType: "application/json; charset=utf-8",
-    // timeout set to 10 seconds
-    timeout: 10000
-  })
-
-  // if the request is done successfully, ...
-  .done (function () {
-    // ... give a notice on the console that the AJAX request for ....... has succeeded
-    console.log("AJAX request (updating an encounter) is done successfully.");
-  })
-
-  // if the request has failed, ...
-  .fail(function (xhr, status, error) {
-    // ... give a notice that the AJAX request for .......... has failed and show the error on the console
-    console.log("AJAX request (updating an encounter) has failed.", error);
-
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
-    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
-    if (error === "timeout") {
-      JL("ajaxUpdatingEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
-    }
-  });
-}
-
 /**
  * This function calls the '/encounter/create' route with ajax, to save a given encounter in the database.
  * @author Paula Scharf, matr.: 450334

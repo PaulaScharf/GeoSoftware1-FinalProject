@@ -2,22 +2,14 @@
 <!-- author: name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334 -->
 
 <nav class="navbar navbar-expand-md bg-dark navbar-dark navbar-expand-md">
-  <a class="navbar-brand <%if(active=="Home"){%>class="active"<%}%>" href="/">Main Page</a>
+  <a class="navbar-brand <%if(active=="Home"){%>active<%}%>" href="/">Main Page</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav">
-      <li class="nav-item dropdown <%if(active=="Maintainance"){%> active<%}%> ">
-        <a  class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbardrop">
-          Maintenance
-          <span class="caret"></span>
-        </a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="/create">Create new user route</a>
-          <a class="dropdown-item" href="/createAnimalRoute">Create new animal route</a>
-        </div>
-      </li>
+      <li class="nav-item <%if(active=="User"){%> active<%}%> "><a class="nav-link" href="/create">Create new user route</a></li>
+      <li class="nav-item <%if(active=="Animal"){%> active<%}%>"><a class="nav-link" href="/createAnimalRoute">Create new animal route</a></li>
     </ul>
   </div>
 </nav>

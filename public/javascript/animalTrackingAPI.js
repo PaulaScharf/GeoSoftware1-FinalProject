@@ -145,6 +145,7 @@ function getIndividualID() {
 */
 function showAnimalIDs(response) {
 
+  $('#individualID').empty();
   let select = document.getElementById("individualID");
 
   // make a new option in the dropdown for every identifier
