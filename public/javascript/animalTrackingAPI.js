@@ -11,18 +11,10 @@
 // please put in your own tokens at 'token.js'
 
 
-// JSDoc: * @throws request failed: [object ProgressEvent]
-
-
-// TODO: KOMMENTARE, JSDoc
-
-
 // ****************************** global variables ******************************
 
-
-// TODO:
 /**
-* Global variable which ....
+* A JSON-object which contains all needed data of the specific animal and its route as a GeoJSON FeatureCollection.
 * @type {Object}
 */
 let animalRoute;
@@ -45,12 +37,12 @@ let animalRoutesGroup;
 // ********************************* functions *********************************
 
 /**
-*
-*
+* Sets up the leaflet-map 'createAnimalRouteMap' with OpenStreetMap tiles and
+* creates a leaflet-layerGroup for this map.
 *
 * @author Katharina Poppinga, matr.: 450146
 */
-function showAnimalMapData() {
+function showAnimalMap() {
 
   // create the initial map in the "createAnimalRouteMap"-div
   createAnimalRouteMap = L.map('createAnimalRouteMap').setView([0, 0], 2);
@@ -69,7 +61,7 @@ function showAnimalMapData() {
 
 
 /**
-* This function makes an AJAX-request to get individual identifiers for a specific studyID.
+* This function makes an AJAX-request to get individual identifiers for a specific studyID from Movabank API.
 * @private
 * @author Paula Scharf, matr.: 450334
 */
@@ -93,7 +85,7 @@ function getIndividualID() {
     studyID: studyID
   };
 
-  // ********** AJAX request for getting animal tracking data from movebank API **********
+  // ********** AJAX request for getting animal tracking data from Movebank API **********
   $.ajax({
     // use a http POST request
     type: "POST",
@@ -126,7 +118,7 @@ function getIndividualID() {
       document.getElementById("individualIdDiv").style.display = "block";
 
       //
-      showAnimalIds(response);
+      showAnimalIDs(response);
     }
   })
 
@@ -146,12 +138,13 @@ function getIndividualID() {
 
 
 /**
-* This function takes the response of the AJAX-request for getting individual identiefiers of a study and displays it in
+* This function takes the response of the AJAX-request for getting individual identifiers of a study and displays it in
 * a dropdown menu on the page.
 * @private
 * @author Paula Scharf, matr.: 450334
 */
-function showAnimalIds(response) {
+function showAnimalIDs(response) {
+
   let select = document.getElementById("individualID");
 
   // make a new option in the dropdown for every identifier
@@ -162,28 +155,34 @@ function showAnimalIds(response) {
 
 
 /**
+* Makes an AJAX-POST-request for getting the animal tracking data for a given studyID,
+* a given individualID and a given max. number of locations from Movebank API. Reads these
+* three attributes out of its corresponding elements in the createAnimalRoute.ejs.
+* Calls a function for formatting and showing the AJAX-response on createAnimalRoute.ejs.
 *
-*
+* @private
 * @author Katharina Poppinga, matr.: 450146, Paula Scharf, matr.: 450334
 */
 function getTrackingData() {
-  //
-  document.getElementById('animalName').innerHTML = "";
-  document.getElementById('animalDateTime').innerHTML = "";
 
-  //
-  animalRoutesGroup.clearLayers();
+// TODO: LÖSCHEN?
+  //document.getElementById('animalName').innerHTML = "";
+  //document.getElementById('animalDateTime').innerHTML = "";
 
+  // clears the section in which the information about the last requested animal route may be displayed
   document.getElementById("getAnimalRouteDiv").style.display = "none";
+
+  // reset the map-content for showing only the last requested animal route
+  animalRoutesGroup.clearLayers();
 
   animalRoute = undefined;
 
-  //
+  // get the user inputs needed for the AJAX-request
   let studyID = document.getElementById('studyID').value;
   let individualID = document.getElementById('individualID').value;
   let maxEventsPerIndividual = document.getElementById('maxEventsPerIndividual').value;
 
-  //
+  // prepare the data given by the user to send with AJAX
   let iDs = {
     studyID: studyID,
     individualID: individualID,
@@ -212,19 +211,19 @@ function getTrackingData() {
   // if the request is done successfully, ...
   .done (function (response) {
 
-    console.log(response);
-
     // ... give a notice on the console that the AJAX request for getting the animal tracking API data has succeeded
     console.log("AJAX request (getting animal tracking data from API) is done successfully.");
 
-    //
+    // if the response has data about an individual animal ...
     if (response.individuals.length > 0) {
+      // ... provide the section to show
       document.getElementById("individualIdDiv").style.display = "block";
       document.getElementById("getAnimalRouteDiv").style.display = "block";
 
+      // format and show the data about that animal
       formatAndShowAnimalRoute(response);
 
-      //
+      // if the response does not provide data about an individual animal, tell the user about it
     } else {
       alert("This individual doesnt seem to have any data stored. \n " +
       "Please try a different individual or study.");
@@ -246,33 +245,32 @@ function getTrackingData() {
 
 
 /**
-* Takes the response of the Animal Tracking API request .....................
-* and ......
-*
+* Takes the needed attributes out of the response of the AJAX-request for the animal tracking data of one animal.
+* Formats them in form of converting the timestamps unit and making a continuous route (in GeoJSOn syntax)
+* out of the gotten coordinates. Adds a few other attributes needed for processing and makes
+* an JSON-object of this animal route. Calls a function for showing the route on createAnimalRoute.ejs.
 *
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param response response of the ......... request ........
+* @param response response of the AJAX-request for getting tracking data of one animal from Movebank API
 */
 function formatAndShowAnimalRoute(response) {
 
-  //
+  // make a route-object (in GeoJSON syntax) out of the given animal coordinates
   let locations = response.individuals[0].locations;
-
-  // animalRouteGeoJSON is an object
   let animalRouteGeoJSON = makeAnimalRouteGeoJSON(locations);
 
-  // timestamps are provided in milliseconds since 1970-01-01 UTC
-  // get the timestamp of the first coordinate of the animalroute (it is only one timestamp saved for one route, like it is for the userroutes, too)
+  // requested timestamps are provided in milliseconds since 1970-01-01 UTC,
+  // convert these Epoch milliseconds to our local date and time format:
+  // for this, get the timestamp of the first coordinate of the animalroute
+  // (it is only one timestamp saved for one route, like it is for the user routes, too)
   let firstTimestampEpochMilli = response.individuals[0].locations[0].timestamp;
-
-  // convert Epoch milliseconds to our local date and time format
   let firstTimestamp = new Date(firstTimestampEpochMilli);
   let date = firstTimestamp.toLocaleDateString();
   let time = firstTimestamp.toLocaleTimeString();
 
 
-  // create ....
+  // create the JSON-object for the animal route
   animalRoute = {
     // get the study-id
     study_id: response.individuals[0].study_id,
@@ -286,7 +284,7 @@ function formatAndShowAnimalRoute(response) {
     date: date,
     // time of the first entry in the locations-array
     time: time,
-    // to distinguish between userroutes and animalroutes
+    // to distinguish between user routes and animal routes
     madeBy: "animal",
     // to distinguish between routes and encounters
     what: "route",
@@ -294,20 +292,19 @@ function formatAndShowAnimalRoute(response) {
     status: "new"
   };
 
-  //
+  // show the animal route to the user, on createAnimalRoute.ejs
   showAnimalRoute(animalRoute);
 }
 
 
 /**
-* Takes the locations-part of the response from the animal tracking API .....................
-* and makes a route (as a GeoJSON feature) from/of the individual lat- and long-coordinates.......
-*
+* Takes the locations-part of the tracking data of one animal and makes a route
+* (in GeoJSON syntax, FeatureCollection) out of all its lat- and long-coordinate-pairs.
 *
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param locations array of ...............
-* @return animalRouteGeoJSON - the locations of the animalroute as a GeoJSON FeatureCollection
+* @param locations array containing objects with (a timestamp - not needed in this function - and) a long- and a lat-coordinate each
+* @return animalRouteGeoJSON - the animal route as a GeoJSON FeatureCollection
 */
 function makeAnimalRouteGeoJSON(locations) {
 
@@ -316,16 +313,14 @@ function makeAnimalRouteGeoJSON(locations) {
   // new array for the coordinates of the route, written in GeoJSON (only the geometry.coordinates part of the GeoJSON format)
   let coordinatesGeoJSON = [];
 
-  //
+  // long- and lat-coordinates out of the locations-array
   let lat, long;
-  //
+  // loop "over" all objects/coordinate-pairs in the locations-array
   for (let i = 0; i < locations.length; i++) {
 
-    //
+    // adding the i-th coordinate-pair to the new array coordinatesGeoJSON
     lat = locations[i].location_lat;
     long = locations[i].location_long;
-
-    // adding the i-th coordinate-pair to the new array coordinatesGeoJSON
     coordinatesGeoJSON.push([long, lat]);
   }
 
@@ -348,44 +343,46 @@ function makeAnimalRouteGeoJSON(locations) {
 
 
 /**
-*
-*
+* Takes an animal route (JSON-object with all data of the specific animal and its route)
+* and shows the individual taxon canonical name of the animal, the date and time of its first
+* coordinate and the route (in the map) on createAnimalRoute.ejs.
 *
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param animalRoute
+* @param animalRoute JSON-object with all data of the specific animal and its route
 */
 function showAnimalRoute(animalRoute) {
 
-  //
+  // show the individual taxon canonical name of the animal and the date and time of its first coordinate on createAnimalRoute.ejs
   document.getElementById('animalName').innerHTML = animalRoute.individualTaxonCanonicalName;
   document.getElementById('animalDateTime').innerHTML = animalRoute.date + ", " + animalRoute.time;
 
 
-  // **************** show animalroute in map "createAnimalRouteMap" ****************
+  // **************** show animal route in map "createAnimalRouteMap" ****************
 
   // animalRouteGeoJSON is an object
   let animalRouteGeoJSON = animalRoute.geoJson;
-  // let animalRouteGeoJSON = JSON.parse(animalRoute.geoJson);
 
-  // extract the coordinates of the animalroute
+  // extract the coordinates of the animal route
   let coordinatesGeoJSON = animalRouteGeoJSON.features[0].geometry.coordinates;
 
-  //
+  // swap the coordinates and make an object of each of them to be able to make a leaflet-polyline out of the route
   let coordinatesLatLong = swapGeoJSONsLongLatToLatLongOrder_Objects(coordinatesGeoJSON);
 
-  // ... center the map on the first point of the animalroute
+  // center the map on the first point of the animal route
   createAnimalRouteMap.setView([coordinatesLatLong[0].lat, coordinatesLatLong[0].lng], 4);
 
   // make a leaflet-polyline from the coordinates and show this polyline in orange in the map
   let polylineOfRoute = L.polyline(coordinatesLatLong, {color: '#ec7e00'}, {weight: '3'});
-  //
   polylineOfRoute.addTo(animalRoutesGroup);
 }
 
 
+// TODO: hier dämlich, da zwei Funktionen?!
+
 /**
-*
+* Inserts a user chosen animal route into the database, using an AJAX-POST-request. Before inserting,
+* its JSON and GeoJSON (route-part) syntax is checked, because it is a global variable that is inserted.
 *
 *
 * @author Katharina Poppinga, matr.: 450146
@@ -400,18 +397,15 @@ function postAnimalRoute() {
   // if there is an animalroute gotten/chosen from movebank API,
   // check the syntax because animalRoute is a global variable
   else {
-
-    // check whether animalRoute is valid JSON that can be parsed, if not throw an exception, tell the user and do not continue
+    // check whether animalRoute is valid JSON that can be parsed
     try {
       JSON.stringify(animalRoute);
     }
+    // if the animalRoute is not valid JSON, throw an exception, tell the user and do not continue
     catch (exception){
-      //
       alert("The animalroute has no valid JSON syntax.\n" + exception);
-      // .........
       return;
     }
-
 
     // check whether exactly this route is already stored in the database to
     // prevent from inserting it again (that would cause much encounter-calculating and could paralyze the app)
@@ -431,22 +425,17 @@ function postAnimalRoute() {
     // if the request is done successfully, ...
     .done (function (response) {
 
-      console.log(response);
-
       // if the chosen route already exists in the database ...
       if (response !== "") {
-        //
+
+        // ... reset the section for showing the chosen animal route
         document.getElementById('animalName').innerHTML = "";
         document.getElementById('animalDateTime').innerHTML = "";
-
-
         document.getElementById("getAnimalRouteDiv").style.display = "none";
-
-        //
         animalRoutesGroup.clearLayers();
-        //
         animalRoute = undefined;
-        // ... tell the user about it
+
+        // ... and tell the user about it
         alert("This animalroute is already stored in your database. Please choose a different one.");
         // ... and do not call the following expressions so that the user can choose a different route
         return;
@@ -467,7 +456,7 @@ function postAnimalRoute() {
       }
     })
 
-    // if the ajax-request has failed, ...
+    // if the AJAX-request has failed, ...
     .fail (function (xhr, status, error) {
 
       // ... give a notice that the AJAX request for finding the animalroute has failed and show the error on the console
@@ -484,14 +473,13 @@ function postAnimalRoute() {
 
 
 /**
-*
+* Makes an AJAX-POST-reqest for inserting an animal route into the database and
+* calls a function for calculating new encounters.
 *
 * @private
 * @author Katharina Poppinga, matr.: 450146
 */
 function insertAnimalroute(){
-
-  console.log(animalRoute);
 
   // ********** AJAX request for posting the animalroute into the database "routeDB" **********
   $.ajax({
@@ -510,27 +498,24 @@ function insertAnimalroute(){
   // if the request is done successfully, ...
   .done (function (response) {
 
-    //
+    // if the AJAX-request was successful but the inserting itself was not ...
     if (response === "") {
-      //
+      // ... tell the user about it
       alert("The animalroute could not be inserted into your database.");
-      //
+
+      // after successfully inserted the animal route in to the database ...
     } else {
-      //
+      // ... reset the section for showing the chosen animal route
       document.getElementById('animalName').innerHTML = "";
       document.getElementById('animalDateTime').innerHTML = "";
-
-
       document.getElementById("getAnimalRouteDiv").style.display = "none";
-
-      //
       animalRoutesGroup.clearLayers();
-      //
       animalRoute = undefined;
-      //
 
+      // ... and tell the user about the success in inserting the animal route
       alert("The animalroute was successfully inserted into your database.");
 
+      // calculate new encounters
       getAllRoutes();
     }
 

@@ -9,7 +9,6 @@
 */
 
 
-
 /**
 * Adds a toolbar for drawing polylines to the given leaflet-map and therefore allows to draw a route (just one at a time) in this map.
 * In addition, writes the drawn polyline in GeoJSON syntax in the given textarea.

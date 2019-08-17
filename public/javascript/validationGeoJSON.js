@@ -51,7 +51,7 @@ function validateJSONAndGeoJSON(idInputTextarea) {
 *
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param routeJSON the route (in JSON syntax!) to check for a correct GeoJSON syntax
+* @param routeJSON the route (in JSON syntax) to check for a correct GeoJSON syntax
 * @return {boolean} true, if the route is in correct GeoJSON syntax, false if not
 */
 function validateGeoJSON(routeJSON) {

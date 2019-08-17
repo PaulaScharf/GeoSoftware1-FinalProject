@@ -11,9 +11,6 @@
 // please put in your own tokens at 'token.js'
 
 
-// TODO: KOMMENTARE (u.a. IN CHECKBOX-FUNKTIONEN) an consecutive nr mit 1 beginnend ANPASSEN
-
-
 // ****************************** global variables *****************************
 
 /**
@@ -85,7 +82,7 @@ let circleEncounters = [];
 // ********************************* functions *********************************
 
 /**
-* Sets up the "indexMap" on the main page and requests all routes out of the database.
+* Sets up the "indexMap" with OpenStreetMap tiles on the main page and requests all routes out of the database.
 * Calls functions for writing all requested routes in their global array and showing all routes
 * that are saved in the global routes array on the main page (in map and tables).
 * Besides, calls function for requesting all encounters and showing them on the

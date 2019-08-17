@@ -10,7 +10,7 @@
 
 
 /**
-* Sets up a leaflet-map and calls a function for enabling the drawing of a polyline into that map.
+* Sets up a leaflet-map with OpenStreetMap tiles and calls a function for enabling the drawing of a polyline into that map.
 * If the given map is the "createMap", also calls another function "getAllRoutes()".
 * If the given map is the "updateMap", shows the route written in the textarea with ID "updateRoute" in the map.
 *
