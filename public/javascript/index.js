@@ -118,8 +118,8 @@ function getAndShowData() {
     url: "/routes/readAll",
     // data type of the response
     dataType: "json",
-    // timeout set to 7 seconds
-    timeout: 7000
+    // timeout set to 10 seconds
+    timeout: 10000
   })
 
   // if the request is done successfully, ...
@@ -285,8 +285,8 @@ function getAllEncountersAndShow() {
     url: "/encounter/readAll",
     // data type of the response
     dataType: "json",
-    // timeout set to 7 seconds
-    timeout: 7000
+    // timeout set to 20 seconds
+    timeout: 20000
   })
 
   // if the request is done successfully, ...
@@ -511,8 +511,8 @@ function deleteRoute(id) {
     data: {
       _id: id
     },
-    // timeout set to 7 seconds
-    timeout: 7000
+    // timeout set to 10 seconds
+    timeout: 10000
   })
 
   // if the request is done successfully, ...
@@ -549,7 +549,7 @@ function deleteRoute(id) {
 
       /**
       * Creates a button for updating its corresponding user route inside the user routes' table cell.
-      * Submitting the button calls '/read'.
+      * Submitting the button calls '/userroute'.
       *
       * @private
       * @author Katharina Poppinga, matr.: 450146
@@ -562,8 +562,8 @@ function deleteRoute(id) {
 
         let id = allRoutes[i][0]._id;
 
-        /// add the button for updating the user route (which calls '/read') to the content of the "tableCellUpdateButton"
-        tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/read' method='GET' name='updateButtonForm' style='display: inline;'>" +
+        /// add the button for updating the user route (which calls '/userroute') to the content of the "tableCellUpdateButton"
+        tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/userroute' method='GET' name='updateButtonForm' style='display: inline;'>" +
         "<input type='hidden' name='_id' value='" + id +"'/>" +
         "<input type='submit' value='update' id='updateButton" + i + "'/>" +
         "</form>";
@@ -655,15 +655,18 @@ function deleteRoute(id) {
       * @param encounter
       */
       function updateEncounter(encounter) {
+
         $.ajax({
           // use a http POST request
           type: "POST",
           // URL to send the request to
           url: "/encounter/update",
           //
-          data: encounter,
-          // timeout set to 7 seconds
-          timeout: 7000
+          data: JSON.stringify(encounter),
+          // type of the data that is sent to the server
+          contentType: "application/json; charset=utf-8",
+          // timeout set to 10 seconds
+          timeout: 10000
         })
 
         // if the request is done successfully, ...

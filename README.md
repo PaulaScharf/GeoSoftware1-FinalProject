@@ -1,23 +1,43 @@
 # GeoSoftware1-FinalProject
 ## How to start the project
-- with docker:  
-    ...
+
+aus project-folder heraus (Übersetzen in Englisch):
+
+- with docker:
+    1. install docker on your local machine
+    2. run ``docker-compose up`` in the terminal
+    3.  
+    4.  
+
+    (the image was built by command ``docker build -t kpoppi/geosoftware1-final_project .``)
+
+    MUSS NOCH GEPUSHT WERDEN !!
+
 - without docker:
-    1. run ``npm install`` in the terminal
-    2. run ``npm start`` in the terminal
-    3. open [localhost:3000](localhost:3000) in a browser
+    1. install node v10.xx and MongoDB v4.xx on your local machine
+    2. run ``npm install`` in the terminal
+    3. run ``npm start`` in the terminal
+    4. open [localhost:3000](localhost:3000) in a browser
+    5. ensure that your adblocker does not prevent jsnlog from working (auch bei docker hinschreiben?!)
 
 ## How to install your own API-keys
 #### Geonames
 1. create an account for [geonames](https://www.geonames.org/login)
 2. wait for activation email
-3. got to your account page 
+3. got to your account page
 4. enable your account for free webservices
 5. set the value of the variable ``usernameTerrainAPI`` in token.js to your username
 #### OpenWeatherMap
 1. create an account for [openweathermap](https://home.openweathermap.org/users/sign_up)
+2.
+3.
+4.
+
 #### Movebank
 1. create an account for [movebank](https://www.movebank.org/user/register)
+2.
+3.
+4.
 
 
 ## GitHub Repository

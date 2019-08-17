@@ -15,7 +15,7 @@
   <!-- locally created css -->
   <link rel="stylesheet" href="../stylesheets/style.css">
 
-  <script async src="/jquery/jquery.min.js"></script>
+  <script src="/jquery/jquery.min.js"></script>
 
   <title>Final Project</title>
 </head>
@@ -70,11 +70,11 @@
           </div>
           <div>This table shows routes created by users as just planned or already completed.<br>
             The checkbox gives you the option to show or hide the corresponding route in the map above.<br>
-            With the slider on the right the routes can be searched by their name and/or their username.</div>
+            With the slider on the right the routes can be filtered by their name and/or their username.</div>
           </div>
 
           <div class="col-sm-5">
-            <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Search User Routes</h3>
+            <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Filter User Routes</h3>
             Username:    <input type="text" id="searchRouteUser" placeholder="Search users of routes" title="Type in a username">
             <br>
             Name of route:    <input type="text" id="searchRouteName" placeholder="Search names of routes" title="Type in a name">
@@ -109,11 +109,11 @@
             </div>
             <div>This table shows routes based on animal tracking data gotten from Movebank API.<br>
               The checkbox gives you the option to show or hide the corresponding route in the map above.<br>
-              With the slider on the right the routes can be searched by their corresponding study ID and/or the individual taxon canonical name of the animal.</div>
+              With the slider on the right the routes can be filtered by their corresponding study ID and/or the individual taxon canonical name of the animal.</div>
             </div>
 
             <div class="col-sm-5">
-              <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Search Animal Routes</h3>
+              <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Filter Animal Routes</h3>
               StudyID:    <input type="text" id="searchStudyID" placeholder="Search studyID" title="Type in a studyID">
               <br>
               Individual Taxon Canonical Name:    <input type="text" id="searchAnimalName" placeholder="Search " title="Type in a user">
@@ -156,7 +156,7 @@
                   </tbody>
                 </table>
               </div>
-              <div>This table shows all encounters between any of the routes above. NUMMERNZUGEHÖTIGKEIT ERKLÄREN<br>
+              <div>This table shows all encounters between any of the routes above. NUMMERNZUGEHÖTIGKEIT ERKLÄREN ?<br>
                 Because the users do not specify timestamps for each point of their routes, the calculated encounters initially are just potential ones.
                 By marking an encounter as 'confirmed' a user can save the encounter as having actually taken place.<br>
                 To have some additional information, for example if you want to visit a place of these again, the terrain of the encounters' location and its country is shown.<br>

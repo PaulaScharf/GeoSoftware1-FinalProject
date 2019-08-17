@@ -264,18 +264,18 @@ function onlyShowConfirmed() {
 * @param encounter
 */
 function updateEncounter(encounter) {
+
   $.ajax({
     // use a http POST request
     type: "POST",
     // URL to send the request to
     url: "/encounter/update",
     //
-    data: encounter,
-    // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
+    data: JSON.stringify(encounter),
     // type of the data that is sent to the server
-    //contentType: "application/json; charset=utf-8",
-    // timeout set to 7 seconds
-    timeout: 7000
+    contentType: "application/json; charset=utf-8",
+    // timeout set to 10 seconds
+    timeout: 10000
   })
 
   // if the request is done successfully, ...
@@ -316,8 +316,8 @@ function postEncounter(encounter, id) {
         contentType: "application/json; charset=utf-8",
         //
         data: JSON.stringify(encounter),
-        // timeout set to 7 seconds
-        timeout: 7000
+        // timeout set to 10 seconds
+        timeout: 10000
     })
 
     // if the request is done successfully, ...

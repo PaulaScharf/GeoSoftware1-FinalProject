@@ -10,9 +10,6 @@
  */
 
 
-// TODO: KOMMENTARE zuende schreiben
-
-
 var express = require('express');
 const mongodb = require('mongodb');
 
@@ -62,7 +59,7 @@ var postRoutesController = function(req, res) {
             res.render('error');
             // if no error occurs ...
         } else {
-            // ... give a notice, that inserting the userroute has succeeded
+            // ... give a notice, that inserting the user route has succeeded
             console.log("Successfully inserted user route into 'routeDB'.");
             // ... and go back to the create-page
             res.render("create");
@@ -98,7 +95,7 @@ var getRoutesController = function(req, res) {
 // route for creating/inserting one userroute
 router.route("/create").post(postRoutesController);
 // route for reading one userroute
-router.route("/read").get(getRoutesController);
+router.route("/userroute").get(getRoutesController);
 
 
 

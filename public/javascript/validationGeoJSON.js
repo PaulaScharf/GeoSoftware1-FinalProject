@@ -43,7 +43,6 @@ function validateJSONAndGeoJSON(idInputTextarea) {
 }
 
 
-
 /**
 * Takes a route in correct JSON syntax and checks whether this route is in correct GeoJSON syntax.
 * If its syntax is correct GeoJSON, true is returned. If not, the user is given a notice and
@@ -57,24 +56,14 @@ function validateJSONAndGeoJSON(idInputTextarea) {
 function validateGeoJSON(routeJSON) {
 
   // check whether the syntax of the input route is conform to the GeoJSON syntax:
-  // attribute "properties" is not checked because it is not that relevant for this project
+  // (attribute "properties" is not checked because it is not that relevant for this project)
 
-  // check whether all necessary attributes exist
-  if ((routeJSON.type !== "undefined") && (routeJSON.features !== "undefined") &&
-
-
+  // check whether all necessary attributes exist and have their required values:
+  if ((routeJSON.hasOwnProperty("type")) && (routeJSON.hasOwnProperty("features")) &&
   (Array.isArray(routeJSON.features)) &&
-
-
-  (routeJSON.features[0].type !== "undefined") && (routeJSON.features[0].geometry !== "undefined") &&
-
-
-  (routeJSON.features[0].geometry.type !== "undefined") && (routeJSON.features[0].geometry.coordinates!== "undefined") &&
-
-
+  (routeJSON.features[0].hasOwnProperty("type")) && (routeJSON.features[0].hasOwnProperty("geometry")) &&
+  (routeJSON.features[0].geometry.hasOwnProperty("type")) && (routeJSON.features[0].geometry.hasOwnProperty("coordinates")) &&
   (Array.isArray(routeJSON.features[0].geometry.coordinates))) {
-
-    //
     if ((routeJSON.type === "FeatureCollection") && (routeJSON.features.length === 1)) {
 
       // check the following in the only item in the array 'routeJSONInput.features':

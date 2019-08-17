@@ -389,6 +389,9 @@ function showAnimalRoute(animalRoute) {
 */
 function postAnimalRoute() {
 
+// animalRoute as a String
+let animalRouteString;
+
   // if there is no animalroute gotten/chosen from movebank API ...
   if (typeof animalRoute === "undefined") {
     // ... tell the user that he/she first has to choose an animalroute by getting tracking data of a study from movebank API
@@ -399,7 +402,7 @@ function postAnimalRoute() {
   else {
     // check whether animalRoute is valid JSON that can be parsed
     try {
-      JSON.stringify(animalRoute);
+      animalRouteString = JSON.stringify(animalRoute);
     }
     // if the animalRoute is not valid JSON, throw an exception, tell the user and do not continue
     catch (exception){
@@ -415,7 +418,7 @@ function postAnimalRoute() {
       // URL to send the request to
       url: "/routes/readAnimal",
       // data to send to the server, send as String for independence of server-side programming language
-      data: JSON.stringify(animalRoute),
+      data: animalRouteString,
       // type of the data that is sent to the server
       contentType: "application/json; charset=utf-8",
       // timeout set to 7 seconds
@@ -491,8 +494,8 @@ function insertAnimalroute(){
     data: JSON.stringify(animalRoute),
     // type of the data that is sent to the server
     contentType: "application/json; charset=utf-8",
-    // timeout set to 7 seconds
-    timeout: 7000
+    // timeout set to 10 seconds
+    timeout: 10000
   })
 
   // if the request is done successfully, ...

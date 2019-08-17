@@ -31,8 +31,8 @@ function getAllRoutes() {
     url: "/routes/readAll",
     // data type of the response
     dataType: "json",
-    // timeout set to 7 seconds
-    timeout: 7000
+    // timeout set to 20 seconds
+    timeout: 20000
   })
 
   // if the request is done successfully, ...
@@ -236,8 +236,8 @@ function postEncounter(encounter, id) {
     contentType: "application/json; charset=utf-8",
     //
     data: JSON.stringify(encounter),
-    // timeout set to 7 seconds
-    timeout: 7000
+    // timeout set to 10 seconds
+    timeout: 10000
   })
 
   // if the request is done successfully, ...
@@ -279,8 +279,8 @@ function deleteEncounter(encounterId) {
     data: {
       _id: encounterId
     },
-    // timeout set to 7 seconds
-    timeout: 7000
+    // timeout set to 10 seconds
+    timeout: 10000
   })
 
   // if the request is done successfully, ...
@@ -318,8 +318,8 @@ function updateStatusFromNewToOld(route) {
     contentType: "application/json; charset=utf-8",
     //
     data: JSON.stringify(route),
-    // timeout set to 7 seconds
-    timeout: 7000
+    // timeout set to 10 seconds
+    timeout: 10000
   })
 
   // if the request is done successfully, ...

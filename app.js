@@ -128,11 +128,8 @@ function connectMongoDb() {
 
 
         // if it is not possible to connect on localhost:27017 or mongodbservice:27017,
-        // catch possible errors and tell the user about them:
+        // catch possible errors and print them in the console:
       } catch (error) {
-
-        // TODO: NOCH WAS??
-
         console.log(error.message);
         console.dir(error);
 
@@ -187,7 +184,7 @@ app.post("/animalTrackingAPI/individualIds", (req, res) => {
     // set the headers for the get-request
     headers: {
       "Authorization":"Basic " + Buffer.from(loginname+':'+password).toString('base64'),
-      "access-control-allow-origin": "localhost:3000",
+      "access-control-allow-origin": "*",   // not set to "localhost:3000" because this code is used for docker, too
       "access-control-allow-methods": "GET, POST",
       "access-control-allow-headers": "content-type"
     },
@@ -243,7 +240,7 @@ app.post("/animalTrackingAPI", (req, res) => {
     // set the headers for the get-request
     headers: {
       "Authorization":"Basic " + Buffer.from(loginname+':'+password).toString('base64'),
-      "access-control-allow-origin": "localhost:3000",
+      "access-control-allow-origin": "*",   // not set to "localhost:3000" because this code is used for docker, too
       "access-control-allow-methods": "GET, POST",
       "access-control-allow-headers": "content-type"
     },
