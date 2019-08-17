@@ -33,17 +33,18 @@
 
     <div class="row" style="padding:10px">
       <div class="col-sm-12">
-        <div>This application shows user and animal routes and their encounters all over the world.<br>
+        <div>This application shows user and animal routes and their encounters all over the world in the map below.<br>
           DATABASE ERWÄHNEN?<br>
-          For creating and inserting routes, use the menu item 'Maintenance'. There you can create your own routes by drawing them into a map or inserting a GeoJSON.
-          Furthermore there is an option to search real animal routes from Movebank API which you can insert, too.<br>
+          For creating your own routes, use the menu item 'Create new user route'.
+          There you can draw a route directly into a map or insert a GeoJSON.
+          Furthermore, use the menu item 'Create new animal route' for inserting real animal routes by GPS sensor data from Movebank API.<br>
           The tables underneath the map provide some information about the inserted routes and their encounters plus options to update or delete the created routes.</div>
           <br>
           <div id="indexMap"></div>
           <div>This map shows all marked routes which you can also see in the tables underneath.
             User routes are coloured red, animal routes are coloured orange.
             Confirmed encounters are shown in green, not confirmed ones in blue.
-            If 'show only confirmed' in the encounters table is selected, you will see only confirmed encounters - but still all routes - in the map.
+            If 'show only confirmed' in the encounters table is selected, you will see only confirmed encounters - but still all routes - in this map.
           </div>
         </div>
       </div>
@@ -156,7 +157,7 @@
                   </tbody>
                 </table>
               </div>
-              <div>This table shows all encounters between any of the routes above. NUMMERNZUGEHÖTIGKEIT ERKLÄREN ?<br>
+              <div>This table shows all encounters between any of the routes above.<br>
                 Because the users do not specify timestamps for each point of their routes, the calculated encounters initially are just potential ones.
                 By marking an encounter as 'confirmed' a user can save the encounter as having actually taken place.<br>
                 To have some additional information, for example if you want to visit a place of these again, the terrain of the encounters' location and its country is shown.<br>
