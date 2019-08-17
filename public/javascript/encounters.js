@@ -57,7 +57,7 @@ function getAllRoutes() {
     // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
     console.log("AJAX request (reading all routes) has failed.", error);
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {
       JL("ajaxReadingAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
     }
@@ -150,11 +150,9 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
   }
 }
 
-
+// TODO: in folgendes JSDoc NOCH SCHREIBEN, DASS ZU ALLENCOUNTERS HINZUGEFÜGT WIRD
 /**
 * This function calculates the intersections of between all the straight lines that make up two given routes.
-*
-* NOCH SCHREIBEN, DASS ZU ALLENCOUNTERS HINZUGEFÜGT WIRD
 *
 *
 * @param firstRoute        a route (only the coordinates)
@@ -233,7 +231,7 @@ function postEncounter(encounter, id) {
     url: "/encounter/create",
     // type of the data that is sent to the server
     contentType: "application/json; charset=utf-8",
-    //
+    // data to send to the server
     data: JSON.stringify(encounter),
     // timeout set to 10 seconds
     timeout: 10000
@@ -254,7 +252,7 @@ function postEncounter(encounter, id) {
     // ... give a notice that the AJAX request for posting an encounter has failed and show the error on the console
     console.log("AJAX request (posting an encounter) has failed.", error);
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {
       JL("ajaxCreatingEncounterTimeout").fatalException("ajax: '/encounter/create' timeout");
     }
@@ -293,7 +291,7 @@ function deleteEncounter(encounterId) {
     // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
     console.log("AJAX request (deleting an encounter) has failed.", error);
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {
       JL("ajaxDeletingEncounterTimeout").fatalException("ajax: '/encounter/delete' timeout");
     }
@@ -315,7 +313,7 @@ function updateStatusFromNewToOld(route) {
     url: "/encounter/update",
     // type of the data that is sent to the server
     contentType: "application/json; charset=utf-8",
-    //
+    // data to send to the server
     data: JSON.stringify(route),
     // timeout set to 10 seconds
     timeout: 10000
@@ -332,7 +330,7 @@ function updateStatusFromNewToOld(route) {
     // ... give a notice that the AJAX request for updating the status of a route has failed and show the error on the console
     console.log("AJAX request (updating the status of a route) has failed.", error);
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {
       JL("ajaxUpdatingEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
     }

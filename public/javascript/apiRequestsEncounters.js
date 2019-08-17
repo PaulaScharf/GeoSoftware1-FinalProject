@@ -250,7 +250,6 @@ function postEncounter(encounter, id) {
         type: "POST",
         // URL to send the request to
         url: "/encounter/create",
-        // TODO: ist encounter JSON?? (dann stringifien) !!!!!!!!
         // type of the data that is sent to the server
         contentType: "application/json; charset=utf-8",
         //
@@ -274,7 +273,7 @@ function postEncounter(encounter, id) {
             // ... give a notice that the AJAX request for posting an encounter has failed and show the error on the console
             console.log("AJAX request (posting an encounter) has failed.", error);
 
-            // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+            // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
             if (error === "timeout") {
                 JL("ajaxCreateEncounterTimeout").fatalException("ajax: '/encounter/create' timeout");
             }

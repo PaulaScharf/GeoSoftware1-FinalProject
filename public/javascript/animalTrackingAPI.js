@@ -128,7 +128,6 @@ function getIndividualID() {
     console.log("AJAX request (getting animal tracking data from API) has failed.", error);
     alert("There was an error. Please try again later.");
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
     // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {
       JL("ajaxGettingAnimalTrackingAPITimeout").fatalException("ajax: '/animalTrackingAPI/individualIds' timeout");
@@ -166,16 +165,9 @@ function showAnimalIDs(response) {
 */
 function getTrackingData() {
 
-// TODO: LÖSCHEN?
-  //document.getElementById('animalName').innerHTML = "";
-  //document.getElementById('animalDateTime').innerHTML = "";
-
-  // clears the section in which the information about the last requested animal route may be displayed
+  // reset the section for showing the chosen animal route
   document.getElementById("getAnimalRouteDiv").style.display = "none";
-
-  // reset the map-content for showing only the last requested animal route
   animalRoutesGroup.clearLayers();
-
   animalRoute = undefined;
 
   // get the user inputs needed for the AJAX-request
@@ -236,7 +228,6 @@ function getTrackingData() {
     // ... give a notice that the AJAX request for getting the animal tracking API data has failed and show the error on the console
     console.log("AJAX request (getting animal tracking data from API) has failed.", error);
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
     // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {
       JL("ajaxGettingAnimalTrackingAPITimeout").fatalException("ajax: '/animalTrackingAPI' timeout");
@@ -379,8 +370,6 @@ function showAnimalRoute(animalRoute) {
 }
 
 
-// TODO: hier dämlich, da zwei Funktionen?!
-
 /**
 * Inserts a user chosen animal route into the database, using an AJAX-POST-request. Before inserting,
 * its JSON and GeoJSON (route-part) syntax is checked, because it is a global variable that is inserted.
@@ -449,7 +438,6 @@ let animalRouteString;
         // ... check whether 'animalRoute.geoJson' contains valid GeoJSON and, if so, ...
         if (validateGeoJSON(animalRoute.geoJson)) {
 
-          // TODO: SO WÄRE VALIDIERUNG DÄMLICH
           // ... insert the chosen animalroute into the database
           insertAnimalroute();
 
@@ -466,7 +454,6 @@ let animalRouteString;
       // ... give a notice that the AJAX request for finding the animalroute has failed and show the error on the console
       console.log("AJAX request (reading/finding animalroute) has failed.", error);
 
-      // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
       // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
       if (error === "timeout") {
         JL("ajaxReadingAnimalrouteTimeout").fatalException("ajax: '/routes/readAnimal' timeout");
@@ -533,7 +520,6 @@ function insertAnimalroute(){
     // ... give a notice that the AJAX request for posting the animalroute has failed and show the error on the console
     console.log("AJAX request (posting animalroute) has failed.", error);
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
     // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {
       JL("ajaxCreatingAnimalrouteTimeout").fatalException("ajax: '/routes/createAnimal' timeout");

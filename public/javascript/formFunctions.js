@@ -68,7 +68,7 @@ function checkTimestamp() {
   }
 }
 
-// TODO: parameterbeschreibung
+// TODO: parameterbeschreibung für madeBy fehlt noch
 /**
 *
 * @private

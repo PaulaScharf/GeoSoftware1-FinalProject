@@ -21,23 +21,27 @@ aus project-folder heraus (Übersetzen in Englisch):
     5. ensure that your adblocker does not prevent jsnlog from working (auch bei docker hinschreiben?!)
 
 ## How to install your own API-keys
-#### Geonames
-1. create an account for [geonames](https://www.geonames.org/login)
-2. wait for activation email
-3. got to your account page
-4. enable your account for free webservices
-5. set the value of the variable ``usernameTerrainAPI`` in token.js to your username
+
 #### OpenWeatherMap
 1. create an account for [openweathermap](https://home.openweathermap.org/users/sign_up)
 2.
 3.
 4.
+5. replace the XXX in value of the variable ``OPENWEATHERMAP_TOKEN`` in /public/javascript/tokens.js by your token
+
+#### Geonames
+1. create an account for [geonames](https://www.geonames.org/login)
+2. wait for activation email
+3. go to your account page
+4. enable your account for free webservices
+5. replace the XXX in value of the variable ``usernameTerrainAPI`` in /public/javascript/tokens.js by your username
 
 #### Movebank
 1. create an account for [movebank](https://www.movebank.org/user/register)
-2.
-3.
-4.
+2. wait for activation email
+3. change the first one-time password
+4. replace the XXX in value of the variable ``loginnameAnimalTrackingAPI`` in /public/javascript/tokens.js by your username
+5. replace the XXX in value of the variable ``passwordAnimalTrackingAPI`` in /public/javascript/tokens.js by your password
 
 
 ## GitHub Repository

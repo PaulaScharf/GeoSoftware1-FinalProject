@@ -73,7 +73,7 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
 
-// TODO: kommentarerklärung
+// TODO: kommentarerklärung, was hier passiert
     //
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
@@ -88,6 +88,7 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
 
+// TODO: kommentarerklärung, was hier passiert
     //
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
@@ -111,6 +112,7 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
         let output = document.getElementById(outputTextarea);
         output.value = JSON.stringify(oldRouteGeoJSON, null, 2);
 
+// TODO: kommentarerklärung, was hier passiert
         //
         let ev = document.createEvent('Event');
         ev.initEvent('keyup', true, false);
@@ -123,6 +125,7 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
         let output = document.getElementById(outputTextarea);
         output.value = "";
 
+// TODO: kommentarerklärung, was hier passiert
         //
         let ev = document.createEvent('Event');
         ev.initEvent('keyup', true, false);

@@ -144,7 +144,7 @@ function getAndShowData() {
     // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
     console.log("AJAX request (reading all routes) has failed.", error);
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {
       JL("ajaxReadingAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
     }
@@ -265,11 +265,10 @@ function fillRoutesMap() {
     // add the polyline to the array polylineRoutes for being able to address the polylines(routes) by numbers (kind of IDs) (needed for checkboxes)
     polylineRoutes.push(polylineOfRoute);
 
-
-    // TODO: KOMMENTARE ANPASSEN!!!
     if (currentRoute[1]) {
       // add the i-th polyline-element of the array polylineRoutes to the allRoutesGroup and therefore to the map "indexMap"
       polylineRoutes[i].addTo(allRoutesGroup);
+      // TODO: KOMMENTARE BERICHTIGEN/ANPASSEN:
       // for the first route of the database ...
       if (i === allRoutes.length - 1) {
         // ... center the map on the first point of the first route
@@ -317,7 +316,7 @@ function getAllEncountersAndShow() {
     // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
     console.log("AJAX request (reading all encounters) has failed.", error);
 
-    // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {
       JL("ajaxReadingAllEncountersTimeout").fatalException("ajax: '/encounter/readAll' timeout");
     }
@@ -551,7 +550,7 @@ function deleteRoute(id) {
         // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
         console.log("AJAX request (deleting a route) has failed.", error);
 
-        // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+        // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
         if (error === "timeout") {
           JL("ajaxDeletingEncounterTimeout").fatalException("ajax: '/routes/delete' timeout");
         }
@@ -710,7 +709,7 @@ function onlyShowConfirmed() {
           // ... give a notice that the AJAX request for .......... has failed and show the error on the console
           console.log("AJAX request (updating an encounter) has failed.", error);
 
-          // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+          // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
           if (error === "timeout") {
             JL("ajaxUpdatingEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
           }
