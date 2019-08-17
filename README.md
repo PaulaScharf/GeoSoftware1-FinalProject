@@ -11,7 +11,14 @@
 #### Geonames
 1. create an account for [geonames](https://www.geonames.org/login)
 2. wait for activation email
-3.
+3. got to your account page 
+4. enable your account for free webservices
+5. set the value of the variable ``usernameTerrainAPI`` in token.js to your username
+#### OpenWeatherMap
+1. create an account for [openweathermap](https://home.openweathermap.org/users/sign_up)
+#### Movebank
+1. create an account for [movebank](https://www.movebank.org/user/register)
+
 
 ## GitHub Repository
 [GeoSoftware1-FinalProject](https://github.com/PaulaScharf/GeoSoftware1-FinalProject.git)

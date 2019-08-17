@@ -184,38 +184,13 @@ function writeAllRoutesInTheGlobalArray(response) {
 */
 function showAllRoutesOnMainPage() {
 
+  fillRoutesTable();
   // coordinates of a route (in GeoJSONs long-lat order)
   let coordinatesRoute;
-
   // loop "over" all routes in the current database "routeDB"
   for (let i = 0; i < allRoutes.length; i++) {
 
     let currentRoute = allRoutes[i];
-
-    // if the route is a user route ...
-    if (currentRoute[0].madeBy === "user") {
-      // ... show it with a consecutive number and its creator, name, date, time and type in the table "routesTable" on the main page
-      createUserRouteTable(i, currentRoute[0].creator, currentRoute[0].name, currentRoute[0].date, currentRoute[0].time, currentRoute[0].type, "routesTable");
-    }
-
-    // if the route is an animal route ...
-    else {
-      // ... show it with a consecutive number and its studyID, individualTaxonCanonicalName, date and time in the table "animalRoutesTable" on the main page
-      createAnimalRouteTable(i, currentRoute[0].study_id, currentRoute[0].individualTaxonCanonicalName, currentRoute[0].date, currentRoute[0].time, "animalRoutesTable");
-    }
-
-    // outsource the creation of the checkbox for showing or not showing the i-th route in the map
-    routeCheckbox(i);
-
-    // if the route is a user route ...
-    if (currentRoute[0].madeBy === "user") {
-      // .. add a button for updating it to the routes-table
-      updateButton(i, currentRoute[0]._id);
-    }
-
-    // add a button for deleting the i-th route to its corresponding table
-    deleteButton(i, currentRoute[0]._id);
-
 
     // ************** show the i-th route in the map "indexMap" on the main page, therefore do the following steps: **************
 
@@ -254,6 +229,47 @@ function showAllRoutesOnMainPage() {
         indexMap.fitBounds(allRoutesGroup.getBounds());
       }
     }
+  }
+}
+
+/**
+ * This function fills both route-tables on the main page with all the routes in the allRoutes-Array
+ * @private
+ * @author Katharina Poppinga, matr.: 450146; Paula Scharf, matr.: 450334
+ */
+function fillRoutesTable() {
+  // clear the tables
+  deleteAllChildrenOfElement("routesTable");
+  deleteAllChildrenOfElement("animalRoutesTable");
+
+  // loop "over" all routes in the current database "routeDB"
+  for (let i = 0; i < allRoutes.length; i++) {
+
+    let currentRoute = allRoutes[i];
+
+    // if the route is a user route ...
+    if (currentRoute[0].madeBy === "user") {
+      // ... show it with a consecutive number and its creator, name, date, time and type in the table "routesTable" on the main page
+      createUserRouteTable(i, currentRoute[0].creator, currentRoute[0].name, currentRoute[0].date, currentRoute[0].time, currentRoute[0].type, "routesTable");
+    }
+
+    // if the route is an animal route ...
+    else {
+      // ... show it with a consecutive number and its studyID, individualTaxonCanonicalName, date and time in the table "animalRoutesTable" on the main page
+      createAnimalRouteTable(i, currentRoute[0].study_id, currentRoute[0].individualTaxonCanonicalName, currentRoute[0].date, currentRoute[0].time, "animalRoutesTable");
+    }
+
+    // outsource the creation of the checkbox for showing or not showing the i-th route in the map
+    routeCheckbox(i);
+
+    // if the route is a user route ...
+    if (currentRoute[0].madeBy === "user") {
+      // .. add a button for updating it to the routes-table
+      updateButton(i);
+    }
+
+    // add a button for deleting the i-th route to its corresponding table
+    deleteButton(i);
   }
 }
 
@@ -477,13 +493,61 @@ function fillEncountersTable() {
         let tableCellDeleteButton = document.getElementById("conseNum"+i);
 
         let id = allRoutes[i][0]._id;
-
-        // add the button for deleting the route (which calls '/routes/delete') to the content of the "tableCellDeleteButton"
-        tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + " <form action='/routes/delete' method='GET' name='deleteButtonForm' style='display: inline;'>" +
-        "<input type='hidden' name='_id' value='" + id +"'/>" +
-        "<input type='submit' value='delete' id='deleteButton" + i + "'/>" +
-        "</form>";
+        //
+        tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + "<button id='deleteButton" + i + "' onclick='deleteRoute(\"" + id +"\")' style='margin-left:15px'>delete</button>";
       }
+
+/**
+ * This function deletes a route from the database and the main page.
+ * Also deletes all encounters with that route from the database and the main page
+ * @private
+ * @author Paula Scharf, matr.: 450334
+ * @param id {String} - the id of the route in the database
+ */
+function deleteRoute(id) {
+  $.ajax({
+    // use a http GET request
+    type: "GET",
+    // URL to send the request to
+    url: "/routes/delete",
+    // data to send to the server
+    data: {
+      _id: id
+    },
+    // timeout set to 7 seconds
+    timeout: 7000
+  })
+
+  // if the request is done successfully, ...
+      .done (function () {
+        // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+        console.log("AJAX request (deleting a route) is done successfully.");
+
+        for (let i = 0; i < allRoutes.length; i++) {
+          let currentRoute = allRoutes[i];
+          if (currentRoute[0]._id === id) {
+            allRoutes.splice(i,1);
+            allRoutesGroup.removeLayer(polylineRoutes[i]);
+            polylineRoutes.splice(i,1);
+            i = i-1;
+          }
+        }
+        fillRoutesTable();
+        deleteAllEncountersOfRoute(id);
+        showEncountersOnMainPage();
+      })
+
+      // if the request has failed, ...
+      .fail(function (xhr, status, error) {
+        // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
+        console.log("AJAX request (deleting a route) has failed.", error);
+
+        // TODO: ÜBERPRÜFEN, OB SCHREIBWEISE RICHTIG
+        if (error === "timeout") {
+          JL("ajaxDeletingEncounterTimeout").fatalException("ajax: '/routes/delete' timeout");
+        }
+      });
+}
 
 
       /**

@@ -64,10 +64,10 @@ var putRoutesController = function (req, res) {
 // delete a route from the database and redirect to the startpage
 var deleteRoutesController = function(req, res) {
 
-  console.log("Delete route " + req.query._id);
-
   //
-  let objectId = new mongodb.ObjectID(req.query._d);
+  let objectId = new mongodb.ObjectID(req.query._id);
+
+  console.log("Delete route " + objectId);
 
   // delete the route with the given id
   req.db.collection('routeDB').deleteOne({_id:objectId}, (error, result) => {
