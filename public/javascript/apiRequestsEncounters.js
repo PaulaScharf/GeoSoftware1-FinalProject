@@ -56,8 +56,8 @@ class WeatherRequest
 
 
   /**
-   * @desc This function is called, when there is a change in the XMLHttpRequest "x".
-   * If it is called and the status is 200 and readyState is 4, it writes the weather into the table and creates an infoRequest.
+   * @desc This function is called, at the end of the constructor.
+   * It opens and sends the request.
    */
   openAndSendRequest()
   {
