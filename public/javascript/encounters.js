@@ -157,8 +157,9 @@ function deleteAllEncountersOfRoute(routeId) {
 */
 function calculateEncounters(oneRoute, oneId, checkForUpdates) {
 
-  //
+  // go through all aready processed routes and calculate intersections between them and the given route
   for (let i = 0; i < alreadyKnownRoutes.length; i++) {
+    // if the current route is set to updated, then it will be processed again later
     if (oneId !== alreadyKnownRoutes[i][0]._id || alreadyKnownRoutes[i][0].status !== "updated") {
       intersectionOfRoutes(oneRoute, alreadyKnownRoutes[i][0].geoJson.features[0].geometry.coordinates, oneId, alreadyKnownRoutes[i][0]._id, checkForUpdates);
     }

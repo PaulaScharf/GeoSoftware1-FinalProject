@@ -40,10 +40,10 @@ class WeatherRequest
     let lat = intersection[0];
     let long = intersection[1];
 
-    //
+    // the url for the weather-request
     this.resource = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + token.OPENWEATHERMAP_TOKEN;
 
-    //
+    // the weather-request as an xmlhttprequest
     this.x = new XMLHttpRequest();
     this.x.intersection = intersection;
     this.x.id = id;
@@ -101,7 +101,7 @@ class WeatherRequest
   errorcallback(e) {
 
     console.dir("e: " + e);
-    //
+
     if (this.status === 404) {
       document.getElementById("weather" + (this.id)).innerHTML = "Error: No connection to the server.";
 
@@ -114,7 +114,6 @@ class WeatherRequest
       // send JSNLog message to the own server-side to tell that there is an error, including the status-code
       JL("weatherRequestError").fatalException("Error: Status-Code " + this.status, e);
     }
-    //
     else {
       document.getElementById("weather" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
       console.dir(e);
@@ -129,7 +128,6 @@ class WeatherRequest
   * @desc This function is called when the request is loaded for the first time.
   */
   loadcallback() {
-    //
     console.log("OpenWeatherMap: status: " + this.status + " , readyState: " + this.readyState);
   }
 }
@@ -152,10 +150,10 @@ function getNewTerrainRequest(encounter, id) {
   let lat = encounter.intersectionX;
   let long = encounter.intersectionY;
 
-  //
+  // the url for the geonames-request
   let resource = "http://api.geonames.org/findNearbyJSON?lat=" + lat + "&lng=" + long + "&username=" + token.usernameTerrainAPI;
 
-  //
+  // the geonames-request as an xmlhttprequest
   let xx = new XMLHttpRequest();
   xx.writeRequestResultsIntoTable = writeRequestResultsIntoTable;
   xx.postEncounter = postEncounter;
@@ -167,16 +165,10 @@ function getNewTerrainRequest(encounter, id) {
   };
 
   xx.onerror = function (e) {
-    //
-    if (this.status === 404)
-    {
+    if (this.status === 404) {
       // send JSNLog message to the own server-side to tell that there is no connection to the Geonames API server
       JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
-    }
-
-    //
-    else
-    {
+    } else {
       console.dir(e);
       console.dir(this.status);
       // send JSNLog message to the own server-side to tell that there is an error, including the status-code
@@ -185,7 +177,6 @@ function getNewTerrainRequest(encounter, id) {
   };
 
   xx.onreadystatechange = function () {
-    //
     if (this.readyState === 4)
     {
       // if the id of the correspondingencounter in the database is known, then save the terrain-info as an attribute
@@ -238,7 +229,6 @@ function writeRequestResultsIntoTable(response, id) {
  */
 function postEncounter(encounter, id) {
 
-    //
     $.ajax({
         // use a http POST request
         type: "POST",

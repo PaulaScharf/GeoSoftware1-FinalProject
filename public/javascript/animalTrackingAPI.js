@@ -69,7 +69,7 @@ function showAnimalMap() {
 * @author Paula Scharf, matr.: 450334
 */
 function getIndividualID() {
-  //
+
   document.getElementById('animalName').innerHTML = "";
   document.getElementById('animalDateTime').innerHTML = "";
 

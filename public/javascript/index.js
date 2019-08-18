@@ -209,7 +209,6 @@ function fillRoutesTable() {
       createAnimalRouteTable(i, currentRoute[0].study_id, currentRoute[0].individualTaxonCanonicalName, currentRoute[0].date, currentRoute[0].time, "animalRoutesTable");
     }
 
-    console.log(currentRoute[1]);
     // outsource the creation of the checkbox for showing or not showing the i-th route in the map
     routeCheckbox(i, currentRoute[1]);
 
@@ -328,7 +327,6 @@ function getAllEncountersAndShow() {
 function writeAllEncountersInTheGlobalArray(response) {
 
   response.forEach((currentEncounter) => {
-    //
     let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
     // go through all routes, to determine their index in the allRoutes-array and give that information
     // to the encounter
@@ -872,8 +870,7 @@ function searchEncounters(madeBy, searchCheckbox) {
           allEncounters[i][1].routesSelected = false;
           allEncounters[i][1].search = "not searched for";
         }
-      }
-      if (allRoutes[currentEncounter[2].secondRoute][0].madeBy === madeBy) {
+      } else if (allRoutes[currentEncounter[2].secondRoute][0].madeBy === madeBy) {
         if (routeIds.includes(currentEncounter[2].secondRoute)) {
           allEncounters[i][1].routesSelected = true;
           allEncounters[i][1].search = "searched for";
