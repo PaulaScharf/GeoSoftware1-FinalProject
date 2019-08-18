@@ -662,7 +662,6 @@ function encounterConfirm(cb_id) {
 function onlyShowConfirmed() {
 
   let checkbox = document.getElementById("showConfirmedCheckbox");
-  //
   if (checkbox.checked === true) {
     confirmActive = true;
     showEncountersOnMainPage();
@@ -685,7 +684,6 @@ function updateEncounter(encounter) {
     type: "POST",
     // URL to send the request to
     url: "/encounter/update",
-    //
     data: JSON.stringify(encounter),
     // type of the data that is sent to the server
     contentType: "application/json; charset=utf-8",
@@ -800,14 +798,20 @@ function encountersToBeAdded(routeId) {
   let result = [];
   //
   for (let i = 0; i < allEncounters.length; i++) {
-    // only routes which belong to the selected route and one other selected route have to be added
-    if (allEncounters[i][2].firstRoute === routeId && allRoutes[allEncounters[i][2].secondRoute][1] &&
-        (confirmActive ? (allEncounters[i][0].tookPlace === "yes") : true)) {
-      result.push(i);
-    }
-    else if (allEncounters[i][2].secondRoute === routeId && allRoutes[allEncounters[i][2].firstRoute][1] &&
-        (confirmActive ? (allEncounters[i][0].tookPlace === "yes") : true)) {
-      result.push(i);
+    let currentEncounter = allEncounters[i];
+    if (typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined" && typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined") {
+
+      // only routes which belong to the selected route and one other selected route have to be added
+      if (currentEncounter[2].firstRoute === routeId && allRoutes[currentEncounter[2].secondRoute][1] &&
+          (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
+        result.push(i);
+      } else if (currentEncounter[2].secondRoute === routeId && allRoutes[currentEncounter[2].firstRoute][1] &&
+          (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
+        result.push(i);
+      }
+    } else {
+      deleteEncounter(currentEncounter[0]._id);
+      allEncounters.splice(i, 1);
     }
   }
   return result;

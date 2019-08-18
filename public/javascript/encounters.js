@@ -121,16 +121,28 @@ function checkForNewRoute(response, checkForUpdates) {
 */
 function deleteAllEncountersOfRoute(routeId) {
 
-  //
+  // go through all encounters
   for (let i = 0; i < allEncounters.length; i++) {
-    //
     let currentEncounter = allEncounters[i][0];
-    //
     if (currentEncounter.firstRoute === routeId || currentEncounter.secondRoute === routeId) {
-      //
+      // delete the encounter from the allEncounters-Array
       allEncounters.splice(i, 1);
+      // delete the encounter from the database
       deleteEncounter(currentEncounter._id);
       i = i-1;
+    } else {
+      // go through all routes, to determine their index in the allRoutes-array and give that information
+      // to the encounter
+      for (let k = 0; k < allRoutes.length; k++) {
+        if (allRoutes[k][0]._id === currentEncounter.firstRoute) {
+          console.log("firstRoute: " + k);
+          currentEncounter.firstRoute = k;
+        }
+        else if (allRoutes[k][0]._id === currentEncounter.secondRoute) {
+          console.log("secondRoute: " + k);
+          currentEncounter.secondRoute = k;
+        }
+      }
     }
   }
 }

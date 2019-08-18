@@ -36,7 +36,7 @@
       <div>This application shows user and animal routes and their encounters all over the world in the map below.<br>
         For creating your own routes, use the menu item 'Create new user route'.
         There you can draw a route directly into a map or insert a GeoJSON.
-        Furthermore, use the menu item 'Create new animal route' for inserting real animal routes by GPS sensor data from Movebank API.<br>
+        Furthermore, use the menu item 'Create new animal route' for inserting real animal routes created by GPS sensor data from Movebank API.<br>
         The tables underneath the map provide some information about the inserted routes and their encounters plus options to update or delete the created routes.</div>
       <br>
       <div id="indexMap"></div>
@@ -44,6 +44,10 @@
         User routes are coloured red, animal routes are coloured orange.
         Confirmed encounters are shown in green, not confirmed ones in blue.
         If 'show only confirmed' in the encounters table is selected, you will see only confirmed encounters - but still all routes - in this map.
+      </div>
+      <div>
+        If two neighbouring points in a route are very far apart, there might be measurement errors in calculating encounters,
+        resulting in encounters at the wrong place or encounters not being calculated at all.
       </div>
     </div>
   </div>
