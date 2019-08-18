@@ -73,8 +73,8 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
 
-// TODO: kommentarerklärung, was hier passiert
-    //
+    // after the polyline is written into the textarea a keyup-event is thrown to trigger the checkForm()-function of the
+    // textarea
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
     output.dispatchEvent(ev);
@@ -88,8 +88,8 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
     let output = document.getElementById(outputTextarea);
     output.value = JSON.stringify(drawnItems.toGeoJSON(), null, 2);
 
-// TODO: kommentarerklärung, was hier passiert
-    //
+    // after the polyline is written into the textarea a keyup-event is thrown to trigger the checkForm()-function of the
+    // textarea
     let ev = document.createEvent('Event');
     ev.initEvent('keyup', true, false);
     output.dispatchEvent(ev);
@@ -112,8 +112,8 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
         let output = document.getElementById(outputTextarea);
         output.value = JSON.stringify(oldRouteGeoJSON, null, 2);
 
-// TODO: kommentarerklärung, was hier passiert
-        //
+        // after the polyline is written into the textarea a keyup-event is thrown to trigger the checkForm()-function of the
+        // textarea
         let ev = document.createEvent('Event');
         ev.initEvent('keyup', true, false);
         output.dispatchEvent(ev);
@@ -125,8 +125,8 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
         let output = document.getElementById(outputTextarea);
         output.value = "";
 
-// TODO: kommentarerklärung, was hier passiert
-        //
+        // after the polyline is written into the textarea a keyup-event is thrown to trigger the checkForm()-function of the
+        // textarea
         let ev = document.createEvent('Event');
         ev.initEvent('keyup', true, false);
         output.dispatchEvent(ev);

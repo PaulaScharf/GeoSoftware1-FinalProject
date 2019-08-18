@@ -57,6 +57,7 @@ function showAnimalMap() {
 
   // create a layerGroup for animal routes, add this group to the existing map "createAnimalRouteMap"
   animalRoutesGroup = L.layerGroup().addTo(createAnimalRouteMap);
+  $('.loading').hide();
 }
 
 

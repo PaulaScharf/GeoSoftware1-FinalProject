@@ -147,6 +147,7 @@ class WeatherRequest
 * @param id
 */
 function getNewTerrainRequest(encounter, id) {
+  console.log("new terrain request");
 
   let lat = encounter.intersectionX;
   let long = encounter.intersectionY;
@@ -160,8 +161,6 @@ function getNewTerrainRequest(encounter, id) {
   xx.postEncounter = postEncounter;
   xx.id = id;
   xx.encounter = encounter;
-  // TODO:
-  xx.response;
   xx.onload = function () {
 
   console.log("Geonames: Status-Code: " + this.status + " , readyState: " + this.readyState);
@@ -171,11 +170,6 @@ function getNewTerrainRequest(encounter, id) {
     //
     if (this.status === 404)
     {
-
-      // TODO: ÄNDERN IN POSTENCOUNTER-OBJECT
-      //document.getElementById("country" + (this.id)).innerHTML = "Error: No connection to the server.";
-      //document.getElementById("terrain" + (this.id)).innerHTML = "Error: No connection to the server.";
-
       // send JSNLog message to the own server-side to tell that there is no connection to the Geonames API server
       JL("terrainRequestError404").fatalException("Error: No connection to the server, Status-Code 404", e);
     }
@@ -183,10 +177,8 @@ function getNewTerrainRequest(encounter, id) {
     //
     else
     {
-      //document.getElementById("country" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
-      //document.getElementById("terrain" + (this.id)).innerHTML = "Errorcallback: Check web-console.";
       console.dir(e);
-
+      console.dir(this.status);
       // send JSNLog message to the own server-side to tell that there is an error, including the status-code
       JL("terrainRequestError").fatalException("Error: Status-Code " + this.status, e);
     }
@@ -196,12 +188,10 @@ function getNewTerrainRequest(encounter, id) {
     //
     if (this.readyState === 4)
     {
-        // TODO: this.status === 200 &&
-      //this.writeRequestResultsIntoTable(this.responseText, this.id);
       // if the id of the correspondingencounter in the database is known, then save the terrain-info as an attribute
       // of the encounter in the database
-        this.encounter.terrain = this.responseText;
-        this.postEncounter(encounter);
+      this.encounter.terrain = this.responseText;
+      this.postEncounter(encounter);
 
     }
   };
@@ -218,21 +208,25 @@ function getNewTerrainRequest(encounter, id) {
 * @param id
 */
 function writeRequestResultsIntoTable(response, id) {
-  // show the terrain .....
-  // .....
+  // show the terrain or possible errors in the encounters table
   if (response !== "") {
-    //
+    // if the terrain and country could be identified
     if (typeof JSON.parse(response).geonames !== "undefined" && typeof JSON.parse(response).geonames[0] !== "undefined") {
       document.getElementById("country" + (id)).innerHTML = JSON.parse(response).geonames[0].countryName;
       document.getElementById("terrain" + (id)).innerHTML = JSON.parse(response).geonames[0].fclName;
-      // we could not check the status code because status 200 is returned although too many requests are made
+      // if too many requests to the api were made
     } else if (typeof JSON.parse(response).status !== "undefined" && JSON.parse(response).status.message === "the hourly limit of 1000 credits for geosoftw_k_p has been exceeded. Please throttle your requests or use the commercial service.") {
       document.getElementById("country" + (id)).innerHTML = "Too many requests.";
       document.getElementById("terrain" + (id)).innerHTML = "Too many requests.";
+      // if the country could not identify the coordinates
     } else {
       document.getElementById("country" + (id)).innerHTML = "Country could not be identified.";
       document.getElementById("terrain" + (id)).innerHTML = "Terrain could not be identified.";
     }
+    // if there is no internet connection the response of the request is empty
+  } else {
+    document.getElementById("country" + (id)).innerHTML = "No connection.";
+    document.getElementById("terrain" + (id)).innerHTML = "No connection.";
   }
 }
 

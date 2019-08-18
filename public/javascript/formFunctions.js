@@ -69,12 +69,11 @@ function checkTimestamp() {
   }
 }
 
-// TODO: parameterbeschreibung für madeBy fehlt noch
 /**
-*
+* This function resets the search, if the textfields for the search were edited.
 * @private
 * @author Paula Scharf, matr.: 450 334
-* @param {String} madeBy -
+* @param {String} madeBy - indicates if the animal- or user-search was edited
 */
 function searchEdited(madeBy) {
   // if the function is called from the animal-searchbar, then select the animal-search-checkbox, otherwise the
@@ -90,5 +89,6 @@ function searchEdited(madeBy) {
     let ev = document.createEvent('Event');
     ev.initEvent('change', true, false);
     checkbox.dispatchEvent(ev);
+    console.log("event dispatched");
   }
 }

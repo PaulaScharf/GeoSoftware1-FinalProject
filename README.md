@@ -3,45 +3,44 @@
 
 aus project-folder heraus (Übersetzen in Englisch):
 
-- with docker:
-    1. install docker on your local machine
-    2. run ``docker-compose up`` in the terminal
-    3.  
-    4.  
+#### with docker:
+1. install docker on your local machine
+2. run ``docker-compose up`` in the terminal
+3.  
+4.  
 
-    (the image was built by command ``docker build -t kpoppi/geosoftware1-final_project .``)
+(the image was built by command ``docker build -t kpoppi/geosoftware1-final_project .``)
 
-    MUSS NOCH GEPUSHT WERDEN !!
+MUSS NOCH GEPUSHT WERDEN !!
 
-- without docker:
-    1. install node v10.xx and MongoDB v4.xx on your local machine
-    2. run ``npm install`` in the terminal
-    3. run ``npm start`` in the terminal
-    4. open [localhost:3000](localhost:3000) in a browser
-    5. ensure that your adblocker does not prevent jsnlog from working (auch bei docker hinschreiben?!)
+#### without docker:
+1. install node v10.xx and MongoDB v4.xx on your local machine
+2. run ``npm install`` in the terminal
+3. run ``npm start`` in the terminal
+4. open [localhost:3000](localhost:3000) in a browser
+5. ensure that your adblocker does not prevent jsnlog from working (auch bei docker hinschreiben?!)
 
-## How to install your own API-keys
+---
+## How to construct your own API-keys
 
 #### OpenWeatherMap
 1. create an account for [openweathermap](https://home.openweathermap.org/users/sign_up)
-2.
-3.
-4.
-5. replace the XXX in value of the variable ``OPENWEATHERMAP_TOKEN`` in /public/javascript/tokens.js by your token
+2. go to the [api-keys-page](https://home.openweathermap.org/api_keys) to find out your api key
+3. set the value of the variable ``OPENWEATHERMAP_TOKEN`` in /public/javascript/tokens.js to your api key
 
 #### Geonames
 1. create an account for [geonames](https://www.geonames.org/login)
 2. wait for activation email
 3. go to your account page
 4. enable your account for free webservices
-5. replace the XXX in value of the variable ``usernameTerrainAPI`` in /public/javascript/tokens.js by your username
+5. set the value of the variable ``usernameTerrainAPI`` in /public/javascript/tokens.js by your username
 
 #### Movebank
 1. create an account for [movebank](https://www.movebank.org/user/register)
 2. wait for activation email
 3. change the first one-time password
-4. replace the XXX in value of the variable ``loginnameAnimalTrackingAPI`` in /public/javascript/tokens.js by your username
-5. replace the XXX in value of the variable ``passwordAnimalTrackingAPI`` in /public/javascript/tokens.js by your password
+4. set the value of the variable ``loginnameAnimalTrackingAPI`` in /public/javascript/tokens.js to your username
+5. set the value of the variable ``passwordAnimalTrackingAPI`` in /public/javascript/tokens.js to your password
 
 
 ## GitHub Repository

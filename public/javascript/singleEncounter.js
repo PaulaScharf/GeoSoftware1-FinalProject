@@ -180,10 +180,7 @@ function fillEncountersMap(currentEncounter) {
   let currentCircle = L.circle([currentEncounter.intersectionX, currentEncounter.intersectionY],
     {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
 
-    // TODO: WAS IST MIT DEM AUSKOMMENTIERTEN?
-
-    //currentCircle.bindPopup("encounter number " + (i + 1) + " between " + allRoutes[currentEncounter[2].firstRoute][0].creator + " and " + allRoutes[currentEncounter[2].secondRoute][0].creator);
-    // add the circle to the array circleEncounters
+    //add the circle to the array circleEncounters
     //circleEncounters.push(currentCircle);
     currentCircle.addTo(encountersGroup);
     encountersMap.fitBounds(currentCircle.getBounds());

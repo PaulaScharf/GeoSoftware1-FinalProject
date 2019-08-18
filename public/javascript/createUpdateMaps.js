@@ -54,7 +54,6 @@ function submitHandlerCreateForm(){
         // TODO: route aus map entfernen
         // .remove();
 
-        // TODO: WAS DAMIT?
         // calculate new encounters
         getAllRoutes();
 
@@ -99,10 +98,6 @@ function submitHandlerCreateForm(){
     submitHandlerCreateForm();
 
 
-    // to have two onload-functions in create.ejs bundled, also call getAllRoutes() when the onload calls the showMapData(createMap)
-    if (specificMap === "createMap") {
-      getAllRoutes();
-    }
 
     // create the initial map in the map-div
     let map = L.map(specificMap).setView([0, 0], 2);
@@ -149,4 +144,5 @@ function submitHandlerCreateForm(){
       // enable drawing a route into the map "updateMap" (using leaflet.draw) and write the corresponding GeoJSON string into textarea "updateRoute"
       drawPolyline(map, "updateRoute", polylineOfOldRoute, oldRouteGeoJSON);
     }
+    $('.loading').hide();
   }

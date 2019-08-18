@@ -9,8 +9,6 @@
 * @author name: Katharina Poppinga, matr.: 450 146; name: Paula Scharf, matr.: 450 334
 */
 
-//TODO: write the hidden form elements into these functions
-
 
 var express = require('express');
 const mongodb = require('mongodb');

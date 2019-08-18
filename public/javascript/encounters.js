@@ -13,7 +13,7 @@
 * Already known/processed routes.
 * @type {Array}
 */
-let alreadyKnownRoutes = [];
+let alreadyKnownRoutes;
 
 
 
@@ -66,7 +66,6 @@ function getAllRoutes() {
 
 
 
-// TODO: instead of checkForUpdates you could also change the status
 /**
 * This route checks, if the AJAX-response contains a new route.
 * If the route is new, then the encounters are calculated for it.
@@ -75,6 +74,8 @@ function getAllRoutes() {
 * @author Paula Scharf, matr.: 450334
 */
 function checkForNewRoute(response, checkForUpdates) {
+  alreadyKnownRoutes = [];
+  console.log("check for new routes");
 
   // go through all routes
   for (let i = 0; i < response.length; i++) {
@@ -85,15 +86,20 @@ function checkForNewRoute(response, checkForUpdates) {
       status: "old"
     };
 
+    console.log("iteration no: " + i);
     //
     if (currentRoute[0].status === "new") {
+      console.log("new");
+      console.log(alreadyKnownRoutes);
       // calculate the encounters with other routes
       calculateEncounters(currentRoute[0].geoJson.features[0].geometry.coordinates, currentRoute[0]._id, checkForUpdates);
       // after the encounters of a route are calculated, its status is set to old
       updateStatusFromNewToOld(route);
     }
     else if (currentRoute[0].status === "updated") {
+      console.log("updated");
       let temp = alreadyKnownRoutes;
+      console.log(temp);
       alreadyKnownRoutes = response;
 
       deleteAllEncountersOfRoute(currentRoute[0]._id);
@@ -150,11 +156,9 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
   }
 }
 
-// TODO: in folgendes JSDoc NOCH SCHREIBEN, DASS ZU ALLENCOUNTERS HINZUGEFÜGT WIRD
 /**
-* This function calculates the intersections of between all the straight lines that make up two given routes.
-*
-*
+* This function calculates encounters between two routes and posts them to the database (and if needed adds the to
+* the "allEncounters"-Array.
 * @param firstRoute        a route (only the coordinates)
 * @param secondRoute       a second route (only the coordinates)
 * @param firstId           ID of the first route
@@ -184,6 +188,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 
     // add the new encounter to the allEncounters-array, if it was created because a route was updated
     if (checkForUpdates) {
+      console.log("add the encounter to the array")
       let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
       // go through all routes, to determine their index in the allRoutes-array and give that information
       // to the encounter
@@ -209,6 +214,7 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
     if (typeof allEncounters !== "undefined") {
       index = allEncounters.length-1;
     }
+    console.log("retrieve the terrain and post encounter");
     // save the new encounter in the database
     getNewTerrainRequest(copyOfEncounter, index);
   });
@@ -336,3 +342,11 @@ function updateStatusFromNewToOld(route) {
     }
   });
 }
+
+$(document).ajaxStop(function () {
+  $('.loading').hide();
+});
+
+$(document).ajaxStart(function () {
+  $('.loading').show();
+});
