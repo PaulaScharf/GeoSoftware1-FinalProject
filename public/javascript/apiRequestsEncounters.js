@@ -31,10 +31,10 @@ class WeatherRequest
 
 {
   /**
-  * @desc This is the constructor of the class WeatherRequest.
-  * @param intersection
-  * @param id     ?????????????????????????
-  */
+   * @desc This is the constructor of the class WeatherRequest.
+   * @param intersection {Array} - the coordinates of the encounter
+   * @param id {number} - the id of the encounter
+   */
   constructor(intersection, id)
   {
     let lat = intersection[0];
@@ -56,9 +56,9 @@ class WeatherRequest
 
 
   /**
-  * @desc
-  *
-  */
+   * @desc This function is called, when there is a change in the XMLHttpRequest "x".
+   * If it is called and the status is 200 and readyState is 4, it writes the weather into the table and creates an infoRequest.
+   */
   openAndSendRequest()
   {
     this.x.open("GET", this.resource, true);
