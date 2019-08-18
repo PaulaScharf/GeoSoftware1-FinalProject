@@ -32,8 +32,8 @@ class WeatherRequest
 {
   /**
   * @desc This is the constructor of the class WeatherRequest.
-  * @param intersection
-  * @param id     ?????????????????????????
+  * @param intersection {Array} - the coordinates of the encounter
+  * @param id {number} - the id of the encounter
   */
   constructor(intersection, id)
   {
@@ -56,8 +56,8 @@ class WeatherRequest
 
 
   /**
-  * @desc
-  *
+  * @desc This function is called immediatly after the constructor of the class.
+  * It opens and sends the request.
   */
   openAndSendRequest()
   {
