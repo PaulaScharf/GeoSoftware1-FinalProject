@@ -63,7 +63,7 @@ QUnit.test("availability Terrain API", function (assert) {
   // test-variables (one test case)
   let lat = 40.32346464521419;
   let long = 23.463965480085898;
-  
+
   // do not finish the test before all async work is completed
   let done = assert.async();
 

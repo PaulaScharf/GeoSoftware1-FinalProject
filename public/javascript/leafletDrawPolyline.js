@@ -14,14 +14,13 @@
 * In addition, writes the drawn polyline in GeoJSON syntax in the given textarea.
 * If the given map is the "updateMap" and the drawn route is deleted, the third and fourth parameter are used, too.
 * They restore the old route which was saved before updating.
-*
 * This function uses leaflet.draw.
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param {map} map leaflet-map, in which the polyline shall be drawn (map, in which leaflet.draw shall be integrated)
-* @param {String} outputTextarea ID of the textarea in which the new drawn polyline shall be written as a GeoJSON string
-* @param {polyline} polylineOfOldRoute just used, if parameter 'map' has the value "updateMap": old route as a polyline
-* @param {object} oldRouteGeoJSON just used, if parameter 'map' has the value "updateMap": old route as a GeoJSON
+* @param {map} map - leaflet-map, in which the polyline shall be drawn (map, in which leaflet.draw shall be integrated)
+* @param {string} outputTextarea - ID of the textarea in which the new drawn polyline shall be written as a GeoJSON string
+* @param {polyline} polylineOfOldRoute - just used, if parameter 'map' has the value "updateMap": old route as a polyline
+* @param {Object} oldRouteGeoJSON - just used, if parameter 'map' has the value "updateMap": old route as a GeoJSON
 */
 function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) {
 
@@ -111,7 +110,7 @@ function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) 
         // ... write the GeoJSON of the old route into the given outputTextarea
         let output = document.getElementById(outputTextarea);
         output.value = JSON.stringify(oldRouteGeoJSON, null, 2);
-
+        
         // after the polyline is written into the textarea a keyup-event is thrown to trigger the checkForm()-function of the
         // textarea
         let ev = document.createEvent('Event');

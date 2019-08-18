@@ -15,7 +15,7 @@
 
 /**
 * A Leaflet-map in which the shared encounter is shown.
-* @type {Map}
+* @type {map}
 */
 let encountersMap;
 
@@ -55,10 +55,10 @@ oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // add the OpenStreetMap tileLayer to the map "singleEncounterMap"
 oSMLayer.addTo(encountersMap);
 
-// create a layerGroup for both routes, add this group to the existing map "singleEncounterMap" ......................................
+// create a layerGroup for both routes, add this group to the existing map "singleEncounterMap"
 routesGroup = L.layerGroup().addTo(encountersMap);
 
-// create a layerGroup for all encounters, add this group to the existing map "singleEncounterMap" ......................................
+// create a layerGroup for encounter, add this group to the existing map "singleEncounterMap"
 encountersGroup = L.layerGroup().addTo(encountersMap);
 
 
@@ -106,7 +106,6 @@ function showRoute(currentRoute, counter) {
     createAnimalRouteTable(counter, currentRoute.study_id, currentRoute.individualTaxonCanonicalName, currentRoute.date, currentRoute.time, "animalRoutesTable");
   }
 
-
   // ************** show the route in the map "singleEncounterMap", therefore do the following steps: **************
 
   // extract the coordinates of the route
@@ -123,7 +122,7 @@ function showRoute(currentRoute, counter) {
 * This function shows an encounter in the map and the table.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param {object} encounter - the encounter to be shown
+* @param {Object} encounter - the encounter to be shown
 */
 function showEncounter(encounter) {
 
@@ -138,7 +137,7 @@ function showEncounter(encounter) {
 * This function fills the encounters table.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param {object} currentEncounter - the to be shown encounter
+* @param {Object} currentEncounter - the to be shown encounter
 */
 function fillEncountersTable(currentEncounter) {
   createSingleEncounterTable(currentEncounter.intersectionX, currentEncounter.intersectionY, 0, "encountersTable");
@@ -157,7 +156,7 @@ function fillEncountersTable(currentEncounter) {
 * This function fills the map with the given encounter.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param {object} currentEncounter - the to be shown encounter
+* @param {Object} currentEncounter - the to be shown encounter
 */
 function fillEncountersMap(currentEncounter) {
   // loop "over" all encounters in the current database "routeDB"
@@ -171,4 +170,4 @@ function fillEncountersMap(currentEncounter) {
     //circleEncounters.push(currentCircle);
     currentCircle.addTo(encountersGroup);
     encountersMap.fitBounds(currentCircle.getBounds());
-}
+  }

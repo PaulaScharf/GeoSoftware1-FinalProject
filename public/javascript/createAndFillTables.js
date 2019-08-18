@@ -11,7 +11,7 @@
 
 /**
 * CSS format to set the text-align to the center.
-* @type {String}
+* @type {string}
 */
 let textAlign = "text-align: center;";
 
@@ -21,7 +21,6 @@ let textAlign = "text-align: center;";
 * Writes the given values (first: +1) in given order into the created table cells.
 * In addition, the first created cell is given an ID for a consecutive number of the
 * routes and its text-align is set to center.
-*
 * @private
 * @author Katharina Poppinga, matr.: 450146
 * @param insertFirst - first value, to write in first new created cell
@@ -67,7 +66,6 @@ function createUserRouteTable(insertFirst, insertSecond, insertThird, insertFour
 * Writes the given values (first: +1) in given order into the created table cells.
 * In addition, the first created cell is given an ID for a consecutive number of the
 * routes and its text-align is set to center.
-*
 * @private
 * @author Katharina Poppinga, matr.: 450146
 * @param insertFirst - first value, to write in first new created cell
@@ -109,7 +107,6 @@ function createAnimalRouteTable(insertFirst, insertSecond, insertThird, insertFo
 * Writes the three given values (first: +1) in given order into the first three created table cells
 * and sets attributes to the other created cells. The first given value is also used for setting the attributes.
 * In addition, the first, second, third, sixth and seventh created cells' text-align is set to center.
-*
 * @private
 * @author Katharina Poppinga, matr.: 450146
 * @param insertFirst - first value, to write in first new created cell
@@ -158,7 +155,6 @@ function createEncountersTable(insertFirst, insertSecond, insertThird, tableBody
 * Writes the first two given values in given order into the first two created table cells
 * and sets attributes to the other created cells. For setting the attributes the third given value is used.
 * In addition, the fourth created cells' text-align is set to center.
-*
 * @private
 * @author Katharina Poppinga, matr.: 450146
 * @param insertFirst - first value, to write in first new created cell
@@ -194,7 +190,6 @@ function createSingleEncounterTable(insertFirst, insertSecond, insertThird, tabl
 
 /**
 * Removes all children of a given HTMLelement (DOM node).
-*
 * @author Katharina Poppinga, matr.: 450146
 * @param {string} elementId - ID of the element whose children will be removed
 */

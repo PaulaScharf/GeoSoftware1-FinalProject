@@ -16,7 +16,6 @@
 let alreadyKnownRoutes;
 
 
-
 /**
 * This function reads all routes from the database and also checks if some of them are new and therefor require a
 * calculation of encounters.
@@ -68,10 +67,10 @@ function getAllRoutes() {
 /**
 * This route checks, if the AJAX-response contains a new route.
 * If the route is new, then the encounters are calculated for it.
- * @private
- * @author Paula Scharf, matr.: 450334
-* @param response    {object} -      the response of the ajax-request in readRoutesEncounters.js
-* @param checkForUpdates {boolean} -  if true, also delete the old encounters associated with a new route
+* @private
+* @author Paula Scharf, matr.: 450334
+* @param {Object} response - the response of the ajax-request in readRoutesEncounters.js
+* @param {boolean} checkForUpdates - if true, also delete the old encounters associated with a new route
 */
 function checkForNewRoute(response, checkForUpdates) {
   alreadyKnownRoutes = [];
@@ -110,9 +109,9 @@ function checkForNewRoute(response, checkForUpdates) {
 
 /**
 * This function deletes all encounters which are associated to the route with the given ID.
- * @private
- * @author Paula Scharf, matr.: 450334
-* @param routeId {number} - the ID of the route
+* @private
+* @author Paula Scharf, matr.: 450334
+* @param {number} routeId - the ID of the route
 */
 function deleteAllEncountersOfRoute(routeId) {
 
@@ -143,9 +142,9 @@ function deleteAllEncountersOfRoute(routeId) {
 
 /**
 * This function calculates all encounters of a given route with all other routes.
-* @param oneRoute       {Array} -  a route (only the coordinates)
-* @param oneId          {number} -  ID of oneRoute
-* @param checkForUpdates {boolean} -  indicates wether this function was also called to recalculate updated routes
+* @param oneRoute        {Array} - a route (only the coordinates)
+* @param oneId           {number} - ID of oneRoute
+* @param checkForUpdates {boolean} - indicates wether this function was also called to recalculate updated routes
 * @author Paula Scharf, matr.: 450334
 */
 function calculateEncounters(oneRoute, oneId, checkForUpdates) {
@@ -192,7 +191,6 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 
     // add the new encounter to the allEncounters-array, if it was created because a route was updated
     if (checkForUpdates) {
-      console.log("add the encounter to the array")
       let noOfRoutes = {firstRoute: undefined, secondRoute: undefined};
       // go through all routes, to determine their index in the allRoutes-array and give that information
       // to the encounter
@@ -227,9 +225,9 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 /**
 * This function calls the '/encounter/create' route with AJAX, to save a given encounter in the database.
 * @author Paula Scharf, matr.: 450334
- * @param encounter {object} - the encounter to be saved
- * @param id {object} - the index of the encounter in the global encounters-array ("allEncounters")
- */
+* @param {Object} encounter - the encounter to be saved
+* @param {Object} id - the index of the encounter in the global encounters-array ("allEncounters")
+*/
 function postEncounter(encounter, id) {
 
   $.ajax({
@@ -270,9 +268,9 @@ function postEncounter(encounter, id) {
 
 /**
 * This function calls the '/encounter/delete' route with AJAX, to delete an encounter with a given ID from the database.
- * @private
- * @author Paula Scharf, matr.: 450334
-* @param encounterId {number}  - the ID of the encounter
+* @private
+* @author Paula Scharf, matr.: 450334
+* @param {number} encounterId - the ID of the encounter
 */
 function deleteEncounter(encounterId) {
 
@@ -310,9 +308,9 @@ function deleteEncounter(encounterId) {
 
 /**
 * This function calls the '/encounter/update' route with AJAX, to update a route in the database.
- * @private
- * @author Paula Scharf, matr.: 450334
-* @param route {object} - the new route
+* @private
+* @author Paula Scharf, matr.: 450334
+* @param {Object} route - the new route
 */
 function updateStatusFromNewToOld(route) {
 

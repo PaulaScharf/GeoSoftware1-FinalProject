@@ -61,9 +61,7 @@ var putRoutesController = function (req, res) {
 // delete a route from the database and redirect to the startpage
 var deleteRoutesController = function(req, res) {
 
-  //
   let objectId = new mongodb.ObjectID(req.query._id);
-
   console.log("Delete route " + objectId);
 
   // delete the route with the given id
@@ -89,7 +87,6 @@ var deleteRoutesController = function(req, res) {
 router.route("/update").post(putRoutesController);
 // route for deleting one user- or animalroute (not with delete method, because this is not available for html-form)
 router.route("/delete").get(deleteRoutesController);
-
 
 
 // ******************************* CRUD-functionality for ANIMAL routes: *********************************
@@ -155,7 +152,6 @@ var postAnimalController = function(req, res) {
 router.route("/readAnimal").post(getAnimalController);
 // route for creating/inserting one animalroute
 router.route("/createAnimal").post(postAnimalController);
-
 
 
 // ******************************************* ALL routes: ***********************************************

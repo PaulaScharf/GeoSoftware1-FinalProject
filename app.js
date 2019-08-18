@@ -188,8 +188,8 @@ app.post("/animalTrackingAPI/individualIds", (req, res) => {
       "access-control-allow-methods": "GET, POST",
       "access-control-allow-headers": "content-type"
     },
-    // timeout set to 5 seconds
-    timeout: 5000
+    // timeout set to 10 seconds
+    timeout: 10000
   };
 
   // GET animal tracking api:
@@ -244,8 +244,8 @@ app.post("/animalTrackingAPI", (req, res) => {
       "access-control-allow-methods": "GET, POST",
       "access-control-allow-headers": "content-type"
     },
-    // timeout set to 5 seconds
-    timeout: 5000
+    // timeout set to 10 seconds
+    timeout: 10000
   };
 
   // GET animal tracking api:
@@ -278,7 +278,6 @@ app.post("/animalTrackingAPI", (req, res) => {
     console.log("Failure while getting animal tracking data from movebank API.", error);
   });
 });
-
 
 // *****************************************************************************
 

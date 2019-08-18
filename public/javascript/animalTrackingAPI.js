@@ -22,7 +22,7 @@ let animalRoute;
 
 /**
 * A Leaflet-map in which the chosen animal route is shown.
-* @type {Map}
+* @type {map}
 */
 let createAnimalRouteMap;
 
@@ -39,7 +39,6 @@ let animalRoutesGroup;
 /**
 * Sets up the leaflet-map 'createAnimalRouteMap' with OpenStreetMap tiles and
 * creates a leaflet-layerGroup for this map.
-*
 * @author Katharina Poppinga, matr.: 450146
 */
 function showAnimalMap() {
@@ -140,6 +139,7 @@ function getIndividualID() {
 * a dropdown menu on the page.
 * @private
 * @author Paula Scharf, matr.: 450334
+* @param {Object} response - response of the AJAX-request for getting individual identifiers of a study from Movebank
 */
 function showAnimalIDs(response) {
 
@@ -159,7 +159,6 @@ function showAnimalIDs(response) {
 * a given individualID and a given max. number of locations from Movebank API. Reads these
 * three attributes out of its corresponding elements in the createAnimalRoute.ejs.
 * Calls a function for formatting and showing the AJAX-response on createAnimalRoute.ejs.
-*
 * @private
 * @author Katharina Poppinga, matr.: 450146, Paula Scharf, matr.: 450334
 */
@@ -241,10 +240,9 @@ function getTrackingData() {
 * Formats them in form of converting the timestamps unit and making a continuous route (in GeoJSOn syntax)
 * out of the gotten coordinates. Adds a few other attributes needed for processing and makes
 * an JSON-object of this animal route. Calls a function for showing the route on createAnimalRoute.ejs.
-*
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param response response of the AJAX-request for getting tracking data of one animal from Movebank API
+* @param {Object} response - response of the AJAX-request for getting tracking data of one animal from Movebank API
 */
 function formatAndShowAnimalRoute(response) {
 
@@ -292,11 +290,10 @@ function formatAndShowAnimalRoute(response) {
 /**
 * Takes the locations-part of the tracking data of one animal and makes a route
 * (in GeoJSON syntax, FeatureCollection) out of all its lat- and long-coordinate-pairs.
-*
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param locations array containing objects with (a timestamp - not needed in this function - and) a long- and a lat-coordinate each
-* @return animalRouteGeoJSON - the animal route as a GeoJSON FeatureCollection
+* @param {Array} locations - array containing objects with (a timestamp - not needed in this function - and) a long- and a lat-coordinate each
+* @return {Object} animalRouteGeoJSON: the animal route as a GeoJSON FeatureCollection
 */
 function makeAnimalRouteGeoJSON(locations) {
 
@@ -338,10 +335,9 @@ function makeAnimalRouteGeoJSON(locations) {
 * Takes an animal route (JSON-object with all data of the specific animal and its route)
 * and shows the individual taxon canonical name of the animal, the date and time of its first
 * coordinate and the route (in the map) on createAnimalRoute.ejs.
-*
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param animalRoute JSON-object with all data of the specific animal and its route
+* @param {Object} animalRoute - JSON-object with all data of the specific animal and its route
 */
 function showAnimalRoute(animalRoute) {
 
@@ -373,7 +369,6 @@ function showAnimalRoute(animalRoute) {
 /**
 * Inserts a user chosen animal route into the database, using an AJAX-POST-request. Before inserting,
 * its JSON and GeoJSON (route-part) syntax is checked, because it is a global variable that is inserted.
-*
 * @author Katharina Poppinga, matr.: 450146
 */
 function postAnimalRoute() {
@@ -465,7 +460,6 @@ function postAnimalRoute() {
 /**
 * Makes an AJAX-POST-reqest for inserting an animal route into the database and
 * calls a function for calculating new encounters.
-*
 * @private
 * @author Katharina Poppinga, matr.: 450146
 */

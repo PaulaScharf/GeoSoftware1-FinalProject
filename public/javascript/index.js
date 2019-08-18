@@ -38,14 +38,14 @@ let allEncounters = [];
 
 /**
  * Global variable that indicates if the checkbox for only showing confirmed encounters is checked.
- * @type {Boolean}
+ * @type {boolean}
  */
 let confirmActive = false;
 
 
 /**
  * A Leaflet-map in which the routes and encounters are shown.
- * @type {Map}
+ * @type {map}
  */
 let indexMap;
 
@@ -87,7 +87,6 @@ let circleEncounters = [];
  * that are saved in the global routes array on the main page (in map and tables).
  * Besides, calls function for requesting all encounters and showing them on the
  * main page (in table and in map).
- *
  * @author Katharina Poppinga, matr.: 450146
  */
 function getAndShowData() {
@@ -155,7 +154,7 @@ function getAndShowData() {
 /**
  * This function takes the response of the AJAX-request for getting all routes and writes it into to global array "allRoutes".
  * @author Paula Scharf, matr.: 450334
- * @param {object} response - response of the ajax-request for getting all routes
+ * @param {Object} response - response of the ajax-request for getting all routes
  */
 function writeAllRoutesInTheGlobalArray(response) {
 
@@ -171,7 +170,6 @@ function writeAllRoutesInTheGlobalArray(response) {
  * them on the main map "indexMap". Adds a checkbox for showing the route in the map or not and
  * a button for deleting each route to each table row. In addition, for each user route a button for
  * updating is added.
- *
  * @private
  * @author Katharina Poppinga, matr.: 450146
  */
@@ -224,7 +222,7 @@ function fillRoutesTable() {
 
 
 /**
-* This function fills the map on the main page with all the routes in the allRoutes-Array
+* This function fills the map on the main page with all the routes in the allRoutes-Array.
 * @private
 * @author Katharina Poppinga, matr.: 450146; Paula Scharf, matr.: 450334
 */
@@ -321,7 +319,7 @@ function getAllEncountersAndShow() {
 /**
  * This function takes the response of the AJAX-request for getting all encounters and writes it into to global array "allEncounters".
  * @author Paula Scharf, matr.: 450334
- * @param {object} response - response of the ajax-request for getting all encounters
+ * @param {Object} response - response of the ajax-request for getting all encounters
  */
 function writeAllEncountersInTheGlobalArray(response) {
 
@@ -458,7 +456,6 @@ function fillEncountersMap() {
  * Creates a checkbox for a route inside its corresponding table cell.
  * A selected/checked checkbox adds its corresponding route to the "allRoutesGroup", therefore this route is shown in the map "indexMap".
  * A deselected checkbox removes its corresponding route from the "allRoutesGroup", therefore this route is not shown in the map "indexMap".
- *
  * @private
  * @author Katharina Poppinga, matr.: 450146
  * @param {number} i - part of the ID for the checkbox
@@ -473,14 +470,12 @@ function routeCheckbox(i, checked){
   tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" + i + "' onclick='routeSelectionForMap(" + i + ")' style='margin-left: 10px; margin-right: 15px;'" +
       ((checked) ? "checked" : "") +
       ">";
-
 }
 
 
 /**
  * Creates a button for deleting its corresponding route inside the routes' table cell.
- * Submitting the button calls '/routes/delete'.
- *
+ * Clicking the button calls function deleteRoute(id).
  * @private
  * @author Katharina Poppinga, matr.: 450146
  * @param {number} i - part of the ID for the delete-button
@@ -491,7 +486,7 @@ function deleteButton(i){
   let tableCellDeleteButton = document.getElementById("conseNum"+i);
 
   let id = allRoutes[i][0]._id;
-  //
+  // add the button for deleting the route (which calls the function deleteRoute(id) if clicked) to the content of the "tableCellDeleteButton"
   tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + "<button id='deleteButton" + i + "' onclick='deleteRoute(\"" + id +"\")' style='margin-left:15px'>delete</button>";
 }
 
@@ -553,7 +548,6 @@ function deleteRoute(id) {
 /**
  * Creates a button for updating its corresponding user route inside the user routes' table cell.
  * Submitting the button calls '/userroute'.
- *
  * @private
  * @author Katharina Poppinga, matr.: 450146
  * @param {number} i - part of the ID for the update-button
@@ -564,8 +558,7 @@ function updateButton(i){
   let tableCellUpdateButton = document.getElementById("conseNum"+i);
 
   let id = allRoutes[i][0]._id;
-
-  /// add the button for updating the user route (which calls '/userroute') to the content of the "tableCellUpdateButton"
+  // add the button for updating the user route (which calls '/userroute') to the content of the "tableCellUpdateButton"
   tableCellUpdateButton.innerHTML = tableCellUpdateButton.innerHTML + " <form action='/userroute' method='GET' name='updateButtonForm' style='display: inline;'>" +
       "<input type='hidden' name='_id' value='" + id +"'/>" +
       "<input type='submit' value='update' id='updateButton" + i + "'/>" +
@@ -613,7 +606,6 @@ function shareButton(bt_id) {
 function encounterCheckbox(cb_id, disabled) {
 
   let currentEncounter = allEncounters[cb_id][0];
-
   // label the table cell, in which the checkbox will be written, as "tableCellCheckbox"
   let tableCellCheckbox = document.getElementById("confirm"+cb_id);
   // add a checkbox (which calls the function encounterConfirm(cb_id) if clicked) to the content of the "tableCellCheckbox"
@@ -674,7 +666,7 @@ function onlyShowConfirmed() {
  * This function makes an AJAX-request in order to update an encounter in the database.
  * @private
  * @author Paula Scharf, matr.: 450334
- * @param {object} encounter - the encounter to be posted
+ * @param {Object} encounter - the encounter to be posted
  */
 function updateEncounter(encounter) {
 
@@ -714,7 +706,6 @@ function updateEncounter(encounter) {
  * Checks whether a route-checkbox with given ID is checked (picked) or not (deselected) for customizing the shown
  * routes in the map "indexMap". If the routeCheckbox is checked (picked), the corresponding route is added
  * to the allRoutesGroup (global variable) and therefore shown in the map "indexMap".
- *
  * @private
  * @author Katharina Poppinga, matr.: 450146, Paula Scharf, matr.: 450334
  * @param {number} cb_id - ID of the route-checkbox
@@ -768,8 +759,8 @@ function routeSelectionForMap(cb_id){
  * This function returns all IDs of encounters which have to be removed because a route was deselected.
  * @private
  * @author Paula Scharf, matr.: 450334
- * @param routeId        {number} -  id of affected route
- * @returns {array} result - ids of affected encounters
+ * @param {number} routeId - id of affected route
+ * @returns {Array} result - ids of affected encounters
  */
 function encountersToBeRemoved(routeId) {
   let result = [];
@@ -789,8 +780,8 @@ function encountersToBeRemoved(routeId) {
  * This function returns all IDs of encounters which have to be added because a route was reselected.
  * @private
  * @author Paula Scharf, matr.: 450334
- * @param routeId      {number}    - id of affected route
- * @returns {array} result  ids of affected encounters
+ * @param {number} routeId - id of affected route
+ * @returns {Array} result: ids of affected encounters
  */
 function encountersToBeAdded(routeId) {
   let result = [];
@@ -818,7 +809,7 @@ function encountersToBeAdded(routeId) {
 /**
  * Show all routes that apply for the searched parameters and all their encounters.
  * @author Paula Scharf, matr.: 450334
- * @param {String} madeBy - a string indicating wether a user or an animal has created the route
+ * @param {string} madeBy - a string indicating wether a user or an animal has created the route
  * @param searchCheckbox - the routeCheckbox-object for the search
  */
 function searchEncounters(madeBy, searchCheckbox) {
@@ -927,8 +918,8 @@ function searchEncounters(madeBy, searchCheckbox) {
 /**
  * Gets the position of the searched for routes in the allRoutes-array.
  * @author Paula Scharf, matr.: 450334
- * @param {object} input - the search parameters
- * @returns {array} an array of indices
+ * @param {Object} input - the search parameters
+ * @returns {Array} an array of indices
  */
 function searchForRouteIds(input) {
   let result = [];

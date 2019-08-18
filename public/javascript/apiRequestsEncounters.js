@@ -32,10 +32,10 @@ class WeatherRequest
 
 {
   /**
-   * @desc This is the constructor of the class WeatherRequest.
-   * @param {array} intersection - the coordinates of the encounter
-   * @param {number} id - the id of the encounter
-   */
+  * @desc This is the constructor of the class WeatherRequest.
+  * @param {Array} intersection - the coordinates of the encounter
+  * @param {number} id - the id of the encounter
+  */
   constructor(intersection, id)
   {
     let lat = intersection[0];
@@ -57,9 +57,9 @@ class WeatherRequest
 
 
   /**
-   * @desc This function is called, at the end of the constructor.
-   * It opens and sends the request.
-   */
+  * @desc This function is called, at the end of the constructor.
+  * It opens and sends the request.
+  */
   openAndSendRequest()
   {
     this.x.open("GET", this.resource, true);
@@ -142,10 +142,9 @@ class WeatherRequest
 * information (terrain and country) for a specific encounter.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param encounter {object} - the encounter for which a request is to be made
+* @param {Object} encounter - the encounter for which a request is to be made
 */
 function getNewTerrainRequest(encounter) {
-  console.log("New terrain request.");
 
   let lat = encounter.intersectionX;
   let long = encounter.intersectionY;
@@ -160,7 +159,7 @@ function getNewTerrainRequest(encounter) {
   xx.encounter = encounter;
   xx.onload = function () {
 
-  console.log("Geonames: Status-Code: " + this.status + " , readyState: " + this.readyState);
+    console.log("Geonames: Status-Code: " + this.status + " , readyState: " + this.readyState);
   };
 
   xx.onerror = function (e) {
@@ -194,8 +193,8 @@ function getNewTerrainRequest(encounter) {
 * This function writes the request-results of the geonames-XMLHttpRequest into the encounters-table.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param response {object} - response of the request
-* @param id {number} - the index of the encounter in the global encounters-array ("allEncounters")
+* @param {Object} response - response of the request
+* @param {number} id - the index of the encounter in the global encounters-array ("allEncounters")
 */
 function writeRequestResultsIntoTable(response, id) {
   // show the terrain or possible errors in the encounters table
@@ -221,44 +220,44 @@ function writeRequestResultsIntoTable(response, id) {
 }
 
 /**
- * This function calls the '/encounter/create' route with ajax, to save a given encounter in the database.
- * @author Paula Scharf, matr.: 450334
- * @param encounter {object} - the encounter to be saved
- * @param id {number} - the index of the encounter in the global encounters-array ("allEncounters")
- */
+* This function calls the '/encounter/create' route with ajax, to save a given encounter in the database.
+* @author Paula Scharf, matr.: 450334
+* @param {Object} encounter - the encounter to be saved
+* @param {number} id - the index of the encounter in the global encounters-array ("allEncounters")
+*/
 function postEncounter(encounter, id) {
 
-    $.ajax({
-        // use a http POST request
-        type: "POST",
-        // URL to send the request to
-        url: "/encounter/create",
-        // type of the data that is sent to the server
-        contentType: "application/json; charset=utf-8",
-        //
-        data: JSON.stringify(encounter),
-        // timeout set to 10 seconds
-        timeout: 10000
-    })
+  $.ajax({
+    // use a http POST request
+    type: "POST",
+    // URL to send the request to
+    url: "/encounter/create",
+    // type of the data that is sent to the server
+    contentType: "application/json; charset=utf-8",
+    // data to send to the server
+    data: JSON.stringify(encounter),
+    // timeout set to 10 seconds
+    timeout: 10000
+  })
 
-    // if the request is done successfully, ...
-        .done (function (response) {
-            if (typeof id !== "undefined") {
-                allEncounters[id][0]._id = response;
-                shareButton(id);
-            }
-            // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
-            console.log("AJAX request (posting an encounter) is done successfully.");
-        })
+  // if the request is done successfully, ...
+  .done (function (response) {
+    if (typeof id !== "undefined") {
+      allEncounters[id][0]._id = response;
+      shareButton(id);
+    }
+    // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+    console.log("AJAX request (posting an encounter) is done successfully.");
+  })
 
-        // if the request has failed, ...
-        .fail(function (xhr, status, error) {
-            // ... give a notice that the AJAX request for posting an encounter has failed and show the error on the console
-            console.log("AJAX request (posting an encounter) has failed.", error);
+  // if the request has failed, ...
+  .fail(function (xhr, status, error) {
+    // ... give a notice that the AJAX request for posting an encounter has failed and show the error on the console
+    console.log("AJAX request (posting an encounter) has failed.", error);
 
-            // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
-            if (error === "timeout") {
-                JL("ajaxCreateEncounterTimeout").fatalException("ajax: '/encounter/create' timeout");
-            }
-        });
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
+    if (error === "timeout") {
+      JL("ajaxCreateEncounterTimeout").fatalException("ajax: '/encounter/create' timeout");
+    }
+  });
 }
