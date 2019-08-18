@@ -77,14 +77,12 @@ function checkForNewRoute(response, checkForUpdates) {
 
   // go through all routes
   for (let i = 0; i < response.length; i++) {
-    //
     let currentRoute = response[i];
     let route = {
       _id: currentRoute[0]._id,
       status: "old"
     };
 
-    //
     if (currentRoute[0].status === "new") {
       console.log("new");
       console.log(alreadyKnownRoutes);
@@ -135,11 +133,9 @@ function deleteAllEncountersOfRoute(routeId) {
       // to the encounter
       for (let k = 0; k < allRoutes.length; k++) {
         if (allRoutes[k][0]._id === currentEncounter.firstRoute) {
-          console.log("firstRoute: " + k);
           currentEncounter.firstRoute = k;
         }
         else if (allRoutes[k][0]._id === currentEncounter.secondRoute) {
-          console.log("secondRoute: " + k);
           currentEncounter.secondRoute = k;
         }
       }
@@ -165,6 +161,7 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
     }
   }
 }
+
 
 /**
 * This function calculates encounters between two routes and posts them to the database (and if needed adds the to
@@ -248,8 +245,8 @@ function postEncounter(encounter, id) {
     contentType: "application/json; charset=utf-8",
     // data to send to the server
     data: JSON.stringify(encounter),
-    // timeout set to 10 seconds
-    timeout: 10000
+    // timeout set to 15 seconds
+    timeout: 15000
   })
 
   // if the request is done successfully, ...
@@ -291,8 +288,8 @@ function deleteEncounter(encounterId) {
     data: {
       _id: encounterId
     },
-    // timeout set to 10 seconds
-    timeout: 10000
+    // timeout set to 15 seconds
+    timeout: 15000
   })
 
   // if the request is done successfully, ...
@@ -330,8 +327,8 @@ function updateStatusFromNewToOld(route) {
     contentType: "application/json; charset=utf-8",
     // data to send to the server
     data: JSON.stringify(route),
-    // timeout set to 10 seconds
-    timeout: 10000
+    // timeout set to 15 seconds
+    timeout: 15000
   })
 
   // if the request is done successfully, ...

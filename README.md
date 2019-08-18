@@ -1,11 +1,9 @@
 # GeoSoftware1-FinalProject
 ## How to start the project
 
-aus project-folder heraus (Übersetzen in Englisch):
-
 #### with docker:
 1. install docker on your local machine
-2. run ``docker-compose up`` in the terminal
+2. run ``docker-compose up`` in the terminal (from project-folder)
 3.  
 4.  
 
@@ -15,13 +13,11 @@ MUSS NOCH GEPUSHT WERDEN !!
 
 #### without docker:
 1. install node v10.xx and MongoDB v4.xx on your local machine
-2. run ``npm install`` in the terminal
-3. run ``npm start`` in the terminal
+2. run ``npm install`` in the terminal (from project-folder)
+3. run ``npm start`` in the terminal (from project-folder)
 4. open [localhost:3000](localhost:3000) in a browser
-5. ensure that your adblocker does not prevent jsnlog from working (auch bei docker hinschreiben?!)
 
----
-## How to construct your own API-keys
+## How to construct and use your own API-keys
 
 #### OpenWeatherMap
 1. create an account for [openweathermap](https://home.openweathermap.org/users/sign_up)
@@ -33,7 +29,7 @@ MUSS NOCH GEPUSHT WERDEN !!
 2. wait for activation email
 3. go to your account page
 4. enable your account for free webservices
-5. set the value of the variable ``usernameTerrainAPI`` in /public/javascript/tokens.js by your username
+5. set the value of the variable ``usernameTerrainAPI`` in /public/javascript/tokens.js to your username
 
 #### Movebank
 1. create an account for [movebank](https://www.movebank.org/user/register)
@@ -42,6 +38,10 @@ MUSS NOCH GEPUSHT WERDEN !!
 4. set the value of the variable ``loginnameAnimalTrackingAPI`` in /public/javascript/tokens.js to your username
 5. set the value of the variable ``passwordAnimalTrackingAPI`` in /public/javascript/tokens.js to your password
 
+## Troubleshoot
+Ensure that your adblocker does not prevent JSNLog from working.
+
+---
 
 ## GitHub Repository
 [GeoSoftware1-FinalProject](https://github.com/PaulaScharf/GeoSoftware1-FinalProject.git)

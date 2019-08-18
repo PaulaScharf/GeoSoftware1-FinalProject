@@ -70,18 +70,16 @@ function showAnimalMap() {
 */
 function getIndividualID() {
 
+  // clear the section where data of potential previous request is shown
   document.getElementById('animalName').innerHTML = "";
   document.getElementById('animalDateTime').innerHTML = "";
-
   animalRoutesGroup.clearLayers();
-
   document.getElementById("individualIdDiv").style.display = "none";
   document.getElementById("getAnimalRouteDiv").style.display = "none";
-
   animalRoute = undefined;
 
+  // get user chosen studyID
   let studyID = document.getElementById('studyID').value;
-
   let iD = {
     studyID: studyID
   };
@@ -118,6 +116,7 @@ function getIndividualID() {
 
       document.getElementById("individualIdDiv").style.display = "block";
 
+      // show the requested IDs of individuals
       showAnimalIDs(response);
     }
   })
@@ -144,9 +143,10 @@ function getIndividualID() {
 */
 function showAnimalIDs(response) {
 
+  // remove individual IDs of previous request
   $('#individualID').empty();
-  let select = document.getElementById("individualID");
 
+  let select = document.getElementById("individualID");
   // make a new option in the dropdown for every identifier
   for (let i = 0; i < response.length; i++) {
     select.options[select.options.length] = new Option(response[i].local_identifier, response[i].local_identifier);
@@ -374,7 +374,6 @@ function showAnimalRoute(animalRoute) {
 * Inserts a user chosen animal route into the database, using an AJAX-POST-request. Before inserting,
 * its JSON and GeoJSON (route-part) syntax is checked, because it is a global variable that is inserted.
 *
-*
 * @author Katharina Poppinga, matr.: 450146
 */
 function postAnimalRoute() {
@@ -411,8 +410,8 @@ function postAnimalRoute() {
       data: animalRouteString,
       // type of the data that is sent to the server
       contentType: "application/json; charset=utf-8",
-      // timeout set to 7 seconds
-      timeout: 7000
+      // timeout set to 10 seconds
+      timeout: 10000
     })
 
     // if the request is done successfully, ...

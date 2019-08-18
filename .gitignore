@@ -5,17 +5,13 @@
 .htmlhintrc
 
 # installed modules
-node_modules/
+node_modules/*
 
 # package-lock
 package-lock.json
 
-# Tokens
-token.js
-
-# Animal Tracking API
-cookies.txt
-license_terms.txt
+.DS_Store
+.dockerignore
 
 # JSDoc
 out/

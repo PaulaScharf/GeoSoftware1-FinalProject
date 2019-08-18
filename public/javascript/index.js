@@ -118,8 +118,8 @@ function getAndShowData() {
     url: "/routes/readAll",
     // data type of the response
     dataType: "json",
-    // timeout set to 10 seconds
-    timeout: 10000
+    // timeout set to 20 seconds
+    timeout: 20000
   })
 
   // if the request is done successfully, ...
@@ -158,7 +158,7 @@ function getAndShowData() {
  * @param response - response of the ajax-request for getting all routes
  */
 function writeAllRoutesInTheGlobalArray(response) {
-  
+
   for (let i = 0; i < response.length; i++) {
     allRoutes.push([response[i], true]);
     allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder_Arrays(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
@@ -335,7 +335,6 @@ function writeAllEncountersInTheGlobalArray(response) {
       if (currentRoute[0]._id === currentEncounter.firstRoute) {
         noOfRoutes.firstRoute = k;
       }
-      //
       else if (currentRoute[0]._id === currentEncounter.secondRoute) {
         noOfRoutes.secondRoute = k;
       }
@@ -383,7 +382,7 @@ function fillEncountersTable() {
   // fill the table
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    if (typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined" && typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined") {
+    if ((typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined") && (typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined")) {
       // only show encounters, which are also shown on the map
       if (currentEncounter[1].routesSelected &&
           (currentEncounter[1].search === "no search" || currentEncounter[1].search === "searched for") &&
@@ -425,7 +424,7 @@ function fillEncountersMap() {
   // loop "over" all encounters in the current database "routeDB"
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    if (typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined" && typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined") {
+    if ((typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined") && (typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined")) {
         // if the encounter took place color it green, otherwise blue
         let color = (currentEncounter[0].tookPlace === "yes") ? "#009d42" : "#000bec";
 
@@ -445,15 +444,15 @@ function fillEncountersMap() {
             // if the checkbox is not active then give true regardless
             (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
           // add the circleEncounters to the allEncountersGroup
-          circleEncounters[i].addTo(allEncountersGroup);
+          currentCircle.addTo(allEncountersGroup);
         }
       } else {
         deleteEncounter(currentEncounter[0]._id);
         allEncounters.splice(i, 1);
+        i = i - 1;
       }
     }
   }
-
 
 
 /**
@@ -497,6 +496,7 @@ function deleteButton(i){
   tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + "<button id='deleteButton" + i + "' onclick='deleteRoute(\"" + id +"\")' style='margin-left:15px'>delete</button>";
 }
 
+
 /**
  * This function deletes a route from the database and the main page.
  * Also deletes all encounters with that route from the database and the main page
@@ -515,8 +515,8 @@ function deleteRoute(id) {
     data: {
       _id: id
     },
-    // timeout set to 10 seconds
-    timeout: 10000
+    // timeout set to 15 seconds
+    timeout: 15000
   })
 
   // if the request is done successfully, ...
@@ -651,6 +651,7 @@ function encounterConfirm(cb_id) {
   fillEncountersMap();
 }
 
+
 /**
  * This function comes into play when the "show confirmed" checkbox is being checked.
  * It makes sure that only the confirmed encounters are being shown in the map and in the table.
@@ -669,6 +670,7 @@ function onlyShowConfirmed() {
   }
 }
 
+
 /**
  * This function makes an AJAX-request in order to update an encounter in the database.
  * @private
@@ -682,11 +684,12 @@ function updateEncounter(encounter) {
     type: "POST",
     // URL to send the request to
     url: "/encounter/update",
+    // data to send to the server
     data: JSON.stringify(encounter),
     // type of the data that is sent to the server
     contentType: "application/json; charset=utf-8",
-    // timeout set to 10 seconds
-    timeout: 10000
+    // timeout set to 15 seconds
+    timeout: 15000
   })
 
   // if the request is done successfully, ...
@@ -770,7 +773,6 @@ function routeSelectionForMap(cb_id){
  * @returns {Array} result  ids of affected encounters
  */
 function encountersToBeRemoved(routeId) {
-
   let result = [];
 
   for (let i = 0; i < allEncounters.length; i++) {
@@ -792,13 +794,11 @@ function encountersToBeRemoved(routeId) {
  * @returns {Array} result  ids of affected encounters
  */
 function encountersToBeAdded(routeId) {
-
   let result = [];
-  //
+
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    if (typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined" && typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined") {
-
+    if ((typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined") && (typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined")) {
       // only routes which belong to the selected route and one other selected route have to be added
       if (currentEncounter[2].firstRoute === routeId && allRoutes[currentEncounter[2].secondRoute][1] &&
           (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
@@ -860,6 +860,7 @@ function searchEncounters(madeBy, searchCheckbox) {
         }
       }
     }
+
     for (let i = 0; i < allEncounters.length; i++) {
       let currentEncounter = allEncounters[i];
       if (allRoutes[currentEncounter[2].firstRoute][0].madeBy === madeBy) {
@@ -894,7 +895,7 @@ function searchEncounters(madeBy, searchCheckbox) {
         });
       }
     }
-    //
+
     for (let i = 0; i < allRoutes.length; i++) {
       if (allRoutes[i][0].madeBy === madeBy) {
         if (!allRoutes[i][1]) {
@@ -908,7 +909,6 @@ function searchEncounters(madeBy, searchCheckbox) {
         }
       }
     }
-
     // reset the attributes of the encounter, that indicate if it is selected or searched for
     for (let i = 0; i < allEncounters.length; i++) {
       let currentEncounter = allEncounters[i];
@@ -933,7 +933,7 @@ function searchEncounters(madeBy, searchCheckbox) {
  */
 function searchForRouteIds(input) {
   let result = [];
-  //
+
   for (let i = 0; i < allRoutes.length; i++) {
     let currentRoute = allRoutes[i];
     // only check the attributes that have a value in the search form

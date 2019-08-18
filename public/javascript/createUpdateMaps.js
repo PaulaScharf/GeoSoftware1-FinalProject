@@ -102,8 +102,8 @@ function submitHandlerCreateForm(){
       url: $(this).attr('action'),
       // data to send to the server
       data: $(this).serialize(),
-      // timeout set to 10 seconds
-      timeout: 10000
+      // timeout set to 15 seconds
+      timeout: 15000
     })
 
     // if the request is done successfully, ...

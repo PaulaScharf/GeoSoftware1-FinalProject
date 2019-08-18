@@ -69,6 +69,7 @@ function checkTimestamp() {
   }
 }
 
+
 /**
 * This function resets the search, if the textfields for the search were edited.
 * @private
@@ -89,6 +90,6 @@ function searchEdited(madeBy) {
     let ev = document.createEvent('Event');
     ev.initEvent('change', true, false);
     checkbox.dispatchEvent(ev);
-    console.log("event dispatched");
+    console.log("Event dispatched.");
   }
 }

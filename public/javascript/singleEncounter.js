@@ -96,16 +96,12 @@ function processResult() {
 * @param counter
 */
 function showRoute(currentRoute, counter) {
-  //
-  if (currentRoute.madeBy === "user") {
 
+  if (currentRoute.madeBy === "user") {
     // show the user route with a consecutive number and its creator, name, date, time and type in the table "routesTable"
     createUserRouteTable(counter, currentRoute.creator, currentRoute.name, currentRoute.date, currentRoute.time, currentRoute.type, "routesTable");
   }
-
-  //
   else if (currentRoute.madeBy === "animal") {
-
     // show the animal route with a consecutive number and its studyID, individualTaxonCanonicalName, date and time in the table "animalRoutesTable"
     createAnimalRouteTable(counter, currentRoute.study_id, currentRoute.individualTaxonCanonicalName, currentRoute.date, currentRoute.time, "animalRoutesTable");
   }
@@ -117,9 +113,8 @@ function showRoute(currentRoute, counter) {
   let coordinatesRoute = swapGeoJSONsLongLatToLatLongOrder_Objects(currentRoute.geoJson.features[0].geometry.coordinates);
   // if the current route is a user route, color it red, otherwise orange
   let color = ((currentRoute.madeBy === "user") ? '#ec0000' : '#ec7e00');
-  // make a leaflet-polyline from the coordinatesRoute
+  // make a leaflet-polyline from the coordinatesRoute and add it to routesGroup
   let polylineOfRoute = L.polyline(coordinatesRoute, {color: color}, {weight: '3'});
-
   polylineOfRoute.addTo(routesGroup);
 }
 
@@ -146,7 +141,6 @@ function showEncounter(encounter) {
 * @param currentEncounter - the to be shown encounter
 */
 function fillEncountersTable(currentEncounter) {
-  //
   createSingleEncounterTable(currentEncounter.intersectionX, currentEncounter.intersectionY, 0, "encountersTable");
   // only show encounters, which are also shown on the map
   // if the encounter is new, then create a new weather request and a new terrain request
