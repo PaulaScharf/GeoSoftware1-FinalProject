@@ -22,16 +22,16 @@ function submitHandlerCreateForm(){
     // prevent form to submit as default
     e.preventDefault();
 
-// Spinner an
+// TODO: Spinner an
 
-    //
+// AJAX-request for creating/inserting a user route with attributes gotten from "createForm"
     $.ajax({
       // use a http POST request
       type: $(this).attr('method'),
       // URL to send the request to
       url: $(this).attr('action'),
       // type of the data that is sent to the server
-      //  contentType: "application/json; charset=utf-8",
+      //contentType: "application/json; charset=utf-8",
       // data to send to the server
       data: $(this).serialize(),
       // timeout set to 10 seconds
@@ -62,7 +62,7 @@ function submitHandlerCreateForm(){
         alert("The user route was successfully inserted into the database.");
       }
 
-// Spinner aus
+// TODO: Spinner aus, NEIN; DA GETALLROUTES() AJAX IST UND DAHER HIER NOCH NICHT FERTIG IST
 
       // ... give a notice on the console that the AJAX request for creating a user route has succeeded
       console.log("AJAX request (creating a user route) is done successfully.");
@@ -71,7 +71,7 @@ function submitHandlerCreateForm(){
     // if the request has failed, ...
     .fail(function (xhr, status, error) {
 
-// Spinner aus
+// TODO: Spinner aus
 
       // ... give a notice that the AJAX request for creating a user route has failed and show the error on the console
       console.log("AJAX request (creating a user route) has failed.", error);
