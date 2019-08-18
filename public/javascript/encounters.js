@@ -281,7 +281,7 @@ function deleteEncounter(encounterId) {
   })
 
   // if the request is done successfully, ...
-  .done (function () {
+  .done (function (response) {
     // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
     console.log("AJAX request (deleting an encounter) is done successfully.");
   })
@@ -320,7 +320,7 @@ function updateStatusFromNewToOld(route) {
   })
 
   // if the request is done successfully, ...
-  .done (function () {
+  .done (function (response) {
     // ... give a notice on the console that the AJAX request for updating the status of a route has succeeded
     console.log("AJAX request (updating the status of a route) is done successfully.");
   })

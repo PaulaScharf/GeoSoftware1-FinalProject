@@ -33,7 +33,7 @@
 
   <%- include('partial/navbar', {active: "Home"}); %>
 
-  <main role="main" onload="checkform()">
+  <main role="main" onload="checkform('updateForm')">
     <div class="row" style="padding:10px">
       <div class="container-fluid">
         <h1>Route Editor</h1>
@@ -54,18 +54,18 @@
       </div>
       <div class="col-12 col-md-6">
         <h2>Edit User Route</h2>
-        <form action="/routes/update" method="POST" name="updateForm" id="createUpdateForm" onsubmit="return validateJSONAndGeoJSON('updateRoute')">
+        <form action="/routes/update" method="POST" name="updateForm" id="updateForm" onsubmit="return validateJSONAndGeoJSON('updateRoute')">
           <input type = "hidden" name = "_id" value="<%= result[0]._id %>"/>
           Username:<br>
-          <input type="text" name="creator" onKeyup="checkform()" value="<%= result[0].creator %>"/><br>
+          <input type="text" name="creator" onKeyup="checkform('updateForm')" value="<%= result[0].creator %>"/><br>
           Name of route:<br>
-          <input type="text" name="name" onKeyup="checkform()" value="<%= result[0].name %>"/><br>
+          <input type="text" name="name" onKeyup="checkform('updateForm')" value="<%= result[0].name %>"/><br>
           Route in correct GeoJSON syntax:<br>
-          <textarea id="updateRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform()">
+          <textarea id="updateRoute" style="width:100%; height:300px" type="text" name="geoJson" onKeyup="checkform('updateForm')">
             <%= stripEndQuotes(JSON.stringify(result[0].geoJson, null, 2)) %> </textarea>
             Timestamp:<br>
-            <input type="date" name="date" onchange="checkform()" value="<%= result[0].date %>"/>
-            <input type="time" name="time" onKeyup="checkform()" value="<%= result[0].time %>"/><br>
+            <input type="date" name="date" onchange="checkform('updateForm')" value="<%= result[0].date %>"/>
+            <input type="time" name="time" onKeyup="checkform('updateForm')" value="<%= result[0].time %>"/><br>
             Type of route:<br>
             <input type="radio" name="type" value="planned" <%if(result[0].type === "planned") {%>checked<%}%>> planned<br>
             <input type="radio" name="type" value="completed" <%if(result[0].type === "completed") {%>checked<%}%>> completed<br>

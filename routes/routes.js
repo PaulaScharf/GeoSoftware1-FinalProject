@@ -29,7 +29,6 @@ var putRoutesController = function (req, res) {
 
   console.log("Update route " + req.body._id);
 
-  // TODO: MÜSSTE DURCH BODY PARSER EIGENTLICH AUTOMATISCH GEHEN, WARUM NICHT? WG. NUR geoJson??
   // convert the coordinate-string to Json
   req.body.geoJson = JSON.parse(req.body.geoJson);
 

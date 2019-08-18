@@ -14,10 +14,11 @@
 * It is called whenever the content of an element of the form changes or a key is pressed inside the element.
 * @private
 * @author Paula Scharf, matr.: 450334
+* @param specificForm ID of the form to check
 */
-function checkform() {
+function checkform(specificForm) {
 
-  let form = document.getElementById("createUpdateForm").elements;
+  let form = document.getElementById(specificForm).elements;
   let cansubmit = true;
 
   // if one of the elements of the form is empty then set cansubmit to false
@@ -26,7 +27,7 @@ function checkform() {
   }
   document.getElementById('submitbutton').disabled = !cansubmit;
 
-  if(cansubmit) {
+  if (cansubmit) {
     document.getElementById("errorMsg").style.display = "none";
     // show an error message if the submitbutton is disabled
   }  else {

@@ -55,7 +55,7 @@ function showAnimalMap() {
   // add the OpenStreetMap tile layer to the map "createAnimalRouteMap"
   oSMLayer.addTo(createAnimalRouteMap);
 
-  // create a layerGroup for animalroutes, add this group to the existing map "createAnimalRouteMap"
+  // create a layerGroup for animal routes, add this group to the existing map "createAnimalRouteMap"
   animalRoutesGroup = L.layerGroup().addTo(createAnimalRouteMap);
 }
 
@@ -254,7 +254,7 @@ function formatAndShowAnimalRoute(response) {
 
   // requested timestamps are provided in milliseconds since 1970-01-01 UTC,
   // convert these Epoch milliseconds to our local date and time format:
-  // for this, get the timestamp of the first coordinate of the animalroute
+  // for this, get the timestamp of the first coordinate of the animal route
   // (it is only one timestamp saved for one route, like it is for the user routes, too)
   let firstTimestampEpochMilli = response.individuals[0].locations[0].timestamp;
   let firstTimestamp = new Date(firstTimestampEpochMilli);
@@ -382,12 +382,12 @@ function postAnimalRoute() {
 // animalRoute as a String
 let animalRouteString;
 
-  // if there is no animalroute gotten/chosen from movebank API ...
+  // if there is no animal route gotten/chosen from movebank API ...
   if (typeof animalRoute === "undefined") {
-    // ... tell the user that he/she first has to choose an animalroute by getting tracking data of a study from movebank API
-    alert("First, you have to choose an animalroute by getting tracking data of a study from movebank API.");
+    // ... tell the user that he/she first has to choose an animal route by getting tracking data of a study from movebank API
+    alert("First, you have to choose an animal route by getting tracking data of a study from movebank API.");
   }
-  // if there is an animalroute gotten/chosen from movebank API,
+  // if there is an animal route gotten/chosen from movebank API,
   // check the syntax because animalRoute is a global variable
   else {
     // check whether animalRoute is valid JSON that can be parsed
@@ -396,7 +396,7 @@ let animalRouteString;
     }
     // if the animalRoute is not valid JSON, throw an exception, tell the user and do not continue
     catch (exception){
-      alert("The animalroute has no valid JSON syntax.\n" + exception);
+      alert("The animal route has no valid JSON syntax.\n" + exception);
       return;
     }
 
@@ -429,7 +429,7 @@ let animalRouteString;
         animalRoute = undefined;
 
         // ... and tell the user about it
-        alert("This animalroute is already stored in your database. Please choose a different one.");
+        alert("This animal route is already stored in the database. Please choose a different one.");
         // ... and do not call the following expressions so that the user can choose a different route
         return;
 
@@ -438,12 +438,12 @@ let animalRouteString;
         // ... check whether 'animalRoute.geoJson' contains valid GeoJSON and, if so, ...
         if (validateGeoJSON(animalRoute.geoJson)) {
 
-          // ... insert the chosen animalroute into the database
+          // ... insert the chosen animal route into the database
           insertAnimalroute();
 
           // if 'animalRoute.geoJson' does not contain valid GeoJSON, tell the user and do not insert into database
         } else {
-          alert("The GeoJSON-part of the animalroute has no valid syntax.");
+          alert("The GeoJSON-part of the animal route has no valid syntax.");
         }
       }
     })
@@ -451,8 +451,8 @@ let animalRouteString;
     // if the AJAX-request has failed, ...
     .fail (function (xhr, status, error) {
 
-      // ... give a notice that the AJAX request for finding the animalroute has failed and show the error on the console
-      console.log("AJAX request (reading/finding animalroute) has failed.", error);
+      // ... give a notice that the AJAX request for finding the animal route has failed and show the error on the console
+      console.log("AJAX request (reading/finding animal route) has failed.", error);
 
       // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
       if (error === "timeout") {
@@ -472,7 +472,7 @@ let animalRouteString;
 */
 function insertAnimalroute(){
 
-  // ********** AJAX request for posting the animalroute into the database "routeDB" **********
+  // ********** AJAX request for posting the animal route into the database "routeDB" **********
   $.ajax({
     // use a http POST request
     type: "POST",
@@ -492,7 +492,7 @@ function insertAnimalroute(){
     // if the AJAX-request was successful but the inserting itself was not ...
     if (response === "") {
       // ... tell the user about it
-      alert("The animalroute could not be inserted into your database.");
+      alert("The animal route could not be inserted into the database.");
 
       // after successfully inserted the animal route in to the database ...
     } else {
@@ -504,21 +504,21 @@ function insertAnimalroute(){
       animalRoute = undefined;
 
       // ... and tell the user about the success in inserting the animal route
-      alert("The animalroute was successfully inserted into your database.");
+      alert("The animal route was successfully inserted into the database.");
 
       // calculate new encounters
       getAllRoutes();
     }
 
-    // ... give a notice on the console that the AJAX request for posting the animalroute has succeeded
-    console.log("AJAX request (posting animalroute) is done successfully.");
+    // ... give a notice on the console that the AJAX request for posting the animal route has succeeded
+    console.log("AJAX request (posting animal route) is done successfully.");
   })
 
   // if the request has failed, ...
   .fail (function (xhr, status, error) {
 
-    // ... give a notice that the AJAX request for posting the animalroute has failed and show the error on the console
-    console.log("AJAX request (posting animalroute) has failed.", error);
+    // ... give a notice that the AJAX request for posting the animal route has failed and show the error on the console
+    console.log("AJAX request (posting animal route) has failed.", error);
 
     // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
     if (error === "timeout") {

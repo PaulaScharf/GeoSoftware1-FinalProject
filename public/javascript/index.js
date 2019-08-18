@@ -93,7 +93,7 @@ let circleEncounters = [];
 function getAndShowData() {
 
   // create the initial map in the "indexMap"-div, the proper map extract will be set later
-  indexMap = L.map('indexMap').setView([0, 0], 3);
+  indexMap = L.map('indexMap').setView([0, 0], 4);
 
   // OpenStreetMap tiles as a layer for the map "indexMap"
   let oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -185,11 +185,12 @@ function showAllRoutesOnMainPage() {
   fillRoutesMap();
 }
 
+
 /**
- * This function fills both route-tables on the main page with all the routes in the allRoutes-Array
- * @private
- * @author Katharina Poppinga, matr.: 450146; Paula Scharf, matr.: 450334
- */
+* This function fills both route-tables on the main page with all the routes in the allRoutes-Array
+* @private
+* @author Katharina Poppinga, matr.: 450146; Paula Scharf, matr.: 450334
+*/
 function fillRoutesTable() {
   // clear the tables
   deleteAllChildrenOfElement("routesTable");
@@ -226,11 +227,12 @@ function fillRoutesTable() {
   }
 }
 
+
 /**
- * This function fills the map on the main page with all the routes in the allRoutes-Array
- * @private
- * @author Katharina Poppinga, matr.: 450146; Paula Scharf, matr.: 450334
- */
+* This function fills the map on the main page with all the routes in the allRoutes-Array
+* @private
+* @author Katharina Poppinga, matr.: 450146; Paula Scharf, matr.: 450334
+*/
 function fillRoutesMap() {
   // coordinates of a route (in GeoJSONs long-lat order)
   let coordinatesRoute;
@@ -268,10 +270,9 @@ function fillRoutesMap() {
     if (currentRoute[1]) {
       // add the i-th polyline-element of the array polylineRoutes to the allRoutesGroup and therefore to the map "indexMap"
       polylineRoutes[i].addTo(allRoutesGroup);
-      // TODO: KOMMENTARE BERICHTIGEN/ANPASSEN:
-      // for the first route of the database ...
+
+      // fit bounds of map to all shown routes
       if (i === allRoutes.length - 1) {
-        // ... center the map on the first point of the first route
         indexMap.fitBounds(allRoutesGroup.getBounds());
       }
     }
@@ -505,57 +506,57 @@ function fillEncountersTable() {
         tableCellDeleteButton.innerHTML = tableCellDeleteButton.innerHTML + "<button id='deleteButton" + i + "' onclick='deleteRoute(\"" + id +"\")' style='margin-left:15px'>delete</button>";
       }
 
-/**
- * This function deletes a route from the database and the main page.
- * Also deletes all encounters with that route from the database and the main page
- * @private
- * @author Paula Scharf, matr.: 450334
- * @param id {String} - the id of the route in the database
- */
-function deleteRoute(id) {
-  $.ajax({
-    // use a http GET request
-    type: "GET",
-    // URL to send the request to
-    url: "/routes/delete",
-    // data to send to the server
-    data: {
-      _id: id
-    },
-    // timeout set to 10 seconds
-    timeout: 10000
-  })
+      /**
+      * This function deletes a route from the database and the main page.
+      * Also deletes all encounters with that route from the database and the main page
+      * @private
+      * @author Paula Scharf, matr.: 450334
+      * @param id {String} - the id of the route in the database
+      */
+      function deleteRoute(id) {
+        $.ajax({
+          // use a http GET request
+          type: "GET",
+          // URL to send the request to
+          url: "/routes/delete",
+          // data to send to the server
+          data: {
+            _id: id
+          },
+          // timeout set to 10 seconds
+          timeout: 10000
+        })
 
-  // if the request is done successfully, ...
-      .done (function () {
-        // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
-        console.log("AJAX request (deleting a route) is done successfully.");
+        // if the request is done successfully, ...
+        .done (function (response) {
+          // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+          console.log("AJAX request (deleting a route) is done successfully.");
 
-        for (let i = 0; i < allRoutes.length; i++) {
-          let currentRoute = allRoutes[i];
-          if (currentRoute[0]._id === id) {
-            allRoutes.splice(i,1);
-            allRoutesGroup.removeLayer(polylineRoutes[i]);
-            polylineRoutes.splice(i,1);
-            i = i-1;
+          for (let i = 0; i < allRoutes.length; i++) {
+            let currentRoute = allRoutes[i];
+            if (currentRoute[0]._id === id) {
+              allRoutes.splice(i,1);
+              allRoutesGroup.removeLayer(polylineRoutes[i]);
+              polylineRoutes.splice(i,1);
+              i = i-1;
+            }
           }
-        }
-        fillRoutesTable();
-        deleteAllEncountersOfRoute(id);
-        showEncountersOnMainPage();
-      })
+          fillRoutesTable();
+          deleteAllEncountersOfRoute(id);
+          showEncountersOnMainPage();
+        })
 
-      // if the request has failed, ...
-      .fail(function (xhr, status, error) {
-        // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
-        console.log("AJAX request (deleting a route) has failed.", error);
+        // if the request has failed, ...
+        .fail(function (xhr, status, error) {
+          // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
+          console.log("AJAX request (deleting a route) has failed.", error);
 
-        // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
-        if (error === "timeout") {
-          JL("ajaxDeletingEncounterTimeout").fatalException("ajax: '/routes/delete' timeout");
-        }
-      });
-}
+          // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
+          if (error === "timeout") {
+            JL("ajaxDeletingEncounterTimeout").fatalException("ajax: '/routes/delete' timeout");
+          }
+        });
+      }
 
 
       /**
@@ -658,26 +659,26 @@ function deleteRoute(id) {
         fillEncountersMap();
       }
 
-/**
- * This function comes into play when the "show confirmed" checkbox is being checked.
- * It makes sure that only the confirmed encounters are being shown in the map and in the table.
- * @private
- * @author Paula Scharf, matr.: 450334
- */
-function onlyShowConfirmed() {
+      /**
+      * This function comes into play when the "show confirmed" checkbox is being checked.
+      * It makes sure that only the confirmed encounters are being shown in the map and in the table.
+      * @private
+      * @author Paula Scharf, matr.: 450334
+      */
+      function onlyShowConfirmed() {
 
-  let checkbox = document.getElementById("showConfirmedCheckbox");
-  //
-  if (checkbox.checked === true) {
-    confirmActive = true;
-    showEncountersOnMainPage();
-  } else {
-    confirmActive = false;
-    showEncountersOnMainPage();
-  }
-}
-
-/**
+        let checkbox = document.getElementById("showConfirmedCheckbox");
+        //
+        if (checkbox.checked === true) {
+          confirmActive = true;
+          showEncountersOnMainPage();
+        } else {
+          confirmActive = false;
+          showEncountersOnMainPage();
+        }
+      }
+      
+      /**
       * This function makes an AJAX-request in order to update an encounter in the database.
       * @private
       * @author Paula Scharf, matr.: 450334
@@ -699,7 +700,7 @@ function onlyShowConfirmed() {
         })
 
         // if the request is done successfully, ...
-        .done (function () {
+        .done (function (response) {
           // ... give a notice on the console that the AJAX request for ....... has succeeded
           console.log("AJAX request (updating an encounter) is done successfully.");
         })
