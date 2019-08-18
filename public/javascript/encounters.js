@@ -39,7 +39,6 @@ function getAllRoutes() {
   .done(function (response) {
     // make the response comply to the format of the allRoutes-array in readRoutesEncounters
     let allRoutes = [];
-    //
     for (let i = 0; i < response.length; i++) {
       allRoutes.push([response[i], true]);
       allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder_Arrays(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
@@ -227,7 +226,6 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
  */
 function postEncounter(encounter, id) {
 
-  //
   $.ajax({
     // use a http POST request
     type: "POST",
@@ -270,7 +268,7 @@ function postEncounter(encounter, id) {
 * @author Paula Scharf, matr.: 450334
 */
 function deleteEncounter(encounterId) {
-  //
+
   $.ajax({
     // use a http GET request
     type: "GET",
@@ -341,10 +339,16 @@ function updateStatusFromNewToOld(route) {
   });
 }
 
-$(document).ajaxStop(function () {
-  $('.loading').hide();
-});
 
+// ***************** loading spinner *****************
+
+// if AJAX starts, show the loading spinner
 $(document).ajaxStart(function () {
   $('.loading').show();
+});
+
+// if AJAX finishes, hide the loading spinner
+// in case of an error, the loading spinner keeps spinning
+$(document).ajaxStop(function () {
+  $('.loading').hide();
 });

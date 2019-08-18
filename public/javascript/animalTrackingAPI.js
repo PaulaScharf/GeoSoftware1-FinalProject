@@ -44,6 +44,9 @@ let animalRoutesGroup;
 */
 function showAnimalMap() {
 
+  // hide the loading spinner
+  $('.loading').hide();
+
   // create the initial map in the "createAnimalRouteMap"-div
   createAnimalRouteMap = L.map('createAnimalRouteMap').setView([0, 0], 2);
 
@@ -57,7 +60,6 @@ function showAnimalMap() {
 
   // create a layerGroup for animal routes, add this group to the existing map "createAnimalRouteMap"
   animalRoutesGroup = L.layerGroup().addTo(createAnimalRouteMap);
-  $('.loading').hide();
 }
 
 
@@ -71,7 +73,6 @@ function getIndividualID() {
   document.getElementById('animalName').innerHTML = "";
   document.getElementById('animalDateTime').innerHTML = "";
 
-  //
   animalRoutesGroup.clearLayers();
 
   document.getElementById("individualIdDiv").style.display = "none";
@@ -81,7 +82,6 @@ function getIndividualID() {
 
   let studyID = document.getElementById('studyID').value;
 
-  //
   let iD = {
     studyID: studyID
   };
@@ -118,7 +118,6 @@ function getIndividualID() {
 
       document.getElementById("individualIdDiv").style.display = "block";
 
-      //
       showAnimalIDs(response);
     }
   })
@@ -380,8 +379,8 @@ function showAnimalRoute(animalRoute) {
 */
 function postAnimalRoute() {
 
-// animalRoute as a String
-let animalRouteString;
+  // animalRoute as a String
+  let animalRouteString;
 
   // if there is no animal route gotten/chosen from movebank API ...
   if (typeof animalRoute === "undefined") {

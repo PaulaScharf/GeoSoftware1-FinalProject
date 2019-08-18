@@ -93,7 +93,7 @@ let circleEncounters = [];
 function getAndShowData() {
 
   // create the initial map in the "indexMap"-div, the proper map extract will be set later
-  indexMap = L.map('indexMap').setView([0, 0], 4);
+  indexMap = L.map('indexMap').setView([0, 0], 2);
 
   // OpenStreetMap tiles as a layer for the map "indexMap"
   let oSMLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -158,13 +158,9 @@ function getAndShowData() {
  * @param response - response of the ajax-request for getting all routes
  */
 function writeAllRoutesInTheGlobalArray(response) {
-  //
+  
   for (let i = 0; i < response.length; i++) {
-    //
     allRoutes.push([response[i], true]);
-
-    // TODO: ATTRIBUT UMBENENNEN, DA ES KEIN GEOJSON IST
-
     allRoutes[i][0].geoJson.features[0].geometry.coordinates = swapGeoJSONsLongLatToLatLongOrder_Arrays(allRoutes[i][0].geoJson.features[0].geometry.coordinates);
   }
 }
@@ -243,8 +239,6 @@ function fillRoutesMap() {
     let currentRoute = allRoutes[i];
 
     // ************** show the i-th route in the map "indexMap" on the main page, therefore do the following steps: **************
-
-    // TODO: ATTRIBUT UMBENENNEN, DA ES KEIN GEOJSON IST
 
     // extract the coordinates of the i-th route
     coordinatesRoute = currentRoute[0].geoJson.features[0].geometry.coordinates;
@@ -514,7 +508,6 @@ function deleteButton(i){
  */
 function deleteRoute(id) {
 
-  $('.loading').show();
   $.ajax({
     // use a http GET request
     type: "GET",

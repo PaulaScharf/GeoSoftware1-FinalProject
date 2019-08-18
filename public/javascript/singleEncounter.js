@@ -11,14 +11,7 @@
 // please put in your own tokens at 'token.js'
 
 
-
-// TODO: FOLGENDES IN ONLOAD-FUNKTION SCHREIBEN???
-
-
 // ****************************** global variables *****************************
-
-
-// TODO: LAYERGROUPS KOMMENTARE ÜBERPRÜFEN
 
 /**
 * A Leaflet-map in which the shared encounter is shown.

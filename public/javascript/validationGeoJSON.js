@@ -21,7 +21,7 @@
 function validateJSONAndGeoJSON(idInputTextarea) {
 
   // take the content of textarea with the id idInputTextarea
-  let routeInput = document.getElementById(idInputTextarea ).value;
+  let routeInput = document.getElementById(idInputTextarea).value;
 
   // needed for checked JSON-syntax of route
   let routeJSONInput;
