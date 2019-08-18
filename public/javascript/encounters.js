@@ -75,7 +75,6 @@ function getAllRoutes() {
 */
 function checkForNewRoute(response, checkForUpdates) {
   alreadyKnownRoutes = [];
-  console.log("check for new routes");
 
   // go through all routes
   for (let i = 0; i < response.length; i++) {
@@ -86,7 +85,6 @@ function checkForNewRoute(response, checkForUpdates) {
       status: "old"
     };
 
-    console.log("iteration no: " + i);
     //
     if (currentRoute[0].status === "new") {
       console.log("new");

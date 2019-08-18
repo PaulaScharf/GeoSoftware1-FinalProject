@@ -213,6 +213,7 @@ function fillRoutesTable() {
       createAnimalRouteTable(i, currentRoute[0].study_id, currentRoute[0].individualTaxonCanonicalName, currentRoute[0].date, currentRoute[0].time, "animalRoutesTable");
     }
 
+    console.log(currentRoute[1]);
     // outsource the creation of the checkbox for showing or not showing the i-th route in the map
     routeCheckbox(i, currentRoute[1]);
 
@@ -432,29 +433,35 @@ function fillEncountersMap() {
   // loop "over" all encounters in the current database "routeDB"
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    // if the encounter took place color it green, otherwise blue
-    let color = (currentEncounter[0].tookPlace === "yes") ? "#009d42" : "#000bec";
+    if (typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined" && typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined") {
+        // if the encounter took place color it green, otherwise blue
+        let color = (currentEncounter[0].tookPlace === "yes") ? "#009d42" : "#000bec";
 
-    // make a circle out of the current encounter
-    let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY],
-        {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
-    let agent_1 = ((allRoutes[currentEncounter[2].firstRoute][0].madeBy === "animal") ?
-        allRoutes[currentEncounter[2].firstRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].firstRoute][0].creator);
-    let agent_2 = ((allRoutes[currentEncounter[2].secondRoute][0].madeBy === "animal") ?
-        allRoutes[currentEncounter[2].secondRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].secondRoute][0].creator);
-    currentCircle.bindPopup("encounter number " + (i + 1) + " between " + agent_1 + " and " + agent_2);
-    // add the circle to the array circleEncounters
-    circleEncounters.push(currentCircle);
-    if(currentEncounter[1].routesSelected &&
-        (currentEncounter[1].search === "no search" || currentEncounter[1].search === "searched for") &&
-        // if the "show confirmed" checkbox is active then check if the encounter is confirmed/ took place.
-        // if the checkbox is not active then give true regardless
-        (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
-      // add the circleEncounters to the allEncountersGroup
-      circleEncounters[i].addTo(allEncountersGroup);
+        // make a circle out of the current encounter
+        let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY],
+            {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
+        let agent_1 = ((allRoutes[currentEncounter[2].firstRoute][0].madeBy === "animal") ?
+            allRoutes[currentEncounter[2].firstRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].firstRoute][0].creator);
+        let agent_2 = ((allRoutes[currentEncounter[2].secondRoute][0].madeBy === "animal") ?
+            allRoutes[currentEncounter[2].secondRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].secondRoute][0].creator);
+        currentCircle.bindPopup("encounter number " + (i + 1) + " between " + agent_1 + " and " + agent_2);
+        // add the circle to the array circleEncounters
+        circleEncounters.push(currentCircle);
+        if (currentEncounter[1].routesSelected &&
+            (currentEncounter[1].search === "no search" || currentEncounter[1].search === "searched for") &&
+            // if the "show confirmed" checkbox is active then check if the encounter is confirmed/ took place.
+            // if the checkbox is not active then give true regardless
+            (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
+          // add the circleEncounters to the allEncountersGroup
+          circleEncounters[i].addTo(allEncountersGroup);
+        }
+      } else {
+        deleteEncounter(currentEncounter[0]._id);
+        allEncounters.splice(i, 1);
+      }
     }
   }
-}
+
 
 
 /**
@@ -473,9 +480,10 @@ function routeCheckbox(i, checked){
   let tableCellCheckbox = document.getElementById("conseNum"+i);
 
   // add the checkbox for the route (which calls the function routeSelectionForMap(cb_id) if clicked) to the content of the "tableCellCheckbox"
-  tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" + i + "' checked onclick='routeSelectionForMap(" + i + ")' style='margin-left: 10px; margin-right: 15px;'>";
+  tableCellCheckbox.innerHTML = tableCellCheckbox.innerHTML + " <input type='checkbox' id='routeCheckbox" + i + "' onclick='routeSelectionForMap(" + i + ")' style='margin-left: 10px; margin-right: 15px;'" +
+      ((checked) ? "checked" : "") +
+      ">";
 
-  document.getElementById("routeCheckbox" + i).checked = checked;
 }
 
 
