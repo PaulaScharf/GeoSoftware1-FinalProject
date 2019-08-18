@@ -142,7 +142,7 @@ class WeatherRequest
 * information (terrain and country) for a specific encounter.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param encounter - the encounter for which a request is to be made
+* @param encounter {object} - the encounter for which a request is to be made
 */
 function getNewTerrainRequest(encounter) {
   console.log("New terrain request.");
@@ -194,8 +194,8 @@ function getNewTerrainRequest(encounter) {
 * This function writes the request-results of the geonames-XMLHttpRequest into the encounters-table.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param response - response of the request
-* @param id - the index of the encounter in the global encounters-array ("allEncounters")
+* @param response {object} - response of the request
+* @param id {number} - the index of the encounter in the global encounters-array ("allEncounters")
 */
 function writeRequestResultsIntoTable(response, id) {
   // show the terrain or possible errors in the encounters table
@@ -223,8 +223,8 @@ function writeRequestResultsIntoTable(response, id) {
 /**
  * This function calls the '/encounter/create' route with ajax, to save a given encounter in the database.
  * @author Paula Scharf, matr.: 450334
- * @param encounter - the encounter to be saved
- * @param id - the index of the encounter in the global encounters-array ("allEncounters")
+ * @param encounter {object} - the encounter to be saved
+ * @param id {number} - the index of the encounter in the global encounters-array ("allEncounters")
  */
 function postEncounter(encounter, id) {
 

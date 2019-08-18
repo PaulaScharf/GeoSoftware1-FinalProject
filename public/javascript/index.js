@@ -674,7 +674,7 @@ function onlyShowConfirmed() {
  * This function makes an AJAX-request in order to update an encounter in the database.
  * @private
  * @author Paula Scharf, matr.: 450334
- * @param {object} encounter -
+ * @param {object} encounter - the encounter to be posted
  */
 function updateEncounter(encounter) {
 
@@ -768,8 +768,8 @@ function routeSelectionForMap(cb_id){
  * This function returns all IDs of encounters which have to be removed because a route was deselected.
  * @private
  * @author Paula Scharf, matr.: 450334
- * @param routeId           id of affected route
- * @returns {array} result  ids of affected encounters
+ * @param routeId        {number} -  id of affected route
+ * @returns {array} result - ids of affected encounters
  */
 function encountersToBeRemoved(routeId) {
   let result = [];
@@ -789,7 +789,7 @@ function encountersToBeRemoved(routeId) {
  * This function returns all IDs of encounters which have to be added because a route was reselected.
  * @private
  * @author Paula Scharf, matr.: 450334
- * @param routeId           id of affected route
+ * @param routeId      {number}    - id of affected route
  * @returns {array} result  ids of affected encounters
  */
 function encountersToBeAdded(routeId) {

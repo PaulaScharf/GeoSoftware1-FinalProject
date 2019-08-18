@@ -92,8 +92,8 @@ function processResult() {
 * This function shows a route in its corresponding table (animal or user) and in the map.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param {object} currentRoute -
-* @param {number} counter -
+* @param {object} currentRoute - the route to be shown
+* @param {number} counter - the id of the route (either 1 or 2 because there are only two routes on this page)
 */
 function showRoute(currentRoute, counter) {
 
@@ -123,7 +123,7 @@ function showRoute(currentRoute, counter) {
 * This function shows an encounter in the map and the table.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param {object} encounter -
+* @param {object} encounter - the encounter to be shown
 */
 function showEncounter(encounter) {
 

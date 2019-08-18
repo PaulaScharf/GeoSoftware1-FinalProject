@@ -68,9 +68,10 @@ function getAllRoutes() {
 /**
 * This route checks, if the AJAX-response contains a new route.
 * If the route is new, then the encounters are calculated for it.
-* @param {object} response          the response of the ajax-request in readRoutesEncounters.js
-* @param checkForUpdates   if true, also delete the old encounters associated with a new route
-* @author Paula Scharf, matr.: 450334
+ * @private
+ * @author Paula Scharf, matr.: 450334
+* @param response    {object} -      the response of the ajax-request in readRoutesEncounters.js
+* @param checkForUpdates {boolean} -  if true, also delete the old encounters associated with a new route
 */
 function checkForNewRoute(response, checkForUpdates) {
   alreadyKnownRoutes = [];
@@ -109,8 +110,9 @@ function checkForNewRoute(response, checkForUpdates) {
 
 /**
 * This function deletes all encounters which are associated to the route with the given ID.
-* @param routeId - the ID of the route
-* @author Paula Scharf, matr.: 450334
+ * @private
+ * @author Paula Scharf, matr.: 450334
+* @param routeId {number} - the ID of the route
 */
 function deleteAllEncountersOfRoute(routeId) {
 
@@ -141,9 +143,9 @@ function deleteAllEncountersOfRoute(routeId) {
 
 /**
 * This function calculates all encounters of a given route with all other routes.
-* @param oneRoute        -  a route (only the coordinates)
-* @param oneId           -  ID of oneRoute
-* @param checkForUpdates -
+* @param oneRoute       {Array} -  a route (only the coordinates)
+* @param oneId          {number} -  ID of oneRoute
+* @param checkForUpdates {boolean} -  indicates wether this function was also called to recalculate updated routes
 * @author Paula Scharf, matr.: 450334
 */
 function calculateEncounters(oneRoute, oneId, checkForUpdates) {
@@ -161,11 +163,11 @@ function calculateEncounters(oneRoute, oneId, checkForUpdates) {
 /**
 * This function calculates encounters between two routes and posts them to the database (and if needed adds the to
 * the "allEncounters"-Array.
-* @param firstRoute        a route (only the coordinates)
-* @param secondRoute       a second route (only the coordinates)
-* @param firstId           ID of the first route
-* @param secondId          ID of the second route
-* @param checkForUpdates   if true, add the new encounter to the allEncounters-array
+* @param firstRoute        {Array} - a route (only the coordinates)
+* @param secondRoute       {Array} - a second route (only the coordinates)
+* @param firstId           {number} - ID of the first route
+* @param secondId          {number} - ID of the second route
+* @param checkForUpdates   {boolean} - if true, add the new encounter to the allEncounters-array
 * @author Paula Scharf, matr.: 450334
 */
 function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkForUpdates) {
@@ -225,8 +227,8 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
 /**
 * This function calls the '/encounter/create' route with AJAX, to save a given encounter in the database.
 * @author Paula Scharf, matr.: 450334
- * @param encounter - the encounter to be saved
- * @param id - the index of the encounter in the global encounters-array ("allEncounters")
+ * @param encounter {object} - the encounter to be saved
+ * @param id {object} - the index of the encounter in the global encounters-array ("allEncounters")
  */
 function postEncounter(encounter, id) {
 
@@ -268,8 +270,9 @@ function postEncounter(encounter, id) {
 
 /**
 * This function calls the '/encounter/delete' route with AJAX, to delete an encounter with a given ID from the database.
-* @param encounterId   - the ID of the encounter
-* @author Paula Scharf, matr.: 450334
+ * @private
+ * @author Paula Scharf, matr.: 450334
+* @param encounterId {number}  - the ID of the encounter
 */
 function deleteEncounter(encounterId) {
 
@@ -307,8 +310,9 @@ function deleteEncounter(encounterId) {
 
 /**
 * This function calls the '/encounter/update' route with AJAX, to update a route in the database.
-* @param route - the new route
-* @author Paula Scharf, matr.: 450334
+ * @private
+ * @author Paula Scharf, matr.: 450334
+* @param route {object} - the new route
 */
 function updateStatusFromNewToOld(route) {
 
