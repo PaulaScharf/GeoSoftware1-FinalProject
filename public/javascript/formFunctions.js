@@ -14,7 +14,7 @@
 * It is called whenever the content of an element of the form changes or a key is pressed inside the element.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param specificForm ID of the form to check
+* @param {string} specificForm ID of the form to check
 */
 function checkform(specificForm) {
 
@@ -74,7 +74,7 @@ function checkTimestamp() {
 * This function resets the search, if the textfields for the search were edited.
 * @private
 * @author Paula Scharf, matr.: 450 334
-* @param {String} madeBy - indicates if the animal- or user-search was edited
+* @param {string} madeBy - indicates if the animal- or user-search was edited
 */
 function searchEdited(madeBy) {
   // if the function is called from the animal-searchbar, then select the animal-search-checkbox, otherwise the

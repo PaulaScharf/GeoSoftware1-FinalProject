@@ -18,6 +18,15 @@ padding: 5px 10px;
 text-align: center;
 }
 
+button:disabled, input[type="submit"]:disabled {
+background-color: #e6e6e6;
+border: none;
+color: #a1a1a1;
+font-size: 16px;
+padding: 5px 10px;
+text-align: center;
+}
+
 caption, td {
   text-align: left;
 }

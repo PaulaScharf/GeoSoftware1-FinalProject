@@ -15,8 +15,8 @@
 * and returns one array containing arrays with the routes' coordinates as lat-long-pairs.
 *
 * @author Katharina Poppinga, matr.: 450146
-* @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
-* @return latLongCoordinatesRoute - one array containing arrays with the coordinates of the route as lat-long-pairs
+* @param {array} longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
+* @return {array} latLongCoordinatesRoute: one array containing arrays with the coordinates of the route as lat-long-pairs
 */
 function swapGeoJSONsLongLatToLatLongOrder_Arrays(longLatCoordinatesRoute){
 
@@ -48,8 +48,8 @@ function swapGeoJSONsLongLatToLatLongOrder_Arrays(longLatCoordinatesRoute){
 * and returns one array containing objects (not arrays!) with the routes' coordinates as lat-long-pairs.
 *
 * @author Katharina Poppinga, matr.: 450146
-* @param longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
-* @return latLongCoordinatesRoute - one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
+* @param {array} longLatCoordinatesRoute - coordinates of a route as valid GeoJSON (just the geometry.coordinates-part, array containing arrays)
+* @return {array} latLongCoordinatesRoute: one array containing objects (not arrays!) with the coordinates of the route as lat-long-pairs
 */
 function swapGeoJSONsLongLatToLatLongOrder_Objects(longLatCoordinatesRoute){
 

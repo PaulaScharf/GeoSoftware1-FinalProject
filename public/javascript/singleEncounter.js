@@ -92,8 +92,8 @@ function processResult() {
 * This function shows a route in its corresponding table (animal or user) and in the map.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param currentRoute
-* @param counter
+* @param {object} currentRoute -
+* @param {number} counter -
 */
 function showRoute(currentRoute, counter) {
 
@@ -123,7 +123,7 @@ function showRoute(currentRoute, counter) {
 * This function shows an encounter in the map and the table.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param encounter
+* @param {object} encounter -
 */
 function showEncounter(encounter) {
 
@@ -138,7 +138,7 @@ function showEncounter(encounter) {
 * This function fills the encounters table.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param currentEncounter - the to be shown encounter
+* @param {object} currentEncounter - the to be shown encounter
 */
 function fillEncountersTable(currentEncounter) {
   createSingleEncounterTable(currentEncounter.intersectionX, currentEncounter.intersectionY, 0, "encountersTable");
@@ -146,7 +146,7 @@ function fillEncountersTable(currentEncounter) {
   // if the encounter is new, then create a new weather request and a new terrain request
   currentEncounter.weather = new WeatherRequest([currentEncounter.intersectionX, currentEncounter.intersectionY], 0);
   if (typeof currentEncounter.terrain === 'undefined') {
-    getNewTerrainRequest(currentEncounter, 0);
+    getNewTerrainRequest(currentEncounter);
   } else {
     writeRequestResultsIntoTable(currentEncounter.terrain, 0);
   }
@@ -157,7 +157,7 @@ function fillEncountersTable(currentEncounter) {
 * This function fills the map with the given encounter.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param currentEncounter - the to be shown encounter
+* @param {object} currentEncounter - the to be shown encounter
 */
 function fillEncountersMap(currentEncounter) {
   // loop "over" all encounters in the current database "routeDB"

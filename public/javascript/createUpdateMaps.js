@@ -17,7 +17,7 @@
 *
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param specificMap ID of a leaflet-map (createMap oder updateMap)
+* @param {string} specificMap - ID of a leaflet-map (createMap oder updateMap)
 */
 function showMapData(specificMap) {
 

@@ -16,6 +16,7 @@ let appender = JL.createAjaxAppender("Appender");
 appender.setOptions({
   "maxBatchSize": 100
 });
+
 JL().setOptions({
   "appenders": [appender]
 });
@@ -32,8 +33,8 @@ class WeatherRequest
 {
   /**
    * @desc This is the constructor of the class WeatherRequest.
-   * @param intersection {Array} - the coordinates of the encounter
-   * @param id {number} - the id of the encounter
+   * @param {array} intersection - the coordinates of the encounter
+   * @param {number} id - the id of the encounter
    */
   constructor(intersection, id)
   {
@@ -141,11 +142,10 @@ class WeatherRequest
 * information (terrain and country) for a specific encounter.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param encounter
-* @param id
+* @param encounter - the encounter for which a request is to be made
 */
-function getNewTerrainRequest(encounter, id) {
-  console.log("new terrain request");
+function getNewTerrainRequest(encounter) {
+  console.log("New terrain request.");
 
   let lat = encounter.intersectionX;
   let long = encounter.intersectionY;
@@ -157,7 +157,6 @@ function getNewTerrainRequest(encounter, id) {
   let xx = new XMLHttpRequest();
   xx.writeRequestResultsIntoTable = writeRequestResultsIntoTable;
   xx.postEncounter = postEncounter;
-  xx.id = id;
   xx.encounter = encounter;
   xx.onload = function () {
 
@@ -195,8 +194,8 @@ function getNewTerrainRequest(encounter, id) {
 * This function writes the request-results of the geonames-XMLHttpRequest into the encounters-table.
 * @private
 * @author Paula Scharf, matr.: 450334
-* @param response
-* @param id
+* @param response - response of the request
+* @param id - the index of the encounter in the global encounters-array ("allEncounters")
 */
 function writeRequestResultsIntoTable(response, id) {
   // show the terrain or possible errors in the encounters table

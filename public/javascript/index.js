@@ -155,7 +155,7 @@ function getAndShowData() {
 /**
  * This function takes the response of the AJAX-request for getting all routes and writes it into to global array "allRoutes".
  * @author Paula Scharf, matr.: 450334
- * @param response - response of the ajax-request for getting all routes
+ * @param {object} response - response of the ajax-request for getting all routes
  */
 function writeAllRoutesInTheGlobalArray(response) {
 
@@ -176,7 +176,6 @@ function writeAllRoutesInTheGlobalArray(response) {
  * @author Katharina Poppinga, matr.: 450146
  */
 function showAllRoutesOnMainPage() {
-
   fillRoutesTable();
   fillRoutesMap();
 }
@@ -322,7 +321,7 @@ function getAllEncountersAndShow() {
 /**
  * This function takes the response of the AJAX-request for getting all encounters and writes it into to global array "allEncounters".
  * @author Paula Scharf, matr.: 450334
- * @param response - response of the ajax-request for getting all encounters
+ * @param {object} response - response of the ajax-request for getting all encounters
  */
 function writeAllEncountersInTheGlobalArray(response) {
 
@@ -435,7 +434,7 @@ function fillEncountersMap() {
             allRoutes[currentEncounter[2].firstRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].firstRoute][0].creator);
         let agent_2 = ((allRoutes[currentEncounter[2].secondRoute][0].madeBy === "animal") ?
             allRoutes[currentEncounter[2].secondRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].secondRoute][0].creator);
-        currentCircle.bindPopup("encounter number " + (i + 1) + " between " + agent_1 + " and " + agent_2);
+        currentCircle.bindPopup("Encounter number " + (i + 1) + " between user '" + agent_1 + "' and user '" + agent_2 + "'.");
         // add the circle to the array circleEncounters
         circleEncounters.push(currentCircle);
         if (currentEncounter[1].routesSelected &&
@@ -502,7 +501,7 @@ function deleteButton(i){
  * Also deletes all encounters with that route from the database and the main page
  * @private
  * @author Paula Scharf, matr.: 450334
- * @param id {String} - the id of the route in the database
+ * @param {string} id - the id of the route in the database
  */
 function deleteRoute(id) {
 
@@ -675,7 +674,7 @@ function onlyShowConfirmed() {
  * This function makes an AJAX-request in order to update an encounter in the database.
  * @private
  * @author Paula Scharf, matr.: 450334
- * @param encounter
+ * @param {object} encounter -
  */
 function updateEncounter(encounter) {
 
@@ -770,7 +769,7 @@ function routeSelectionForMap(cb_id){
  * @private
  * @author Paula Scharf, matr.: 450334
  * @param routeId           id of affected route
- * @returns {Array} result  ids of affected encounters
+ * @returns {array} result  ids of affected encounters
  */
 function encountersToBeRemoved(routeId) {
   let result = [];
@@ -791,7 +790,7 @@ function encountersToBeRemoved(routeId) {
  * @private
  * @author Paula Scharf, matr.: 450334
  * @param routeId           id of affected route
- * @returns {Array} result  ids of affected encounters
+ * @returns {array} result  ids of affected encounters
  */
 function encountersToBeAdded(routeId) {
   let result = [];
@@ -929,7 +928,7 @@ function searchEncounters(madeBy, searchCheckbox) {
  * Gets the position of the searched for routes in the allRoutes-array.
  * @author Paula Scharf, matr.: 450334
  * @param {object} input - the search parameters
- * @returns {Array} result - an array of indices
+ * @returns {array} an array of indices
  */
 function searchForRouteIds(input) {
   let result = [];

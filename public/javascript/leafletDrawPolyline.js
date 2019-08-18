@@ -18,10 +18,10 @@
 * This function uses leaflet.draw.
 * @private
 * @author Katharina Poppinga, matr.: 450146
-* @param map leaflet-map, in which the polyline shall be drawn (map, in which leaflet.draw shall be integrated)
-* @param outputTextarea ID of the textarea in which the new drawn polyline shall be written as a GeoJSON string
-* @param polylineOfOldRoute just used, if parameter 'map' has the value "updateMap": old route as a polyline
-* @param oldRouteGeoJSON just used, if parameter 'map' has the value "updateMap": old route as a GeoJSON
+* @param {map} map leaflet-map, in which the polyline shall be drawn (map, in which leaflet.draw shall be integrated)
+* @param {String} outputTextarea ID of the textarea in which the new drawn polyline shall be written as a GeoJSON string
+* @param {polyline} polylineOfOldRoute just used, if parameter 'map' has the value "updateMap": old route as a polyline
+* @param {object} oldRouteGeoJSON just used, if parameter 'map' has the value "updateMap": old route as a GeoJSON
 */
 function drawPolyline(map, outputTextarea, polylineOfOldRoute, oldRouteGeoJSON) {
 

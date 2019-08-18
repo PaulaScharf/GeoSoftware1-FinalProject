@@ -68,7 +68,7 @@ function getAllRoutes() {
 /**
 * This route checks, if the AJAX-response contains a new route.
 * If the route is new, then the encounters are calculated for it.
-* @param response          the response of the ajax-request in readRoutesEncounters.js
+* @param {object} response          the response of the ajax-request in readRoutesEncounters.js
 * @param checkForUpdates   if true, also delete the old encounters associated with a new route
 * @author Paula Scharf, matr.: 450334
 */
@@ -84,19 +84,14 @@ function checkForNewRoute(response, checkForUpdates) {
     };
 
     if (currentRoute[0].status === "new") {
-      console.log("new");
-      console.log(alreadyKnownRoutes);
       // calculate the encounters with other routes
       calculateEncounters(currentRoute[0].geoJson.features[0].geometry.coordinates, currentRoute[0]._id, checkForUpdates);
       // after the encounters of a route are calculated, its status is set to old
       updateStatusFromNewToOld(route);
     }
     else if (currentRoute[0].status === "updated") {
-      console.log("updated");
       let temp = alreadyKnownRoutes;
-      console.log(temp);
       alreadyKnownRoutes = response;
-
       deleteAllEncountersOfRoute(currentRoute[0]._id);
       // calculate the encounters with other routes
       calculateEncounters(currentRoute[0].geoJson.features[0].geometry.coordinates, currentRoute[0]._id, checkForUpdates);
@@ -221,9 +216,8 @@ function intersectionOfRoutes(firstRoute, secondRoute, firstId, secondId, checkF
     if (typeof allEncounters !== "undefined") {
       index = allEncounters.length-1;
     }
-    console.log("retrieve the terrain and post encounter");
     // save the new encounter in the database
-    getNewTerrainRequest(copyOfEncounter, index);
+    getNewTerrainRequest(copyOfEncounter);
   });
 }
 
