@@ -140,9 +140,13 @@
         <table class="table">
           <thead class="thead-dark" id="encounterTableHead">
           <tr>
-            <th rowspan="2">Consecutive number of encounter</th>
-            <th rowspan="2">Number of first route</th>
-            <th rowspan="2">Number of second route</th>
+            <th colspan="1" align="center">
+              <div style="white-space:nowrap">
+                <input type='checkbox' id='dontShowAnimalsCheckbox' name="dontShowAnimalsCheckbox" onclick="dontShowAnimalEncounters()">
+                <label for="showConfirmedCheckbox">dont show encounters between animals</label>
+              </div></th>
+            <th colspan="2" align="center">First route</th>
+            <th colspan="2" align="center">Second route</th>
             <th colspan="2" align="center">Context information</th>
             <th colspan="1" align="center">
               <div style="white-space:nowrap">
@@ -153,6 +157,11 @@
             <th rowspan="2">Share Encounter</th>
           </tr>
           <tr>
+            <th>Consecutive number of encounter</th>
+            <th>Number</th>
+            <th>Made by</th>
+            <th>Number</th>
+            <th>Made by</th>
             <th>Country</th>
             <th>Terrain</th>
             <th>Confirm encounter</th>

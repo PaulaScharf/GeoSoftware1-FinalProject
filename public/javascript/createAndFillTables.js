@@ -112,9 +112,12 @@ function createAnimalRouteTable(insertFirst, insertSecond, insertThird, insertFo
 * @param insertFirst - first value, to write in first new created cell
 * @param insertSecond - second value, to write in second new created cell
 * @param insertThird - third value, to write in third new created cell
+* @param insertFourth - fourth value, to write in third new created cell
+* @param insertFifth - fifth value, to write in third new created cell
 * @param {string} tableBodyID - ID of the tbody to which to append the new created row and cells
+ *
 */
-function createEncountersTable(insertFirst, insertSecond, insertThird, tableBodyID) {
+function createEncountersTable(insertFirst, insertSecond, insertThird, insertFourth, insertFifth, tableBodyID) {
 
   // create new table row and seven new table cells and write corresponding values into them
   let row = document.createElement("tr");
@@ -128,15 +131,21 @@ function createEncountersTable(insertFirst, insertSecond, insertThird, tableBody
   thirdValue.innerHTML = insertThird;
   thirdValue.style.cssText = textAlign;
   let fourthValue = document.createElement("td");
-  fourthValue.setAttribute("id", "country" + insertFirst);
+  fourthValue.innerHTML = insertFourth;
+  fourthValue.style.cssText = textAlign;
   let fifthValue = document.createElement("td");
-  fifthValue.setAttribute("id", "terrain" + insertFirst);
+  fifthValue.innerHTML = insertFifth;
+  fifthValue.style.cssText = textAlign;
   let sixthValue = document.createElement("td");
-  sixthValue.setAttribute("id", "confirm" + insertFirst);
-  sixthValue.style.cssText = textAlign;
+  sixthValue.setAttribute("id", "country" + insertFirst);
   let seventhValue = document.createElement("td");
-  seventhValue.setAttribute("id", "share" + insertFirst);
-  seventhValue.style.cssText = textAlign;
+  seventhValue.setAttribute("id", "terrain" + insertFirst);
+  let eighthValue = document.createElement("td");
+  eighthValue.setAttribute("id", "confirm" + insertFirst);
+  eighthValue.style.cssText = textAlign;
+  let ninthValue = document.createElement("td");
+  ninthValue.setAttribute("id", "share" + insertFirst);
+  ninthValue.style.cssText = textAlign;
 
   // append new row and seven new cells to given table
   document.getElementById(tableBodyID).appendChild(row);
@@ -147,6 +156,8 @@ function createEncountersTable(insertFirst, insertSecond, insertThird, tableBody
   row.appendChild(fifthValue);
   row.appendChild(sixthValue);
   row.appendChild(seventhValue);
+  row.appendChild(eighthValue);
+  row.appendChild(ninthValue);
 }
 
 

@@ -35,6 +35,11 @@ let allRoutes = [];
  */
 let allEncounters = [];
 
+/**
+ * Global variable that indicates if the checkbox for not showing encounters between animals is checked.
+ * @type {boolean}
+ */
+let noAnimals = false;
 
 /**
  * Global variable that indicates if the checkbox for only showing confirmed encounters is checked.
@@ -379,19 +384,24 @@ function fillEncountersTable() {
   // fill the table
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    if ((typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined") && (typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined")) {
+    let firstRoute = allRoutes[currentEncounter[2].firstRoute];
+    let secondRoute = allRoutes[currentEncounter[2].secondRoute];
+    if ((typeof firstRoute !== "undefined") && (typeof secondRoute !== "undefined")) {
       // only show encounters, which are also shown on the map
       if (currentEncounter[1].routesSelected &&
           (currentEncounter[1].search === "no search" || currentEncounter[1].search === "searched for") &&
           // if the "show confirmed" checkbox is active then check if the encounter is confirmed/ took place.
           // if the checkbox is not active then give true regardless
-          (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
-        createEncountersTable(i, currentEncounter[2].firstRoute + 1, currentEncounter[2].secondRoute + 1, "encountersTable");
+          (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true) &&
+          //
+          (noAnimals ? (firstRoute[0].madeBy !== "animal" || secondRoute[0].madeBy !== "animal") : true)) {
+        createEncountersTable(i, currentEncounter[2].firstRoute + 1, firstRoute[0].madeBy,
+            currentEncounter[2].secondRoute + 1, secondRoute[0].madeBy, "encountersTable");
         if (typeof currentEncounter[0].terrain !== 'undefined') {
           writeRequestResultsIntoTable(currentEncounter[0].terrain, i);
         }
-        let isFirstPlanned = (allRoutes[currentEncounter[2].firstRoute][0].type === "planned");
-        let isSecondPlanned = (allRoutes[currentEncounter[2].secondRoute][0].type === "planned");
+        let isFirstPlanned = (firstRoute[0].type === "planned");
+        let isSecondPlanned = (secondRoute[0].type === "planned");
 
         encounterCheckbox(i, (isFirstPlanned || isSecondPlanned));
         shareButton(i);
@@ -421,17 +431,19 @@ function fillEncountersMap() {
   // loop "over" all encounters in the current database "routeDB"
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    if ((typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined") && (typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined")) {
+    let firstRoute = allRoutes[currentEncounter[2].firstRoute];
+    let secondRoute = allRoutes[currentEncounter[2].secondRoute];
+    if ((typeof firstRoute !== "undefined") && (typeof secondRoute !== "undefined")) {
         // if the encounter took place color it green, otherwise blue
         let color = (currentEncounter[0].tookPlace === "yes") ? "#009d42" : "#000bec";
 
         // make a circle out of the current encounter
         let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY],
             {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
-        let agent_1 = ((allRoutes[currentEncounter[2].firstRoute][0].madeBy === "animal") ?
-            allRoutes[currentEncounter[2].firstRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].firstRoute][0].creator);
-        let agent_2 = ((allRoutes[currentEncounter[2].secondRoute][0].madeBy === "animal") ?
-            allRoutes[currentEncounter[2].secondRoute][0].individualTaxonCanonicalName : allRoutes[currentEncounter[2].secondRoute][0].creator);
+        let agent_1 = ((firstRoute[0].madeBy === "animal") ?
+            firstRoute[0].individualTaxonCanonicalName : firstRoute[0].creator);
+        let agent_2 = ((secondRoute[0].madeBy === "animal") ?
+            secondRoute[0].individualTaxonCanonicalName : secondRoute[0].creator);
         currentCircle.bindPopup("Encounter number " + (i + 1) + " between user '" + agent_1 + "' and user '" + agent_2 + "'.");
         // add the circle to the array circleEncounters
         circleEncounters.push(currentCircle);
@@ -439,7 +451,11 @@ function fillEncountersMap() {
             (currentEncounter[1].search === "no search" || currentEncounter[1].search === "searched for") &&
             // if the "show confirmed" checkbox is active then check if the encounter is confirmed/ took place.
             // if the checkbox is not active then give true regardless
-            (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
+            (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true) &&
+            // if the "dont show encounters between animals" checkbox is active then check that atleast one of the
+            // corresponding routes was not made by an animal.
+            // if the checkbox is not active then give true regardless
+            (noAnimals ? (firstRoute[0].madeBy !== "animal" || secondRoute[0].madeBy !== "animal") : true)) {
           // add the circleEncounters to the allEncountersGroup
           currentCircle.addTo(allEncountersGroup);
         }
@@ -642,6 +658,23 @@ function encounterConfirm(cb_id) {
   fillEncountersMap();
 }
 
+/**
+ * This function comes into play when the "dont show encounters between animals" checkbox is being checked.
+ * It makes sure that only the encounters that are not solely between animals are being shown in the map and in the table.
+ * @private
+ * @author Paula Scharf, matr.: 450334
+ */
+function dontShowAnimalEncounters() {
+
+  let checkbox = document.getElementById("dontShowAnimalsCheckbox");
+  if (checkbox.checked === true) {
+    noAnimals = true;
+    showEncountersOnMainPage();
+  } else {
+    noAnimals = false;
+    showEncountersOnMainPage();
+  }
+}
 
 /**
  * This function comes into play when the "show confirmed" checkbox is being checked.
@@ -788,13 +821,27 @@ function encountersToBeAdded(routeId) {
 
   for (let i = 0; i < allEncounters.length; i++) {
     let currentEncounter = allEncounters[i];
-    if ((typeof allRoutes[currentEncounter[2].firstRoute] !== "undefined") && (typeof allRoutes[currentEncounter[2].secondRoute] !== "undefined")) {
+    let firstRoute = allRoutes[currentEncounter[2].firstRoute];
+    let secondRoute = allRoutes[currentEncounter[2].secondRoute];
+    if ((typeof firstRoute !== "undefined") && (typeof secondRoute !== "undefined")) {
       // only routes which belong to the selected route and one other selected route have to be added
-      if (currentEncounter[2].firstRoute === routeId && allRoutes[currentEncounter[2].secondRoute][1] &&
-          (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
+      if (currentEncounter[2].firstRoute === routeId && secondRoute[1] &&
+          // if the "show confirmed" checkbox is active then check if the encounter is confirmed/ took place.
+          // if the checkbox is not active then give true regardless
+          (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true) &&
+          // if the "dont show encounters between animals" checkbox is active then check that atleast one of the
+          // corresponding routes was not made by an animal.
+          // if the checkbox is not active then give true regardless
+          (noAnimals ? (firstRoute[0].madeBy !== "animal" || secondRoute[0].madeBy !== "animal") : true)) {
         result.push(i);
-      } else if (currentEncounter[2].secondRoute === routeId && allRoutes[currentEncounter[2].firstRoute][1] &&
-          (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true)) {
+      } else if (currentEncounter[2].secondRoute === routeId && firstRoute[1] &&
+          // if the "show confirmed" checkbox is active then check if the encounter is confirmed/ took place.
+          // if the checkbox is not active then give true regardless
+          (confirmActive ? (currentEncounter[0].tookPlace === "yes") : true) &&
+          // if the "dont show encounters between animals" checkbox is active then check that atleast one of the
+          // corresponding routes was not made by an animal.
+          // if the checkbox is not active then give true regardless
+          (noAnimals ? (firstRoute[0].madeBy !== "animal" || secondRoute[0].madeBy !== "animal") : true)) {
         result.push(i);
       }
     } else {

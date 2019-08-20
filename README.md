@@ -15,7 +15,7 @@ MUSS NOCH GEPUSHT WERDEN !!
 1. install node v10.xx and MongoDB v4.xx on your local machine
 2. run ``npm install`` in the terminal (from project-folder)
 3. run ``npm start`` in the terminal (from project-folder)
-4. open [localhost:3000](localhost:3000) in a browser
+4. open [localhost:3000](http://localhost:3000) in a browser
 
 ## How to construct and use your own API-keys
 
