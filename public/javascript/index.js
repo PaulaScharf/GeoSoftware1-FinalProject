@@ -444,7 +444,9 @@ function fillEncountersMap() {
             firstRoute[0].individualTaxonCanonicalName : firstRoute[0].creator);
         let agent_2 = ((secondRoute[0].madeBy === "animal") ?
             secondRoute[0].individualTaxonCanonicalName : secondRoute[0].creator);
-        currentCircle.bindPopup("Encounter number " + (i + 1) + " between user '" + agent_1 + "' and user '" + agent_2 + "'.");
+        let form = "<div>Encounter number " + (i + 1) + " between user '" + agent_1 + "' and user '" + agent_2 + "'.</div>" +
+            createButtonForm(i);
+        currentCircle.bindPopup(form);
         // add the circle to the array circleEncounters
         circleEncounters.push(currentCircle);
         if (currentEncounter[1].routesSelected &&
@@ -595,22 +597,35 @@ function shareButton(bt_id) {
   let tableCellButton = document.getElementById("share"+bt_id);
 
   if(tableCellButton) {
-    let ids = {
-      e_id: allEncounters[bt_id][0]._id,
-      r1_id: allRoutes[allEncounters[bt_id][2].firstRoute][0]._id,
-      r2_id: allRoutes[allEncounters[bt_id][2].secondRoute][0]._id,
-    };
-
     // add the share-button (which calls '/getSingleEncounter') to the content of the "tableCellButton"
-    tableCellButton.innerHTML = "<form action='/getSingleEncounter' method='GET' name='shareForm'>" +
-        "<input type='hidden' name='e_id' value='" + ids.e_id + "'/>" +
-        "<input type='hidden' name='r1_id' value='" + ids.r1_id + "'/>" +
-        "<input type='hidden' name='r2_id' value='" + ids.r2_id + "'/>" +
-        "<input type='submit' value='share' id='sharebutton" + bt_id + "'/>" +
-        "</form>";
+    tableCellButton.innerHTML = createButtonForm(bt_id);
   }
 }
 
+/**
+ * This function creates a form for a button for sharing an encounter.
+ * @private
+ * @author Paula Scharf, matr.: 450334
+ * @param i {number} - the position of the encounter in the allEncounters-Array
+ * @returns {string} - the form for the button
+ */
+function createButtonForm(i) {
+    let ids = {
+      e_id: allEncounters[i][0]._id,
+      r1_id: allRoutes[allEncounters[i][2].firstRoute][0]._id,
+      r2_id: allRoutes[allEncounters[i][2].secondRoute][0]._id,
+    };
+
+    // add the share-button (which calls '/getSingleEncounter') to the content of the "tableCellButton"
+    return "<div style='text-align: center'>" +
+        "<form action='/getSingleEncounter' method='GET' name='shareForm'>" +
+        "<input type='hidden' name='e_id' value='" + ids.e_id + "'/>" +
+        "<input type='hidden' name='r1_id' value='" + ids.r1_id + "'/>" +
+        "<input type='hidden' name='r2_id' value='" + ids.r2_id + "'/>" +
+        "<input type='submit' value='share' id='sharebutton" + i + "'/>" +
+        "</form>" +
+        "</div>";
+}
 
 /**
  * This function creates the checkbox for confirming an encounter in the encounters-table.
