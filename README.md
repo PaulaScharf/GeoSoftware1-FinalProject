@@ -4,12 +4,9 @@
 #### with docker:
 1. install docker on your local machine
 2. run ``docker-compose up`` in the terminal (from project-folder)
-3.  
-4.  
+3. open [localhost:3000](http://localhost:3000) in a browser
 
 (the image was built by command ``docker build -t kpoppi/geosoftware1-final_project .``)
-
-MUSS NOCH GEPUSHT WERDEN !!
 
 #### without docker:
 1. install node v10.xx and MongoDB v4.xx on your local machine

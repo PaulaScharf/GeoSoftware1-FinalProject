@@ -166,8 +166,6 @@ function fillEncountersMap(currentEncounter) {
   let currentCircle = L.circle([currentEncounter.intersectionX, currentEncounter.intersectionY],
     {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
 
-    //add the circle to the array circleEncounters
-    //circleEncounters.push(currentCircle);
     currentCircle.addTo(encountersGroup);
     encountersMap.fitBounds(currentCircle.getBounds());
   }

@@ -58,12 +58,12 @@
                 <table class="table">
                     <thead class="thead-dark" id="userRoutesTableHead">
                     <tr>
-                        <th>Consecutive number of route</th>
+                        <th>Consecutive Number</th>
                         <th>Username</th>
-                        <th>Name of route</th>
+                        <th>Name Of Route</th>
                         <th>Date</th>
                         <th>Time</th>
-                        <th>Type of route</th>
+                        <th>Type Of Route</th>
                     </tr>
                     </thead>
                     <tbody id="routesTable">
@@ -78,10 +78,10 @@
         <div class="col-lg-5">
             <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Filter User Routes</h3>
             Username:
-            <input type="text" id="searchRouteUser" placeholder="Search users of routes" title="Type in a username" onkeyup="searchEdited('user')" autocomplete="off">
+            <input type="text" id="searchRouteUser" placeholder="Filter users of routes" title="Type in a username" onkeyup="searchEdited('user')" autocomplete="off">
             <br>
             Name of route:
-            <input type="text" id="searchRouteName" placeholder="Search names of routes" title="Type in a name" onkeyup="searchEdited('user')" autocomplete="off">
+            <input type="text" id="searchRouteName" placeholder="Filter names of routes" title="Type in a name of route" onkeyup="searchEdited('user')" autocomplete="off">
             <div>
                 <label class="switch">
                     <input type="checkbox" id="userSearchCheckbox" onchange="searchEncounters('user', this)" autocomplete="off">
@@ -100,7 +100,7 @@
                 <table class="table">
                     <thead class="thead-dark" id="animalRoutesTableHead">
                     <tr>
-                        <th>Consecutive number of route</th>
+                        <th>Consecutive Number</th>
                         <th>Study ID</th>
                         <th>Individual Taxon Canonical Name</th>
                         <th>Date</th>
@@ -119,10 +119,10 @@
         <div class="col-lg-5">
             <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Filter Animal Routes</h3>
             StudyID:
-            <input type="text" id="searchStudyID" placeholder="Search studyID" title="Type in a studyID" onkeyup="searchEdited('animal')" autocomplete="off">
+            <input type="text" id="searchStudyID" placeholder="Filter studyID" title="Type in a studyID" onkeyup="searchEdited('animal')" autocomplete="off">
             <br>
             Individual Taxon Canonical Name:
-            <input type="text" id="searchAnimalName" placeholder="Search " title="Type in a user" onkeyup="searchEdited('animal')" autocomplete="off">
+            <input type="text" id="searchAnimalName" placeholder="Filter individual taxon canonical name" title="Type in an individual taxon canonical name" onkeyup="searchEdited('animal')" autocomplete="off">
             <div>
                 <label class="switch">
                     <input type="checkbox" id="animalSearchCheckbox" onchange="searchEncounters('animal', this)" autocomplete="off">
@@ -140,18 +140,18 @@
                 <table class="table">
                     <thead class="thead-dark" id="encounterTableHead">
                     <tr>
-                        <th rowspan="2">consecutive number of encounter</th>
-                        <th colspan="2" align="center">First route</th>
-                        <th colspan="2" align="center">Second route</th>
-                        <th colspan="2" align="center">Context information</th>
+                        <th rowspan="2">Consecutive Number</th>
+                        <th colspan="2" align="center">First Route</th>
+                        <th colspan="2" align="center">Second Route</th>
+                        <th colspan="2" align="center">Context Information</th>
                         <th rowspan="2">Confirm</th>
-                        <th rowspan="2">Share Encounter</th>
+                        <th rowspan="2">Share</th>
                     </tr>
                     <tr>
                         <th>Number</th>
-                        <th>Made by</th>
+                        <th>Made By</th>
                         <th>Number</th>
-                        <th>Made by</th>
+                        <th>Made By</th>
                         <th>Country</th>
                         <th>Terrain</th>
                     </tr>
@@ -162,7 +162,7 @@
             </div>
             <div>This table shows all encounters between any of the routes above.<br>
                 Because the users do not specify timestamps for each point of their routes, the calculated encounters initially are just potential ones.
-                By marking an encounter as 'confirmed' a user can save the encounter as having actually taken place.<br>
+                By marking an encounter as confirmed a user can save the encounter as having actually taken place.<br>
                 To have some additional information, for example if you want to visit a place of these again, the terrain of the encounters' location and its country is shown.<br>
                 To share a specific encounter with other people, you can use the URL given by its 'share'-button.</div>
         </div>
@@ -171,12 +171,12 @@
             <h3 style="text-align: left; margin-left: auto; margin-right: auto;">Filter Encounters</h3>
             <div style="margin-left: 10px;">
                 <input type='checkbox' id='dontShowAnimalsCheckbox' name="dontShowAnimalsCheckbox" onclick="dontShowAnimalEncounters()">
+                 Do not show encounters between animals
             </div>
-            dont show encounters between animals
             <div style="margin-left: 10px; margin-top: 20px">
                 <input type='checkbox' id='showConfirmedCheckbox' name="showConfirmedCheckbox" onclick="onlyShowConfirmed()">
+                 Only show confirmed
             </div>
-            only show confirmed
         </div>
     </div>
 

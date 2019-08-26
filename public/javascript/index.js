@@ -127,32 +127,32 @@ function getAndShowData() {
   })
 
   // if the request is done successfully, ...
-      .done (function (response) {
+  .done (function (response) {
 
-        // ... give a notice on the console that the AJAX request for reading all routes has succeeded
-        console.log("AJAX request (reading all routes) is done successfully.");
+    // ... give a notice on the console that the AJAX request for reading all routes has succeeded
+    console.log("AJAX request (reading all routes) is done successfully.");
 
-        // ... write all requested routes in their global array
-        writeAllRoutesInTheGlobalArray(response);
+    // ... write all requested routes in their global array
+    writeAllRoutesInTheGlobalArray(response);
 
-        // ... show all routes on the main page (in table and in map)
-        showAllRoutesOnMainPage();
+    // ... show all routes on the main page (in table and in map)
+    showAllRoutesOnMainPage();
 
-        // ... request all encounters and show them on the main page (in table and in map)
-        getAllEncountersAndShow();
-      })
+    // ... request all encounters and show them on the main page (in table and in map)
+    getAllEncountersAndShow();
+  })
 
-      // if the request has failed, ...
-      .fail (function (xhr, status, error) {
+  // if the request has failed, ...
+  .fail (function (xhr, status, error) {
 
-        // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
-        console.log("AJAX request (reading all routes) has failed.", error);
+    // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
+    console.log("AJAX request (reading all routes) has failed.", error);
 
-        // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
-        if (error === "timeout") {
-          JL("ajaxReadingAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
-        }
-      });
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
+    if (error === "timeout") {
+      JL("ajaxReadingAllRoutesTimeout").fatalException("ajax: '/routes/readAll' timeout");
+    }
+  });
 }
 
 
@@ -252,12 +252,12 @@ function fillRoutesMap() {
     // if the current route is a user route ...
     if (currentRoute[0].madeBy === "user") {
       // ... add a popup to it in the map, telling its name, its creator and that it is a user route
-      polylineOfRoute.bindPopup("Route number " + (i + 1) + " has the name '" + currentRoute[0].name + "' and was created by a user with the name '" + currentRoute[0].creator + "'");
+      polylineOfRoute.bindPopup("Route number " + (i + 1) + " has the name '" + currentRoute[0].name + "' and was created by a user with the name '" + currentRoute[0].creator + "'.");
 
       // if the current route is an animal route ...
     } else {
       // ... add a popup to it in the map, telling the taxon of its animal, its studyID and that it is an animal route
-      polylineOfRoute.bindPopup("Route number " + (i + 1) + " was made by an animal with the taxon '" + currentRoute[0].individualTaxonCanonicalName + "' from the study with the ID " + currentRoute[0].study_id);
+      polylineOfRoute.bindPopup("Route number " + (i + 1) + " was made by an animal with the taxon '" + currentRoute[0].individualTaxonCanonicalName + "' from the study with the ID " + currentRoute[0].study_id + ".");
     }
 
     // add the polyline to the array polylineRoutes for being able to address the polylines(routes) by numbers (kind of IDs) (needed for checkboxes)
@@ -282,7 +282,7 @@ function fillRoutesMap() {
  * @author Paula Scharf, matr.: 450334
  */
 function getAllEncountersAndShow() {
-  //
+
   $.ajax({
     // use a http GET request
     type: "GET",
@@ -295,29 +295,29 @@ function getAllEncountersAndShow() {
   })
 
   // if the request is done successfully, ...
-      .done (function (response) {
+  .done (function (response) {
 
-        writeAllEncountersInTheGlobalArray(response);
+    writeAllEncountersInTheGlobalArray(response);
 
-        // check if a route was added or updated and adjust the encounters accordingly
-        checkForNewRoute(allRoutes, true);
+    // check if a route was added or updated and adjust the encounters accordingly
+    checkForNewRoute(allRoutes, true);
 
-        showEncountersOnMainPage();
+    showEncountersOnMainPage();
 
-        // ... give a notice on the console that the AJAX request for reading all encounters has succeeded
-        console.log("AJAX request (reading all encounters) is done successfully.");
-      })
+    // ... give a notice on the console that the AJAX request for reading all encounters has succeeded
+    console.log("AJAX request (reading all encounters) is done successfully.");
+  })
 
-      // if the request has failed, ...
-      .fail (function (xhr, status, error) {
-        // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
-        console.log("AJAX request (reading all encounters) has failed.", error);
+  // if the request has failed, ...
+  .fail (function (xhr, status, error) {
+    // ... give a notice that the AJAX request for reading all routes has failed and show the error on the console
+    console.log("AJAX request (reading all encounters) has failed.", error);
 
-        // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
-        if (error === "timeout") {
-          JL("ajaxReadingAllEncountersTimeout").fatalException("ajax: '/encounter/readAll' timeout");
-        }
-      });
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
+    if (error === "timeout") {
+      JL("ajaxReadingAllEncountersTimeout").fatalException("ajax: '/encounter/readAll' timeout");
+    }
+  });
 }
 
 
@@ -452,8 +452,7 @@ function fillEncountersMap() {
             :
             {name: secondRoute[0].creator,
               type: "user"});
-        let textAndForm = "<div>Encounter number " + (i + 1) + " between " + agent_1.type + " '" + agent_1.name
-            + "' and " + agent_2.type + " '" + agent_2.name + "'.</div>" +
+        let textAndForm = "<div>Encounter number " + (i + 1) + " between " + agent_1.type + " '" + agent_1.name + "' and " + agent_2.type + " '" + agent_2.name + "'.</div>" +
             createButtonForm(i);
         currentCircle.bindPopup(textAndForm);
         // add the circle to the array circleEncounters
@@ -541,34 +540,34 @@ function deleteRoute(id) {
   })
 
   // if the request is done successfully, ...
-      .done (function (response) {
-        // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
-        console.log("AJAX request (deleting a route) is done successfully.");
+  .done (function (response) {
+    // ... give a notice on the console that the AJAX request for pushing an encounter has succeeded
+    console.log("AJAX request (deleting a route) is done successfully.");
 
-        for (let i = 0; i < allRoutes.length; i++) {
-          let currentRoute = allRoutes[i];
-          if (currentRoute[0]._id === id) {
-            allRoutes.splice(i,1);
-            allRoutesGroup.removeLayer(polylineRoutes[i]);
-            polylineRoutes.splice(i,1);
-            i = i-1;
-          }
-        }
-        fillRoutesTable();
-        deleteAllEncountersOfRoute(id);
-        showEncountersOnMainPage();
-      })
+    for (let i = 0; i < allRoutes.length; i++) {
+      let currentRoute = allRoutes[i];
+      if (currentRoute[0]._id === id) {
+        allRoutes.splice(i,1);
+        allRoutesGroup.removeLayer(polylineRoutes[i]);
+        polylineRoutes.splice(i,1);
+        i = i-1;
+      }
+    }
+    fillRoutesTable();
+    deleteAllEncountersOfRoute(id);
+    showEncountersOnMainPage();
+  })
 
-      // if the request has failed, ...
-      .fail(function (xhr, status, error) {
-        // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
-        console.log("AJAX request (deleting a route) has failed.", error);
+  // if the request has failed, ...
+  .fail(function (xhr, status, error) {
+    // ... give a notice that the AJAX request for deleting an encounter has failed and show the error on the console
+    console.log("AJAX request (deleting a route) has failed.", error);
 
-        // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
-        if (error === "timeout") {
-          JL("ajaxDeletingEncounterTimeout").fatalException("ajax: '/routes/delete' timeout");
-        }
-      });
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
+    if (error === "timeout") {
+      JL("ajaxDeletingEncounterTimeout").fatalException("ajax: '/routes/delete' timeout");
+    }
+  });
 }
 
 
@@ -611,11 +610,12 @@ function shareButton(bt_id) {
   }
 }
 
+
 /**
  * This function creates a form for a button for sharing an encounter.
  * @private
  * @author Paula Scharf, matr.: 450334
- * @param i {number} - the position of the encounter in the allEncounters-Array
+ * @param {number} i - the position of the encounter in the allEncounters-Array
  * @returns {string} - the form for the button
  */
 function createButtonForm(i) {
@@ -635,6 +635,7 @@ function createButtonForm(i) {
         "</form>" +
         "</div>";
 }
+
 
 /**
  * This function creates the checkbox for confirming an encounter in the encounters-table.
@@ -682,6 +683,7 @@ function encounterConfirm(cb_id) {
   fillEncountersMap();
 }
 
+
 /**
  * This function comes into play when the "dont show encounters between animals" checkbox is being checked.
  * It makes sure that only the encounters that are not solely between animals are being shown in the map and in the table.
@@ -699,6 +701,7 @@ function dontShowAnimalEncounters() {
     showEncountersOnMainPage();
   }
 }
+
 
 /**
  * This function comes into play when the "show confirmed" checkbox is being checked.
@@ -741,21 +744,21 @@ function updateEncounter(encounter) {
   })
 
   // if the request is done successfully, ...
-      .done (function (response) {
-        // ... give a notice on the console that the AJAX request for ....... has succeeded
-        console.log("AJAX request (updating an encounter) is done successfully.");
-      })
+  .done (function (response) {
+    // ... give a notice on the console that the AJAX request for ....... has succeeded
+    console.log("AJAX request (updating an encounter) is done successfully.");
+  })
 
-      // if the request has failed, ...
-      .fail(function (xhr, status, error) {
-        // ... give a notice that the AJAX request for .......... has failed and show the error on the console
-        console.log("AJAX request (updating an encounter) has failed.", error);
+  // if the request has failed, ...
+  .fail(function (xhr, status, error) {
+    // ... give a notice that the AJAX request for .......... has failed and show the error on the console
+    console.log("AJAX request (updating an encounter) has failed.", error);
 
-        // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
-        if (error === "timeout") {
-          JL("ajaxUpdatingEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
-        }
-      });
+    // send JSNLog message to the own server-side to tell that this ajax-request has failed because of a timeout
+    if (error === "timeout") {
+      JL("ajaxUpdatingEncounterTimeout").fatalException("ajax: '/encounter/update' timeout");
+    }
+  });
 }
 
 
@@ -963,7 +966,7 @@ function searchEncounters(madeBy, searchCheckbox) {
 
           let checkbox = document.getElementById("routeCheckbox" + i);
           checkbox.checked = true;
-          //
+
           let ev = document.createEvent('Event');
           ev.initEvent('click', true, false);
           checkbox.dispatchEvent(ev);

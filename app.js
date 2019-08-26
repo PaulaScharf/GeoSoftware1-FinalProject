@@ -73,7 +73,7 @@ app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', '
 *
 * Try to connect to mongodb on localhost:27017 (if not using docker),
 * if not possible try to connect on mongodbservice:27017 (if using docker),
-* if not possible throw an exception/error.
+* if not possible print the error.
 *
 */
 function connectMongoDb() {
