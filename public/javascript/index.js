@@ -441,12 +441,21 @@ function fillEncountersMap() {
         let currentCircle = L.circle([currentEncounter[0].intersectionX, currentEncounter[0].intersectionY],
             {radius: 200, color: color, fillColor: color, fillOpacity: 0.5});
         let agent_1 = ((firstRoute[0].madeBy === "animal") ?
-            firstRoute[0].individualTaxonCanonicalName : firstRoute[0].creator);
+            {name: firstRoute[0].individualTaxonCanonicalName,
+              type: "animal"}
+            :
+            {name: firstRoute[0].creator,
+              type: "user"});
         let agent_2 = ((secondRoute[0].madeBy === "animal") ?
-            secondRoute[0].individualTaxonCanonicalName : secondRoute[0].creator);
-        let form = "<div>Encounter number " + (i + 1) + " between user '" + agent_1 + "' and user '" + agent_2 + "'.</div>" +
+            {name: secondRoute[0].individualTaxonCanonicalName,
+              type: "animal"}
+            :
+            {name: secondRoute[0].creator,
+              type: "user"});
+        let textAndForm = "<div>Encounter number " + (i + 1) + " between " + agent_1.type + " '" + agent_1.name
+            + "' and " + agent_2.type + " '" + agent_2.name + "'.</div>" +
             createButtonForm(i);
-        currentCircle.bindPopup(form);
+        currentCircle.bindPopup(textAndForm);
         // add the circle to the array circleEncounters
         circleEncounters.push(currentCircle);
         if (currentEncounter[1].routesSelected &&
