@@ -24,7 +24,8 @@
     "morgan": "~1.9.1",
     "popper": "^1.0.1",
     "popper.js": "^1.15.0",
-    "qunit": "^2.9.2"
+    "qunit": "^2.9.2",
+    "serve-favicon": "^2.5.0"
   },
   "description": "final project for the class 'Geosoftware I' in the summer semester 2019",
   "main": "app.js",
