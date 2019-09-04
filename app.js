@@ -65,7 +65,7 @@ app.use("/bootstrap", express.static(path.join(__dirname, 'node_modules', 'boots
 app.use("/popper", express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist')));
 app.use("/leaflet", express.static(path.join(__dirname, 'node_modules', 'leaflet', 'dist')));
 app.use("/leaflet-draw", express.static(path.join(__dirname, 'node_modules', 'leaflet-draw', 'dist')));
-app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@Turf', 'turf')));
+app.use("/turf", express.static(path.join(__dirname, 'node_modules', '@turf', 'turf')));
 app.use('/jsnlog', express.static(path.join(__dirname, 'node_modules', 'jsnlog')));
 app.use('/qunit', express.static(path.join(__dirname, 'node_modules', 'qunit', 'qunit')));
 
@@ -176,7 +176,7 @@ app.post("/jsnlog.logger", function (req, res) {
 app.post("/animalTrackingAPI/individualIds", (req, res) => {
 
   // request-resource for the following https-GET request for individualIDs of the animal tracking API
-  var resource = "https://www.movebank.org/movebank/service/json-auth?entity_type=individual&study_id=" + req.body.studyID;
+  //var resource = "https://www.movebank.org/movebank/service/json-auth?entity_type=individual&study_id=" + req.body.studyID;
 
   // loginname and password needed for authorization during the get-request
   var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
@@ -191,12 +191,15 @@ app.post("/animalTrackingAPI/individualIds", (req, res) => {
       "access-control-allow-methods": "GET, POST",
       "access-control-allow-headers": "content-type"
     },
-    // timeout set to 10 seconds
-    timeout: 10000
+    // timeout set to 20 seconds
+    timeout: 20000,
+    // request-resource for the following https-GET request for individualIDs of the animal tracking API:
+    hostname: "www.movebank.org",
+    path: "/movebank/service/json-auth?entity_type=individual&study_id=" + req.body.studyID
   };
 
   // GET animal tracking api:
-  https.get(resource, options, (httpResponse) => {
+  https.get(options, (httpResponse) => {
 
     var body = "";
 
@@ -232,7 +235,7 @@ app.post("/animalTrackingAPI/individualIds", (req, res) => {
 app.post("/animalTrackingAPI", (req, res) => {
 
   // request-resource for the following https-GET request
-  let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + req.body.studyID + "&individual_local_identifiers[]=" + req.body.individualID + "&max_events_per_individual=" + req.body.maxEventsPerIndividual + "&sensor_type=gps";
+  //let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + req.body.studyID + "&individual_local_identifiers[]=" + req.body.individualID + "&max_events_per_individual=" + req.body.maxEventsPerIndividual + "&sensor_type=gps";
 
   // loginname and password needed for authorization during the get-request
   let loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
@@ -247,12 +250,15 @@ app.post("/animalTrackingAPI", (req, res) => {
       "access-control-allow-methods": "GET, POST",
       "access-control-allow-headers": "content-type"
     },
-    // timeout set to 10 seconds
-    timeout: 10000
+    // timeout set to 20 seconds
+    timeout: 20000,
+    //
+    hostname: "www.movebank.org",
+    path: "/movebank/service/json-auth?study_id=" + req.body.studyID + "&individual_local_identifiers[]=" + req.body.individualID + "&max_events_per_individual=" + req.body.maxEventsPerIndividual + "&sensor_type=gps"
   };
 
   // GET animal tracking api:
-  https.get(resource, options, (httpResponse) => {
+  https.get(options, (httpResponse) => {
 
     let body = "";
 
