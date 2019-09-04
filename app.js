@@ -52,9 +52,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // use built-in middleware which parses incoming requests with JSON payloads so that explicit parse expressions for every JSON are not necessary
 app.use(express.json());
 
-var favicon = require('serve-favicon');
-app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
-
 // use built-in middleware which parses urlencoded bodies, https://expressjs.com/en/4x/api.html#express.urlencoded
 app.use(express.urlencoded({ extended: false }));
 
