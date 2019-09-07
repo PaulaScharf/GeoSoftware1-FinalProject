@@ -175,9 +175,6 @@ app.post("/jsnlog.logger", function (req, res) {
 // http-POST to forward user input for studyID when requesting the animal tracking API
 app.post("/animalTrackingAPI/individualIds", (req, res) => {
 
-  // request-resource for the following https-GET request for individualIDs of the animal tracking API
-  //var resource = "https://www.movebank.org/movebank/service/json-auth?entity_type=individual&study_id=" + req.body.studyID;
-
   // loginname and password needed for authorization during the get-request
   var loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
   var password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
@@ -234,9 +231,6 @@ app.post("/animalTrackingAPI/individualIds", (req, res) => {
 // http-POST to forward user inputs for studyID, individualID and maxEventsPerIndividual when requesting the animal tracking API
 app.post("/animalTrackingAPI", (req, res) => {
 
-  // request-resource for the following https-GET request
-  //let resource = "https://www.movebank.org/movebank/service/json-auth?study_id=" + req.body.studyID + "&individual_local_identifiers[]=" + req.body.individualID + "&max_events_per_individual=" + req.body.maxEventsPerIndividual + "&sensor_type=gps";
-
   // loginname and password needed for authorization during the get-request
   let loginname = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.loginnameAnimalTrackingAPI;
   let password = require(path.join(__dirname, 'public', 'javascript', 'tokens.js')).token.passwordAnimalTrackingAPI;
@@ -252,9 +246,9 @@ app.post("/animalTrackingAPI", (req, res) => {
     },
     // timeout set to 20 seconds
     timeout: 20000,
-    //
+    // request-resource for the following https-GET request for animal tracking data of the animal tracking API:
     hostname: "www.movebank.org",
-    path: "/movebank/service/json-auth?study_id=" + req.body.studyID + "&individual_local_identifiers[]=" + req.body.individualID + "&max_events_per_individual=" + req.body.maxEventsPerIndividual + "&sensor_type=gps"
+    path: "/movebank/service/json-auth?study_id=" + req.body.studyID + "&individual_local_identifiers[]=" + encodeURIComponent(req.body.individualID) + "&max_events_per_individual=" + req.body.maxEventsPerIndividual + "&sensor_type=gps"
   };
 
   // GET animal tracking api:
