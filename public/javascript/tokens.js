@@ -11,9 +11,6 @@
 
 // please put in your own tokens here:
 
-// TODO: VOR ABGABE HIER ALLES AUS-XXEN zu: ... : "XXX"
-
-
 // following format of the code taken from https://github.com/streuselcake/jslab/blob/master/_api-token/sample_token.js
 
 // hack to make "exports" available in the browser as globals
@@ -21,15 +18,15 @@ if (typeof exports == "undefined"){
     var exports = window;
 }
 
-// tokens
+// all needed tokens:
 exports.token = {
-    // OpenWeatherMap API: weather data
-    OPENWEATHERMAP_TOKEN: "5e48111daa1da0d2673f81e5ec6fe1bc",
+    // token for OpenWeatherMap API: weather data
+    OPENWEATHERMAP_TOKEN: "XXX",
 
-    // Geonames API: country & terrain data
-    usernameTerrainAPI: "geosoftw_k_p",
+    // token for Geonames API: country & terrain data
+    usernameTerrainAPI: "XXX",
 
-    // Movebank API: animal tracking data
-    loginnameAnimalTrackingAPI: "KPoppi",
-    passwordAnimalTrackingAPI: "U6_l1#"
+    // tokens for Movebank API: animal tracking data
+    loginnameAnimalTrackingAPI: "XXX",
+    passwordAnimalTrackingAPI: "XXX"
 };

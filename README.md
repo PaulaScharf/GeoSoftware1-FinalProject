@@ -6,8 +6,6 @@
 2. run ``docker-compose up`` in the terminal (from project-folder)
 3. open [localhost:3000](http://localhost:3000/) or [192.168.99.100:3000](http://192.168.99.100:3000/) in a browser (depending on your local machine, potentially try both)
 
-(the image was built by command ``docker build -t kpoppi/geosoftware1-final_project .``)
-
 #### without docker:
 1. install node v10.xx and MongoDB v4.xx on your local machine
 2. run ``npm install`` in the terminal (from project-folder)
