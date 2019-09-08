@@ -93,7 +93,8 @@ function connectMongoDb() {
         "mongodb://localhost:27017",
         {
           useNewUrlParser: true,
-          autoReconnect: true
+          autoReconnect: true,
+          useUnifiedTopology: true
         }
       );
 
@@ -117,7 +118,8 @@ function connectMongoDb() {
           "mongodb://mongodbservice:27017",
           {
             useNewUrlParser: true,
-            autoReconnect: true
+            autoReconnect: true,
+            useUnifiedTopology: true
           }
         );
 
