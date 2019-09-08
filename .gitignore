@@ -10,8 +10,5 @@ node_modules/*
 # package-lock
 package-lock.json
 
-.DS_Store
-.dockerignore
-
 # JSDoc
 out/
