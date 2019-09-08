@@ -1,16 +1,26 @@
 # GeoSoftware1-FinalProject
 ## How to start the project
 
-#### with docker:
-1. install docker on your local machine
+#### with Docker:
+1. install Docker on your local machine
 2. run ``docker-compose up`` in the terminal (from project-folder)
 3. open [localhost:3000](http://localhost:3000/) or [192.168.99.100:3000](http://192.168.99.100:3000/) in a browser (depending on your local machine, potentially try both)
 
-#### without docker:
-1. install node v10.xx and MongoDB v4.xx on your local machine
+#### without Docker:
+1. install Node v10.xx and MongoDB v4.xx on your local machine
 2. run ``npm install`` in the terminal (from project-folder)
 3. run ``npm start`` in the terminal (from project-folder)
 4. open [localhost:3000](http://localhost:3000) in a browser
+
+
+## How to start the tests
+
+#### server-side tests:
+after starting the project, run ``npm test`` in the terminal (from project-folder)
+
+#### client-side tests:
+after starting the project, open [localhost:3000/test](http://localhost:3000/test) in a browser
+
 
 ## How to construct and use your own API-keys
 
